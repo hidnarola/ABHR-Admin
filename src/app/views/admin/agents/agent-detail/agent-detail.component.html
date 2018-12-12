@@ -1,0 +1,175 @@
+<div class="card">
+  <div class="card-body">
+    <div class="row pb-3">
+      <div class="col-lg-12 text-right">
+          <button type="button" class="btn btn-primary" (click)="open2(content, agentDetails)">
+              <i class="fa fa-edit" aria-hidden="true"></i> Edit
+          </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12" *ngIf="agentDetails"> 
+        <div><b>Id : </b> {{ agentDetails._id }} </div>
+        <div><b>First Name : </b> {{agentDetails.first_name}} </div>
+        <div><b>Last Name : </b> {{agentDetails.last_name}} </div>
+        <div><b>Email : </b> {{ agentDetails.email }} </div>
+        <div><b>Device Type : </b> {{ agentDetails.deviceType }} </div>
+        <div><b>Phone Number : </b> {{ agentDetails.phone_number ? agentDetails.phone_number : '-'}} </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <div class="card-body">
+    <div class="row pb-3">
+      <div class="col-lg-12 text-right">
+          <button type="button" class="btn btn-primary">
+           <i class="fa fa-external-link" aria-hidden="true"></i> Export
+          </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="table table-responsive table-hover">
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table">
+              <thead>
+                <tr>
+                <th>Id</th>
+                <th>Fisrt Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Device Type</th>
+                <th>Phone Number</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="rentalData?.length != 0">
+                <tr *ngFor="let item of rentalData; let i = index">
+                  <td>
+                    {{i+1}}
+                  </td>
+                  <td>
+                    <span>
+                      {{ item.first_name }}
+                    </span>
+                  </td>
+                  <td>
+                    <span>
+                      {{ item.last_name }}
+                    </span>
+                  </td>
+                  <td>
+                    <span>
+                      {{ item.email }}
+                    </span>
+                  </td>
+                  <td>
+                    <span>
+                      {{ item.deviceType }}
+                    </span>
+                  </td>
+                  <td>
+                      <span>
+                          {{ item.phone_number ? item.phone_number : '-'}}
+                      </span>
+                    </td>
+                  <td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!--Edit form-->
+<div class="row">
+    <div class="col-md-6">
+        <ng-template #content let-c="close" let-d="dismiss">
+            <div class="modal-header">
+              <h4 class="modal-title">Edit Agent</h4>
+              <button type="button" class="close"  id="closepopup" aria-label="Close" (click)="d('Cross click')">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+  
+            <div class="modal-body">
+                <form [formGroup]="AddEditForm" (ngSubmit)="onSubmit()" class="form-horizontal form-material">
+                    <div class="form-group ">
+                        <div class="col-xs-12">
+                          <label>Firstname :</label>
+                          <input class="form-control" type="text" required="" [(ngModel)]="agentDetails.first_name" name="first_name" placeholder="Enter Firstname" formControlName="first_name"
+                          class="form-control" [ngClass]="{ 'is-invalid': submitted && f.first_name.errors }"> 
+                          <div *ngIf=" submitted && f.first_name.errors " class="invalid-feedback">
+                              <div *ngIf="f.first_name.errors.required"> first name is required</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group ">
+                      <div class="col-xs-12">
+                        <label>Lastname :</label>
+                        <input class="form-control" type="text" required="" [(ngModel)]="agentDetails.last_name" name="last_name" placeholder="Enter last_name" formControlName="last_name"
+                        class="form-control" [ngClass]="{ 'is-invalid': submitted && f.last_name.errors }"> 
+                        <div *ngIf=" submitted && f.last_name.errors " class="invalid-feedback">
+                            <div *ngIf="f.last_name.errors.required"> last name is required</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group ">
+                      <div class="col-xs-12">
+                        <label>Email :</label>
+                        <input class="form-control" type="text" required="" [(ngModel)]="agentDetails.email" placeholder="Enter Email" formControlName="email"
+                        name="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }">
+                        <div *ngIf="submitted && f.email.errors" class="invalid-feedback" >
+                          <div *ngIf=" f.email.errors.required ">email is required</div>
+                          <div *ngIf=" f.email.errors.pattern"> email format is wrong </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                          <label>Phone Number :</label>
+                          <input class="form-control" type="number" name="phone_number" [(ngModel)]="agentDetails.phone_number" placeholder="Enter Phone Number" formControlName="phone_number"
+                          class="form-control" [ngClass]= "{ 'is-invalid': submitted && f.phone_number.errors }">
+                          <div *ngIf=" submitted && f.phone_number.errors " class="invalid-feedback">
+                            <!-- <div *ngIf="f.phone_number.errors.required">phone number is required</div> -->
+                            <!-- <div *ngIf="f.phone_number.errors.minlength">phone number can not be less than 10 digits</div>
+                            <div *ngIf="f.phone_number.errors.maxlength">phone number can not be more than 10 digits</div> -->
+                            <div *ngIf="f.phone_number.errors.pattern">phone number is wrong</div>
+                          </div>
+                         </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-xs-12">
+                        <label>Device Type :</label>
+                        <select class="custom-select col-12" id="inlineFormCustomSelect" required=""
+                        class="form-control" [ngClass]= "{ 'is-invalid': submitted && f.deviceType.errors }" >
+                            <option value="" selected="">Choose Device Type...</option>
+                            <option value="android">Android</option>
+                            <option value="ios">IOS</option>
+                        </select>
+                        <div *ngIf=" submitted && f.deviceType.errors " class="invalid-feedback">
+                            <div *ngIf="f.deviceType.errors.required">device type is required</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group text-center m-t-20">
+                      <div class="col-xs-12">
+                        <button type="submit" class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light">Submit</button>
+                      </div>
+                    </div>
+                  </form>
+            </div>
+            
+            <!-- <div class="modal-footer">
+              <button type="submit" class="btn btn-secondary" (click)="c('Close click')">Add</button>
+            </div> -->
+  
+          
+        </ng-template>
+    </div>
+  </div>
