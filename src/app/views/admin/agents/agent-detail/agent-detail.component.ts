@@ -14,9 +14,11 @@ import {NgbModal, ModalDismissReasons, NgbActiveModal} from '@ng-bootstrap/ng-bo
 //popup-forms
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'; 
 
+//alert
+import { AlertService } from '../../../../shared/services/alert.service';
+import { Subscription } from 'rxjs'
 
-declare var require: any;
-//const data: any = require('../../../table/data-table/company.json');
+
 @Component({
   selector: 'app-agent-detail',
   templateUrl: './agent-detail.component.html',
@@ -30,6 +32,8 @@ export class AgentDetailComponent implements OnInit {
   public userId;
   public agentDetails;
 
+  private subscription: Subscription;
+  message: any;
 
   @ViewChild(DataTableDirective)
   dtElement: DataTableDirective;
@@ -48,7 +52,8 @@ export class AgentDetailComponent implements OnInit {
     private service: CrudService,
     private modalService: NgbModal,
     public router: Router,
-    private fromBuilder: FormBuilder
+    private fromBuilder: FormBuilder,
+    private alertService : AlertService
   ) {
     this.route.params.subscribe(params => {
       this.userId = params.id;
@@ -81,17 +86,20 @@ export class AgentDetailComponent implements OnInit {
     onSubmit() {
       this.submitted = true;
       if (!this.AddEditForm.invalid) {
-        console.log('in valid');
+        console.log('in valid', this.userId);
         this.formData = this.AddEditForm.value;
         if (this.isEdit) {
           this.formData.user_id = this.userId;
           console.log(this.formData);
           this.service.put('admin/agents/update', this.formData).subscribe(res => {
             console.log('response after edit===>', res);
+            console.log('this.agentDetails==>',this.agentDetails);
+            this.agentDetails = this.formData;
             this.closePopup();
-          }, err => {
+            this.alertService.success('Agent is edited!!', true);
+          }, error => {
+            this.alertService.error('Something went wrong, please try again!!', true);
             this.closePopup();
-            var err_message = err.error.message;
           })
         }
         this.isEdit = false;
@@ -109,8 +117,9 @@ export class AgentDetailComponent implements OnInit {
   }
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
+    this.subscription.unsubscribe();
   }
-  //public rentalData = data;
+
   
   public rentalData;
 
@@ -118,6 +127,7 @@ export class AgentDetailComponent implements OnInit {
   ngOnInit() {
     this.RentalData();
     this.AgentDetails();
+    this.alert()
 }
 
 RentalData(){
@@ -188,7 +198,6 @@ open2(content, agentDetails) {
   console.log('agentDetails====>',agentDetails);
   if( agentDetails != 'undefined' && agentDetails ){
     this.isEdit = true;
-    this.userId = agentDetails._id;
     this.AddEditForm.controls['first_name'].setValue(agentDetails.first_name);
     this.AddEditForm.controls['last_name'].setValue(agentDetails.last_name);
     this.AddEditForm.controls['email'].setValue(agentDetails.email);
@@ -213,5 +222,11 @@ private getDismissReason(reason: any): string {
   }
 }
 //add-edit popup ends here
+
+alert(){
+  this.subscription = this.alertService.getMessage().subscribe(message => { 
+    this.message = message; 
+});
+}
 
 }

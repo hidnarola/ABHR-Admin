@@ -1,0 +1,151 @@
+import { Component, OnInit, Renderer, ViewChild } from '@angular/core';
+import { Subject } from 'rxjs';
+import { DataTableDirective } from 'angular-datatables';
+import { ActivatedRoute  } from '@angular/router';
+import { Router } from '@angular/router';
+
+// services
+import { CrudService } from '../../../../shared/services/crud.service';
+import { DataSharingService } from '../../../../shared/services/data-sharing.service';
+
+//model
+import {NgbModal, ModalDismissReasons, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+
+//popup-forms
+import { FormBuilder, FormGroup, Validators } from '@angular/forms'; 
+
+//alert
+import { AlertService } from '../../../../shared/services/alert.service';
+import { Subscription } from 'rxjs'
+
+@Component({
+  selector: 'app-staff-detail',
+  templateUrl: './staff-detail.component.html',
+  styleUrls: ['./staff-detail.component.css']
+})
+export class StaffDetailComponent implements OnInit {
+
+  public selectedAgent;
+  public index;
+  public viewData;
+  public userId;
+  public agentDetails;
+
+  private subscription: Subscription;
+  message: any;
+  AddEditForm: FormGroup;
+  submitted = false;
+  public formData: any;
+  public isEdit;
+
+  constructor(
+    public renderer: Renderer,
+    private dataShare: DataSharingService,
+    private route: ActivatedRoute,
+    private service: CrudService,
+    private modalService: NgbModal,
+    public router: Router,
+    private fromBuilder: FormBuilder,
+    private alertService : AlertService
+  ) { 
+    this.route.params.subscribe(params => {
+      this.userId = params.id;
+    });
+    //addform validation
+    const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');                                                                                                                                                                                                                                 
+        this.AddEditForm = this.fromBuilder.group({
+            first_name: ['', Validators.required],
+            last_name: ['', Validators.required],
+            phone_number: ['',[ Validators.minLength(10), Validators.maxLength(10), Validators.pattern("[0-9]{10}")]],
+            email: ['', [Validators.required, Validators.email,Validators.pattern(pattern)]],
+            // deviceType: [''],
+        })
+        this.formData = {
+          first_name: String,
+          last_name: String,
+          // deviceType: String,
+          phone_number: Number,
+          email: String
+        };
+  }
+
+  //add-edit-popup form validation
+  get f() { return this.AddEditForm.controls; }
+  closePopup() {
+    var element = document.getElementById('closepopup');
+    element.click();
+  }
+  onSubmit() {
+    this.submitted = true;
+    if (!this.AddEditForm.invalid) {
+      console.log('in valid', this.userId);
+      this.formData = this.AddEditForm.value;
+      if (this.isEdit) {
+        this.formData.user_id = this.userId;
+        console.log(this.formData);
+        this.service.put('admin/staff/update', this.formData).subscribe(res => {
+          console.log('response after edit===>', res);
+          console.log('this.agentDetails==>',this.agentDetails);
+          this.agentDetails = this.formData;
+          this.closePopup();
+          this.alertService.success('Staff is edited!!', true);
+        }, error => {
+          this.alertService.error('Something went wrong, please try again!!', true);
+          this.closePopup();
+        })
+      }
+      this.isEdit = false;
+    }
+  }
+
+  AgentDetails(){
+    this.service.get('admin/staff/details/'+this.userId).subscribe ( res =>{
+      console.log('userdetails==>',res);
+      this.agentDetails = res['user'];
+      console.log('agentdetails==>', this.agentDetails);
+    })
+ }
+
+ //model
+closeResult: string;
+open2(content, agentDetails) { 
+  console.log('agentDetails====>',agentDetails);
+  if( agentDetails != 'undefined' && agentDetails ){
+    this.isEdit = true;
+    this.AddEditForm.controls['first_name'].setValue(agentDetails.first_name);
+    this.AddEditForm.controls['last_name'].setValue(agentDetails.last_name);
+    this.AddEditForm.controls['email'].setValue(agentDetails.email);
+    this.AddEditForm.controls['phone_number'].setValue(agentDetails.phone_number);
+    // this.AddEditForm.controls['deviceType'].setValue(agentDetails.deviceType);
+    console.log('firstname', agentDetails.first_name);
+    console.log('lastname===>', agentDetails.last_name)
+  };
+  this.modalService.open(content).result.then((result) => {
+    this.closeResult = `Closed with: ${result}`;
+  }, (reason) => {
+    this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+  });
+}
+private getDismissReason(reason: any): string {
+  if (reason === ModalDismissReasons.ESC) {
+    return 'by pressing ESC';
+  } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+    return 'by clicking on a backdrop';
+  } else {
+    return  `with: ${reason}`;
+  }
+}
+//add-edit popup ends here
+
+alert(){
+  this.subscription = this.alertService.getMessage().subscribe(message => { 
+    this.message = message; 
+});
+}
+
+  ngOnInit() {
+    this.AgentDetails();
+    this.alert();
+  }
+
+}

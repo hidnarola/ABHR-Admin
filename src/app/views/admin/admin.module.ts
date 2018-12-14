@@ -9,6 +9,7 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { DataTablesModule } from 'angular-datatables';
 import {MatDialogModule} from '@angular/material/dialog';
 import {FormsModule,ReactiveFormsModule} from '@angular/forms';
+import {ConfirmDialogModule} from 'primeng/confirmdialog';
 
 import { AdminComponent } from './admin.component';
 // Child components
@@ -22,7 +23,7 @@ import { OperationsComponent } from './operations/operations.component';
 import { SettingsComponent } from './settings/settings.component';
 import { AgentDetailComponent } from './agents/agent-detail/agent-detail.component';
 import { CompanyDetailsComponent } from './car-rental-companies/company-details/company-details.component';
-import { AuthGuard } from '../../shared/guards/auth.guard';
+import { StaffDetailComponent } from './staff/staff-detail/staff-detail.component';
 
 
 
@@ -36,7 +37,6 @@ const AdminRoutes: Routes = [
       {
         path: 'dashboard',
         component: AdminComponent,
-        //canActivate: [AuthGuard],
         data: {
           title: 'Admin Dashboard',
           urls: [{title: 'Admin Dashboard',url: '/admin'}]
@@ -45,7 +45,6 @@ const AdminRoutes: Routes = [
       {
         path: 'agents',
         component: AgentsComponent,
-        //canActivate: [AuthGuard],
         data: {
           title: 'Manage Agents',
           urls: [{title: 'Admin Dashboard',url: '/admin/dashboard'},{title: 'Agents'}]
@@ -54,19 +53,26 @@ const AdminRoutes: Routes = [
       {
         path: 'agents/view/:id',
         component: AgentDetailComponent,
-        //canActivate: [AuthGuard],
         data: {
           title: 'Manage Agents',
           urls: [{title: 'Admin Dashboard',url: '/admin/dashboard'},{title: 'Agents', url: '/admin/agents'}, {title: 'view'}]
         },
       },
-      // {
-      //   path: 'staffs',
-      //   component: StaffComponent,
-      //   data: {
-      //     title: 'Manage Staffs'
-      //   },
-      // },
+      {
+        path: 'staff',
+        component: StaffComponent,
+        data: {
+          title: 'Manage Staffs'
+        },
+      },
+      {
+        path: 'staff/view/:id',
+        component: StaffDetailComponent,
+        data: {
+          title: 'Manage Staff',
+          urls: [{title: 'Admin Dashboard',url: '/admin/dashboard'},{title: 'Staff', url: '/admin/staff'}, {title: 'view'}]
+        },
+      },
       {
         path: '',
         data: {
@@ -146,7 +152,8 @@ const AdminRoutes: Routes = [
       DataTablesModule,
       MatDialogModule,
       FormsModule,
-      ReactiveFormsModule
+      ReactiveFormsModule,
+      ConfirmDialogModule
     ],
     exports: [RouterModule],
     declarations: [
@@ -160,6 +167,7 @@ const AdminRoutes: Routes = [
         OperationsComponent,
         SettingsComponent,
         AgentDetailComponent,
+        StaffDetailComponent,
         CompanyDetailsComponent
     ]
 })

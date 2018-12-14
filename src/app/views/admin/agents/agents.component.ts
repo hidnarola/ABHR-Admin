@@ -5,7 +5,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { AgentAddEditComponent } from "./../../../shared/model-popup/agent-add-edit/agent-add-edit.component";
 
 //routing
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, ActivatedRoute } from '@angular/router';
 import { NgModule } from '@angular/core';
 
 //model
@@ -19,12 +19,18 @@ import { CrudService } from '../../../shared/services/crud.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
+//primng
+import {ConfirmDialogModule} from 'primeng/confirmdialog';
+import {ConfirmationService, Message} from 'primeng/api';
+import { MessageService } from 'primeng/api';
+
+//alert
+import { AlertService } from '../../../shared/services/alert.service';
+import { Subscription } from 'rxjs'
+
 
 const AgentRoutes: Routes = []
 
-declare var require: any;
-
-//const data: any = require('../../../table/data-table/company.json');
 @Component({
   selector: 'app-agents',
   templateUrl: './agents.component.html',
@@ -47,6 +53,12 @@ export class AgentsComponent implements OnInit {
   public formData: any;
   public userId;
   public isEdit: boolean;
+  public isDelete: boolean;
+
+  private subscription: Subscription;
+  message: any;
+ 
+  msgs: Message[] = [];
 
   constructor(
     public renderer: Renderer,
@@ -54,18 +66,19 @@ export class AgentsComponent implements OnInit {
     private dataShare: DataSharingService,
     public dialog: MatDialog,
     public router: Router,
-    // private datePipe: DatePipe,
+    private route: ActivatedRoute,
+    private confirmationService: ConfirmationService,
     //model
     private modalService: NgbModal,
-    private fromBuilder: FormBuilder
+    private fromBuilder: FormBuilder,
+    private alertService : AlertService
   ) {
     //addform validation
     const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
     this.AddEditForm = this.fromBuilder.group({
-      // username: ['', Validators.required],
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
-      deviceType: [''],
+      deviceType: ['', Validators.required],
       phone_number: ['', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern("[0-9]{10}")]],
       email: ['', [Validators.required, Validators.email, Validators.pattern(pattern)]]
     });
@@ -88,28 +101,32 @@ export class AgentsComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     if (!this.AddEditForm.invalid) {
-      console.log('in valid');
+      let formData: FormData = new FormData();
       this.formData = this.AddEditForm.value;
+      console.log('formadata==>',this.formData);
       if (this.isEdit) {
         this.formData.user_id = this.userId;
-        console.log(this.formData);
+        console.log('userId', this.userId);
         this.service.put('admin/agents/update', this.formData).subscribe(res => {
-          console.log('response after edit===>', res);
+          this.render();
           this.closePopup();
-        }, err => {
+          this.alertService.success('Agent is edited!!', true);
+        }, error => {
+          this.alertService.error('Something went wrong, please try again!!', true)
           this.closePopup();
-          var err_message = err.error.message;
         })
       } else {
         this.service.post('admin/agents/add', this.formData).subscribe(res => {
-          console.log('response after add===>', res);
+          this.render();
           this.closePopup();
-        }, err => {
-          var err_message = err.error.message;
+          this.alertService.success('Agent is added!!', true);
+        }, error => {
+          this.alertService.error('Something went wrong, please try again!!', true)
           this.closePopup();
         })
       }
       this.isEdit = false;
+      this.submitted = false;
     }
   }
 
@@ -126,6 +143,7 @@ export class AgentsComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
   //public agentData = data;
@@ -133,6 +151,11 @@ export class AgentsComponent implements OnInit {
 
   title = 'angulardatatables';
   ngOnInit() {
+    this.AgentsListData();
+    this.alert();
+  }
+
+  AgentsListData(){
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
@@ -140,17 +163,14 @@ export class AgentsComponent implements OnInit {
       serverSide: true,
       ordering: true,
       language: { "processing": "<i class='fa fa-refresh loader fa-spin'></i>" },
-      // ajax: (dataTablesParameters: any, callback) => {
-      //     callback({
-      //       recordsTotal: 5,
-      //       recordsFiltered: 5,
-      //       data: data
-      //     });
-      // },
       ajax: (dataTablesParameters: any, callback) => {
         setTimeout(() => {
+          console.log('dtaparametes==>',dataTablesParameters);
           this.service.post('admin/agents/list', dataTablesParameters).subscribe(res => {
             this.agents = res['result']['data'];
+            if(this.agents.length != 0){
+              $('.odd').hide();   
+            }
             console.log(this.agents);
             this.dataShare.changeLoading(false);
             callback({
@@ -164,7 +184,6 @@ export class AgentsComponent implements OnInit {
       columns: [
         {
           data: 'Id',
-          name: 'i+1',
         },
         {
           data: 'Fisrt Name',
@@ -192,6 +211,7 @@ export class AgentsComponent implements OnInit {
       ]
     };
   }
+
 
   ngAfterViewInit(): void {
     this.dtTrigger.next();
@@ -243,14 +263,34 @@ export class AgentsComponent implements OnInit {
   }
   //add-edit popup ends here
 
-  //delete popup model
-  delete(content2) {
-    this.modalService.open(content2).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+//dlt popup
+  delete(userId) {
+    console.log('userId==>',userId);
+    this.confirmationService.confirm({
+        message: 'Are you sure want to delete this record?',
+        header: 'Confirmation',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+        this.service.put('admin/agents/delete', {user_id : userId}).subscribe(res => {
+          this.render();
+          this.alertService.success('Agent is deleted!!', true);
+          setTimeout(()=>{ this.closePopup()},1000);
+        },error => {
+          this.alertService.error('Something went wrong, please try again!!', true);
+          
+        });
+        },
+        reject: () => {
+      }
     });
   }
-  //ends here
+// dlt pop up ends here
 
+//message 
+  alert(){
+    this.subscription = this.alertService.getMessage().subscribe(message => { 
+      this.message = message; 
+  });
+  }
+// message ends here
 }

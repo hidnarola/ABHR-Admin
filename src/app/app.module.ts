@@ -24,10 +24,15 @@ import { SpinnerComponent } from './shared/spinner.component';
 import { CompaniesComponent } from './views/companies/companies.component';
 // import { RentalsComponent } from './shared/components/rentals/rentals.component';
 
+import {ConfirmDialogModule} from 'primeng/confirmdialog';
+import {ConfirmationService} from 'primeng/api';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 //third party modules
 import { DataTablesModule } from 'angular-datatables';
-// import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { AlertComponent } from './shared/components/alert/alert.component';
+
+
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
   wheelSpeed: 2,
@@ -44,6 +49,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     BreadcrumbComponent,
     SidebarComponent,
     CompaniesComponent,
+    AlertComponent
     // ResetPasswordComponent
   ],
   imports: [
@@ -56,9 +62,14 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NgbModule.forRoot(),  
     PerfectScrollbarModule,
     AppRoutingModule,
-    DataTablesModule
+    DataTablesModule,
+    ConfirmDialogModule,
+   // AlertComponent,
+   
   ],
   providers: [
+    MessageService,
+    ConfirmationService,
       {
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG

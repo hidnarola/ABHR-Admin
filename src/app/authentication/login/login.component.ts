@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'; 
 //service
 import { CrudService } from '../../shared/services/crud.service';
+import { AlertService } from '../../shared/services/alert.service';
+import { Subscription } from 'rxjs'
 
 @Component({
     selector: 'app-login',
@@ -16,10 +18,16 @@ export class LoginComponent implements OnInit, AfterViewInit {
     public formData: any;
     public alerts = [];
 
+    private subscription: Subscription;
+    message: any;
+
     constructor(public router: Router,
                 public service: CrudService,
-                private fromBuilder: FormBuilder) {
-                    console.log('here');
+                private fromBuilder: FormBuilder,
+                private alertService : AlertService) {
+                    this.subscription = this.alertService.getMessage().subscribe(message => { 
+                        this.message = message; 
+                    });
                 }
 
     ngOnInit() {
@@ -61,11 +69,16 @@ export class LoginComponent implements OnInit, AfterViewInit {
                 localStorage.setItem('admin',JSON.stringify(res['result']))
                 localStorage.setItem('token',res['token'])
                 this.router.navigate(['/admin/dashboard']);
-              }, (err) => {
-                err = err.error
-                this.alerts.push({ type: 'danger', msg: err['message'], 'timeout': 5000 })
+              },  error => {
+                this.alertService.error('Something went wrong, please try again!!', true);
+                //this.loading = false;
               });
         }
         // alert('SUCCESS!! :-)\n\n' + JSON.stringify(this.loginForm.value))
     }
+
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+      }
+      
 }

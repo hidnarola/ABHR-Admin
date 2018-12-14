@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 //service
 import { CrudService } from '../../shared/services/crud.service';
+import { AlertService } from '../../shared/services/alert.service';
+import { Subscription } from 'rxjs'
 
 @Component({
   selector: 'app-forget-password',
@@ -16,9 +18,17 @@ export class ForgetPasswordComponent implements OnInit {
   public formData: any;
   public alerts = [];
 
+  private subscription: Subscription;
+    message: any;
+
   constructor( private formBuilder: FormBuilder,
                public service: CrudService,
-               public router: Router,) { }
+               public router: Router,
+               private alertService : AlertService) { 
+                this.subscription = this.alertService.getMessage().subscribe(message => { 
+                  this.message = message; 
+              });
+               }
 
   ngOnInit() {
     this.formData = {};
@@ -40,14 +50,15 @@ export class ForgetPasswordComponent implements OnInit {
       this.service.post('admin/forget_password', this.forgetPasswordForm.value).subscribe((res) => {
         this.submitted = false;
         console.log('result==>',res);
-        this.alerts.push({ type: 'success', msg: res['message'], 'timeout': 5000 });
-        this.router.navigate(['/admin/login']);
+        this.alertService.success('Email is sent to you Email Id!', true);
+        this.router.navigate(['/admin/forget-password']);
         console.log('alert', this.alerts)
-      }, (err) => {
-        err = err.error
-        this.alerts.push({ type: 'danger', msg: err['message'], 'timeout': 5000 })
+      }, error => {
+        this.alertService.error('Something went wrong, please try again!!', true);
       });
     }
   }
-
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 }
