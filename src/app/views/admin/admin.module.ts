@@ -62,7 +62,8 @@ const AdminRoutes: Routes = [
         path: 'staff',
         component: StaffComponent,
         data: {
-          title: 'Manage Staffs'
+          title: 'Manage Staff',
+          urls: [{title: 'Admin Dashboard',url: '/admin/dashboard'},{title: 'Staff'}]
         },
       },
       {

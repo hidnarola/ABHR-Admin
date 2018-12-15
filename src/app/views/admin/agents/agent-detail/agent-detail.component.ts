@@ -26,108 +26,101 @@ import { Subscription } from 'rxjs'
 })
 export class AgentDetailComponent implements OnInit {
 
-  public selectedAgent;
-  public index;
-  public viewData;
-  public userId;
-  public agentDetails;
+public selectedAgent;
+public index;
+public viewData;
+public userId;
+public agentDetails;
 
-  private subscription: Subscription;
-  message: any;
+private subscription: Subscription;
+message: any;
 
-  @ViewChild(DataTableDirective)
-  dtElement: DataTableDirective;
-  dtOptions: DataTables.Settings = {};
-  dtTrigger: Subject<any> = new Subject();
+@ViewChild(DataTableDirective)
+dtElement: DataTableDirective;
+dtOptions: DataTables.Settings = {};
+dtTrigger: Subject<any> = new Subject();
 
-  AddEditForm: FormGroup;
-  submitted = false;
-  public formData: any;
-  public isEdit;
+AddEditForm: FormGroup;
+submitted = false;
+public formData: any;
+public isEdit;
+public rentalData;
+closeResult: string;
 
-  constructor(
-    public renderer: Renderer,
-    private dataShare: DataSharingService,
-    private route: ActivatedRoute,
-    private service: CrudService,
-    private modalService: NgbModal,
-    public router: Router,
-    private fromBuilder: FormBuilder,
-    private alertService : AlertService
-  ) {
-    this.route.params.subscribe(params => {
-      this.userId = params.id;
-    });
-    //addform validation
-    const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');                                                                                                                                                                                                                                 
-        this.AddEditForm = this.fromBuilder.group({
-            first_name: ['', Validators.required],
-            last_name: ['', Validators.required],
-            phone_number: ['',[ Validators.minLength(10), Validators.maxLength(10), Validators.pattern("[0-9]{10}")]],
-            email: ['', [Validators.required, Validators.email,Validators.pattern(pattern)]],
-            deviceType: [''],
-        })
-        this.formData = {
-          first_name: String,
-          last_name: String,
-          deviceType: String,
-          phone_number: Number,
-          email: String
-        };
-   }
+constructor(
+public renderer: Renderer,
+private dataShare: DataSharingService,
+private route: ActivatedRoute,
+private service: CrudService,
+private modalService: NgbModal,
+public router: Router,
+private fromBuilder: FormBuilder,
+private alertService : AlertService
+) {
+this.route.params.subscribe(params => {
+  this.userId = params.id;
+});
+//addform validation
+const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');                                                                                                                                                                                                                                 
+    this.AddEditForm = this.fromBuilder.group({
+        first_name: ['', Validators.required],
+        last_name: ['', Validators.required],
+        phone_number: ['',[ Validators.minLength(10), Validators.maxLength(10), Validators.pattern("[0-9]{10}")]],
+        email: ['', [Validators.required, Validators.email,Validators.pattern(pattern)]],
+        deviceType: [''],
+    })
+    this.formData = {
+      first_name: String,
+      last_name: String,
+      deviceType: String,
+      phone_number: Number,
+      email: String
+    };
+}
 
    
-   //add-edit-popup form validation
-    get f() { return this.AddEditForm.controls; }
-    closePopup() {
-      var element = document.getElementById('closepopup');
-      element.click();
+//add-edit-popup form validation
+get f() { return this.AddEditForm.controls; }
+closePopup() {
+  var element = document.getElementById('closepopup');
+  element.click();
+}
+onSubmit() {
+  this.submitted = true;
+  if (!this.AddEditForm.invalid) {
+    console.log('in valid', this.userId);
+    this.formData = this.AddEditForm.value;
+    if (this.isEdit) {
+      this.formData.user_id = this.userId;
+      console.log(this.formData);
+      this.service.put('admin/agents/update', this.formData).subscribe(res => {
+        console.log('response after edit===>', res);
+        console.log('this.agentDetails==>',this.agentDetails);
+        this.agentDetails = this.formData;
+        this.closePopup();
+        this.alertService.success('Agent is edited!!', true);
+      }, error => {
+        this.alertService.error('Something went wrong, please try again!!', true);
+        this.closePopup();
+      })
     }
-    onSubmit() {
-      this.submitted = true;
-      if (!this.AddEditForm.invalid) {
-        console.log('in valid', this.userId);
-        this.formData = this.AddEditForm.value;
-        if (this.isEdit) {
-          this.formData.user_id = this.userId;
-          console.log(this.formData);
-          this.service.put('admin/agents/update', this.formData).subscribe(res => {
-            console.log('response after edit===>', res);
-            console.log('this.agentDetails==>',this.agentDetails);
-            this.agentDetails = this.formData;
-            this.closePopup();
-            this.alertService.success('Agent is edited!!', true);
-          }, error => {
-            this.alertService.error('Something went wrong, please try again!!', true);
-            this.closePopup();
-          })
-        }
-        this.isEdit = false;
-      }
-    }
+    this.isEdit = false;
+  }
+}
   
 
-  render(): void {
-    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      // Destroy the table first
-      dtInstance.destroy();
-      // Call the dtTrigger to rerender again
-      this.dtTrigger.next();
-    });
-  }
-  ngOnDestroy(): void {
-    this.dtTrigger.unsubscribe();
-    this.subscription.unsubscribe();
-  }
+render(): void {
+  this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+    // Destroy the table first
+    dtInstance.destroy();
+    // Call the dtTrigger to rerender again
+    this.dtTrigger.next();
+  });
+}
 
-  
-  public rentalData;
-
-  title = 'angulardatatables';
-  ngOnInit() {
-    this.RentalData();
-    this.AgentDetails();
-    this.alert()
+ngOnDestroy(): void {
+  this.dtTrigger.unsubscribe();
+  this.subscription.unsubscribe();
 }
 
 RentalData(){
@@ -193,7 +186,6 @@ ngAfterViewInit(): void {
 }
 
 //model
-closeResult: string;
 open2(content, agentDetails) { 
   console.log('agentDetails====>',agentDetails);
   if( agentDetails != 'undefined' && agentDetails ){
@@ -227,6 +219,12 @@ alert(){
   this.subscription = this.alertService.getMessage().subscribe(message => { 
     this.message = message; 
 });
+}
+
+ngOnInit() {
+  this.RentalData();
+  this.AgentDetails();
+  this.alert()
 }
 
 }

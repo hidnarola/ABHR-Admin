@@ -80,11 +80,6 @@
                 </td>
               </tr>
             </tbody>
-            <!-- <tbody *ngIf="agents?.length == 0">
-              <tr>
-                <td colspan="3" class="no-data-available">No data!</td>
-              </tr>
-            <tbody> -->
           </table>
         </div>
       </div>
@@ -92,13 +87,11 @@
   </div>
 </div>
 
-<!-- add-edit form -->
 
+<!-- add-edit form -->
 <div class="row">
   <div class="col-md-6">
-    <div class="Agent-add-edit">
     <ng-template #content let-c="close" let-d="dismiss">
-        
       <div class="modal-header">
         <!-- <h4 class="modal-title">Add Agent</h4> -->
         <ng-container *ngIf="!isEdit">Add Agent </ng-container>
@@ -107,7 +100,6 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-
       <div class="modal-body">
         <form [formGroup]="AddEditForm" (ngSubmit)="onSubmit()" class="form-horizontal form-material row">
           <div class="col-sm-6">
@@ -167,9 +159,7 @@
                       <input type="radio" id="customRadio2" class="custom-control-input" value="ios" name="deviceType" formControlName="deviceType" [ngClass]="{ 'is-invalid': submitted && f.deviceType.errors }">
                       <label class="custom-control-label" for="customRadio2">IOS</label>
                   </div>
-                  <!--<input type="radio" value="anroid" name="deviceType" formControlName="deviceType" [ngClass]="{ 'is-invalid': submitted && f.deviceType.errors }"> Anroid
-                  <input type="radio" value="ios" name="deviceType" formControlName="deviceType" [ngClass]="{ 'is-invalid': submitted && f.deviceType.errors }"> IOS-->
-                  </div>
+                </div>
               <div *ngIf="submitted && f.deviceType.errors " class="invalid-feedback">
                 <div *ngIf="f.deviceType.errors.required">device type is required</div>
               </div>
@@ -182,13 +172,10 @@
           </div>
         </form>
       </div>
-
       <!-- <div class="modal-footer">
             <button type="submit" class="btn btn-secondary" (click)="c('Close click')">Add</button>
-          </div> -->
-        
+          </div> -->   
     </ng-template>
-  </div>
   </div>
 </div>
 

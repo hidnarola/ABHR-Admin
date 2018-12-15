@@ -72,8 +72,7 @@ body .ui-dialog .ui-dialog-footer{ text-align:center !important; }
 .dropdown-menu{ font-size:13px !important;}
 input#checkbox-signup { margin-right: 5px;}
 div#DataTables_Table_0_paginate {text-transform: uppercase; font-size: 13px;}
-i.ng-tns-c3-0.pi.pi-exclamation-triangle.ui-confirmdialog-icon.ng-star-inserted{color:red}
 .ui-confirmdialog.ui-dialog .ui-dialog-content {padding: 2em 2em !important;}
-span.ui-button-text.ui-clickable.dlt-button {background-color: #e70000;}
 h4.table-header {color: #1976d2;text-transform: uppercase;font-weight: 500;}
 li.breadcrumb-item {font-weight: 400;}
+.ui-confirmdialog-icon{ color: red}

@@ -33,7 +33,6 @@ export class CrudService {
 
   post(apiUrl, data) {
     console.log('data===>,', data);
-
     const url = environment.apiUrl + apiUrl;
     return this.http.post(url, data, this.httpOptions);
   }

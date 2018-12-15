@@ -20,7 +20,6 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 //primng
-import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import {ConfirmationService, Message} from 'primeng/api';
 import { MessageService } from 'primeng/api';
 

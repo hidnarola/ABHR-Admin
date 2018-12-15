@@ -10,14 +10,14 @@ export const ROUTES: RouteInfo[] = [
     {
         path: '/admin/staff', title: 'Manage Staffs', icon: 'mdi mdi-widgets', class: '', label: '', labelClass: '', extralink: false, submenu: []
     },
-    // {
-    //     path:'', title: 'Cars',icon: 'fa fa-car', class: 'has-arrow', label: '', labelClass: '', extralink: false, 
-    //     submenu: [
-    //         {
-    //             path: '/admin/car-rental-companies', title: 'Companies', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: []
-    //         },
-    //     ]
-    // },
+    {
+        path:'', title: 'Cars',icon: 'fa fa-car', class: 'has-arrow', label: '', labelClass: '', extralink: false, 
+        submenu: [
+            {
+                path: '/admin/car-rental-companies', title: 'Companies', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: []
+            },
+        ]
+    },
     // {
     //     path: '/admin/users', title: 'Users', icon: 'fa fa-users', class: '', label: '', labelClass: '', extralink: false, submenu: []
     // },

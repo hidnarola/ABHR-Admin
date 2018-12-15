@@ -32,7 +32,6 @@ export class BreadcrumbComponent implements OnInit {
             this.titleService.setTitle(event['title']);
             this.pageInfo = event;
         });
-        console.log('here==>',this.titleService);
     }
     ngOnInit() { }
 }
