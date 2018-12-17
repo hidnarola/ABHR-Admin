@@ -8,7 +8,7 @@ export const ROUTES: RouteInfo[] = [
         path: '/admin/agents', title: 'Agents', icon: 'fa fa-user-circle-o', class: '', label: '', labelClass: '', extralink: false, submenu: []
     },
     {
-        path: '/admin/staff', title: 'Manage Staffs', icon: 'mdi mdi-widgets', class: '', label: '', labelClass: '', extralink: false, submenu: []
+        path: '/admin/staff', title: 'Staff', icon: 'mdi mdi-widgets', class: '', label: '', labelClass: '', extralink: false, submenu: []
     },
     {
         path:'', title: 'Cars',icon: 'fa fa-car', class: 'has-arrow', label: '', labelClass: '', extralink: false, 

@@ -20,7 +20,7 @@
         <div class="agents-dtl-box-inr"><b>Last Name : </b> <span>{{agentDetails.last_name}}</span> </div>
         <div class="agents-dtl-box-inr"><b>Email : </b> <span>{{ agentDetails.email }}</span> </div>
         <div class="agents-dtl-box-inr"><b>Device Type : </b> <span>{{ agentDetails.deviceType }}</span> </div>
-        <div class="agents-dtl-box-inr"><b>Phone Number : </b> <span>{{ agentDetails.phone_number }}</span> </div>
+        <div class="agents-dtl-box-inr"><b>Phone Number : </b> <span>{{ agentDetails.phone_number ? agentDetails.phone_number : '-' }}</span> </div>
       </div>
     </div>
   </div>
@@ -78,7 +78,7 @@
                   </td>
                   <td>
                     <span>
-                        {{ item.phone_number}}
+                      {{ item.phone_number ? item.phone_number : '-'}}
                     </span>
                   </td>
                 </tr>
@@ -96,8 +96,6 @@
   <ng-template #content let-c="close" let-d="dismiss">  
     <div class="modal-header">
       <h4 class="modal-title">Edit Agent</h4>
-      <!-- <ng-container *ngIf="!isEdit">Add Agent </ng-container>
-      <ng-container *ngIf="isEdit">Edit Agent</ng-container> -->
       <button type="button" class="close" id="closepopup" aria-label="Close" (click)="d('Cross click')">
         <span aria-hidden="true">&times;</span>
       </button>
@@ -161,9 +159,7 @@
                     <input type="radio" id="customRadio2" class="custom-control-input" value="ios" name="deviceType" formControlName="deviceType" [ngClass]="{ 'is-invalid': submitted && f.deviceType.errors }">
                     <label class="custom-control-label" for="customRadio2">ios</label>
                 </div>
-                <!--<input type="radio" value="anroid" name="deviceType" formControlName="deviceType" [ngClass]="{ 'is-invalid': submitted && f.deviceType.errors }"> Anroid
-                <input type="radio" value="ios" name="deviceType" formControlName="deviceType" [ngClass]="{ 'is-invalid': submitted && f.deviceType.errors }"> IOS-->
-                </div>
+               </div>
             <div *ngIf="submitted && f.deviceType.errors " class="invalid-feedback">
               <div *ngIf="f.deviceType.errors.required">device type is required</div>
             </div>
@@ -176,9 +172,6 @@
         </div>
       </form>
     </div>
-    <!-- <div class="modal-footer">
-          <button type="submit" class="btn btn-secondary" (click)="c('Close click')">Add</button>
-        </div> -->  
   </ng-template>
 </div>
 </div>

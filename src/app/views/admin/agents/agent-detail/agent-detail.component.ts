@@ -26,7 +26,6 @@ import { Subscription } from 'rxjs'
 })
 export class AgentDetailComponent implements OnInit {
 
-public selectedAgent;
 public index;
 public viewData;
 public userId;
@@ -90,7 +89,6 @@ onSubmit() {
   if (!this.AddEditForm.invalid) {
     console.log('in valid', this.userId);
     this.formData = this.AddEditForm.value;
-    if (this.isEdit) {
       this.formData.user_id = this.userId;
       console.log(this.formData);
       this.service.put('admin/agents/update', this.formData).subscribe(res => {
@@ -103,8 +101,6 @@ onSubmit() {
         this.alertService.error('Something went wrong, please try again!!', true);
         this.closePopup();
       })
-    }
-    this.isEdit = false;
   }
 }
   
@@ -132,6 +128,7 @@ RentalData(){
     ordering: false,
     language:{"processing": "<i class='fa fa-refresh loader fa-spin'></i>"},
     ajax: (dataTablesParameters: any, callback) => {
+      console.log('dataparametes==>', dataTablesParameters);
       setTimeout(() => {
       this.service.post('admin/agents/rental_list', dataTablesParameters).subscribe(res => {
         this.rentalData = res['result']['data'];

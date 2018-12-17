@@ -2,7 +2,6 @@ import { Component, OnInit, Renderer, ViewChild, ViewEncapsulation } from '@angu
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { AgentAddEditComponent } from "./../../../shared/model-popup/agent-add-edit/agent-add-edit.component";
 
 //routing
 import { Routes, RouterModule, ActivatedRoute } from '@angular/router';
@@ -160,7 +159,7 @@ export class AgentsComponent implements OnInit {
       pageLength: 10,
       processing: true,
       serverSide: true,
-      ordering: true,
+      ordering: false,
       language: { "processing": "<i class='fa fa-refresh loader fa-spin'></i>" },
       ajax: (dataTablesParameters: any, callback) => {
         setTimeout(() => {

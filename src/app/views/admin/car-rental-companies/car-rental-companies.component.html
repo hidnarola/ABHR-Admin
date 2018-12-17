@@ -62,7 +62,7 @@
                 </td>
                 <td>
                   <span>
-                    {{ item.phone_number}}
+                    {{ item.phone_number ? item.phone_number : '-'}}
                   </span>
                 </td>
                 <td>
@@ -90,8 +90,8 @@
   <div class="col-md-6">
     <ng-template #content let-c="close" let-d="dismiss">
       <div class="modal-header">
-        <ng-container *ngIf="!isEdit">Add Staff </ng-container>
-        <ng-container *ngIf="isEdit">Edit Staff</ng-container>
+        <ng-container *ngIf="!isEdit">Add Company </ng-container>
+        <ng-container *ngIf="isEdit">Edit Company</ng-container>
         <button type="button" class="close" id="closepopup" aria-label="Close" (click)="d('Cross click')">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -101,7 +101,7 @@
           <div class="col-sm-6">
             <div class="form-group">
               <label>Company Name :</label>
-              <input class="form-control" type="text" required="" name="name" placeholder="Enter Firstname"
+              <input class="form-control" type="text" required="" name="name" placeholder="Enter Company Name"
                 formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.name.errors }">
               <div *ngIf=" submitted && f.name.errors " class="invalid-feedback">
                 <div *ngIf="f.name.errors.required"> Company Name is required</div>
@@ -111,7 +111,7 @@
           <div class="col-sm-6 ">
             <div class="form-group">
               <label>Description :</label>
-              <input class="form-control" type="text" required="" name="description" placeholder="Enter Lastname"
+              <input class="form-control" type="text" required="" name="description" placeholder="Enter Description"
                 formControlName="description" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.description.errors }">
               <div *ngIf=" submitted && f.description.errors " class="invalid-feedback">
                 <div *ngIf="f.description.errors.required"> Description is required</div>
@@ -132,10 +132,11 @@
           <div class="col-sm-6 ">
             <div class="form-group">
               <label>Site URL :</label>
-              <input class="form-control" type="text" required="" placeholder="Enter Email" formControlName="email"
+              <input class="form-control" type="text" required="" placeholder="Enter URL" formControlName="site_url"
                 name="site_url" [ngClass]="{ 'is-invalid': submitted && f.site_url.errors }">
               <div *ngIf="submitted && f.site_url.errors" class="invalid-feedback">
-                <!-- <div *ngIf=" f.site_url.errors.required ">site_url is required</div> -->
+                <div *ngIf=" f.site_url.errors.required ">URL is required</div>
+                <div *ngIf=" f.site_url.errors.pattern"> URL is wrong </div>
               </div>
             </div>
           </div>

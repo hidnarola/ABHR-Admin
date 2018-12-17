@@ -1,11 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-// import { CompanyDetailsComponent } from './company-details.component';
-
+import { DataTablesModule } from 'angular-datatables';
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    DataTablesModule
   ],
-  // declarations: [0]
 })
 export class CompanyDetailsModule { }

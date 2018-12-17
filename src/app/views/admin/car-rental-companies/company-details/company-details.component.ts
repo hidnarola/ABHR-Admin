@@ -41,10 +41,12 @@ public isEdit;
 closeResult: string;
 
 @ViewChild(DataTableDirective)
-dtElement: DataTableDirective;
+dtElementcar: DataTableDirective;
+dtElementrental: DataTableDirective;
 dtOptions: DataTables.Settings = {};
+//dtOptionsrental: DataTables.Settings = {};
 dtTrigger: Subject<any> = new Subject();
-
+//dtTriggerrental: Subject<any> = new Subject();
 constructor(
   public renderer: Renderer,
   private dataShare: DataSharingService,
@@ -59,16 +61,18 @@ constructor(
   //addform validation
   const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');                                                                                                                                                                                                                                 
       this.AddEditForm = this.fromBuilder.group({
-          first_name: ['', Validators.required],
-          last_name: ['', Validators.required],
-          phone_number: ['',[ Validators.minLength(10), Validators.maxLength(10), Validators.pattern("[0-9]{10}")]],
-          email: ['', [Validators.required, Validators.email,Validators.pattern(pattern)]],
+        name: ['', Validators.required],
+        description: ['', Validators.required],
+        site_url: ['',[Validators.required, Validators.pattern("^(https?:\/\/)?[0-9a-zA-Z]+\.[-_0-9a-zA-Z]+\.[0-9a-zA-Z]+$")]],
+        phone_number: ['', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern("[0-9]{10}")]],
+        email: ['', [Validators.required, Validators.email, Validators.pattern(pattern)]]
       })
       this.formData = {
-        first_name: String,
-        last_name: String,
+        name: String,
+        description: String,
         phone_number: Number,
-        email: String
+        email: String,
+        site_url: String
       };
 }
 
@@ -81,47 +85,41 @@ closePopup() {
 onSubmit() {
   this.submitted = true;
   if (!this.AddEditForm.invalid) {
-    console.log('in valid', this.userId);
+    //console.log('in valid', this.userId);
     this.formData = this.AddEditForm.value;
-    if (this.isEdit) {
       this.formData.company_id = this.userId;
-      console.log(this.formData);
+      //console.log(this.formData);
       this.service.put('admin/company/update', this.formData).subscribe(res => {
-        console.log('response after edit===>', res);
-        console.log('this.userDetails==>',this.userDetails);
+        //console.log('response after edit===>', res);
+        //console.log('this.userDetails==>',this.userDetails);
         this.userDetails = this.formData;
         this.closePopup();
-        this.alertService.success('Staff is edited!!', true);
+        this.alertService.success('Company is edited!!', true);
       }, error => {
         this.alertService.error('Something went wrong, please try again!!', true);
         this.closePopup();
       })
-    }
-    this.isEdit = false;
   }
 }
 
 UserDetails(){
   this.service.get('admin/company/details/'+this.userId).subscribe ( res =>{
-    console.log('userdetails RES==>',res['data']);
+    //console.log('userdetails RES==>',res['data']);
     this.userDetails = res['data'];
-    console.log('user',['user']);
-    console.log('userDetails==>', this.userDetails);
+    //console.log('userDetails==>', this.userDetails);
   })
 }
 
 //model
 open2(content, userDetails) { 
-  console.log('userDetails====>',userDetails);
+  //console.log('userDetails====>',userDetails);
   if( userDetails != 'undefined' && userDetails ){
     this.isEdit = true;
-    this.AddEditForm.controls['first_name'].setValue(userDetails.first_name);
-    this.AddEditForm.controls['last_name'].setValue(userDetails.last_name);
+    this.AddEditForm.controls['name'].setValue(userDetails.name);
+    this.AddEditForm.controls['description'].setValue(userDetails.description);
     this.AddEditForm.controls['email'].setValue(userDetails.email);
+    this.AddEditForm.controls['site_url'].setValue(userDetails.site_url);
     this.AddEditForm.controls['phone_number'].setValue(userDetails.phone_number);
-    // this.AddEditForm.controls['deviceType'].setValue(userDetails.deviceType);
-    console.log('firstname', userDetails.first_name);
-    console.log('lastname===>', userDetails.last_name)
   };
   this.modalService.open(content).result.then((result) => {
     this.closeResult = `Closed with: ${result}`;
@@ -146,8 +144,8 @@ alert(){
 });
 }
 
-render(): void {
-  this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+rendercar(): void {
+  this.dtElementcar.dtInstance.then((dtInstance: DataTables.Api) => {
     // Destroy the table first
     dtInstance.destroy();
     // Call the dtTrigger to rerender again
@@ -155,13 +153,28 @@ render(): void {
   });
 }
 
-ngOnDestroy(): void {
+// renderrental(): void {
+//   this.dtElementrental.dtInstance.then((dtInstance: DataTables.Api) => {
+//     // Destroy the table first
+//     dtInstance.destroy();
+//     // Call the dtTrigger to rerender again
+//     this.dtTriggerrental.next();
+//   });
+// }
+
+ngOnDestroycar(): void {
   this.dtTrigger.unsubscribe();
   this.subscription.unsubscribe();
 }
 
+// ngOnDestroyrental(): void {
+//   this.dtTriggerrental.unsubscribe();
+//   this.subscription.unsubscribe();
+// }
+
 ngAfterViewInit(): void {
   this.dtTrigger.next();
+  //this.dtTriggerrental.next();
 }
 
 CarData(){
@@ -170,12 +183,13 @@ CarData(){
     pageLength: 10,
     processing: true,
     serverSide: true,
-    ordering: true,
+    ordering: false,
     language: { "processing": "<i class='fa fa-refresh loader fa-spin'></i>" },
     ajax: (dataTablesParameters: any, callback) => {
+      console.log('dataparametes car==>',dataTablesParameters);
       setTimeout(() => {
-        console.log('dtaparametes car rental company==>',dataTablesParameters);
-        this.service.post('admin/agents/list', dataTablesParameters).subscribe(res => {
+        console.log('dtaparametes car==>',dataTablesParameters);
+        this.service.post('admin/company/car_list', dataTablesParameters).subscribe(res => {
           this.carData = res['result']['data'];
           console.log(this.carData);
           this.dataShare.changeLoading(false);
@@ -192,16 +206,20 @@ CarData(){
         data: 'Id',
       },
       {
-        data: 'Fisrt Name',
-        name: 'first_name',
+        data: 'Company Name',
+        name: 'name',
       },
       {
-        data: 'Last Name',
-        name: 'last_name',
+        data: 'Description',
+        name: 'description',
       },
       {
         data: 'Email',
         name: 'email',
+      },
+      {
+        data: 'Site URl',
+        name: 'site_url',
       },
       {
         data: 'Phone Number',
@@ -223,6 +241,7 @@ RentalData(){
     ordering: false,
     language:{"processing": "<i class='fa fa-refresh loader fa-spin'></i>"},
     ajax: (dataTablesParameters: any, callback) => {
+      console.log('dataparametes in rental==>', dataTablesParameters);
       setTimeout(() => {
       this.service.post('admin/agents/rental_list', dataTablesParameters).subscribe(res => {
         this.rentalData = res['result']['data'];
@@ -238,6 +257,7 @@ RentalData(){
     columns: [
       {
         data: 'Id', 
+        name: 'i+1',
       },
       {
         data: 'Fisrt Name', 
@@ -264,7 +284,9 @@ RentalData(){
 }
 
 ngOnInit() {
+  this.CarData();
   this.UserDetails();
+  this.RentalData();
   this.alert();
 }
 

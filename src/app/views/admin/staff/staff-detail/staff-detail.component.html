@@ -18,7 +18,7 @@
         <div class="agents-dtl-box-inr"><b>First Name : </b> <span>{{userDetails.first_name}}</span> </div>
         <div class="agents-dtl-box-inr"><b>Last Name : </b> <span>{{userDetails.last_name}}</span> </div>
         <div class="agents-dtl-box-inr"><b>Email : </b> <span>{{ userDetails.email }}</span> </div>
-        <div class="agents-dtl-box-inr"><b>Phone Number : </b> <span>{{ userDetails.phone_number }}</span> </div>
+        <div class="agents-dtl-box-inr"><b>Phone Number : </b> <span>{{ userDetails.phone_number ? userDetails.phone_number : '-' }}</span> </div>
       </div>
     </div>
   </div>

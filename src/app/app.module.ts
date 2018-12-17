@@ -5,7 +5,6 @@ import { CommonModule, LocationStrategy, HashLocationStrategy } from '@angular/c
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { Routes, RouterModule } from '@angular/router';
 
 import { FullComponent } from './layouts/full/full.component';
 import { BlankComponent } from './layouts/blank/blank.component';
@@ -21,8 +20,6 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SpinnerComponent } from './shared/spinner.component';
-import { CompaniesComponent } from './views/companies/companies.component';
-// import { RentalsComponent } from './shared/components/rentals/rentals.component';
 
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import {ConfirmationService} from 'primeng/api';
@@ -48,9 +45,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NavigationComponent,
     BreadcrumbComponent,
     SidebarComponent,
-    CompaniesComponent,
     AlertComponent
-    // ResetPasswordComponent
   ],
   imports: [
     CommonModule,
@@ -64,7 +59,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AppRoutingModule,
     DataTablesModule,
     ConfirmDialogModule,
-   // AlertComponent,
    
   ],
   providers: [

@@ -15,7 +15,7 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 //model
-import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 //primng
 import {ConfirmationService, Message} from 'primeng/api';
@@ -46,6 +46,7 @@ export class CarRentalCompaniesComponent implements OnInit {
   private subscription: Subscription;
   message: any;
   msgs: Message[] = [];
+  closeResult: string;
 
 constructor(
   public renderer: Renderer,
@@ -64,7 +65,7 @@ constructor(
   this.AddEditForm = this.fromBuilder.group({
     name: ['', Validators.required],
     description: ['', Validators.required],
-    site_url: [''],
+    site_url: ['',[Validators.required, Validators.pattern("^(https?:\/\/)?[0-9a-zA-Z]+\.[-_0-9a-zA-Z]+\.[0-9a-zA-Z]+$")]],
     phone_number: ['', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern("[0-9]{10}")]],
     email: ['', [Validators.required, Validators.email, Validators.pattern(pattern)]]
   });
@@ -84,7 +85,7 @@ UsersListData(){
     pageLength: 10,
     processing: true,
     serverSide: true,
-    ordering: true,
+    ordering: false,
     language: { "processing": "<i class='fa fa-refresh loader fa-spin'></i>" },
     ajax: (dataTablesParameters: any, callback) => {
       setTimeout(() => {
@@ -138,7 +139,6 @@ ngAfterViewInit(): void {
 }
 
 //Add-Edit pop up
-closeResult: string;
 open2(content, item) {
   console.log('item==>', item);
   if (item != 'undefined' && item != '') {
@@ -231,9 +231,10 @@ onSubmit() {
     this.formData = this.AddEditForm.value;
     console.log('formadata==>',this.formData);
     if (this.isEdit) {
-      this.formData.user_id = this.userId;
+      this.formData.company_id = this.userId;
       console.log('userId', this.userId);
       this.service.put('admin/company/update', this.formData).subscribe(res => {
+        console.log('after update==>',res)
         this.render();
         this.closePopup();
         this.alertService.success('Company is edited!!', true);

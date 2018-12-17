@@ -6,7 +6,8 @@ import { FullComponent } from './layouts/full/full.component';
 import { BlankComponent } from './layouts/blank/blank.component';
 import { AuthGuard } from './shared/guards/auth.guard';
 
-import { AdminModule } from '../app/views/admin/admin.module'
+import { AdminModule } from '../app/views/admin/admin.module';
+import { CompaniesModule } from '../app/views/companies/companies.module';
 import { LoginGuard } from './shared/guards/login.guard';
 // import { AdminComponent } from './views/admin/admin.component';
 
@@ -20,6 +21,9 @@ export const routes: Routes = [
         },
             { path: '', redirectTo: '/admin/dashboard', pathMatch: 'full', 
             canActivate: [AuthGuard] 
+        },
+        { path: 'company', loadChildren: './views/companies/companies.module#CompaniesModule',
+            //canActivate: [AuthGuard]
         },
         ]
     },
