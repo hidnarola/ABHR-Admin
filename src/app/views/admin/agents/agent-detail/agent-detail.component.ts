@@ -15,7 +15,7 @@ import {NgbModal, ModalDismissReasons, NgbActiveModal} from '@ng-bootstrap/ng-bo
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'; 
 
 //alert
-import { AlertService } from '../../../../shared/services/alert.service';
+import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs'
 
 
@@ -54,7 +54,7 @@ private service: CrudService,
 private modalService: NgbModal,
 public router: Router,
 private fromBuilder: FormBuilder,
-private alertService : AlertService
+private messageService: MessageService,
 ) {
 this.route.params.subscribe(params => {
   this.userId = params.id;
@@ -96,9 +96,9 @@ onSubmit() {
         console.log('this.agentDetails==>',this.agentDetails);
         this.agentDetails = this.formData;
         this.closePopup();
-        this.alertService.success('Agent is edited!!', true);
+        this.messageService.add({severity:'success', summary:'Success', detail:'Agent is edited!!'});
       }, error => {
-        this.alertService.error('Something went wrong, please try again!!', true);
+        this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
         this.closePopup();
       })
   }
@@ -116,7 +116,6 @@ render(): void {
 
 ngOnDestroy(): void {
   this.dtTrigger.unsubscribe();
-  this.subscription.unsubscribe();
 }
 
 RentalData(){
@@ -212,16 +211,9 @@ private getDismissReason(reason: any): string {
 }
 //add-edit popup ends here
 
-alert(){
-  this.subscription = this.alertService.getMessage().subscribe(message => { 
-    this.message = message; 
-});
-}
-
 ngOnInit() {
   this.RentalData();
   this.AgentDetails();
-  this.alert()
 }
 
 }

@@ -13,7 +13,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 //primng
 import {ConfirmationService, Message} from 'primeng/api';
 //alert
-import { AlertService } from '../../../shared/services/alert.service';
+import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs'
 
 @Component({
@@ -49,7 +49,7 @@ export class CarsComponent implements OnInit {
     //model
     private modalService: NgbModal,
     private fromBuilder: FormBuilder,
-    private alertService : AlertService
+    private messageService: MessageService,
   ) {
      //addform validation
   const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
@@ -175,11 +175,10 @@ delete(userId) {
       accept: () => {
       this.service.put('admin/company/delete', {company_id : userId}).subscribe(res => {
         this.render();
-        this.alertService.success('Car is deleted!!', true);
+        this.messageService.add({severity:'success', summary:'Success', detail:'Car is deleted!!'});
         //setTimeout(()=>{ this.closePopup()},1000);
       },error => {
-        this.alertService.error('Something went wrong, please try again!!', true);
-        
+        this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});        
       });
       },
       reject: () => {
@@ -187,14 +186,6 @@ delete(userId) {
   });
 }
 // dlt pop up ends here
-
-//alert-message 
-alert(){
-  this.subscription = this.alertService.getMessage().subscribe(message => { 
-    this.message = message; 
-});
-}
-// alert-message ends here
 
 render(): void {
   this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
@@ -207,7 +198,6 @@ render(): void {
 
 ngOnDestroy(): void {
   this.dtTrigger.unsubscribe();
-  this.subscription.unsubscribe();
 }
 
 closePopup() {
@@ -228,18 +218,18 @@ onSubmit() {
         console.log('after update==>',res)
         this.render();
         this.closePopup();
-        this.alertService.success('Car is edited!!', true);
+        this.messageService.add({severity:'success', summary:'Success', detail:'Car is edited!!'});
       }, error => {
-        this.alertService.error('Something went wrong, please try again!!', true)
+        this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
         this.closePopup();
       })
     } else {
       this.service.post('admin/company/add', this.formData).subscribe(res => {
         this.render();
         this.closePopup();
-        this.alertService.success('Car is added!!', true);
+        this.messageService.add({severity:'success', summary:'Success', detail:'Car is added!!'});
       }, error => {
-        this.alertService.error('Something went wrong, please try again!!', true)
+        this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
         this.closePopup();
       })
     }
@@ -250,7 +240,6 @@ onSubmit() {
 
 ngOnInit() {
   this.UsersListData();
-  this.alert();
 }
 
 }

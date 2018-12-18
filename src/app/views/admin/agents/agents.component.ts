@@ -21,9 +21,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 //primng
 import {ConfirmationService, Message} from 'primeng/api';
 import { MessageService } from 'primeng/api';
-
-//alert
-import { AlertService } from '../../../shared/services/alert.service';
 import { Subscription } from 'rxjs'
 
 
@@ -66,10 +63,10 @@ export class AgentsComponent implements OnInit {
     public router: Router,
     private route: ActivatedRoute,
     private confirmationService: ConfirmationService,
+    private messageService: MessageService,
     //model
     private modalService: NgbModal,
     private fromBuilder: FormBuilder,
-    private alertService : AlertService
   ) {
     //addform validation
     const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
@@ -108,18 +105,18 @@ export class AgentsComponent implements OnInit {
         this.service.put('admin/agents/update', this.formData).subscribe(res => {
           this.render();
           this.closePopup();
-          this.alertService.success('Agent is edited!!', true);
+          this.messageService.add({severity:'success', summary:'Success', detail:'Agent is edited!!'});
         }, error => {
-          this.alertService.error('Something went wrong, please try again!!', true)
+          this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
           this.closePopup();
         })
       } else {
         this.service.post('admin/agents/add', this.formData).subscribe(res => {
           this.render();
           this.closePopup();
-          this.alertService.success('Agent is added!!', true);
+          this.messageService.add({severity:'success', summary:'Success', detail:'Agent is added!!'});
         }, error => {
-          this.alertService.error('Something went wrong, please try again!!', true)
+          this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
           this.closePopup();
         })
       }
@@ -141,7 +138,6 @@ export class AgentsComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
-    this.subscription.unsubscribe();
   }
 
   //public agentData = data;
@@ -150,7 +146,6 @@ export class AgentsComponent implements OnInit {
   title = 'angulardatatables';
   ngOnInit() {
     this.AgentsListData();
-    this.alert();
   }
 
   AgentsListData(){
@@ -271,11 +266,9 @@ export class AgentsComponent implements OnInit {
         accept: () => {
         this.service.put('admin/agents/delete', {user_id : userId}).subscribe(res => {
           this.render();
-          this.alertService.success('Agent is deleted!!', true);
-          setTimeout(()=>{ this.closePopup()},1000);
+          this.messageService.add({severity:'success', summary:'Success', detail:'Agent is Deleted!!'});
         },error => {
-          this.alertService.error('Something went wrong, please try again!!', true);
-          
+          this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});  
         });
         },
         reject: () => {
@@ -283,12 +276,4 @@ export class AgentsComponent implements OnInit {
     });
   }
 // dlt pop up ends here
-
-//message 
-  alert(){
-    this.subscription = this.alertService.getMessage().subscribe(message => { 
-      this.message = message; 
-  });
-  }
-// message ends here
 }

@@ -15,7 +15,7 @@ import {NgbModal, ModalDismissReasons, NgbActiveModal} from '@ng-bootstrap/ng-bo
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'; 
 
 //alert
-import { AlertService } from '../../../../shared/services/alert.service';
+import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs'
 
 @Component({
@@ -44,9 +44,7 @@ closeResult: string;
 dtElementcar: DataTableDirective;
 dtElementrental: DataTableDirective;
 dtOptions: DataTables.Settings = {};
-//dtOptionsrental: DataTables.Settings = {};
 dtTrigger: Subject<any> = new Subject();
-//dtTriggerrental: Subject<any> = new Subject();
 constructor(
   public renderer: Renderer,
   private dataShare: DataSharingService,
@@ -55,7 +53,7 @@ constructor(
   private modalService: NgbModal,
   public router: Router,
   private fromBuilder: FormBuilder,
-  private alertService : AlertService
+  private messageService: MessageService,
 ) { 
   this.route.params.subscribe(params => { this.userId = params.id; });
   //addform validation
@@ -87,16 +85,16 @@ onSubmit() {
   if (!this.AddEditForm.invalid) {
     //console.log('in valid', this.userId);
     this.formData = this.AddEditForm.value;
-      this.formData.company_id = this.userId;
-      //console.log(this.formData);
+    this.formData.company_id = this.userId;
+      console.log('form data in company view page',this.formData);
       this.service.put('admin/company/update', this.formData).subscribe(res => {
         //console.log('response after edit===>', res);
         //console.log('this.userDetails==>',this.userDetails);
         this.userDetails = this.formData;
         this.closePopup();
-        this.alertService.success('Company is edited!!', true);
+        this.messageService.add({severity:'success', summary:'Success', detail:'Company is edited!!'});
       }, error => {
-        this.alertService.error('Something went wrong, please try again!!', true);
+        this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
         this.closePopup();
       })
   }
@@ -138,13 +136,7 @@ private getDismissReason(reason: any): string {
 }
 //add-edit popup ends here
 
-alert(){
-  this.subscription = this.alertService.getMessage().subscribe(message => { 
-    this.message = message; 
-});
-}
-
-rendercar(): void {
+render(): void {
   this.dtElementcar.dtInstance.then((dtInstance: DataTables.Api) => {
     // Destroy the table first
     dtInstance.destroy();
@@ -153,28 +145,12 @@ rendercar(): void {
   });
 }
 
-// renderrental(): void {
-//   this.dtElementrental.dtInstance.then((dtInstance: DataTables.Api) => {
-//     // Destroy the table first
-//     dtInstance.destroy();
-//     // Call the dtTrigger to rerender again
-//     this.dtTriggerrental.next();
-//   });
-// }
-
-ngOnDestroycar(): void {
+ngOnDestroy(): void {
   this.dtTrigger.unsubscribe();
-  this.subscription.unsubscribe();
 }
-
-// ngOnDestroyrental(): void {
-//   this.dtTriggerrental.unsubscribe();
-//   this.subscription.unsubscribe();
-// }
 
 ngAfterViewInit(): void {
   this.dtTrigger.next();
-  //this.dtTriggerrental.next();
 }
 
 CarData(){
@@ -183,13 +159,17 @@ CarData(){
     pageLength: 10,
     processing: true,
     serverSide: true,
+    searching: false, 
     ordering: false,
     language: { "processing": "<i class='fa fa-refresh loader fa-spin'></i>" },
     ajax: (dataTablesParameters: any, callback) => {
       console.log('dataparametes car==>',dataTablesParameters);
       setTimeout(() => {
+        dataTablesParameters.company_id = this.userId; 
         console.log('dtaparametes car==>',dataTablesParameters);
-        this.service.post('admin/company/car_list', dataTablesParameters).subscribe(res => {
+          this.service.post('admin/company/car_list', dataTablesParameters).subscribe(res => {
+            console.log('user id in car data table', this.userId)
+            console.log('car data==>', res)
           this.carData = res['result']['data'];
           console.log(this.carData);
           this.dataShare.changeLoading(false);
@@ -206,79 +186,24 @@ CarData(){
         data: 'Id',
       },
       {
-        data: 'Company Name',
-        name: 'name',
+        data: 'Brand Name',
+        name: 'brandDetails.brand_name',
       },
       {
-        data: 'Description',
-        name: 'description',
+        data: 'Model Name',
+        name: 'modelDetails.model_name',
       },
       {
-        data: 'Email',
-        name: 'email',
+        data: 'Year', 
+        name: 'modelDetails.release_year',
       },
       {
-        data: 'Site URl',
-        name: 'site_url',
+        data: 'Status',
+        name: 'is_avialable',
       },
-      {
-        data: 'Phone Number',
-        name: 'phone_number',
-      },
-      {
-        data: 'Actions',
-      }
-    ]
-  };
-}
-
-RentalData(){
-  this.dtOptions = {
-    pagingType: 'full_numbers',
-    pageLength: 10,
-    processing: true,
-    serverSide: true,
-    ordering: false,
-    language:{"processing": "<i class='fa fa-refresh loader fa-spin'></i>"},
-    ajax: (dataTablesParameters: any, callback) => {
-      console.log('dataparametes in rental==>', dataTablesParameters);
-      setTimeout(() => {
-      this.service.post('admin/agents/rental_list', dataTablesParameters).subscribe(res => {
-        this.rentalData = res['result']['data'];
-        this.dataShare.changeLoading(false);
-        callback({
-          recordsTotal: res['result']['recordsTotal'],
-          recordsFiltered: res['result']['recordsTotal'],
-          data: []
-        });
-      })
-       }, 1000)
-    },
-    columns: [
-      {
-        data: 'Id', 
-        name: 'i+1',
-      },
-      {
-        data: 'Fisrt Name', 
-        name:'first_name',
-      },
-      {
-        data: 'Last Name',
-        name: 'last_name',
-      },
-      {
-        data: 'Email',
-        name: 'email',
-      },
-      {
-        data: 'Device Type',
-        name: 'deviceType',
-      },
-      {
-        data: 'Phone Number',
-        name: 'phone_number',
-      }
+      // {
+      //   data: 'Actions',
+      // }
     ]
   };
 }
@@ -286,8 +211,5 @@ RentalData(){
 ngOnInit() {
   this.CarData();
   this.UserDetails();
-  this.RentalData();
-  this.alert();
 }
-
 }

@@ -1,5 +1,4 @@
 import { NgModule } from "@angular/core";
-import { RentalsComponent } from './rentals.component'; 
 import { CommonModule } from "@angular/common";
 
 @NgModule({
@@ -7,8 +6,7 @@ import { CommonModule } from "@angular/common";
         CommonModule
     ],
     declarations:[
-        RentalsComponent
     ],
-    exports: [RentalsComponent]
+    exports: []
 })
 export class RentalModule{}

@@ -77,3 +77,4 @@ h4.table-header {color: #1976d2;text-transform: uppercase;font-weight: 500;}
 li.breadcrumb-item {font-weight: 400;}
 .ui-confirmdialog-icon{ color: red}
 .blue{color:#1976d2; margin-bottom: 18px;}
+.ui-toast-top-right {top: 60px !important;}

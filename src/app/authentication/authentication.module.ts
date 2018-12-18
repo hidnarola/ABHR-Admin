@@ -3,6 +3,8 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import {FormsModule,ReactiveFormsModule} from '@angular/forms';
 
+import {ToastModule} from 'primeng/toast';
+
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { NotFoundComponent } from './404/not-found.component';
@@ -13,15 +15,14 @@ import { AuthenticationRoutes } from './authentication.routing';
 import { ForgetPasswordComponent } from './forget-password/forget-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
-
-
 @NgModule({
   imports: [ 
     CommonModule,
     RouterModule.forChild(AuthenticationRoutes),
     NgbModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ToastModule
   ],
   declarations: [
     NotFoundComponent,

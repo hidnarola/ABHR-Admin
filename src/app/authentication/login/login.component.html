@@ -1,12 +1,8 @@
 <div class="login-register" style="background-image:url(assets/images/background/login-register.jpg);">
   
-  <div *ngIf="message" 
-  [ngClass]="{ 'alert': message,
-              'alert-success': message.type === 'success', 
-              'alert-danger': message.type === 'error' }">
-    {{message.text}}
-  </div>
-
+ <!--Alert message--> 
+<!-- <p-toast position="top-center"></p-toast> -->
+<p-toast></p-toast>
 
   <div class="login-box card">
     <div class="card-body">
@@ -34,10 +30,10 @@
         </div>
         <div class="form-group row">
           <div class="col-md-12 font-14">
-            <div class="checkbox checkbox-primary pull-left p-t-0">
+            <!-- <div class="checkbox checkbox-primary pull-left p-t-0">
               <input id="checkbox-signup" type="checkbox">
               <label for="checkbox-signup"> Remember me </label>
-            </div> 
+            </div>  -->
             <a href="javascript:void(0)" id="to-recover" class="text-dark pull-right" [routerLink]="['/admin/forget-password']">
               Forgot password?</a> 
             </div>

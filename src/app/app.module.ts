@@ -8,10 +8,11 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 import { FullComponent } from './layouts/full/full.component';
 import { BlankComponent } from './layouts/blank/blank.component';
-
+//shared component
 import { NavigationComponent } from './shared/header-navigation/navigation.component';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import { BreadcrumbComponent } from './shared/breadcrumb/breadcrumb.component';
+//import { RentalsComponent } from './shared/components/rentals/rentals.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
@@ -27,8 +28,6 @@ import { MessageService } from 'primeng/components/common/messageservice';
 
 //third party modules
 import { DataTablesModule } from 'angular-datatables';
-import { AlertComponent } from './shared/components/alert/alert.component';
-
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -45,7 +44,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NavigationComponent,
     BreadcrumbComponent,
     SidebarComponent,
-    AlertComponent
   ],
   imports: [
     CommonModule,

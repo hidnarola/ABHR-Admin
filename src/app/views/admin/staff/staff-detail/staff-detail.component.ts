@@ -1,6 +1,5 @@
 import { Component, OnInit, Renderer, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
-import { DataTableDirective } from 'angular-datatables';
 import { ActivatedRoute  } from '@angular/router';
 import { Router } from '@angular/router';
 
@@ -15,7 +14,7 @@ import {NgbModal, ModalDismissReasons, NgbActiveModal} from '@ng-bootstrap/ng-bo
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'; 
 
 //alert
-import { AlertService } from '../../../../shared/services/alert.service';
+import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs'
 
 @Component({
@@ -45,7 +44,7 @@ constructor(
   private modalService: NgbModal,
   public router: Router,
   private fromBuilder: FormBuilder,
-  private alertService : AlertService
+  private messageService: MessageService,
 ) { 
   this.route.params.subscribe(params => {
     this.userId = params.id;
@@ -86,9 +85,9 @@ onSubmit() {
         this.userDetails = this.formData;
         console.log('this.userDetails==>',this.userDetails);
         // this.closePopup();
-        this.alertService.success('Staff is edited!!', true);
+        this.messageService.add({severity:'success', summary:'Success', detail:'Staff is edited!!'});
       }, error => {
-        this.alertService.error('Something went wrong, please try again!!', true);
+        this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
         // this.closePopup();
       })
       this.closePopup();
@@ -134,15 +133,8 @@ private getDismissReason(reason: any): string {
 }
 //add-edit popup ends here
 
-alert(){
-  this.subscription = this.alertService.getMessage().subscribe(message => { 
-    this.message = message; 
-});
-}
-
 ngOnInit() {
   this.UserDetails();
-  this.alert();
 }
 
 }

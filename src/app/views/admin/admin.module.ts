@@ -10,6 +10,7 @@ import { DataTablesModule } from 'angular-datatables';
 import {MatDialogModule} from '@angular/material/dialog';
 import {FormsModule,ReactiveFormsModule} from '@angular/forms';
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
+import {ToastModule} from 'primeng/toast';
 
 import { AdminComponent } from './admin.component';
 // Child components
@@ -25,6 +26,10 @@ import { AgentDetailComponent } from './agents/agent-detail/agent-detail.compone
 import { CompanyDetailsComponent } from './car-rental-companies/company-details/company-details.component';
 import { StaffDetailComponent } from './staff/staff-detail/staff-detail.component';
 
+//shared component
+import { RentalsComponent } from '../../shared/components/rentals/rentals.component';
+import { AlertComponent } from '../../shared/components/alert/alert.component';
+import { CarDetailsComponent } from './car-rental-companies/company-details/car-details/car-details.component';
 
 
 const AdminRoutes: Routes = [
@@ -93,9 +98,17 @@ const AdminRoutes: Routes = [
             component: CompanyDetailsComponent,
             data: {
             title: 'Manage Companies',
-            urls: [{title: 'Admin Dashboard',url: '/admin/dashboard'},{title: 'Companies', url: '/admin/car-rental-companies'}, {title: 'view'}]
+            urls: [{title: 'Admin Dashboard',url: '/admin/dashboard'},{title: 'Companies', url: '/admin/car-rental-companies'}, {title: 'View'}]
             },
-          }
+          },
+          {
+            path: 'car-rental-companies/car/view/:id',
+            component: CarDetailsComponent,
+            data: {
+              title: 'Manage Cars',
+              urls: [{title: 'Admin Dashboard',url: '/admin/dashboard'},{title: 'Companies', url: '/admin/car-rental-companies'}, {title: 'View '}]
+              },
+          },
         ] 
       },
       {
@@ -154,7 +167,8 @@ const AdminRoutes: Routes = [
       MatDialogModule,
       FormsModule,
       ReactiveFormsModule,
-      ConfirmDialogModule
+      ConfirmDialogModule,
+      ToastModule
     ],
     exports: [RouterModule],
     declarations: [
@@ -169,7 +183,10 @@ const AdminRoutes: Routes = [
         SettingsComponent,
         AgentDetailComponent,
         StaffDetailComponent,
-        CompanyDetailsComponent
+        CompanyDetailsComponent,
+        RentalsComponent,
+        AlertComponent,
+        CarDetailsComponent
     ]
 })
 export class AdminModule { }

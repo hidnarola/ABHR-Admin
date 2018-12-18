@@ -21,7 +21,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import {ConfirmationService, Message} from 'primeng/api';
 
 //alert
-import { AlertService } from '../../../shared/services/alert.service';
+import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs'
 
 @Component({
@@ -58,7 +58,7 @@ constructor(
     //model
     private modalService: NgbModal,
     private fromBuilder: FormBuilder,
-    private alertService : AlertService
+    private messageService: MessageService,
 ) {
   //addform validation
   const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
@@ -185,11 +185,10 @@ delete(userId) {
       accept: () => {
       this.service.put('admin/company/delete', {company_id : userId}).subscribe(res => {
         this.render();
-        this.alertService.success('Company is deleted!!', true);
+        this.messageService.add({severity:'success', summary:'Success', detail:'Company is Deleted!!'});
         //setTimeout(()=>{ this.closePopup()},1000);
       },error => {
-        this.alertService.error('Something went wrong, please try again!!', true);
-        
+        this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});        
       });
       },
       reject: () => {
@@ -197,14 +196,6 @@ delete(userId) {
   });
 }
 // dlt pop up ends here
-
-//alert-message 
-alert(){
-  this.subscription = this.alertService.getMessage().subscribe(message => { 
-    this.message = message; 
-});
-}
-// alert-message ends here
 
 render(): void {
   this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
@@ -217,7 +208,6 @@ render(): void {
 
 ngOnDestroy(): void {
   this.dtTrigger.unsubscribe();
-  this.subscription.unsubscribe();
 }
 
 closePopup() {
@@ -237,18 +227,18 @@ onSubmit() {
         console.log('after update==>',res)
         this.render();
         this.closePopup();
-        this.alertService.success('Company is edited!!', true);
+        this.messageService.add({severity:'success', summary:'Success', detail:'Company is edited!!'});
       }, error => {
-        this.alertService.error('Something went wrong, please try again!!', true)
+        this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
         this.closePopup();
       })
     } else {
       this.service.post('admin/company/add', this.formData).subscribe(res => {
         this.render();
         this.closePopup();
-        this.alertService.success('Company is added!!', true);
+        this.messageService.add({severity:'success', summary:'Success', detail:'Company is added!!'});
       }, error => {
-        this.alertService.error('Something went wrong, please try again!!', true)
+        this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
         this.closePopup();
       })
     }
@@ -259,7 +249,6 @@ onSubmit() {
 
 ngOnInit() {
   this.UsersListData();
-  this.alert();
 }
 
 }

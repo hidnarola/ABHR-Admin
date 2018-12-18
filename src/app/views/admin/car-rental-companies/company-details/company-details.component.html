@@ -1,7 +1,5 @@
 <!--Alert message-->  
-<div *ngIf="message" id="closepopup" [ngClass]="{ 'alert': message,'alert-success': message.type === 'success','alert-danger': message.type === 'error' }">
-  {{message.text}} 
-</div>
+<p-toast></p-toast>
 
 <!--details-->
 <div class="card">
@@ -44,11 +42,11 @@
               <thead>
                 <tr>
                 <th>Id</th>
-                <th>Fisrt Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th>Phone Number</th>
-                <th>Actions</th>
+                <th>BRAND NAME</th>
+                <th>MODEL NAME</th>
+                <th>YEAR</th>
+                <th>STATUS</th>
+                <!-- <th>Actions</th> -->
                 </tr>
               </thead>
               <tbody *ngIf="carData?.length != 0">
@@ -58,34 +56,34 @@
                   </td>
                   <td>
                     <span>
-                      {{ item.first_name }}
+                      {{ item.brandDetails.brand_name }}
                     </span>
                   </td>
                   <td>
                     <span>
-                      {{ item.last_name }}
+                      {{ item.modelDetails.model_name }}
                     </span>
                   </td>
                   <td>
                     <span>
-                      {{ item.email }}
+                      {{ item.modelDetails.release_year }}
                     </span>
                   </td>
                   <td>
                     <span>
-                        {{ item.phone_number ? item.phone_number : '-'}}
+                      {{ item.is_avialable }}
                     </span>
                   </td>
-                  <td>
+                  <!-- <td>
                     <div ngbDropdown class="d-inline-block">
                       <button class="btn btn-primary" id="dropdownBasic1" ngbDropdownToggle></button>
                       <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                        <button class="dropdown-item" [routerLink]="['/admin/car-rental-companies/view/',item._id]">View</button>
+                        <button class="dropdown-item" [routerLink]="['/admin/car-rental-companies/car/view/',item._id]">View</button>-->
                         <!-- <button class="dropdown-item" (click)="open2(content, item)">Edit</button>
                         <button class="dropdown-item" (click)="delete(item._id)">Delete</button> -->
-                       </div>
+                      <!--</div>
                     </div>
-                  </td>
+                  </td> -->
                 </tr>
               </tbody>
             </table>
@@ -93,71 +91,10 @@
       </div>
     </div>
   </div>
-</div>
+</div> 
 
 <!--Rental-datatable-->
-<div class="card">
-  <div class="card-body">
-    <div class="row pb-3">
-      <div class="col-lg-6"><h4 class="table-header">List of Rentals </h4></div>
-      <div class="col-lg-6 text-right">
-          <button type="button" class="btn btn-primary">
-           <i class="fa fa-external-link" aria-hidden="true"></i> Export
-          </button>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="table table-responsive table-hover">
-            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table">
-              <thead>
-                <tr>
-                <th>Id</th>
-                <th>Fisrt Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th>Device Type</th>
-                <th>Phone Number</th>
-                </tr>
-              </thead>
-              <tbody *ngIf="rentalData?.length != 0">
-                <tr *ngFor="let item of rentalData; let i = index">
-                  <td>
-                    {{i+1}}
-                  </td>
-                  <td>
-                    <span>
-                      {{ item.first_name }}
-                    </span>
-                  </td>
-                  <td>
-                    <span>
-                      {{ item.last_name }}
-                    </span>
-                  </td>
-                  <td>
-                    <span>
-                      {{ item.email }}
-                    </span>
-                  </td>
-                  <td>
-                    <span>
-                      {{ item.deviceType }}
-                    </span>
-                  </td>
-                  <td>
-                    <span>
-                        {{ item.phone_number}}
-                    </span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<app-rentals></app-rentals>
 
 <!--Edit form-->
  <div class="row">

@@ -4,6 +4,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { ResetPasswordComponent } from './reset-password.component';
 import {FormsModule,ReactiveFormsModule} from '@angular/forms';
 
+import {ToastModule} from 'primeng/toast';
+
 const ResetPasswordRoutes: Routes =[
   {
     path: '',
@@ -16,7 +18,8 @@ const ResetPasswordRoutes: Routes =[
     CommonModule,
     RouterModule.forChild(ResetPasswordRoutes),
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ToastModule
   ],
   declarations: [
     ResetPasswordComponent

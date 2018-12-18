@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 //service
 import { CrudService } from '../../shared/services/crud.service';
-import { AlertService } from '../../shared/services/alert.service';
+import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs'
 
 @Component({
@@ -24,11 +24,7 @@ export class ForgetPasswordComponent implements OnInit {
   constructor( private formBuilder: FormBuilder,
                public service: CrudService,
                public router: Router,
-               private alertService : AlertService) { 
-                this.subscription = this.alertService.getMessage().subscribe(message => { 
-                  this.message = message; 
-              });
-               }
+               private messageService: MessageService,) { }
 
   ngOnInit() {
     this.formData = {};
@@ -50,15 +46,15 @@ export class ForgetPasswordComponent implements OnInit {
       this.service.post('admin/forget_password', this.forgetPasswordForm.value).subscribe((res) => {
         this.submitted = false;
         console.log('result==>',res);
-        this.alertService.success('Email is sent to you Email Id!', true);
+        this.messageService.add({severity:'success', summary:'Success', detail:'Email is sent to you Email Id!!'});
         this.router.navigate(['/admin/forget-password']);
         console.log('alert', this.alerts)
       }, error => {
-        this.alertService.error('Something went wrong, please try again!!', true);
+        this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
       });
     }
   }
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    //this.subscription.unsubscribe();
   }
 }

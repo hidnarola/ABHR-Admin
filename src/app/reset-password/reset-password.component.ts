@@ -4,7 +4,7 @@ import { MustMatch } from '../shared/helpers/must-match.validator';
 import { Router } from '@angular/router';
 //service
 import { CrudService } from '../shared/services/crud.service';
-import { AlertService } from '../shared/services/alert.service';
+import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs'
 
 @Component({
@@ -23,11 +23,7 @@ export class ResetPasswordComponent implements OnInit {
   constructor( private formBuilder: FormBuilder,
               public service: CrudService,
               public router: Router,
-              private alertService : AlertService) {
-                this.subscription = this.alertService.getMessage().subscribe(message => { 
-                  this.message = message; 
-              });
-               }
+              private messageService: MessageService,) {}
 
   ngOnInit() {
     this.resetPasswordForm = this.formBuilder.group({
@@ -48,16 +44,16 @@ export class ResetPasswordComponent implements OnInit {
       console.log('forget pass form==>',this.resetPasswordForm.value);
       this.service.post('admin/reset_password', this.resetPasswordForm.value).subscribe((res) => {
         this.submitted = false;
-        this.alertService.success('Password is Reset!!', true);
+        this.messageService.add({severity:'error', summary:'Success', detail:'Password has been Reset successfully!!'});
         console.log('result==>',res);
       },error => {
-        this.alertService.error('Something went wrong, please try again!!', true);
+        this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
       });
     }
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    //this.subscription.unsubscribe();
   }
 
 }

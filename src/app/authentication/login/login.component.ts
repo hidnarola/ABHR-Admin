@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'; 
 //service
 import { CrudService } from '../../shared/services/crud.service';
-import { AlertService } from '../../shared/services/alert.service';
+import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs'
 
 @Component({
@@ -24,11 +24,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     constructor(public router: Router,
                 public service: CrudService,
                 private fromBuilder: FormBuilder,
-                private alertService : AlertService) {
-                    this.subscription = this.alertService.getMessage().subscribe(message => { 
-                        this.message = message; 
-                    });
-                }
+                private messageService: MessageService,) {}
 
     ngOnInit() {
         this.formData = {};
@@ -70,15 +66,13 @@ export class LoginComponent implements OnInit, AfterViewInit {
                 localStorage.setItem('token',res['token'])
                 this.router.navigate(['/admin/dashboard']);
               },  error => {
-                this.alertService.error('Something went wrong, please try again!!', true);
-                //this.loading = false;
+                this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
               });
         }
-        // alert('SUCCESS!! :-)\n\n' + JSON.stringify(this.loginForm.value))
     }
 
     ngOnDestroy() {
-        this.subscription.unsubscribe();
+        //this.subscription.unsubscribe();
       }
       
 }

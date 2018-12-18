@@ -22,6 +22,7 @@ import {ConfirmationService, Message} from 'primeng/api';
 
 //alert
 import { AlertService } from '../../../shared/services/alert.service';
+import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs'
 
 @Component({
@@ -57,7 +58,7 @@ export class StaffComponent implements OnInit {
     //model
     private modalService: NgbModal,
     private fromBuilder: FormBuilder,
-    private alertService : AlertService
+    private messageService: MessageService,
   ) {
     //addform validation
     const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
@@ -95,9 +96,9 @@ onSubmit() {
       this.service.put('admin/staff/update', this.formData).subscribe(res => {
         this.render();
         this.closePopup();
-        this.alertService.success('Staff is edited!!', true);
+        this.messageService.add({severity:'success', summary:'Success', detail:'Staff is edited!!'});
       }, error => {
-        this.alertService.error('Something went wrong, please try again!!', true)
+        this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
         this.closePopup();
       })
     } else {
@@ -106,9 +107,9 @@ onSubmit() {
         console.log('staff adddata==>',res)
         this.render();
         this.closePopup();
-        this.alertService.success('Staff is added!!', true);
+        this.messageService.add({severity:'success', summary:'Success', detail:'Staff is added!!'});
       }, error => {
-        this.alertService.error('Something went wrong, please try again!!', true)
+        this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
         this.closePopup();
       })
     }
@@ -129,13 +130,12 @@ render(): void {
 
 ngOnDestroy(): void {
   this.dtTrigger.unsubscribe();
-  this.subscription.unsubscribe();
+  //this.subscription.unsubscribe();
 }
 
 
 ngOnInit() {
   this.UsersListData();
-  this.alert();
 }
 
 UsersListData(){
@@ -239,11 +239,10 @@ delete(userId) {
       accept: () => {
       this.service.put('admin/staff/delete', {user_id : userId}).subscribe(res => {
         this.render();
-        this.alertService.success('Staff is deleted!!', true);
+        this.messageService.add({severity:'success', summary:'Success', detail:'Staff is Deleted!!'});
         //setTimeout(()=>{ this.closePopup()},1000);
       },error => {
-        this.alertService.error('Something went wrong, please try again!!', true);
-        
+        this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});          
       });
       },
       reject: () => {
@@ -251,13 +250,5 @@ delete(userId) {
   });
 }
 // dlt pop up ends here
-
-//alert-message 
-alert(){
-  this.subscription = this.alertService.getMessage().subscribe(message => { 
-    this.message = message; 
-});
-}
-// alert-message ends here
 
 }

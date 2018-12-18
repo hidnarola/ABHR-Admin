@@ -1,6 +1,9 @@
-<div *ngIf="message" 
+<div *ngIf="message" id="closepopup"
 [ngClass]="{ 'alert': message,
              'alert-success': message.type === 'success', 
              'alert-danger': message.type === 'error' }">
   {{message.text}}
+  <button type="button" class="close" aria-label="Close" data-dismiss="modal" id="closepopup" (click)="('close')"> 
+    <span aria-hidden="true">&times;</span>
+  </button>
 </div>

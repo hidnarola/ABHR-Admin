@@ -2,9 +2,7 @@
 <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle" width="425"></p-confirmDialog>
   
  <!--Alert message--> 
-<div *ngIf="message"[ngClass]="{ 'alert': message,'alert-success': message.type === 'success','alert-danger': message.type === 'error' }">
-  {{message.text}}
-</div>
+ <p-toast></p-toast>
     
 <!--datatable-->    
 <div class="row pb-3">

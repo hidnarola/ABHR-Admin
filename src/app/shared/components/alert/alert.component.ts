@@ -2,6 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AlertService } from '../../services/alert.service';
 import { Subscription } from 'rxjs';
 
+
+
 @Component({
   selector: 'app-alert',
   templateUrl: './alert.component.html',
@@ -14,9 +16,19 @@ export class AlertComponent implements OnInit, OnDestroy {
 
   constructor(private alertService: AlertService) { }
 
+  closePopup() {
+    var element = document.getElementById("CloseButton") as any;
+    element.click();
+  }
+
   ngOnInit() {
+   this.alertMessage();
+   this.closePopup();
+  }
+
+  alertMessage(){
     this.subscription = this.alertService.getMessage().subscribe(message => { 
-        this.message = message; 
+      this.message = message; 
     });
   }
 
