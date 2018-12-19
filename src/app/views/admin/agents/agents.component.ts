@@ -161,9 +161,6 @@ export class AgentsComponent implements OnInit {
           console.log('dtaparametes==>',dataTablesParameters);
           this.service.post('admin/agents/list', dataTablesParameters).subscribe(res => {
             this.agents = res['result']['data'];
-            if(this.agents.length != 0){
-              $('.odd').hide();   
-            }
             console.log(this.agents);
             this.dataShare.changeLoading(false);
             callback({

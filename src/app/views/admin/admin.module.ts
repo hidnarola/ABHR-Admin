@@ -60,7 +60,7 @@ const AdminRoutes: Routes = [
         component: AgentDetailComponent,
         data: {
           title: 'Manage Agents',
-          urls: [{title: 'Admin Dashboard',url: '/admin/dashboard'},{title: 'Agents', url: '/admin/agents'}, {title: 'view'}]
+          urls: [{title: 'Admin Dashboard',url: '/admin/dashboard'},{title: 'Agents', url: '/admin/agents'}, {title: 'Agent Detail'}]
         },
       },
       {
@@ -76,7 +76,7 @@ const AdminRoutes: Routes = [
         component: StaffDetailComponent,
         data: {
           title: 'Manage Staff',
-          urls: [{title: 'Admin Dashboard',url: '/admin/dashboard'},{title: 'Staff', url: '/admin/staff'}, {title: 'view'}]
+          urls: [{title: 'Admin Dashboard',url: '/admin/dashboard'},{title: 'Staff', url: '/admin/staff'}, {title: 'Staff Detail'}]
         },
       },
       {
@@ -98,7 +98,7 @@ const AdminRoutes: Routes = [
             component: CompanyDetailsComponent,
             data: {
             title: 'Manage Companies',
-            urls: [{title: 'Admin Dashboard',url: '/admin/dashboard'},{title: 'Companies', url: '/admin/car-rental-companies'}, {title: 'View'}]
+            urls: [{title: 'Admin Dashboard',url: '/admin/dashboard'},{title: 'Companies', url: '/admin/car-rental-companies'}, {title: 'Company Detail'}]
             },
           },
           {
@@ -106,7 +106,7 @@ const AdminRoutes: Routes = [
             component: CarDetailsComponent,
             data: {
               title: 'Manage Cars',
-              urls: [{title: 'Admin Dashboard',url: '/admin/dashboard'},{title: 'Companies', url: '/admin/car-rental-companies'}, {title: 'View '}]
+              urls: [{title: 'Admin Dashboard',url: '/admin/dashboard'},{title: 'Companies', url: '/admin/car-rental-companies'}, {title: 'Company Detail', url: '/admin/car-rental-companies/view/_id'}, {title: 'Car Detail'}]
               },
           },
         ] 

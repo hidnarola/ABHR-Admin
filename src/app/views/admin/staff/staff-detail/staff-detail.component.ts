@@ -61,7 +61,6 @@ constructor(
       this.formData = {
         first_name: String,
         last_name: String,
-        // deviceType: String,
         phone_number: Number,
         email: String
       };

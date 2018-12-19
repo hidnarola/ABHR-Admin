@@ -98,16 +98,12 @@ export class CarsComponent implements OnInit {
           data: 'Id',
         },
         {
-          data: 'Company Name',
+          data: 'Car Name',
           name: 'name',
         },
         {
           data: 'Description',
           name: 'description',
-        },
-        {
-          data: 'Email',
-          name: 'email',
         },
         {
           data: 'Site URl',

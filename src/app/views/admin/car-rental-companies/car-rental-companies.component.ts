@@ -39,6 +39,7 @@ export class CarRentalCompaniesComponent implements OnInit {
   AddEditForm: FormGroup;
   submitted = false;
   public formData: any;
+  public title = "Add Company";
   public userId;
   public isEdit: boolean;
   public isDelete: boolean;
@@ -142,6 +143,7 @@ ngAfterViewInit(): void {
 open2(content, item) {
   console.log('item==>', item);
   if (item != 'undefined' && item != '') {
+    this.title = "Edit Company";
     this.isEdit = true;
     this.userId = item._id;
     this.AddEditForm.controls['name'].setValue(item.name);
@@ -244,6 +246,7 @@ onSubmit() {
     }
     this.isEdit = false;
     this.submitted = false;
+    this.title = "Add Company";
   }
 }
 

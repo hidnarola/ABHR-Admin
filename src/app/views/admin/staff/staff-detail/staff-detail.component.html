@@ -13,6 +13,7 @@
     </div>
     <div class="row">
       <div class="agents-dtl-box" *ngIf="userDetails"> 
+          <h4 class="blue"> Details of {{userDetails.first_name}} {{userDetails.last_name}} </h4>
         <div class="agents-dtl-box-inr"><b>First Name : </b> <span>{{userDetails.first_name}}</span> </div>
         <div class="agents-dtl-box-inr"><b>Last Name : </b> <span>{{userDetails.last_name}}</span> </div>
         <div class="agents-dtl-box-inr"><b>Email : </b> <span>{{ userDetails.email }}</span> </div>

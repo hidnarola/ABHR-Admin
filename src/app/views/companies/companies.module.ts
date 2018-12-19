@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule,ReactiveFormsModule} from '@angular/forms';
 import { DataTablesModule } from 'angular-datatables';
-
+import {ConfirmDialogModule} from 'primeng/confirmdialog';
+import {ToastModule} from 'primeng/toast';
 //child component
 import { Routes, RouterModule } from '@angular/router';
 import { CarsComponent } from './cars/cars.component';
@@ -29,7 +31,7 @@ const CompanyRoutes: Routes = [{
             path: 'cars',
             component: CarsComponent,
             data: {
-                title: 'Cars',
+                title: 'Manage Cars',
                 urls: [{ title: 'Dashboard', url: '/company'},{ title: 'Cars'}]
             },
         }
@@ -41,6 +43,9 @@ const CompanyRoutes: Routes = [{
         FormsModule,
         DataTablesModule,
         ReactiveFormsModule,
+        ConfirmDialogModule,
+        ToastModule,
+        NgbModule,
     	RouterModule.forChild(CompanyRoutes)
     ],
     exports: [RouterModule],

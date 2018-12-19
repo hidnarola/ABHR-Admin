@@ -9,7 +9,7 @@
 
 .dataTables_length, .dataTables_filter{ margin:0 0 20px;}
 .dataTables_filter label{font-size:13px; color:#666; text-transform: uppercase; font-weight:400; letter-spacing:.1em; margin:0;}
-.dataTables_filter input{border: 1px solid #eee; background: #fff; padding: 5px; line-height: 20px;}
+.dataTables_filter input{border: unset; border-bottom: 1px solid #666; background: #fff; padding: 5px; line-height: 20px;}
 .dataTables_length label{font-size:12px; color: #666; text-transform: uppercase; font-weight:400; letter-spacing:.1em; margin:0; line-height:32px;}
 .dataTables_length select{ margin:0 5px; padding:4px 6px; line-height:20px; color:#666;}
 
@@ -31,10 +31,12 @@ html body .dataTables_wrapper .dataTables_paginate .paginate_button:active{backg
 body .dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
 body .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover,
 body .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {color: #666 !important; background:#fff !important; opacity:.8; border: 1px solid #eee !important; font-size: 13px; font-weight: 400; letter-spacing: .08em; text-transform: uppercase; line-height:20px;}
-
 body .dataTables_wrapper .dataTables_info {font-size:13px; font-weight:400; padding:20px 0 0; line-height:40px;}
 .dataTables_wrapper .dataTables_paginate {padding:20px 0 0 !important;}
+table.dataTable thead th{ border-bottom: unset!important; background: #fff !important}
+.dataTables_length select { border: unset;border-bottom: 1px solid #666 !important;}
 .table {margin-bottom:0 !important;}
+
 .modal-dialog {max-width:640px !important;}
 .modal-content {border:0 !important; border-radius:0 !important;}
 .modal-header{font-size:18px; border-radius:0 !important; text-transform:uppercase; font-weight: 500; letter-spacing: .08em; color:#fff !important; background:#1976d2;}
@@ -78,3 +80,7 @@ li.breadcrumb-item {font-weight: 400;}
 .ui-confirmdialog-icon{ color: red}
 .blue{color:#1976d2; margin-bottom: 18px;}
 .ui-toast-top-right {top: 60px !important;}
+h4.text-themecolor.m-b-0 {text-transform: uppercase;}
+h4.blue {text-transform: uppercase;}
+.no-data-available {text-align: center;}
+.dataTables_empty {display: none;}

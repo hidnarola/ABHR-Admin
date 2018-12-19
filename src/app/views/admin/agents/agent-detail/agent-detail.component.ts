@@ -130,6 +130,7 @@ RentalData(){
       console.log('dataparametes==>', dataTablesParameters);
       setTimeout(() => {
       this.service.post('admin/agents/rental_list', dataTablesParameters).subscribe(res => {
+        console.log('rentals res in agents', res)
         this.rentalData = res['result']['data'];
         this.dataShare.changeLoading(false);
         callback({
@@ -143,27 +144,22 @@ RentalData(){
     columns: [
       {
         data: 'Id', 
-        name: 'i+1',
       },
       {
-        data: 'Fisrt Name', 
-        name:'first_name',
+        data: 'Car Id',
+        name: 'car_id'
       },
       {
-        data: 'Last Name',
-        name: 'last_name',
+        data: 'Booking Number', 
+        name:'booking_number',
       },
       {
-        data: 'Email',
-        name: 'email',
+        data: 'Booking Rent',
+        name: 'booking_rent',
       },
       {
-        data: 'Device Type',
-        name: 'deviceType',
-      },
-      {
-        data: 'Phone Number',
-        name: 'phone_number',
+        data: 'Trip Status',
+        name: 'trip_status',
       }
     ]
   };

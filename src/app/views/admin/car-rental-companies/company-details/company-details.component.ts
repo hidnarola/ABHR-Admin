@@ -102,7 +102,7 @@ onSubmit() {
 
 UserDetails(){
   this.service.get('admin/company/details/'+this.userId).subscribe ( res =>{
-    //console.log('userdetails RES==>',res['data']);
+    console.log('userdetails RES==>',res['data']);
     this.userDetails = res['data'];
     //console.log('userDetails==>', this.userDetails);
   })
@@ -201,9 +201,9 @@ CarData(){
         data: 'Status',
         name: 'is_avialable',
       },
-      // {
-      //   data: 'Actions',
-      // }
+      {
+        data: 'Actions',
+      }
     ]
   };
 }
