@@ -18,6 +18,9 @@ export class ResetPasswordComponent implements OnInit {
   public alerts = [];
   public linkData;
   public isExpired;
+  public userId;
+  public UserType;
+  public formData;
 
   private subscription: Subscription;
   message: any;
@@ -30,12 +33,18 @@ export class ResetPasswordComponent implements OnInit {
               ) 
               {
                 this.route.queryParams.subscribe(params => {
-                  console.log('query params==>', params)
                   if (params['detials']) {
                     let strParams = atob(params['detials']);
-                    console.log('strParams', strParams)
                     this.linkData = JSON.parse(strParams);
-                    console.log('linkdata==>', this.linkData)
+                    console.log(this.linkData);
+                    if(this.linkData.user_id){
+                      this.userId = this.linkData.user_id;
+                      this.UserType = 'admin';
+                    }
+                    if(this.linkData.company_id){
+                      this.userId = this.linkData.company_id;
+                      this.UserType = 'company';
+                    }     
                     let currentTime = new Date().getTime();
                     if (this.linkData.expire_time < currentTime) {
                       this.isExpired = true;
@@ -62,15 +71,31 @@ export class ResetPasswordComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     if(!this.resetPasswordForm.invalid){
-      console.log(this.resetPasswordForm);
-      console.log('forget pass form==>',this.resetPasswordForm.value);
-      this.service.post('reset_password', this.resetPasswordForm.value).subscribe((res) => {
+      console.log('type',this.UserType);
+      if(this.UserType == 'company'){
+        this.formData = { 'company_id': this.userId, 
+                          'new_password': this.resetPasswordForm.value.password 
+                       }
+        this.service.post('company/reset_password', this.formData).subscribe((res) => {
         this.submitted = false;
-        this.messageService.add({severity:'error', summary:'Success', detail:'Password has been Reset successfully!!'});
-        console.log('result==>',res);
-      },error => {
-        this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
-      });
+        this.messageService.add({severity:'success', summary:'Success', detail:'Password has been Reset successfully!!'});
+          console.log('result==>',res);
+        },error => {
+          this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
+        });
+        
+      } else if(this.UserType == 'admin'){
+        this.formData = { 'user_id': this.userId, 
+                          'new_password': this.resetPasswordForm.value.password 
+                        }
+        this.service.post('reset_password', this.formData).subscribe((res) => {
+          this.submitted = false;
+          this.messageService.add({severity:'success', summary:'Success', detail:'Password has been Reset successfully!!'});
+          console.log('result==>',res);
+        },error => {
+          this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
+        });
+      }
     }
   }
 

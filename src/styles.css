@@ -44,7 +44,7 @@ table.dataTable thead th{ border-bottom: unset!important; background: #fff !impo
 .form-group label{font-size:13px; letter-spacing:.08em; color:#333; text-transform:uppercase; margin:0 0 5px;}
 .form-control{padding:7px 10px 8px 12px !important; font-size:13px !important; letter-spacing:.08em !important; border-radius:0 !important; color:#666 !important;}
 .close {color: #fff !important; text-shadow:none !important; opacity:.8 !important;}
-.form-control:focus {border-color:transparent !important; outline: 0 !important;box-shadow:none !important;}
+.form-control:focus {background-color: #ffffff!important;border-color: #1976d2!important;outline: 0;box-shadow: 0 0 0 0.05rem rgba(25, 118, 210, 0.39)!important;}
 .custom-btn{max-width:280px; margin: 0 auto; display: block; padding:10px 15px !important; width:100%;}
 
 .custom-control-label::after,
@@ -62,7 +62,7 @@ body .ui-corner-top{ border-radius:0 !important;}
 
 .agents-dtl-box {max-width:550px;display: block;width: 100%; margin:-45px 0 0 15px; }
 .agents-dtl-box>div {border: 1px solid #eee;margin: 0 0 5px;display: block;padding: 10px;}
-.agents-dtl-box>div b {margin: -10px 20px -10px -10px;background: #f6f6f6;display: inline-block;vertical-align: top;padding: 13px 10px 12px;min-width: 150px;text-align: right;font-size: 13px;color: #666;text-transform: uppercase;letter-spacing: .05em;font-weight: 500;}
+.agents-dtl-box>div b {margin: -10px 20px -10px -10px;background: #f6f6f6;display: inline-block;vertical-align: top;padding: 13px 10px 12px;min-width: 170px;text-align: right;font-size: 13px;color: #666;text-transform: uppercase;letter-spacing: .05em;font-weight: 500;}
 .agents-dtl-box span {font-size: 13px; color: #333; font-weight: 400; letter-spacing: .04em;}
 
 .ui-confirmdialog.ui-dialog .ui-dialog-content{ border:0 !important }
@@ -84,3 +84,4 @@ h4.text-themecolor.m-b-0 {text-transform: uppercase;}
 h4.blue {text-transform: uppercase;}
 .no-data-available {text-align: center;}
 .dataTables_empty {display: none;}
+h4#cardetail-title {margin-top: 45px;}

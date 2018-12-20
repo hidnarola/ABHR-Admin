@@ -5,6 +5,8 @@ import {FormsModule,ReactiveFormsModule} from '@angular/forms';
 import { DataTablesModule } from 'angular-datatables';
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import {ToastModule} from 'primeng/toast';
+import { ChartistModule} from 'ng-chartist';
+import { ChartsModule } from 'ng2-charts'
 //child component
 import { Routes, RouterModule } from '@angular/router';
 import { CarsComponent } from './cars/cars.component';
@@ -24,7 +26,7 @@ const CompanyRoutes: Routes = [{
             component: CompaniesComponent,
             data: {
                 title: 'Dashboard',
-                urls: [{title: 'Dashboard',url: '/company'},{ title: 'Cars'}]
+                urls: [{title: 'Dashboard'}]
             },
         },
         {
@@ -46,6 +48,8 @@ const CompanyRoutes: Routes = [{
         ConfirmDialogModule,
         ToastModule,
         NgbModule,
+        ChartsModule,
+        ChartistModule,
     	RouterModule.forChild(CompanyRoutes)
     ],
     exports: [RouterModule],

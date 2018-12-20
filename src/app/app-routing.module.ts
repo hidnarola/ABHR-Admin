@@ -41,6 +41,11 @@ export const routes: Routes = [
                 // canActivate: [AuthGuard],
             },
             {
+                path: 'company',
+                loadChildren: './authentication/authentication.module#AuthenticationModule',
+                // canActivate: [AuthGuard],
+            },
+            {
                 path: 'reset-password',
                 loadChildren: './reset-password/reset-password.module#ResetPasswordModule',
                 canActivate: [LoginGuard],

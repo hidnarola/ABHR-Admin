@@ -17,6 +17,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     submitted = false;
     public formData: any;
     public alerts = [];
+    public CurrentAdmin;
 
     private subscription: Subscription;
     message: any;
@@ -24,7 +25,12 @@ export class LoginComponent implements OnInit, AfterViewInit {
     constructor(public router: Router,
                 public service: CrudService,
                 private fromBuilder: FormBuilder,
-                private messageService: MessageService,) {}
+                private messageService: MessageService,) {
+                    var urlSegment = this.router.url;
+                    var array = urlSegment.split('/');
+                    console.log(array[1]);
+                    this.CurrentAdmin = array[1];
+                }
 
     ngOnInit() {
         this.formData = {};
@@ -56,18 +62,29 @@ export class LoginComponent implements OnInit, AfterViewInit {
         this.submitted = true;
 
         if(!this.loginForm.invalid){
-            console.log(this.loginForm);
-            console.log('login form==>', this.loginForm.value);
-            console.log('formdata==>', this.formData)
-            this.service.post('admin/login', this.loginForm.value).subscribe((res) => {
-                this.submitted = false;
-                console.log('result==>',res);
-                localStorage.setItem('admin',JSON.stringify(res['result']))
-                localStorage.setItem('token',res['token'])
-                this.router.navigate(['/admin/dashboard']);
-              },  error => {
-                this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
-              });
+            if(this.CurrentAdmin == 'admin'){
+                this.service.post('admin/login', this.loginForm.value).subscribe((res) => {
+                    this.submitted = false;
+                    console.log('result==>',res);
+                    localStorage.setItem('admin',JSON.stringify(res['result']))
+                    localStorage.setItem('token',res['token'])
+                    this.router.navigate(['/admin/dashboard']);
+                  },  error => {
+                    this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
+                });
+            } else if(this.CurrentAdmin == 'company'){
+                this.service.post('company/login', this.loginForm.value).subscribe((res) => {
+                    console.log('value', this.loginForm.value)
+                    this.submitted = false;
+                    console.log('result==>',res);
+                    localStorage.setItem('company-admin',JSON.stringify(res['result']))
+                    localStorage.setItem('token',res['token'])
+                    this.router.navigate(['/company/dashboard']);
+                  },  error => {
+                    this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
+                });
+            }
+           
         }
     }
 

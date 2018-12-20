@@ -35,3 +35,11 @@ export const ROUTES: RouteInfo[] = [
     // }, 
 ];
 
+export const COMPANY_ROUTES: RouteInfo[] = [
+    {
+        path: '/company/dashboard', title: 'Dashboard', icon: 'mdi mdi-gauge', class: '', label: '', labelClass: '', extralink: false, submenu: []
+    },
+    {
+        path: '/company/cars', title: 'Cars', icon: 'fa fa-car', class: '', label: '', labelClass: '', extralink: false, submenu: []
+    },
+]

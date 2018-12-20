@@ -93,9 +93,7 @@
   <div class="col-md-6">
     <ng-template #content let-c="close" let-d="dismiss">
       <div class="modal-header">
-        <!-- <h4 class="modal-title">Add Agent</h4> -->
-        <ng-container *ngIf="!isEdit">Add Agent </ng-container>
-        <ng-container *ngIf="isEdit">Edit Agent</ng-container>
+        <ng-container>{{ title }}</ng-container>
         <button type="button" class="close" id="closepopup" aria-label="Close" (click)="d('Cross click')">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -152,8 +150,8 @@
               {{ f.deviceType.val }}
                 <div class="custom-radio-wrap">
                   <div class="custom-control custom-radio">
-                      <input type="radio" id="customRadio1" class="custom-control-input" value="anroid" name="deviceType" formControlName="deviceType" [ngClass]="{ 'is-invalid': submitted && f.deviceType.errors }">
-                      <label class="custom-control-label" for="customRadio1">Anroid</label>
+                      <input type="radio" id="customRadio1" class="custom-control-input" value="android" name="deviceType" formControlName="deviceType" [ngClass]="{ 'is-invalid': submitted && f.deviceType.errors }">
+                      <label class="custom-control-label" for="customRadio1">Android</label>
                   </div>
                   <div class="custom-control custom-radio">
                       <input type="radio" id="customRadio2" class="custom-control-input" value="ios" name="deviceType" formControlName="deviceType" [ngClass]="{ 'is-invalid': submitted && f.deviceType.errors }">

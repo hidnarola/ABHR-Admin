@@ -39,6 +39,7 @@ submitted = false;
 public formData: any;
 public isEdit;
 closeResult: string;
+public title = "Add Company";
 
 @ViewChild(DataTableDirective)
 dtElementcar: DataTableDirective;
@@ -84,7 +85,9 @@ onSubmit() {
   this.submitted = true;
   if (!this.AddEditForm.invalid) {
     //console.log('in valid', this.userId);
+    let formData: FormData = new FormData();
     this.formData = this.AddEditForm.value;
+    if (this.isEdit) {
     this.formData.company_id = this.userId;
       console.log('form data in company view page',this.formData);
       this.service.put('admin/company/update', this.formData).subscribe(res => {
@@ -97,7 +100,20 @@ onSubmit() {
         this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
         this.closePopup();
       })
+  } else {
+    this.title = "Add Company";
+    this.service.post('admin/company/add', this.formData).subscribe(res => {
+      this.render();
+      this.closePopup();
+      this.messageService.add({severity:'success', summary:'Success', detail:'Company is added!!'});
+    }, error => {
+      this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
+      this.closePopup();
+    })
   }
+  this.isEdit = false;
+  this.submitted = false;
+ }
 }
 
 UserDetails(){
@@ -112,16 +128,27 @@ UserDetails(){
 open2(content, userDetails) { 
   //console.log('userDetails====>',userDetails);
   if( userDetails != 'undefined' && userDetails ){
+    this.title = "Edit Company";
     this.isEdit = true;
     this.AddEditForm.controls['name'].setValue(userDetails.name);
     this.AddEditForm.controls['description'].setValue(userDetails.description);
     this.AddEditForm.controls['email'].setValue(userDetails.email);
     this.AddEditForm.controls['site_url'].setValue(userDetails.site_url);
     this.AddEditForm.controls['phone_number'].setValue(userDetails.phone_number);
-  };
+  } else {
+    this.title = "Add Company";
+  }
   this.modalService.open(content).result.then((result) => {
     this.closeResult = `Closed with: ${result}`;
   }, (reason) => {
+    if (reason == 'Cross click' || reason == 0) {
+      this.isEdit = false;
+      this.AddEditForm.controls['name'].setValue('');
+      this.AddEditForm.controls['description'].setValue('');
+      this.AddEditForm.controls['email'].setValue('');
+      this.AddEditForm.controls['site_url'].setValue('');
+      this.AddEditForm.controls['phone_number'].setValue('');
+    }
     this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
   });
 }

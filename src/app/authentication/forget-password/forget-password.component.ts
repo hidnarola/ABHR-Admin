@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, UrlSegment  } from '@angular/router';
+
 //service
 import { CrudService } from '../../shared/services/crud.service';
 import { MessageService } from 'primeng/api';
@@ -17,6 +18,7 @@ export class ForgetPasswordComponent implements OnInit {
   submitted = false;
   public formData: any;
   public alerts = [];
+  public currentUser;
 
   private subscription: Subscription;
     message: any;
@@ -24,7 +26,14 @@ export class ForgetPasswordComponent implements OnInit {
   constructor( private formBuilder: FormBuilder,
                public service: CrudService,
                public router: Router,
-               private messageService: MessageService,) { }
+               public route: ActivatedRoute,
+               private messageService: MessageService) {
+                var urlSegment = this.router.url;
+                var array = urlSegment.split('/');
+                console.log(array[1]);
+                this.currentUser = array[1];
+               }
+
 
   ngOnInit() {
     this.formData = {};
@@ -39,19 +48,27 @@ export class ForgetPasswordComponent implements OnInit {
   onSubmit(){
     console.log('here')
     this.submitted = true;
-
     if(!this.forgetPasswordForm.invalid){
-      console.log(this.forgetPasswordForm);
-      console.log('forget pass form==>',this.forgetPasswordForm.value);
-      this.service.post('admin/forget_password', this.forgetPasswordForm.value).subscribe((res) => {
-        this.submitted = false;
-        console.log('result==>',res);
-        this.messageService.add({severity:'success', summary:'Success', detail:'Email is sent to you Email Id!!'});
-        this.router.navigate(['/admin/forget-password']);
-        console.log('alert', this.alerts)
-      }, error => {
-        this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
-      });
+      if(this.currentUser == 'admin'){
+        this.service.post('admin/forget_password', this.forgetPasswordForm.value).subscribe((res) => {
+          this.submitted = false;
+          this.messageService.add({severity:'success', summary:'Success', detail:'Email is sent to you Email Id!!'});
+          this.router.navigate(['/admin/forget-password']);
+        }, error => {
+          this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
+        });
+      }
+      else if(this.currentUser == 'company'){
+        this.service.post('company/forget_password', this.forgetPasswordForm.value).subscribe((res) => {
+          this.submitted = false;
+          console.log('result==>',res);
+          this.messageService.add({severity:'success', summary:'Success', detail:'Email is sent to you Email Id!!'});
+          this.router.navigate(['/admin/forget-password']);
+          console.log('alert', this.alerts)
+        }, error => {
+          this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
+        });
+      }
     }
   }
   ngOnDestroy() {

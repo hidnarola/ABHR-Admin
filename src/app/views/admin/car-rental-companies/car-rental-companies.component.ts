@@ -145,12 +145,15 @@ open2(content, item) {
   if (item != 'undefined' && item != '') {
     this.title = "Edit Company";
     this.isEdit = true;
+    console.log('title', this.title)
     this.userId = item._id;
     this.AddEditForm.controls['name'].setValue(item.name);
     this.AddEditForm.controls['description'].setValue(item.description);
     this.AddEditForm.controls['email'].setValue(item.email);
     this.AddEditForm.controls['site_url'].setValue(item.site_url);
     this.AddEditForm.controls['phone_number'].setValue(item.phone_number);
+  }else{
+    this.title = "Add Company";
   }
   this.modalService.open(content).result.then((result) => {
     this.closeResult = `Closed with: ${result}`;
@@ -166,6 +169,8 @@ open2(content, item) {
     this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
   });
 }
+
+
 private getDismissReason(reason: any): string {
   if (reason === ModalDismissReasons.ESC) {
     return 'by pressing ESC';
@@ -188,7 +193,6 @@ delete(userId) {
       this.service.put('admin/company/delete', {company_id : userId}).subscribe(res => {
         this.render();
         this.messageService.add({severity:'success', summary:'Success', detail:'Company is Deleted!!'});
-        //setTimeout(()=>{ this.closePopup()},1000);
       },error => {
         this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});        
       });
@@ -224,6 +228,7 @@ onSubmit() {
     console.log('formadata==>',this.formData);
     if (this.isEdit) {
       this.formData.company_id = this.userId;
+      this.title = "Edit Company";
       console.log('userId', this.userId);
       this.service.put('admin/company/update', this.formData).subscribe(res => {
         console.log('after update==>',res)
@@ -235,6 +240,7 @@ onSubmit() {
         this.closePopup();
       })
     } else {
+      this.title = "Add Company";
       this.service.post('admin/company/add', this.formData).subscribe(res => {
         this.render();
         this.closePopup();
@@ -246,7 +252,6 @@ onSubmit() {
     }
     this.isEdit = false;
     this.submitted = false;
-    this.title = "Add Company";
   }
 }
 

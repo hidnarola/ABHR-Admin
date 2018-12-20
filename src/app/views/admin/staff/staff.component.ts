@@ -47,6 +47,7 @@ export class StaffComponent implements OnInit {
   private subscription: Subscription;
   message: any;
   msgs: Message[] = [];
+  public title = "Add Company";
 
   constructor(
     public renderer: Renderer,
@@ -92,6 +93,7 @@ onSubmit() {
     console.log('formadata==>',this.formData);
     if (this.isEdit) {
       this.formData.user_id = this.userId;
+      this.title = "Edit Company";
       console.log('userId in staff', this.userId);
       this.service.put('admin/staff/update', this.formData).subscribe(res => {
         this.render();
@@ -102,6 +104,7 @@ onSubmit() {
         this.closePopup();
       })
     } else {
+      this.title = "Add Company";
       console.log('formdata in add==>',this.formData);
       this.service.post('admin/staff/add', this.formData).subscribe(res => {
         console.log('staff adddata==>',res)
@@ -198,12 +201,15 @@ closeResult: string;
 open2(content, item) {
   console.log('item==>', item);
   if (item != 'undefined' && item != '') {
+    this.title = "Edit Company";
     this.isEdit = true;
     this.userId = item._id;
     this.AddEditForm.controls['first_name'].setValue(item.first_name);
     this.AddEditForm.controls['last_name'].setValue(item.last_name);
     this.AddEditForm.controls['email'].setValue(item.email);
     this.AddEditForm.controls['phone_number'].setValue(item.phone_number);
+  } else{
+    this.title = "Add Company";
   }
   this.modalService.open(content).result.then((result) => {
     this.closeResult = `Closed with: ${result}`;

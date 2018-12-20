@@ -49,6 +49,7 @@ export class AgentsComponent implements OnInit {
   public userId;
   public isEdit: boolean;
   public isDelete: boolean;
+  public title = "Add Company";
 
   private subscription: Subscription;
   message: any;
@@ -101,6 +102,7 @@ export class AgentsComponent implements OnInit {
       console.log('formadata==>',this.formData);
       if (this.isEdit) {
         this.formData.user_id = this.userId;
+        this.title = "Edit Company";
         console.log('userId', this.userId);
         this.service.put('admin/agents/update', this.formData).subscribe(res => {
           this.render();
@@ -111,6 +113,7 @@ export class AgentsComponent implements OnInit {
           this.closePopup();
         })
       } else {
+        this.title = "Add Company";
         this.service.post('admin/agents/add', this.formData).subscribe(res => {
           this.render();
           this.closePopup();
@@ -143,7 +146,6 @@ export class AgentsComponent implements OnInit {
   //public agentData = data;
   public agents;
 
-  title = 'angulardatatables';
   ngOnInit() {
     this.AgentsListData();
   }
@@ -220,6 +222,7 @@ export class AgentsComponent implements OnInit {
   open2(content, item) {
     console.log('item==>', item);
     if (item != 'undefined' && item != '') {
+      this.title = "Edit Company";
       this.isEdit = true;
       this.userId = item._id;
       this.AddEditForm.controls['first_name'].setValue(item.first_name);
@@ -227,6 +230,8 @@ export class AgentsComponent implements OnInit {
       this.AddEditForm.controls['email'].setValue(item.email);
       this.AddEditForm.controls['phone_number'].setValue(item.phone_number);
       this.AddEditForm.controls['deviceType'].setValue(item.deviceType);
+    } else{
+      this.title = "Add Company";
     }
     this.modalService.open(content).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;

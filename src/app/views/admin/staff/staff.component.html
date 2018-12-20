@@ -87,8 +87,7 @@
   <div class="col-md-6">
     <ng-template #content let-c="close" let-d="dismiss">
       <div class="modal-header">
-        <ng-container *ngIf="!isEdit">Add Staff </ng-container>
-        <ng-container *ngIf="isEdit">Edit Staff</ng-container>
+        <ng-container>{{ title }}</ng-container>
         <button type="button" class="close" id="closepopup" aria-label="Close" (click)="d('Cross click')">
           <span aria-hidden="true">&times;</span>
         </button>
