@@ -7,10 +7,10 @@
 <div class="row pb-3">
 
   <div class="col-lg-12 text-right">
-    <button type="button" class="btn btn-primary m-r-10">
+    <button type="button" class="btn btn-primary btn-rounded m-r-10">
       <i class="fa fa-external-link" aria-hidden="true"></i> Export
     </button>
-    <button type="button" class="btn btn-primary" (click)="open2(content, '')">
+    <button type="button" class="btn btn-primary btn-rounded" (click)="open2(content, '')">
       <i class="mdi mdi-account-plus" aria-hidden="true"></i> Add
     </button>
   </div>
@@ -54,8 +54,8 @@
                   </span>
                 </td>
                 <td>
-                  <span>
-                    {{ item.deviceType }}
+                  <span class="badge badge-primary">
+                    {{ item.deviceType  | titlecase }}
                   </span>
                 </td>
                 <td>
@@ -150,7 +150,7 @@
               {{ f.deviceType.val }}
                 <div class="custom-radio-wrap">
                   <div class="custom-control custom-radio">
-                      <input type="radio" id="customRadio1" class="custom-control-input" value="android" name="deviceType" formControlName="deviceType" [ngClass]="{ 'is-invalid': submitted && f.deviceType.errors }">
+                      <input type="radio" id="customRadio1" class="custom-control-input" value="anroid" name="deviceType" formControlName="deviceType" [ngClass]="{ 'is-invalid': submitted && f.deviceType.errors }">
                       <label class="custom-control-label" for="customRadio1">Android</label>
                   </div>
                   <div class="custom-control custom-radio">

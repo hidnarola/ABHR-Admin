@@ -16,6 +16,7 @@ export class SidebarComponent implements OnInit {
     showMenu: string = '';
     showSubMenu: string = '';
     public sidebarnavItems: any[];
+    public AdminType;
     //this is for the open close
     addExpandClass(element: any) {
         if (element === this.showMenu) {
@@ -36,12 +37,26 @@ export class SidebarComponent implements OnInit {
     
     constructor(private modalService: NgbModal, private router: Router,
         private route: ActivatedRoute) {
+            var user = JSON.parse(localStorage.getItem('admin'));
+            let company = JSON.parse(localStorage.getItem('company-admin'));
+            if(user != null && user != undefined){
+                this.AdminType = user.first_name;
+            }
+            if(company !=null && company != undefined){
+                this.AdminType = company.name;
+            }
+            if(company ==null && company == undefined && user == null && user == undefined){
+                this.AdminType = 'Admin'
+            }
+            
+
             var urlSegment = this.router.url;
             var array = urlSegment.split('/');
-            console.log(array[1]);
+           // console.log(array[1]);
             this.currentUser = array[1];
-            console.log('current user', this.currentUser)
-           console.log('url', this.router.url)      
+            //console.log('current user', this.currentUser)
+           //console.log('url', this.router.url)      
+
     } 
     // End open close
     ngOnInit() {

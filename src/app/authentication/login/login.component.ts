@@ -42,20 +42,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     }
     get f() { return this.loginForm.controls; }
 
-    ngAfterViewInit() {
-        /*$(function() {
-            $(".preloader").fadeOut();
-        });
-        
-        $('#to-recover').on("click", function() {
-            $("#loginform").slideUp();
-            $("#recoverform").fadeIn();
-        });*/
-    }
-
-    // onLoggedin() {
-    //     localStorage.setItem('isLoggedin', 'true');
-    // }
+    ngAfterViewInit() {}
 
     onSubmit(){
         console.log('here');
@@ -68,6 +55,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
                     console.log('result==>',res);
                     localStorage.setItem('admin',JSON.stringify(res['result']))
                     localStorage.setItem('token',res['token'])
+                    console.log('token', res['result'])
                     this.router.navigate(['/admin/dashboard']);
                   },  error => {
                     this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
@@ -79,6 +67,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
                     console.log('result==>',res);
                     localStorage.setItem('company-admin',JSON.stringify(res['result']))
                     localStorage.setItem('token',res['token'])
+                    console.log('token', res['token'])
                     this.router.navigate(['/company/dashboard']);
                   },  error => {
                     this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
@@ -88,8 +77,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
         }
     }
 
-    ngOnDestroy() {
-        //this.subscription.unsubscribe();
-      }
+    ngOnDestroy() { }
       
 }

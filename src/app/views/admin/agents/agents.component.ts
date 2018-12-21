@@ -155,8 +155,8 @@ export class AgentsComponent implements OnInit {
       pagingType: 'full_numbers',
       pageLength: 10,
       processing: true,
-      serverSide: true,
-      ordering: false,
+      serverSide: true, 
+      responsive: true,
       language: { "processing": "<i class='fa fa-refresh loader fa-spin'></i>" },
       ajax: (dataTablesParameters: any, callback) => {
         setTimeout(() => {
@@ -179,7 +179,7 @@ export class AgentsComponent implements OnInit {
         },
         {
           data: 'Fisrt Name',
-          name: 'first_name',
+          name: 'first_name', 
         },
         {
           data: 'Last Name',

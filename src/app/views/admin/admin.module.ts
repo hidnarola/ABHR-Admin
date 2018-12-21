@@ -25,11 +25,13 @@ import { SettingsComponent } from './settings/settings.component';
 import { AgentDetailComponent } from './agents/agent-detail/agent-detail.component';
 import { CompanyDetailsComponent } from './car-rental-companies/company-details/company-details.component';
 import { StaffDetailComponent } from './staff/staff-detail/staff-detail.component';
+import { CarDetailsComponent } from './car-rental-companies/company-details/car-details/car-details.component';
+import { AddEditCarComponent } from '../admin/car-rental-companies/company-details/add-edit-car/add-edit-car.component';
 
 //shared component
 import { RentalsComponent } from '../../shared/components/rentals/rentals.component';
 import { AlertComponent } from '../../shared/components/alert/alert.component';
-import { CarDetailsComponent } from './car-rental-companies/company-details/car-details/car-details.component';
+
 
 
 const AdminRoutes: Routes = [
@@ -59,7 +61,7 @@ const AdminRoutes: Routes = [
         path: 'agents/view/:id',
         component: AgentDetailComponent,
         data: {
-          title: 'Manage Agents',
+          title: 'View Agent Detail',
           urls: [{title: 'Admin Dashboard',url: '/admin/dashboard'},{title: 'Agents', url: '/admin/agents'}, {title: 'Agent Detail'}]
         },
       },
@@ -75,7 +77,7 @@ const AdminRoutes: Routes = [
         path: 'staff/view/:id',
         component: StaffDetailComponent,
         data: {
-          title: 'Manage Staff',
+          title: 'View Staff',
           urls: [{title: 'Admin Dashboard',url: '/admin/dashboard'},{title: 'Staff', url: '/admin/staff'}, {title: 'Staff Detail'}]
         },
       },
@@ -97,7 +99,7 @@ const AdminRoutes: Routes = [
             path: 'car-rental-companies/view/:id',
             component: CompanyDetailsComponent,
             data: {
-            title: 'Manage Companies',
+            title: 'View Company Detail',
             urls: [{title: 'Admin Dashboard',url: '/admin/dashboard'},{title: 'Companies', url: '/admin/car-rental-companies'}, {title: 'Company Detail'}]
             },
           },
@@ -105,9 +107,25 @@ const AdminRoutes: Routes = [
             path: 'car-rental-companies/car/view/:id',
             component: CarDetailsComponent,
             data: {
-              title: 'Manage Cars',
+              title: 'View Car',
               urls: [{title: 'Admin Dashboard',url: '/admin/dashboard'},{title: 'Companies', url: '/admin/car-rental-companies'}, {title: 'Company Detail', url: '/admin/car-rental-companies/view/_id'}, {title: 'Car Detail'}]
               },
+          },
+          {
+            path: 'car-rental-companies/car/edit/:id',
+            component: AddEditCarComponent,
+            data: {
+              title: 'Edit Car',
+              urls: [{title: 'Admin Dashboard',url: '/admin/dashboard'},{title: 'Companies', url: '/admin/car-rental-companies'}, {title: 'Company Detail', url: '/admin/car-rental-companies/view/_id'}, {title: 'Car Detail'}]
+              },
+          },
+          {
+            path: 'car-rental-companies/car/add',
+            component: AddEditCarComponent,
+            data: {
+            title: 'Add Car',
+            urls: [{title: 'Admin Dashboard',url: '/admin/dashboard'},{title: 'Companies', url: '/admin/car-rental-companies'}, {title: 'Company Detail', url: '/admin/car-rental-companies/view/_id'}, {title: 'Add Company'}]
+            },
           },
         ] 
       },
@@ -186,7 +204,8 @@ const AdminRoutes: Routes = [
         CompanyDetailsComponent,
         RentalsComponent,
         AlertComponent,
-        CarDetailsComponent
+        CarDetailsComponent,
+        AddEditCarComponent
     ]
 })
 export class AdminModule { }

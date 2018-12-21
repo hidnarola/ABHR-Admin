@@ -53,7 +53,7 @@ RentalData(){
     pageLength: 10,
     processing: true,
     serverSide: true,
-    ordering: false,
+    ordering: true,
     language:{"processing": "<i class='fa fa-refresh loader fa-spin'></i>"},
     ajax: (dataTablesParameters: any, callback) => {
       console.log('dataparametes in rental==>', dataTablesParameters);
