@@ -57,6 +57,7 @@ constructor(
   private messageService: MessageService,
 ) { 
   this.route.params.subscribe(params => { this.userId = params.id; });
+  console.log('userid in admin comapny', this.userId)
   //addform validation
   const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');                                                                                                                                                                                                                                 
       this.AddEditForm = this.fromBuilder.group({
@@ -187,7 +188,7 @@ CarData(){
     processing: true,
     serverSide: true,
     searching: false, 
-    ordering: false,
+    ordering: true,
     language: { "processing": "<i class='fa fa-refresh loader fa-spin'></i>" },
     ajax: (dataTablesParameters: any, callback) => {
       console.log('dataparametes car==>',dataTablesParameters);
@@ -225,7 +226,7 @@ CarData(){
         name: 'modelDetails.release_year',
       },
       {
-        data: 'Status',
+        data: 'Available',
         name: 'is_avialable',
       },
       {

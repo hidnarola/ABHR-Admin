@@ -13,6 +13,7 @@ import { CarsComponent } from './cars/cars.component';
 import { CompanyReportsComponent } from './company-reports/company-reports.component';
 import { CompanyTransactionsComponent } from './../companies/company-transactions/company-transactions.component';
 import { CompaniesComponent } from './companies.component';
+import { CarDetailsComponent } from './cars/car-details/car-details.component';
 
 
 const CompanyRoutes: Routes = [{
@@ -34,9 +35,17 @@ const CompanyRoutes: Routes = [{
             component: CarsComponent,
             data: {
                 title: 'Manage Cars',
-                urls: [{ title: 'Dashboard', url: '/company'},{ title: 'Cars'}]
+                urls: [{ title: 'Dashboard', url: '/company/dashboard'},{ title: 'Cars'}]
             },
-        }
+        },
+        {
+            path: 'car/view/:id',
+            component: CarDetailsComponent,
+            data: {
+              title: 'View Car',
+              urls: [{ title: 'Dashboard', url: '/company/dashboard'},{ title: 'Cars' , url: '/company/cars'}, {title: 'Car Detail'}]
+            },
+        },
     ]
 }]
 @NgModule({
@@ -55,6 +64,7 @@ const CompanyRoutes: Routes = [{
     exports: [RouterModule],
 	declarations: [
         CarsComponent,
+        CarDetailsComponent,
         CompanyTransactionsComponent,
         CompanyReportsComponent,
         CompaniesComponent

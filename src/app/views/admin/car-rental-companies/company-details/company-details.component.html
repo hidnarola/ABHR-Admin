@@ -45,11 +45,11 @@
               <thead>
                 <tr>
                 <th>Id</th>
-                <th>BRAND NAME</th>
-                <th>MODEL NAME</th>
-                <th>YEAR</th>
-                <th>STATUS</th>
-                <th>Actions</th>
+                <th>Brand Name</th>
+                <th>Model Name</th>
+                <th>Year</th>
+                <th>Available</th>
+                <th class="disabled" >Actions</th>
                 </tr>
               </thead>
               <tbody *ngIf="carData?.length != 0">
@@ -74,7 +74,7 @@
                   </td>
                   <td>
                     <span>
-                      {{ item.is_avialable }}
+                      {{ item.is_avialable?'Yes':'No' }}
                     </span>
                   </td>
                   <td>
@@ -94,7 +94,7 @@
               </tbody>
               <tbody *ngIf="carData?.length == 0">
                 <tr>
-                  <td colspan="7" class="no-data-available">No matching records found!</td>
+                  <td colspan="7" class="no-data-available">No record found!</td>
                 </tr>
               </tbody>
             </table>
@@ -164,7 +164,7 @@
             <div class="col-sm-6">
               <div class="form-group">
                 <label>Phone Number :</label>
-                <input class="form-control" type="number" name="phone_number" placeholder="Enter Phone Number"
+                <input class="form-control" type="string" name="phone_number" placeholder="Enter Phone Number"
                   formControlName="phone_number" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.phone_number.errors }">
                 <div *ngIf=" submitted && f.phone_number.errors " class="invalid-feedback">
                   <div *ngIf="f.phone_number.errors.pattern">phone number is wrong</div>

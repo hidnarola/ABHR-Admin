@@ -34,6 +34,7 @@ export class CarsComponent implements OnInit {
   public isEdit: boolean;
   public isDelete: boolean;
   public users;
+  public companyId;
   private subscription: Subscription;
   message: any;
   msgs: Message[] = [];
@@ -51,6 +52,9 @@ export class CarsComponent implements OnInit {
     private fromBuilder: FormBuilder,
     private messageService: MessageService,
   ) {
+    let company = JSON.parse(localStorage.getItem('company-admin'));
+    this.companyId = company._id;
+    console.log('companyid==>', this.companyId)
      //addform validation
   const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
   this.AddEditForm = this.fromBuilder.group({
@@ -80,8 +84,9 @@ export class CarsComponent implements OnInit {
       language: { "processing": "<i class='fa fa-refresh loader fa-spin'></i>" },
       ajax: (dataTablesParameters: any, callback) => {
         setTimeout(() => {
-          console.log('dtaparametes car rental company==>',dataTablesParameters);
-          this.service.post('admin/company/list', dataTablesParameters).subscribe(res => {
+          dataTablesParameters.company_id = this.companyId; 
+          console.log('dtaparametes car==>',dataTablesParameters);
+          this.service.post('admin/company/car_list', dataTablesParameters).subscribe(res => {
             this.users = res['result']['data'];
             console.log(this.users);
             this.dataShare.changeLoading(false);
@@ -98,20 +103,20 @@ export class CarsComponent implements OnInit {
           data: 'Id',
         },
         {
-          data: 'Car Name',
-          name: 'name',
+          data: 'Brand Name',
+          name: 'brandDetails.brand_name',
         },
         {
-          data: 'Description',
-          name: 'description',
+          data: 'Model Name',
+          name: 'modelDetails.model_name',
         },
         {
-          data: 'Site URl',
-          name: 'site_url',
+          data: 'Year', 
+          name: 'modelDetails.release_year',
         },
         {
-          data: 'Phone Number',
-          name: 'phone_number',
+          data: 'Available',
+          name: 'is_avialable',
         },
         {
           data: 'Actions',

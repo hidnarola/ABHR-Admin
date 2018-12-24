@@ -75,7 +75,7 @@ export class AgentsComponent implements OnInit {
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
       deviceType: ['', Validators.required],
-      phone_number: ['', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern("[0-9]{10}")]],
+      phone_number: ['', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^([0-9]){10,14}$/)]],
       email: ['', [Validators.required, Validators.email, Validators.pattern(pattern)]]
     });
 
@@ -178,7 +178,7 @@ export class AgentsComponent implements OnInit {
           data: 'Id',
         },
         {
-          data: 'Fisrt Name',
+          data: 'First Name',
           name: 'first_name', 
         },
         {

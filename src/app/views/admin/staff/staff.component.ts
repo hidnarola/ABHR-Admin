@@ -169,7 +169,7 @@ UsersListData(){
         data: 'Id',
       },
       {
-        data: 'Fisrt Name',
+        data: 'First Name',
         name: 'first_name',
       },
       {
