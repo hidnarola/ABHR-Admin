@@ -7,6 +7,8 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Routes, RouterModule, ActivatedRoute } from '@angular/router';
 import { NgModule } from '@angular/core';
 
+import { NgxSpinnerService } from 'ngx-spinner';
+
 //model
 import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -68,13 +70,14 @@ export class AgentsComponent implements OnInit {
     //model
     private modalService: NgbModal,
     private fromBuilder: FormBuilder,
+    private spinner: NgxSpinnerService
   ) {
     //addform validation
     const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
     this.AddEditForm = this.fromBuilder.group({
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
-      deviceType: ['', Validators.required],
+      //deviceType: ['', Validators.required],
       phone_number: ['', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^([0-9]){10,14}$/)]],
       email: ['', [Validators.required, Validators.email, Validators.pattern(pattern)]]
     });
@@ -82,7 +85,7 @@ export class AgentsComponent implements OnInit {
     this.formData = {
       first_name: String,
       last_name: String,
-      deviceType: String,
+      //deviceType: String,
       phone_number: Number,
       email: String
     };
@@ -151,6 +154,7 @@ export class AgentsComponent implements OnInit {
   }
 
   AgentsListData(){
+    this.spinner.show();
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
@@ -164,7 +168,8 @@ export class AgentsComponent implements OnInit {
           this.service.post('admin/agents/list', dataTablesParameters).subscribe(res => {
             this.agents = res['result']['data'];
             console.log(this.agents);
-            this.dataShare.changeLoading(false);
+            //this.dataShare.changeLoading(false);
+            this.spinner.hide();
             callback({
               recordsTotal: res['result']['recordsTotal'],
               recordsFiltered: res['result']['recordsTotal'],
@@ -189,10 +194,10 @@ export class AgentsComponent implements OnInit {
           data: 'Email',
           name: 'email',
         },
-        {
-          data: 'Device Type',
-          name: 'deviceType',
-        },
+        // {
+        //   data: 'Device Type',
+        //   name: 'deviceType',
+        // },
         {
           data: 'Phone Number',
           name: 'phone_number',
@@ -229,7 +234,7 @@ export class AgentsComponent implements OnInit {
       this.AddEditForm.controls['last_name'].setValue(item.last_name);
       this.AddEditForm.controls['email'].setValue(item.email);
       this.AddEditForm.controls['phone_number'].setValue(item.phone_number);
-      this.AddEditForm.controls['deviceType'].setValue(item.deviceType);
+     //    this.AddEditForm.controls['deviceType'].setValue(item.deviceType);
     } else{
       this.title = "Add Company";
     }
@@ -242,7 +247,7 @@ export class AgentsComponent implements OnInit {
         this.AddEditForm.controls['last_name'].setValue('');
         this.AddEditForm.controls['email'].setValue('');
         this.AddEditForm.controls['phone_number'].setValue('');
-        this.AddEditForm.controls['deviceType'].setValue('');
+       // this.AddEditForm.controls['deviceType'].setValue('');
       }
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });

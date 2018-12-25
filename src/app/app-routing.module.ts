@@ -23,7 +23,7 @@ export const routes: Routes = [
             canActivate: [AuthGuard] 
         },
         { path: 'company', loadChildren: './views/companies/companies.module#CompaniesModule',
-           // canActivate: [AuthGuard]
+            canActivate: [AuthGuard]
         },
         ]
     },

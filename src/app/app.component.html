@@ -2,3 +2,10 @@
     <app-spinner>
     </app-spinner>
 </router-outlet>
+<div id="loader" [hidden]="!loading"><i class="fa fa-spinner fa-spin fa-3x" aria-hidden="true"></i></div>
+<ngx-spinner
+bdColor = "rgba(51, 51, 51, 0.8)"
+size = "medium"
+color = "rgb(97, 165, 233)"
+type = "ball-spin-clockwise"
+></ngx-spinner>

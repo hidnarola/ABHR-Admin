@@ -18,7 +18,7 @@
         <div class="agents-dtl-box-inr"><b>First Name : </b> <span>{{agentDetails.first_name}}</span> </div>
         <div class="agents-dtl-box-inr"><b>Last Name : </b> <span>{{agentDetails.last_name}}</span> </div>
         <div class="agents-dtl-box-inr"><b>Email : </b> <span>{{ agentDetails.email }}</span> </div>
-        <div class="agents-dtl-box-inr"><b>Device Type : </b> <span>{{ agentDetails.deviceType | titlecase }}</span> </div>
+        <!-- <div class="agents-dtl-box-inr"><b>Device Type : </b> <span>{{ agentDetails.deviceType | titlecase }}</span> </div> -->
         <div class="agents-dtl-box-inr"><b>Phone Number : </b> <span>{{ agentDetails.phone_number ? agentDetails.phone_number : '-' }}</span> </div>
       </div>
     </div>
@@ -44,9 +44,9 @@
                 <tr>
                 <th>Id</th>
                 <th>Car Id</th>
-                <th>Booking Number</th>
-                <th>Booking Rent</th>
-                <th>Trip Status</th>
+                <th>Booking Id</th>
+                <th>Price</th>
+                <th class="disabled">Status</th>
                 </tr>
               </thead>
               <tbody *ngIf="rentalData?.length != 0">
@@ -142,7 +142,7 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-6">
+        <!-- <div class="col-sm-6">
           <div class="form-group">
             <label>Device Type :</label>
             {{ f.deviceType.val }}
@@ -160,7 +160,7 @@
               <div *ngIf="f.deviceType.errors.required">device type is required</div>
             </div>
           </div>
-        </div>
+        </div> -->
         <div class="col-sm-12 text-center">
           <div class="form-group">
             <button type="submit" class="btn waves-effect waves-light custom-btn btn-primary">Submit</button>

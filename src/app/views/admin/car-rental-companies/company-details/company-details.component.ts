@@ -4,6 +4,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { ActivatedRoute  } from '@angular/router';
 import { Router } from '@angular/router';
 
+import { NgxSpinnerService } from 'ngx-spinner';
 // services
 import { CrudService } from '../../../../shared/services/crud.service';
 import { DataSharingService } from '../../../../shared/services/data-sharing.service';
@@ -55,6 +56,7 @@ constructor(
   public router: Router,
   private fromBuilder: FormBuilder,
   private messageService: MessageService,
+  private spinner: NgxSpinnerService
 ) { 
   this.route.params.subscribe(params => { this.userId = params.id; });
   console.log('userid in admin comapny', this.userId)
@@ -118,10 +120,13 @@ onSubmit() {
 }
 
 UserDetails(){
+ // this.spinner.show();
   this.service.get('admin/company/details/'+this.userId).subscribe ( res =>{
     console.log('userdetails RES==>',res['data']);
     this.userDetails = res['data'];
-    //console.log('userDetails==>', this.userDetails);
+   // this.spinner.hide();
+ // }, error => {
+   // this.spinner.hide();
   })
 }
 
@@ -182,6 +187,7 @@ ngAfterViewInit(): void {
 }
 
 CarData(){
+  this.spinner.show();
   this.dtOptions = {
     pagingType: 'full_numbers',
     pageLength: 10,
@@ -200,7 +206,8 @@ CarData(){
             console.log('car data==>', res)
           this.carData = res['result']['data'];
           console.log(this.carData);
-          this.dataShare.changeLoading(false);
+         // this.dataShare.changeLoading(false);
+          this.spinner.hide();
           callback({
             recordsTotal: res['result']['recordsTotal'],
             recordsFiltered: res['result']['recordsTotal'],

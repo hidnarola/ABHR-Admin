@@ -28,7 +28,7 @@
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Email</th>
-                <th>Device Type</th>
+                <!-- <th>Device Type</th> -->
                 <th>Phone Number</th>
                 <th class="disabled">Actions</th>
               </tr>
@@ -53,11 +53,11 @@
                     {{ item.email }}
                   </span>
                 </td>
-                <td>
+                <!-- <td>
                   <span class="badge badge-primary">
                     {{ item.deviceType  | titlecase }}
                   </span>
-                </td>
+                </td> -->
                 <td>
                   <span>
                     {{ item.phone_number ? item.phone_number : '-'}}
@@ -144,7 +144,7 @@
               </div>
             </div>
           </div>
-          <div class="col-sm-6">
+          <!-- <div class="col-sm-6">
             <div class="form-group">
               <label>Device Type :</label>
               {{ f.deviceType.val }}
@@ -162,8 +162,8 @@
                 <div *ngIf="f.deviceType.errors.required">device type is required</div>
               </div>
             </div>
-          </div>
-          <div class="col-sm-12 text-center">
+          </div> -->
+          <div class="col-sm-12 text-center"> 
             <div class="form-group">
               <button type="submit" class="btn waves-effect waves-light custom-btn btn-primary">Submit</button>
             </div>

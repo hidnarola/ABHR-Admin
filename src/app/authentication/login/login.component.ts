@@ -27,6 +27,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
                 private fromBuilder: FormBuilder,
                 private messageService: MessageService,) {
                     var urlSegment = this.router.url;
+                    console.log('urlsegment in login==>', urlSegment)
                     var array = urlSegment.split('/');
                     console.log(array[1]);
                     this.CurrentAdmin = array[1];

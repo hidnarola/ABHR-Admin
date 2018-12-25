@@ -79,7 +79,7 @@ RentalData(){
         name: 'car_id'
       },
       {
-        data: 'Booking Number', 
+        data: 'Booking Id', 
         name:'booking_number',
       },
       {

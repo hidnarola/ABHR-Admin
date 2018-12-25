@@ -71,7 +71,7 @@ body .ui-dialog .ui-dialog-footer{ text-align:center !important; }
 .modal-title{ color:#fff; }
 .dropdown-menu{ font-size:13px !important;}
 input#checkbox-signup { margin-right: 5px;}
-div#DataTables_Table_0_paginate {text-transform: uppercase; font-size: 13px;}
+div#DataTables_Table_0_paginate {text-transform: capitalize; font-size: 13px;}
 .ui-confirmdialog.ui-dialog .ui-dialog-content {padding: 2em 2em !important;}
 h4.table-header {color: #5c5c5c;text-transform: capitalize;font-weight: 400;margin-bottom: 30px;}
 li.breadcrumb-item {font-weight: 400;}
@@ -79,7 +79,6 @@ li.breadcrumb-item {font-weight: 400;}
 #blue{ color: #5c5c5c;text-transform: capitalize;font-weight: 400;margin-bottom: 48px;}
 .ui-toast-top-right {top: 60px !important;}
 h4.text-themecolor.m-b-0 {text-transform: capitalize;}
-h4.blue {text-transform: uppercase;}
 .no-data-available {text-align: center;}
 .dataTables_empty {display: none;}
 .mt-45{ margin-top: 45px!important;}
@@ -116,3 +115,9 @@ table.dataTable thead .sorting_desc{background-image:url(/assets/images/sorting_
 .dropdown-menu{ min-width:100px !important;}
 .table-responsive {overflow-x: initial !important;}
 body table.dataTable thead .disabled{ background-image:none !important}
+.blue .topbar .navbar-header {padding: 5px 0px;margin-bottom: -1px; margin-top: -1px;}
+.blue .topbar .navbar-header .navbar-brand img{width: 180px;}
+/* .black-overlay{ background-color:rgb(25, 118, 210,.7) !important;} */
+/* .la-ball-spin-clockwise.la-3x{ width:70px !important; height:70px !important;} */
+
+span.hide-menu { padding-left: 15px;}

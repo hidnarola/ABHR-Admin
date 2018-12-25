@@ -7,6 +7,8 @@ import { Observable } from 'rxjs';
 })
 export class AuthGuard implements CanActivate {
 
+  public CurrentAdmin;
+
   constructor(private router: Router) { }
 
   // canActivate(
@@ -19,23 +21,47 @@ export class AuthGuard implements CanActivate {
     return this.checkLogin(url);
   }
   checkLogin(url: string): boolean {
+    var array = url.split('/');
+    this.CurrentAdmin = array[1];
     let islogin = true;
-    let loginUser = localStorage.getItem('admin');
+    let loginUserAdmin = localStorage.getItem('admin');
+    let loginUserCompany = localStorage.getItem('company-admin');
     let token = localStorage.getItem('token');
-    try {
-      loginUser = JSON.parse(loginUser);
-      if (loginUser['_id'] && token) {
-        islogin = true;
-      } else {
+    if(this.CurrentAdmin == 'admin'){
+      try {
+        loginUserAdmin = JSON.parse(loginUserAdmin);
+        if (loginUserAdmin['_id'] && token) {
+          islogin = true;
+        } else {
+          islogin = false;
+        }
+      } catch (e) {
         islogin = false;
       }
-    } catch (e) {
-      islogin = false;
+      if (!islogin) {
+        this.router.navigate(['/admin/login']);
+        return false;
+      }
+     // return true;
     }
-    if (!islogin) {
-      this.router.navigate(['/admin/login']);
-      return false;
+     else if(this.CurrentAdmin == 'company'){
+      try {
+        loginUserCompany = JSON.parse(loginUserCompany);
+        if (loginUserCompany['_id'] && token) {
+          islogin = true;
+        } else {
+          islogin = false;
+        }
+      } catch (e) {
+        islogin = false;
+      }
+      if (!islogin) {
+        this.router.navigate(['/company/login']);
+        return false;
+      }
+     // return true;
     }
     return true;
-   }
+    }
 }
+

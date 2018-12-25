@@ -22,6 +22,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SpinnerComponent } from './shared/spinner.component';
 
+// NGX Modules
+import { NgxSpinnerModule } from 'ngx-spinner';
+
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import {ConfirmationService} from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
@@ -57,6 +60,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     AppRoutingModule,
     DataTablesModule,
     ConfirmDialogModule,
+    NgxSpinnerModule
    
   ],
   providers: [

@@ -6,6 +6,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { Routes, RouterModule, ActivatedRoute } from '@angular/router';
 import { NgModule } from '@angular/core';
 
+import { NgxSpinnerService } from 'ngx-spinner';
 //service
 import { DataSharingService } from '../../../shared/services/data-sharing.service'
 import { CrudService } from '../../../shared/services/crud.service';
@@ -60,6 +61,7 @@ constructor(
     private modalService: NgbModal,
     private fromBuilder: FormBuilder,
     private messageService: MessageService,
+    private spinner: NgxSpinnerService
 ) {
   //addform validation
   const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
@@ -81,6 +83,7 @@ constructor(
 }
 get f() { return this.AddEditForm.controls; }
 UsersListData(){
+  this.spinner.show();
   this.dtOptions = {
     pagingType: 'full_numbers',
     pageLength: 10,
@@ -94,7 +97,8 @@ UsersListData(){
         this.service.post('admin/company/list', dataTablesParameters).subscribe(res => {
           this.users = res['result']['data'];
           console.log(this.users);
-          this.dataShare.changeLoading(false);
+          //this.dataShare.changeLoading(false);
+          this.spinner.hide();
           callback({
             recordsTotal: res['result']['recordsTotal'],
             recordsFiltered: res['result']['recordsTotal'],
