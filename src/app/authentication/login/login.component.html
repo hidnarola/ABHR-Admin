@@ -13,7 +13,7 @@
             <input class="form-control" type="text" required="" placeholder="Enter Your Email" formControlName="email"
             name="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }">
             <div *ngIf="submitted && f.email.errors" class="invalid-feedback" >
-              <div *ngIf=" f.email.errors.required ">email is required</div>
+              <div *ngIf=" f.email.errors.required ">Email is required</div>
               <!-- <div *ngIf=" f.email.errors.email"> email must be a valid email address </div> -->
               <div *ngIf=" f.email.errors.pattern"> email format is wrong </div>
             </div>
@@ -24,7 +24,7 @@
             <input class="form-control" type="password" required="" name="password" placeholder="Password" formControlName="password"
             class="form-control" [ngClass]= "{ 'is-invalid': submitted && f.password.errors }">
             <div *ngIf=" submitted && f.password.errors " class="invalid-feedback">
-              <div *ngIf="f.password.errors.required">password is required</div>
+              <div *ngIf="f.password.errors.required">Password is required</div>
             </div>
            </div>
         </div>
