@@ -19,6 +19,7 @@ export class ForgetPasswordComponent implements OnInit {
   public formData: any;
   public alerts = [];
   public currentUser;
+  public AdminType;
 
   private subscription: Subscription;
     message: any;
@@ -27,7 +28,20 @@ export class ForgetPasswordComponent implements OnInit {
                public service: CrudService,
                public router: Router,
                public route: ActivatedRoute,
-               private messageService: MessageService) {
+               private messageService: MessageService) 
+               {
+                var user = JSON.parse(localStorage.getItem('admin'));
+                console.log('data from local storage', user)
+                let company = JSON.parse(localStorage.getItem('company-admin'));
+                if(user != null && user != undefined){
+                    this.AdminType = user.first_name;
+                    console.log('user name ==>', this.AdminType)
+                }
+                if(company !=null && company != undefined){
+                    this.AdminType = company.name;
+                    console.log('user name ==>', this.AdminType)
+                }
+
                 var urlSegment = this.router.url;
                 var array = urlSegment.split('/');
                 console.log(array[1]);
@@ -71,7 +85,5 @@ export class ForgetPasswordComponent implements OnInit {
       }
     }
   }
-  ngOnDestroy() {
-    //this.subscription.unsubscribe();
-  }
+  ngOnDestroy() {}
 }

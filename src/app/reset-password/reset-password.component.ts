@@ -21,6 +21,7 @@ export class ResetPasswordComponent implements OnInit {
   public userId;
   public UserType;
   public formData;
+  public userName;
 
   private subscription: Subscription;
   message: any;
@@ -36,14 +37,18 @@ export class ResetPasswordComponent implements OnInit {
                   if (params['detials']) {
                     let strParams = atob(params['detials']);
                     this.linkData = JSON.parse(strParams);
-                    console.log(this.linkData);
+                    console.log('link data==>' ,this.linkData);
                     if(this.linkData.user_id){
                       this.userId = this.linkData.user_id;
                       this.UserType = 'admin';
+                      this.userName = this.linkData.first_name;
+                      console.log('admin user name ===>', this.linkData.first_name )
                     }
                     if(this.linkData.company_id){
                       this.userId = this.linkData.company_id;
                       this.UserType = 'company';
+                      this.userName = this.linkData.name;
+                      console.log('company user name ==>', this.linkData.name )
                     }     
                     let currentTime = new Date().getTime();
                     if (this.linkData.expire_time < currentTime) {

@@ -121,3 +121,5 @@ body table.dataTable thead .disabled{ background-image:none !important}
 /* .la-ball-spin-clockwise.la-3x{ width:70px !important; height:70px !important;} */
 
 span.hide-menu { padding-left: 15px;}
+a#to-recover:hover, 
+a#to-recover:focus { color: #1976d2!important }
