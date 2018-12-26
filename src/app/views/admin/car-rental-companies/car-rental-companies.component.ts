@@ -196,9 +196,10 @@ delete(userId) {
       accept: () => {
       this.service.put('admin/company/delete', {company_id : userId}).subscribe(res => {
         this.render();
-        this.messageService.add({severity:'success', summary:'Success', detail:'Company is Deleted!!'});
-      },error => {
-        this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});        
+        this.messageService.add({severity:'success', summary:'Success', detail: res['message'] });
+      },err => {
+        err = err.error
+        this.messageService.add({severity:'error', summary:'Error', detail: err['message']});        
       });
       },
       reject: () => {
@@ -238,9 +239,10 @@ onSubmit() {
         console.log('after update==>',res)
         this.render();
         this.closePopup();
-        this.messageService.add({severity:'success', summary:'Success', detail:'Company is edited!!'});
-      }, error => {
-        this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
+        this.messageService.add({severity:'success', summary:'Success', detail: res['message']});
+      }, err => {
+        err = err.error
+        this.messageService.add({severity:'error', summary:'Error', detail:err['message']});
         this.closePopup();
       })
     } else {
@@ -248,9 +250,10 @@ onSubmit() {
       this.service.post('admin/company/add', this.formData).subscribe(res => {
         this.render();
         this.closePopup();
-        this.messageService.add({severity:'success', summary:'Success', detail:'Company is added!!'});
-      }, error => {
-        this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
+        this.messageService.add({severity:'success', summary:'Success', detail: res['message']});
+      }, err => {
+        err = err.error
+        this.messageService.add({severity:'error', summary:'Error', detail:err['message']});
         this.closePopup();
       })
     }

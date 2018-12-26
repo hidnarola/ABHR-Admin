@@ -13,7 +13,8 @@ import { CarsComponent } from './cars/cars.component';
 import { CompanyReportsComponent } from './company-reports/company-reports.component';
 import { CompanyTransactionsComponent } from './../companies/company-transactions/company-transactions.component';
 import { CompaniesComponent } from './companies.component';
-import { CarDetailsComponent } from './cars/car-details/car-details.component';
+import { CarDetailsComponent } from './cars/CompanyAdmin_car-details/car-details.component';
+import { CarAddEditComponent } from './cars/CompanyAdmin-car-add-edit/company-admin-car-add-edit.component';
 
 
 const CompanyRoutes: Routes = [{
@@ -31,7 +32,7 @@ const CompanyRoutes: Routes = [{
             },
         },
         {
-            path: 'cars',
+            path: 'car',
             component: CarsComponent,
             data: {
                 title: 'Manage Cars',
@@ -43,11 +44,28 @@ const CompanyRoutes: Routes = [{
             component: CarDetailsComponent,
             data: {
               title: 'View Car',
-              urls: [{ title: 'Dashboard', url: '/company/dashboard'},{ title: 'Cars' , url: '/company/cars'}, {title: 'Car Detail'}]
+              urls: [{ title: 'Dashboard', url: '/company/dashboard'},{ title: 'Cars' , url: '/company/car'}, {title: 'Car Detail'}]
             },
         },
+        {
+            path: 'car/edit/:id',
+            component: CarAddEditComponent,
+            data: {
+              title: 'Edit Car',
+              urls: [{ title: 'Dashboard', url: '/company/dashboard'},{ title: 'Cars' , url: '/company/car'},  {title: 'Edit Company'}]
+            },
+        },
+        {
+            path: 'car/add',
+            component: CarAddEditComponent,
+            data: {
+            title: 'Add Car',
+            urls: [{title: 'Dashboard',url: '/company/dashboard'}, { title: 'Cars' , url: '/company/car'}, {title: 'Add Company'}]
+            },
+          },
     ]
-}]
+},
+]
 @NgModule({
 	imports: [
     	CommonModule, 
@@ -65,6 +83,7 @@ const CompanyRoutes: Routes = [{
 	declarations: [
         CarsComponent,
         CarDetailsComponent,
+        CarAddEditComponent,
         CompanyTransactionsComponent,
         CompanyReportsComponent,
         CompaniesComponent

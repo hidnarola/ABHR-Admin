@@ -15,7 +15,7 @@ export class AppComponent {
     private dataShare: DataSharingService
   ){
     this.dataShare.currentloading.subscribe((res)=>{
-      console.log('datashare in loading', res)
+     // console.log('datashare in loading', res)
     this.loading = res;
   })}
 }

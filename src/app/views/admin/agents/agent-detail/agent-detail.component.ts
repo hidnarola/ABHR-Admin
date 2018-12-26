@@ -99,9 +99,10 @@ onSubmit() {
         console.log('this.agentDetails==>',this.agentDetails);
         this.agentDetails = this.formData;
         this.closePopup();
-        this.messageService.add({severity:'success', summary:'Success', detail:'Agent is edited!!'});
-      }, error => {
-        this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
+        this.messageService.add({severity:'success', summary:'Success',  detail: res['message'] });
+      },  err => {
+        err = err.error
+        this.messageService.add({severity:'error', summary:'Error', detail: err['message'] });
         this.closePopup();
       })
   }

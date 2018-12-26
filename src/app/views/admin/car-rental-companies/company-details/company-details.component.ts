@@ -90,7 +90,7 @@ onSubmit() {
     //console.log('in valid', this.userId);
     let formData: FormData = new FormData();
     this.formData = this.AddEditForm.value;
-    if (this.isEdit) {
+    // if (this.isEdit) {
     this.formData.company_id = this.userId;
       console.log('form data in company view page',this.formData);
       this.service.put('admin/company/update', this.formData).subscribe(res => {
@@ -98,23 +98,25 @@ onSubmit() {
         //console.log('this.userDetails==>',this.userDetails);
         this.userDetails = this.formData;
         this.closePopup();
-        this.messageService.add({severity:'success', summary:'Success', detail:'Company is edited!!'});
-      }, error => {
-        this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
+        this.messageService.add({severity:'success', summary:'Success', detail: res['message'] });
+      },  err => {
+        err = err.error
+        this.messageService.add({severity:'error', summary:'Error', detail: err['message'] });
         this.closePopup();
       })
-  } else {
-    this.title = "Add Company";
-    this.service.post('admin/company/add', this.formData).subscribe(res => {
-      this.render();
-      this.closePopup();
-      this.messageService.add({severity:'success', summary:'Success', detail:'Company is added!!'});
-    }, error => {
-      this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
-      this.closePopup();
-    })
-  }
-  this.isEdit = false;
+  // }
+  //  else {
+    // this.title = "Add Company";
+    // this.service.post('admin/company/add', this.formData).subscribe(res => {
+    //   this.render();
+    //   this.closePopup();
+    //   this.messageService.add({severity:'success', summary:'Success', detail:'Company is added!!'});
+    // }, error => {
+    //   this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
+    //   this.closePopup();
+    // })
+  // }
+  // this.isEdit = false;
   this.submitted = false;
  }
 }
@@ -133,28 +135,29 @@ UserDetails(){
 //model
 open2(content, userDetails) { 
   //console.log('userDetails====>',userDetails);
-  if( userDetails != 'undefined' && userDetails ){
-    this.title = "Edit Company";
-    this.isEdit = true;
+  // if( userDetails != 'undefined' && userDetails ){
+    // this.title = "Edit Company";
+    // this.isEdit = true;
     this.AddEditForm.controls['name'].setValue(userDetails.name);
     this.AddEditForm.controls['description'].setValue(userDetails.description);
     this.AddEditForm.controls['email'].setValue(userDetails.email);
     this.AddEditForm.controls['site_url'].setValue(userDetails.site_url);
     this.AddEditForm.controls['phone_number'].setValue(userDetails.phone_number);
-  } else {
-    this.title = "Add Company";
-  }
+  // } 
+  // else {
+    // this.title = "Add Company";
+  // }
   this.modalService.open(content).result.then((result) => {
     this.closeResult = `Closed with: ${result}`;
   }, (reason) => {
-    if (reason == 'Cross click' || reason == 0) {
-      this.isEdit = false;
-      this.AddEditForm.controls['name'].setValue('');
-      this.AddEditForm.controls['description'].setValue('');
-      this.AddEditForm.controls['email'].setValue('');
-      this.AddEditForm.controls['site_url'].setValue('');
-      this.AddEditForm.controls['phone_number'].setValue('');
-    }
+    // if (reason == 'Cross click' || reason == 0) {
+    //   this.isEdit = false;
+    //   this.AddEditForm.controls['name'].setValue('');
+    //   this.AddEditForm.controls['description'].setValue('');
+    //   this.AddEditForm.controls['email'].setValue('');
+    //   this.AddEditForm.controls['site_url'].setValue('');
+    //   this.AddEditForm.controls['phone_number'].setValue('');
+    // }
     this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
   });
 }

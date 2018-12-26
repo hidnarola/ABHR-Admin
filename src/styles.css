@@ -37,9 +37,9 @@ body .dataTables_wrapper .dataTables_info {font-size:13px; font-weight:400; padd
 
 .modal-dialog {max-width:640px !important;}
 .modal-content {border:0 !important; border-radius:0 !important;}
-.modal-header{font-size:18px; border-radius:0 !important; text-transform:uppercase; font-weight: 500; letter-spacing: .08em; color:#fff !important; background:#1976d2;}
+.modal-header{font-size:18px; border-radius:0 !important; text-transform:capitalize; font-weight: 500; letter-spacing: .08em; color:#fff !important; background:#1976d2;}
 
-.form-group label{font-size:13px; letter-spacing:.08em; color:#333; text-transform:uppercase; margin:0 0 5px;}
+.form-group label{font-size:13px; letter-spacing:.08em; color:#333; text-transform:capitalize; margin:0 0 5px;}
 .form-control{padding:7px 10px 8px 12px !important; font-size:13px !important; letter-spacing:.08em !important; border-radius:0 !important; color:#666 !important;}
 .close {color: #fff !important; text-shadow:none !important; opacity:.8 !important;}
 .form-control:focus {background-color: #ffffff!important;border-color: #1976d2!important;outline: 0;box-shadow: 0 0 0 0.05rem rgba(25, 118, 210, 0.39)!important;}
@@ -51,17 +51,22 @@ body .dataTables_wrapper .dataTables_info {font-size:13px; font-weight:400; padd
 .custom-control-input:checked ~ .custom-control-label::before,
 .custom-radio .custom-control-input:checked ~ .custom-control-label::before {background-color: #1976d2 !important;}
 label.custom-control-label{ line-height:16px; color:#666;}
-body .ui-dialog .ui-dialog-titlebar {border:0 !important; color: #fff !important; background: #1976d2 !important; font-size: 16px !important; font-weight: 700 !important; text-transform: uppercase !important; letter-spacing: .08em !important;}
+body .ui-dialog .ui-dialog-titlebar {border:0 !important; color: #fff !important; background: #1976d2 !important; font-size: 16px !important; font-weight: 700 !important; text-transform: capitalize !important; letter-spacing: .08em !important;}
 body .ui-corner-all {border-radius:0 !important;}
 body .ui-corner-top{ border-radius:0 !important;}
 .dropdown-item:hover,
 .dropdown-item:focus {color: #ffffff !important; background-color: #1976d2 !important;}
 
 
-.agents-dtl-box {max-width:550px;display: block;width: 100%; margin:-45px 0 0 15px; }
+.agents-dtl-box {max-width: 50%;display: block;width: 100%; margin:-45px 0 0 15px; }
 .agents-dtl-box>div {border: 1px solid #eee;margin: 0 0 5px;display: block;padding: 10px;}
-.agents-dtl-box>div b {margin: -10px 20px -10px -10px;background: #f6f6f6;display: inline-block;vertical-align: top;padding: 13px 10px 12px;min-width: 170px;text-align: right;font-size: 13px;color: #666;text-transform: uppercase;letter-spacing: .05em;font-weight: 500;}
+.agents-dtl-box>div b {margin: -10px 20px -10px -10px;background: #f6f6f6;display: inline-block;vertical-align: top;padding: 13px 10px 12px;min-width: 170px;text-align: right;font-size: 13px;color: #666;text-transform: capitalize;letter-spacing: .05em;font-weight: 500;}
 .agents-dtl-box span {font-size: 13px; color: #333; font-weight: 400; letter-spacing: .04em;}
+
+.cars-dtl-box { display: block;width: 100%; margin:-45px 0 0 0; }
+.cars-dtl-box-inr {border: 1px #eee solid;margin: 0 0 5px;padding: 10px;display: block;}
+.cars-dtl-box-inr b{margin: -10px 20px -10px -10px;background: #f6f6f6;display: inline-block;vertical-align: top;padding: 13px 10px 12px;min-width: 170px;text-align: right;font-size: 13px;color: #666;text-transform: capitalize;letter-spacing: .05em;font-weight: 500;}
+.cars-dtl-box span {font-size: 13px; color: #333; font-weight: 400; letter-spacing: .04em;}
 
 .ui-confirmdialog.ui-dialog .ui-dialog-content{ border:0 !important }
 body .ui-dialog .ui-dialog-footer {border: 0 !important; border-top: 1px solid #eee !important;}

@@ -51,7 +51,7 @@ export class AgentsComponent implements OnInit {
   public userId;
   public isEdit: boolean;
   public isDelete: boolean;
-  public title = "Add Company";
+  public title = "Add Agent";
 
   private subscription: Subscription;
   message: any;
@@ -105,24 +105,26 @@ export class AgentsComponent implements OnInit {
       console.log('formadata==>',this.formData);
       if (this.isEdit) {
         this.formData.user_id = this.userId;
-        this.title = "Edit Company";
+        this.title = "Edit Agent";
         console.log('userId', this.userId);
         this.service.put('admin/agents/update', this.formData).subscribe(res => {
           this.render();
           this.closePopup();
-          this.messageService.add({severity:'success', summary:'Success', detail:'Agent is edited!!'});
-        }, error => {
-          this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
+          this.messageService.add({severity:'success', summary:'Success', detail: res['message'] });
+        },err => {
+          err = err.error
+          this.messageService.add({severity:'error', summary:'Error', detail: err['message']});
           this.closePopup();
         })
       } else {
-        this.title = "Add Company";
+        this.title = "Add Agent";
         this.service.post('admin/agents/add', this.formData).subscribe(res => {
           this.render();
           this.closePopup();
-          this.messageService.add({severity:'success', summary:'Success', detail:'Agent is added!!'});
-        }, error => {
-          this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
+          this.messageService.add({severity:'success', summary:'Success', detail: res['message'] });
+        }, err => {
+          err = err.error
+          this.messageService.add({severity:'error', summary:'Error', detail: err['message']});
           this.closePopup();
         })
       }
@@ -227,7 +229,7 @@ export class AgentsComponent implements OnInit {
   open2(content, item) {
     console.log('item==>', item);
     if (item != 'undefined' && item != '') {
-      this.title = "Edit Company";
+      this.title = "Edit Agent";
       this.isEdit = true;
       this.userId = item._id;
       this.AddEditForm.controls['first_name'].setValue(item.first_name);
@@ -236,7 +238,7 @@ export class AgentsComponent implements OnInit {
       this.AddEditForm.controls['phone_number'].setValue(item.phone_number);
      //    this.AddEditForm.controls['deviceType'].setValue(item.deviceType);
     } else{
-      this.title = "Add Company";
+      this.title = "Add Agent";
     }
     this.modalService.open(content).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
@@ -273,9 +275,10 @@ export class AgentsComponent implements OnInit {
         accept: () => {
         this.service.put('admin/agents/delete', {user_id : userId}).subscribe(res => {
           this.render();
-          this.messageService.add({severity:'success', summary:'Success', detail:'Agent is Deleted!!'});
-        },error => {
-          this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});  
+          this.messageService.add({severity:'success', summary:'Success', detail: res['message']});
+        },err => {
+          err = err.error
+          this.messageService.add({severity:'error', summary:'Error',  detail: err['message']});  
         });
         },
         reject: () => {

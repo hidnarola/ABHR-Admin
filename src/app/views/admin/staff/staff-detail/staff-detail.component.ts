@@ -84,9 +84,10 @@ onSubmit() {
         this.userDetails = this.formData;
         console.log('this.userDetails==>',this.userDetails);
         // this.closePopup();
-        this.messageService.add({severity:'success', summary:'Success', detail:'Staff is edited!!'});
-      }, error => {
-        this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
+        this.messageService.add({severity:'success', summary:'Success',  detail: res['message'] });
+      },  err => {
+        err = err.error
+        this.messageService.add({severity:'error', summary:'Error', detail: err['message'] });
         // this.closePopup();
       })
       this.closePopup();

@@ -10,7 +10,7 @@
     <button type="button" class="btn btn-primary btn-rounded m-r-10">
       <i class="fa fa-external-link" aria-hidden="true"></i> Export
     </button>
-    <button type="button" class="btn btn-primary btn-rounded" (click)="open2(content, '')">
+    <button type="button" class="btn btn-primary btn-rounded" [routerLink]="['/company/car/add']">
       <i class="mdi mdi-account-plus" aria-hidden="true"></i> Add
     </button>
   </div>
@@ -58,19 +58,19 @@
                     {{ item.is_avialable?'Yes':'No' }}
                   </span>
                 </td>
-                <td>
-                  <button type="button" class="btn btn-primary btn-rounded" [routerLink]="['/company/car/view/',item._id]">View</button>
-                </td>
                 <!-- <td>
+                  <button type="button" class="btn btn-primary btn-rounded" [routerLink]="['/company/car/view/',item._id]">View</button>
+                </td> -->
+                <td>
                   <div ngbDropdown class="d-inline-block">
                     <button class="btn btn-primary" id="dropdownBasic1" ngbDropdownToggle></button>
                     <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                      <button class="dropdown-item" [routerLink]="['/admin/car-rental-companies/car/view/',item._id]">View</button>
-                      <button class="dropdown-item" [routerLink]="['/admin/car-rental-companies/car/edit/',item._id]">Edit</button>
-                      <button class="dropdown-item" (click)="delete(item._id)">Delete</button>
+                      <button class="dropdown-item" [routerLink]="['/company/car/view/',item._id]">View</button>
+                      <button class="dropdown-item" [routerLink]="['/company/car/edit/',item._id]">Edit</button>
+                      <!-- <button class="dropdown-item" (click)="delete(item._id)">Delete</button> -->
                    </div>
                   </div>
-                </td> -->
+                </td>
               </tr>
             </tbody>
             <tbody *ngIf="users?.length == 0">
@@ -87,7 +87,7 @@
   
 
 <!-- add-edit form -->
-<div class="row">
+<!-- <div class="row">
   <div class="col-md-6">
     <ng-template #content let-c="close" let-d="dismiss">
       <div class="modal-header">
@@ -149,4 +149,4 @@
       </div>
     </ng-template>
   </div>
-</div>
+</div> -->
