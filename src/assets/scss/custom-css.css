@@ -1,20 +1,45 @@
-.sidebar-nav>ul>li>a i { font-size: 19px !important; width: 27px !important; }
-.sidebar-nav ul li ul li a { padding: 7px 35px 7px 25px; }
-.sidebar-nav .has-arrow::after{ top:18px !important; }
-.sidebar-nav>ul>li>a{ border-left: 3px solid transparent; height:44px; }
-.sidebar-nav>ul>li.active>a{ border-left: 3px solid #1976d2; }
-.sidebar-nav ul li a.active,
-.sidebar-nav ul li a.router-link-active{ font-weight: 500 !important; }
+.sidebar-nav>ul>li>a i {
+    font-size: 19px !important;
+    width: 27px !important;
+}
 
-.custom-add-btn{ padding: 7px 12px !important; font-size: 13px !important;}
-table.dataTable tbody td{
+.sidebar-nav ul li ul li a {
+    padding: 7px 35px 7px 25px;
+}
+
+.sidebar-nav .has-arrow::after {
+    top: 18px !important;
+}
+
+.sidebar-nav>ul>li>a {
+    border-left: 3px solid transparent;
+    height: 44px;
+}
+
+.sidebar-nav>ul>li.active>a {
+    border-left: 3px solid #1976d2;
+}
+
+.sidebar-nav ul li a.active,
+.sidebar-nav ul li a.router-link-active {
+    font-weight: 500 !important;
+}
+
+.custom-add-btn {
+    padding: 7px 12px !important;
+    font-size: 13px !important;
+}
+
+table.dataTable tbody td {
     vertical-align: middle !important;
     padding: 12px 20px !important;
 }
+
 .dataTables_filter label,
-.dataTables_length label{
+.dataTables_length label {
     letter-spacing: 0.05em !important;
 }
+
 .dataTables_filter input:focus,
 .dataTables_length select:focus {
     outline: none;
@@ -29,6 +54,7 @@ table.dataTable tbody td{
     -o-transition-duration: 0.3s;
     transition-duration: 0.3s;
 }
+
 .dataTables_filter input,
 .dataTables_length select {
     border: 0;
@@ -50,6 +76,10 @@ table.dataTable tbody td{
     margin-left: 10px;
 }
 
-.stylish-table tbody tr{
+.stylish-table tbody tr {
     border-left: 4px solid #ffffff;
+}
+
+.sidebar-nav {
+    padding: 0px !important
 }
