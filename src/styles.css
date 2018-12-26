@@ -43,7 +43,14 @@ body .dataTables_wrapper .dataTables_info {font-size:13px; font-weight:400; padd
 .form-control{padding:7px 10px 8px 12px !important; font-size:13px !important; letter-spacing:.08em !important; border-radius:0 !important; color:#666 !important;}
 .close {color: #fff !important; text-shadow:none !important; opacity:.8 !important;}
 .form-control:focus {background-color: #ffffff!important;border-color: #1976d2!important;outline: 0;box-shadow: 0 0 0 0.05rem rgba(25, 118, 210, 0.39)!important;}
-.custom-btn{max-width:280px; margin: 0 auto; display: block; padding:10px 15px !important; width:100%;}
+.custom-btn{
+    width: 90px;
+    display: inline-block;
+    margin-right: 15px;
+    border: none;
+    padding: 8px 12px;
+    color: #fff !important;
+}
 
 .custom-control-label::after,
 .custom-control-label::before {top:0 !important;}
