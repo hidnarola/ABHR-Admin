@@ -206,7 +206,7 @@ CarData(){
         console.log('dtaparametes car==>',dataTablesParameters);
           this.service.post('admin/company/car_list', dataTablesParameters).subscribe(res => {
             console.log('user id in car data table', this.userId)
-            console.log('car data==>', res)
+            console.log('car data in res==>', res)
           this.carData = res['result']['data'];
           console.log(this.carData);
          // this.dataShare.changeLoading(false);
@@ -229,11 +229,11 @@ CarData(){
       },
       {
         data: 'Model Name',
-        name: 'modelDetails.model_name',
+        name: 'car_model',
       },
       {
         data: 'Year', 
-        name: 'modelDetails.release_year',
+        name: 'car_model_release_year',
       },
       {
         data: 'Available',
