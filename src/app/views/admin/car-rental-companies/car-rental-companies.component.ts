@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 //model
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
 //primng
 import {ConfirmationService, Message} from 'primeng/api';
@@ -159,7 +159,11 @@ open2(content, item) {
   }else{
     this.title = "Add Company";
   }
-  this.modalService.open(content).result.then((result) => {
+  const options : NgbModalOptions ={
+    keyboard: false,
+    backdrop: 'static'
+  };
+  this.modalService.open(content, options).result.then((result) => {
     this.closeResult = `Closed with: ${result}`;
   }, (reason) => {
     if (reason == 'Cross click' || reason == 0) {

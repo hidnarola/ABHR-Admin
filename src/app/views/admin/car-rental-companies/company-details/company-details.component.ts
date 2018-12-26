@@ -10,7 +10,7 @@ import { CrudService } from '../../../../shared/services/crud.service';
 import { DataSharingService } from '../../../../shared/services/data-sharing.service';
 
 //model
-import {NgbModal, ModalDismissReasons, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModal, ModalDismissReasons, NgbActiveModal, NgbModalOptions} from '@ng-bootstrap/ng-bootstrap';
 
 //popup-forms
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'; 
@@ -147,7 +147,11 @@ open2(content, userDetails) {
   // else {
     // this.title = "Add Company";
   // }
-  this.modalService.open(content).result.then((result) => {
+  const options: NgbModalOptions ={
+    keyboard: false,
+    backdrop: 'static'
+  }
+  this.modalService.open(content, options).result.then((result) => {
     this.closeResult = `Closed with: ${result}`;
   }, (reason) => {
     // if (reason == 'Cross click' || reason == 0) {
@@ -158,18 +162,9 @@ open2(content, userDetails) {
     //   this.AddEditForm.controls['site_url'].setValue('');
     //   this.AddEditForm.controls['phone_number'].setValue('');
     // }
-    this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
   });
 }
-private getDismissReason(reason: any): string {
-  if (reason === ModalDismissReasons.ESC) {
-    return 'by pressing ESC';
-  } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-    return 'by clicking on a backdrop';
-  } else {
-    return  `with: ${reason}`;
-  }
-}
+
 //add-edit popup ends here
 
 render(): void {
