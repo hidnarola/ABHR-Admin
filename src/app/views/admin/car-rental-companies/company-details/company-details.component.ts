@@ -220,9 +220,9 @@ CarData(){
       }, 1000)
     },
     columns: [
-      {
-        data: 'Id',
-      },
+      // {
+      //   data: 'Id',
+      // },
       {
         data: 'Brand Name',
         name: 'brandDetails.brand_name',

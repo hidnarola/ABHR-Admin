@@ -36,7 +36,7 @@ body .dataTables_wrapper .dataTables_info {font-size:13px; font-weight:400; padd
 .dataTables_length select { border: unset;border-bottom: 1px solid #666 !important;} */
 
 .modal-dialog {max-width:640px !important;}
-.modal-content {border:0 !important; border-radius:0 !important;}
+.modal-content {border:0 !important; border-radius:0 !important; margin-top: 25%;}
 .modal-header{font-size:18px; border-radius:0 !important; text-transform:capitalize; font-weight: 500; letter-spacing: .08em; color:#fff !important; background:#1976d2;}
 
 .form-group label{font-size:13px; letter-spacing:.08em; color:#333; text-transform:capitalize; margin:0 0 5px;}
@@ -87,6 +87,9 @@ h4.text-themecolor.m-b-0 {text-transform: capitalize;}
 .no-data-available {text-align: center;}
 .dataTables_empty {display: none;}
 .mt-45{ margin-top: 45px!important;}
+.mb-45{ margin-bottom: 45px!important;}
+.mt-20{ margin-top: 20px!important;}
+.mb-20{ margin-bottom: 20px!important;}
 
 
 table.dataTable{ margin:0 auto 25px !important;}
@@ -128,3 +131,5 @@ body table.dataTable thead .disabled{ background-image:none !important}
 span.hide-menu { padding-left: 15px;}
 a#to-recover:hover, 
 a#to-recover:focus { color: #1976d2!important }
+
+/* .login-box{width: 450px !important; margin: 110px auto !important;} */

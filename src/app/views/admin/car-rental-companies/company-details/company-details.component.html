@@ -44,7 +44,7 @@
             <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table">
               <thead>
                 <tr>
-                <th>Id</th>
+                <!-- <th>Id</th> -->
                 <th>Brand Name</th>
                 <th>Model Name</th>
                 <th>Year</th>
@@ -54,9 +54,9 @@
               </thead>
               <tbody *ngIf="carData?.length != 0">
                 <tr *ngFor="let item of carData; let i = index">
-                  <td>
+                  <!-- <td>
                     {{i+1}}
-                  </td>
+                  </td> -->
                   <td>
                     <span>
                       {{ item.brandDetails.brand_name }}

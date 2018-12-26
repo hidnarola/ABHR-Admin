@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Renderer, ViewChild, ViewEncapsulation, ViewContainerRef } from '@angular/core';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
@@ -8,9 +8,10 @@ import { Routes, RouterModule, ActivatedRoute } from '@angular/router';
 import { NgModule } from '@angular/core';
 
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ModalDialogService } from 'ngx-modal-dialog';
 
 //model
-import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
 //service
 import { DataSharingService } from '../../../shared/services/data-sharing.service'
@@ -70,7 +71,9 @@ export class AgentsComponent implements OnInit {
     //model
     private modalService: NgbModal,
     private fromBuilder: FormBuilder,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    // modalService: ModalDialogService, 
+    viewRef: ViewContainerRef
   ) {
     //addform validation
     const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
@@ -181,9 +184,9 @@ export class AgentsComponent implements OnInit {
         }, 1000)
       },
       columns: [
-        {
-          data: 'Id',
-        },
+        // {
+        //   data: 'Id',
+        // },
         {
           data: 'First Name',
           name: 'first_name', 
@@ -224,6 +227,7 @@ export class AgentsComponent implements OnInit {
     // });
   }
 
+  
   //model
   closeResult: string;
   open2(content, item) {
@@ -240,7 +244,11 @@ export class AgentsComponent implements OnInit {
     } else{
       this.title = "Add Agent";
     }
-    this.modalService.open(content).result.then((result) => {
+    const options: NgbModalOptions = {
+    keyboard: false,
+    backdrop: 'static'
+    };
+    this.modalService.open(content, options).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       if (reason == 'Cross click' || reason == 0) {
@@ -251,17 +259,7 @@ export class AgentsComponent implements OnInit {
         this.AddEditForm.controls['phone_number'].setValue('');
        // this.AddEditForm.controls['deviceType'].setValue('');
       }
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
-  }
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
   }
   //add-edit popup ends here
 

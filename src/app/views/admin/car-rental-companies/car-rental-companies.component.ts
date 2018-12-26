@@ -108,9 +108,9 @@ UsersListData(){
       }, 1000)
     },
     columns: [
-      {
-        data: 'Id',
-      },
+      // {
+      //   data: 'Id',
+      // },
       {
         data: 'Company Name',
         name: 'name',
@@ -170,19 +170,7 @@ open2(content, item) {
       this.AddEditForm.controls['site_url'].setValue('');
       this.AddEditForm.controls['phone_number'].setValue('');
     }
-    this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
   });
-}
-
-
-private getDismissReason(reason: any): string {
-  if (reason === ModalDismissReasons.ESC) {
-    return 'by pressing ESC';
-  } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-    return 'by clicking on a backdrop';
-  } else {
-    return `with: ${reason}`;
-  }
 }
 //add-edit popup ends here
 

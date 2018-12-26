@@ -167,9 +167,9 @@ UsersListData(){
       }, 1000)
     },
     columns: [
-      {
-        data: 'Id',
-      },
+      // {
+      //   data: 'Id',
+      // },
       {
         data: 'First Name',
         name: 'first_name',
