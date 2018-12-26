@@ -66,21 +66,23 @@ export class ForgetPasswordComponent implements OnInit {
       if(this.currentUser == 'admin'){
         this.service.post('admin/forget_password', this.forgetPasswordForm.value).subscribe((res) => {
           this.submitted = false;
-          this.messageService.add({severity:'success', summary:'Success', detail:'Email is sent to you Email Id!!'});
+          this.messageService.add({severity:'success', summary:'Success', detail: res['message']});
           this.router.navigate(['/admin/forget-password']);
-        }, error => {
-          this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
+        }, err => {
+          err = err.error
+          this.messageService.add({severity:'error', summary:'Error', detail: err['message']});
         });
       }
       else if(this.currentUser == 'company'){
         this.service.post('company/forget_password', this.forgetPasswordForm.value).subscribe((res) => {
           this.submitted = false;
           console.log('result==>',res);
-          this.messageService.add({severity:'success', summary:'Success', detail:'Email is sent to you Email Id!!'});
-          this.router.navigate(['/admin/forget-password']);
+          this.messageService.add({severity:'success', summary:'Success', detail: res['message']});
+          this.router.navigate(['/company/forget-password']);
           console.log('alert', this.alerts)
-        }, error => {
-          this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
+        }, err => {
+          err = err.error
+          this.messageService.add({severity:'error', summary:'Error', detail: err['message']});
         });
       }
     }

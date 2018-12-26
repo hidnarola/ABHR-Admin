@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Renderer, ViewChild, ViewEncapsulation, ViewContainerRef } from '@angular/core';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
@@ -8,9 +8,10 @@ import { Routes, RouterModule, ActivatedRoute } from '@angular/router';
 import { NgModule } from '@angular/core';
 
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ModalDialogService } from 'ngx-modal-dialog';
 
 //model
-import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
 //service
 import { DataSharingService } from '../../../shared/services/data-sharing.service'
@@ -51,7 +52,7 @@ export class AgentsComponent implements OnInit {
   public userId;
   public isEdit: boolean;
   public isDelete: boolean;
-  public title = "Add Company";
+  public title = "Add Agent";
 
   private subscription: Subscription;
   message: any;
@@ -70,7 +71,9 @@ export class AgentsComponent implements OnInit {
     //model
     private modalService: NgbModal,
     private fromBuilder: FormBuilder,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    // modalService: ModalDialogService, 
+    viewRef: ViewContainerRef
   ) {
     //addform validation
     const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
@@ -105,24 +108,26 @@ export class AgentsComponent implements OnInit {
       console.log('formadata==>',this.formData);
       if (this.isEdit) {
         this.formData.user_id = this.userId;
-        this.title = "Edit Company";
+        this.title = "Edit Agent";
         console.log('userId', this.userId);
         this.service.put('admin/agents/update', this.formData).subscribe(res => {
           this.render();
           this.closePopup();
-          this.messageService.add({severity:'success', summary:'Success', detail:'Agent is edited!!'});
-        }, error => {
-          this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
+          this.messageService.add({severity:'success', summary:'Success', detail: res['message'] });
+        },err => {
+          err = err.error
+          this.messageService.add({severity:'error', summary:'Error', detail: err['message']});
           this.closePopup();
         })
       } else {
-        this.title = "Add Company";
+        this.title = "Add Agent";
         this.service.post('admin/agents/add', this.formData).subscribe(res => {
           this.render();
           this.closePopup();
-          this.messageService.add({severity:'success', summary:'Success', detail:'Agent is added!!'});
-        }, error => {
-          this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
+          this.messageService.add({severity:'success', summary:'Success', detail: res['message'] });
+        }, err => {
+          err = err.error
+          this.messageService.add({severity:'error', summary:'Error', detail: err['message']});
           this.closePopup();
         })
       }
@@ -179,9 +184,9 @@ export class AgentsComponent implements OnInit {
         }, 1000)
       },
       columns: [
-        {
-          data: 'Id',
-        },
+        // {
+        //   data: 'Id',
+        // },
         {
           data: 'First Name',
           name: 'first_name', 
@@ -222,12 +227,13 @@ export class AgentsComponent implements OnInit {
     // });
   }
 
+  
   //model
   closeResult: string;
   open2(content, item) {
     console.log('item==>', item);
     if (item != 'undefined' && item != '') {
-      this.title = "Edit Company";
+      this.title = "Edit Agent";
       this.isEdit = true;
       this.userId = item._id;
       this.AddEditForm.controls['first_name'].setValue(item.first_name);
@@ -236,9 +242,13 @@ export class AgentsComponent implements OnInit {
       this.AddEditForm.controls['phone_number'].setValue(item.phone_number);
      //    this.AddEditForm.controls['deviceType'].setValue(item.deviceType);
     } else{
-      this.title = "Add Company";
+      this.title = "Add Agent";
     }
-    this.modalService.open(content).result.then((result) => {
+    const options: NgbModalOptions = {
+    keyboard: false,
+    backdrop: 'static'
+    };
+    this.modalService.open(content, options).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       if (reason == 'Cross click' || reason == 0) {
@@ -249,17 +259,7 @@ export class AgentsComponent implements OnInit {
         this.AddEditForm.controls['phone_number'].setValue('');
        // this.AddEditForm.controls['deviceType'].setValue('');
       }
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
-  }
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
   }
   //add-edit popup ends here
 
@@ -273,9 +273,10 @@ export class AgentsComponent implements OnInit {
         accept: () => {
         this.service.put('admin/agents/delete', {user_id : userId}).subscribe(res => {
           this.render();
-          this.messageService.add({severity:'success', summary:'Success', detail:'Agent is Deleted!!'});
-        },error => {
-          this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});  
+          this.messageService.add({severity:'success', summary:'Success', detail: res['message']});
+        },err => {
+          err = err.error
+          this.messageService.add({severity:'error', summary:'Error',  detail: err['message']});  
         });
         },
         reject: () => {

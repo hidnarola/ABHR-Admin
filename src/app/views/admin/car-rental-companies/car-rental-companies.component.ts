@@ -108,9 +108,9 @@ UsersListData(){
       }, 1000)
     },
     columns: [
-      {
-        data: 'Id',
-      },
+      // {
+      //   data: 'Id',
+      // },
       {
         data: 'Company Name',
         name: 'name',
@@ -170,19 +170,7 @@ open2(content, item) {
       this.AddEditForm.controls['site_url'].setValue('');
       this.AddEditForm.controls['phone_number'].setValue('');
     }
-    this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
   });
-}
-
-
-private getDismissReason(reason: any): string {
-  if (reason === ModalDismissReasons.ESC) {
-    return 'by pressing ESC';
-  } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-    return 'by clicking on a backdrop';
-  } else {
-    return `with: ${reason}`;
-  }
 }
 //add-edit popup ends here
 
@@ -196,9 +184,10 @@ delete(userId) {
       accept: () => {
       this.service.put('admin/company/delete', {company_id : userId}).subscribe(res => {
         this.render();
-        this.messageService.add({severity:'success', summary:'Success', detail:'Company is Deleted!!'});
-      },error => {
-        this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});        
+        this.messageService.add({severity:'success', summary:'Success', detail: res['message'] });
+      },err => {
+        err = err.error
+        this.messageService.add({severity:'error', summary:'Error', detail: err['message']});        
       });
       },
       reject: () => {
@@ -238,9 +227,10 @@ onSubmit() {
         console.log('after update==>',res)
         this.render();
         this.closePopup();
-        this.messageService.add({severity:'success', summary:'Success', detail:'Company is edited!!'});
-      }, error => {
-        this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
+        this.messageService.add({severity:'success', summary:'Success', detail: res['message']});
+      }, err => {
+        err = err.error
+        this.messageService.add({severity:'error', summary:'Error', detail:err['message']});
         this.closePopup();
       })
     } else {
@@ -248,9 +238,10 @@ onSubmit() {
       this.service.post('admin/company/add', this.formData).subscribe(res => {
         this.render();
         this.closePopup();
-        this.messageService.add({severity:'success', summary:'Success', detail:'Company is added!!'});
-      }, error => {
-        this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
+        this.messageService.add({severity:'success', summary:'Success', detail: res['message']});
+      }, err => {
+        err = err.error
+        this.messageService.add({severity:'error', summary:'Error', detail:err['message']});
         this.closePopup();
       })
     }

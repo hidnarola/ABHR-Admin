@@ -71,9 +71,9 @@ RentalData(){
        }, 1000)
     },
     columns: [
-      {
-        data: 'Id', 
-      },
+      // {
+      //   data: 'Id', 
+      // },
       {
         data: 'Car Id',
         name: 'car_id'

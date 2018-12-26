@@ -26,8 +26,8 @@ import { SettingsComponent } from './settings/settings.component';
 import { AgentDetailComponent } from './agents/agent-detail/agent-detail.component';
 import { CompanyDetailsComponent } from './car-rental-companies/company-details/company-details.component';
 import { StaffDetailComponent } from './staff/staff-detail/staff-detail.component';
-// import { CarDetailsComponent } from './car-rental-companies/company-details/car-details/car-details.component';
-// import { AddEditCarComponent } from '../admin/car-rental-companies/company-details/add-edit-car/add-edit-car.component';
+import { CarDetailsComponent } from './car-rental-companies/company-details/car-details/car-details.component';
+import { AddEditCarComponent } from '../admin/car-rental-companies/company-details/add-edit-car/add-edit-car.component';
 
 //shared component
 import { RentalsComponent } from '../../shared/components/rentals/rentals.component';
@@ -205,8 +205,8 @@ const AdminRoutes: Routes = [
         CompanyDetailsComponent,
         RentalsComponent,
         AlertComponent,
-        // CarDetailsComponent,
-        // AddEditCarComponent
+        CarDetailsComponent,
+        AddEditCarComponent
     ]
 })
 export class AdminModule { }

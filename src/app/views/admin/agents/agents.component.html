@@ -22,7 +22,7 @@
           <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table">
             <thead>
               <tr>
-                <th>Sr No.</th>
+                <!-- <th>Sr No.</th> -->
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Email</th>
@@ -33,9 +33,9 @@
             </thead>
             <tbody *ngIf="agents?.length != 0">
               <tr *ngFor="let item of agents; let i = index">
-                <td>
+                <!-- <td>
                   {{i+1}}
-                </td>
+                </td> -->
                 <td>
                   <span>
                     {{ item.first_name }}
@@ -110,7 +110,7 @@
               <input class="form-control" type="text" required="" name="first_name" placeholder="Enter Firstname"
                 formControlName="first_name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.first_name.errors }">
               <div *ngIf=" submitted && f.first_name.errors " class="invalid-feedback">
-                <div *ngIf="f.first_name.errors.required"> Firstname is required</div>
+                <div *ngIf="f.first_name.errors.required"> First name is required</div>
               </div>
             </div>
           </div>
@@ -120,7 +120,7 @@
               <input class="form-control" type="text" required="" name="last_name" placeholder="Enter Lastname"
                 formControlName="last_name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.last_name.errors }">
               <div *ngIf=" submitted && f.last_name.errors " class="invalid-feedback">
-                <div *ngIf="f.last_name.errors.required"> Lastname is required</div>
+                <div *ngIf="f.last_name.errors.required"> Last name is required</div>
               </div>
             </div>
           </div>

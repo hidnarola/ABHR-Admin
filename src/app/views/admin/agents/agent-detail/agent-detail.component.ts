@@ -11,7 +11,7 @@ import { CrudService } from '../../../../shared/services/crud.service';
 import { DataSharingService } from '../../../../shared/services/data-sharing.service';
 
 //model
-import {NgbModal, ModalDismissReasons, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModal, ModalDismissReasons, NgbActiveModal, NgbModalOptions} from '@ng-bootstrap/ng-bootstrap';
 
 //popup-forms
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'; 
@@ -99,9 +99,10 @@ onSubmit() {
         console.log('this.agentDetails==>',this.agentDetails);
         this.agentDetails = this.formData;
         this.closePopup();
-        this.messageService.add({severity:'success', summary:'Success', detail:'Agent is edited!!'});
-      }, error => {
-        this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
+        this.messageService.add({severity:'success', summary:'Success',  detail: res['message'] });
+      },  err => {
+        err = err.error
+        this.messageService.add({severity:'error', summary:'Error', detail: err['message'] });
         this.closePopup();
       })
   }
@@ -147,9 +148,9 @@ RentalData(){
        }, 1000)
     },
     columns: [
-      {
-        data: 'Id', 
-      },
+      // {
+      //   data: 'Id', 
+      // },
       {
         data: 'Car Id',
         name: 'car_id'
@@ -195,21 +196,15 @@ open2(content, agentDetails) {
     console.log('firstname', agentDetails.first_name);
     console.log('lastname===>', agentDetails.last_name)
   };
-  this.modalService.open(content).result.then((result) => {
+  const options: NgbModalOptions = {
+    keyboard: false,
+    backdrop: 'static'
+    };
+  this.modalService.open(content, options).result.then((result) => {
     this.closeResult = `Closed with: ${result}`;
-  }, (reason) => {
-    this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-  });
+  }, );
 }
-private getDismissReason(reason: any): string {
-  if (reason === ModalDismissReasons.ESC) {
-    return 'by pressing ESC';
-  } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-    return 'by clicking on a backdrop';
-  } else {
-    return  `with: ${reason}`;
-  }
-}
+
 //add-edit popup ends here
 
 ngOnInit() {

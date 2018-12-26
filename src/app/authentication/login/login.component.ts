@@ -51,15 +51,16 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
         if(!this.loginForm.invalid){
             if(this.CurrentAdmin == 'admin'){
-                this.service.post('admin/login', this.loginForm.value).subscribe((res) => {
+                this.service.post('admin/login', this.loginForm.value).subscribe( res => {
                     this.submitted = false;
                     console.log('result==>',res);
                     localStorage.setItem('admin',JSON.stringify(res['result']))
                     localStorage.setItem('token',res['token'])
                     console.log('token', res['result'])
                     this.router.navigate(['/admin/dashboard']);
-                  },  error => {
-                    this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
+                  },  err => {
+                    err = err.error
+                    this.messageService.add({severity:'error', summary:'Error', detail: err['message']});
                 });
             } else if(this.CurrentAdmin == 'company'){
                 this.service.post('company/login', this.loginForm.value).subscribe((res) => {
@@ -70,8 +71,9 @@ export class LoginComponent implements OnInit, AfterViewInit {
                     localStorage.setItem('token',res['token'])
                     console.log('token', res['token'])
                     this.router.navigate(['/company/dashboard']);
-                  },  error => {
-                    this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
+                  },  err => {
+                    err = err.error
+                    this.messageService.add({severity:'error', summary:'Error',  detail: err['message']});
                 });
             }
            

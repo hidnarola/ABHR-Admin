@@ -98,9 +98,10 @@ onSubmit() {
       this.service.put('admin/staff/update', this.formData).subscribe(res => {
         this.render();
         this.closePopup();
-        this.messageService.add({severity:'success', summary:'Success', detail:'Staff is edited!!'});
-      }, error => {
-        this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
+        this.messageService.add({severity:'success', summary:'Success',detail: res['message'] });
+      }, err => {
+        err = err.error
+        this.messageService.add({severity:'error', summary:'Error', detail: err['message'] });
         this.closePopup();
       })
     } else {
@@ -110,9 +111,10 @@ onSubmit() {
         console.log('staff adddata==>',res)
         this.render();
         this.closePopup();
-        this.messageService.add({severity:'success', summary:'Success', detail:'Staff is added!!'});
-      }, error => {
-        this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
+        this.messageService.add({severity:'success', summary:'Success', detail: res['message'] });
+      }, err => {
+        err = err.error
+        this.messageService.add({severity:'error', summary:'Error', detail: err['message'] });
         this.closePopup();
       })
     }
@@ -165,9 +167,9 @@ UsersListData(){
       }, 1000)
     },
     columns: [
-      {
-        data: 'Id',
-      },
+      // {
+      //   data: 'Id',
+      // },
       {
         data: 'First Name',
         name: 'first_name',
@@ -245,10 +247,11 @@ delete(userId) {
       accept: () => {
       this.service.put('admin/staff/delete', {user_id : userId}).subscribe(res => {
         this.render();
-        this.messageService.add({severity:'success', summary:'Success', detail:'Staff is Deleted!!'});
+        this.messageService.add({severity:'success', summary:'Success', detail: res['message'] });
         //setTimeout(()=>{ this.closePopup()},1000);
-      },error => {
-        this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});          
+      },err => {
+        err = err.error
+        this.messageService.add({severity:'error', summary:'Error', detail: err['message'] });          
       });
       },
       reject: () => {
