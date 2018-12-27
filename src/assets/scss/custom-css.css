@@ -83,3 +83,5 @@ table.dataTable tbody td {
 .sidebar-nav {
     padding: 0px !important
 }
+
+.page-wrapper{ height: inherit !important; }
