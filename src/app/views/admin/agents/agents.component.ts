@@ -25,7 +25,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {ConfirmationService, Message} from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs'
-import { DISABLED } from '@angular/forms/src/model';
 
 
 const AgentRoutes: Routes = []
@@ -53,8 +52,8 @@ export class AgentsComponent implements OnInit {
   public userId;
   public isEdit: boolean;
   public isDelete: boolean;
+  isLoading: boolean;
   public title = "Add Agent";
-  disabled = false;
 
   private subscription: Subscription;
   message: any;
@@ -83,9 +82,7 @@ export class AgentsComponent implements OnInit {
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
       //deviceType: ['', Validators.required],
-      // phone_number: ['', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^([0-9]){10,14}$/)]],
-      // phone_number: ['', Validators.pattern(/(7|8|9)\d{9}/)],
-      phone_number: ['', [Validators.pattern(/^([0-9]){10}$/)]],
+      phone_number: ['', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^([0-9]){10}$/)]],
       email: ['', [Validators.required, Validators.email, Validators.pattern(pattern)]]
     });
 
@@ -103,21 +100,13 @@ export class AgentsComponent implements OnInit {
   closePopup() {
     var element = document.getElementById('closepopup');
     element.click();
+    this.isLoading = false;
   }
-  onSubmit(isValid : boolean) {
-    // if(this.AddEditForm.invalid){
-      this.submitted = true;
-    if(!isValid){
-      return;
-    } else
-    
-    // if (!this.AddEditForm.invalid) {
-    // if (isValid) 
-    {
-      this.closePopup();
-      this.render();
-      this.submitted = false;
-     // let formData: FormData = new FormData();
+  onSubmit() {
+    this.submitted = true;
+    if (!this.AddEditForm.invalid) {
+      this.isLoading = true;
+      let formData: FormData = new FormData();
       this.formData = this.AddEditForm.value;
       console.log('formadata==>',this.formData);
       if (this.isEdit) {
@@ -125,33 +114,31 @@ export class AgentsComponent implements OnInit {
         this.title = "Edit Agent";
         console.log('userId', this.userId);
         this.service.put('admin/agents/update', this.formData).subscribe(res => {
-          this.disabled = true;
-          // this.render();
-          // this.closePopup();
+          this.render();
+          this.closePopup();
           this.messageService.add({severity:'success', summary:'Success', detail: res['message'] });
-          console.log('success', res )
         },err => {
           err = err.error
           this.messageService.add({severity:'error', summary:'Error', detail: err['message']});
-          // this.closePopup();
-          console.log('error msg==>', err)
+          this.closePopup();
         })
       } else {
         this.title = "Add Agent";
         this.service.post('admin/agents/add', this.formData).subscribe(res => {
-          this.disabled = true;
-          // this.render();
-          // this.closePopup();
+          this.render();
+          this.closePopup();
           this.messageService.add({severity:'success', summary:'Success', detail: res['message'] });
         }, err => {
           err = err.error
           this.messageService.add({severity:'error', summary:'Error', detail: err['error']});
-          // this.closePopup();
-          console.log('error msg==>', err)
+          this.closePopup();
         })
       }
       this.isEdit = false;
-    } 
+      this.submitted = false;
+    }else{
+      return
+    }
   }
 
   //ends here
@@ -278,7 +265,7 @@ export class AgentsComponent implements OnInit {
        // this.AddEditForm.controls['deviceType'].setValue('');
       }
     });
-    this.submitted = false;
+    this.submitted= false;
   }
   //add-edit popup ends here
 
@@ -293,7 +280,6 @@ export class AgentsComponent implements OnInit {
         this.service.put('admin/agents/delete', {user_id : userId}).subscribe(res => {
           this.render();
           this.messageService.add({severity:'success', summary:'Success', detail: res['message']});
-          
         },err => {
           err = err.error
           this.messageService.add({severity:'error', summary:'Error',  detail: err['message']});  

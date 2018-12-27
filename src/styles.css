@@ -51,7 +51,13 @@ body .dataTables_wrapper .dataTables_info {font-size:13px; font-weight:400; padd
     padding: 8px 12px;
     color: #fff !important;
 }
-
+.loading-btn{
+    display: inline-block;
+    margin-right: 15px;
+    border: none;
+    padding: 8px 12px;
+    color: #fff !important;
+}
 .custom-control-label::after,
 .custom-control-label::before {top:0 !important;}
 .custom-radio-wrap .custom-radio{ display:inline-block; vertical-align:top; margin:0 15px 0 0;}

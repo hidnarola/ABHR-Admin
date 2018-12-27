@@ -160,7 +160,10 @@
             </div>
           </div>
           <div class="col-sm-12">
-              <button type="submit" class="btn waves-effect waves-light custom-btn btn-primary">Submit</button>
+              <button type="submit" *ngIf="!isLoading" class="btn waves-effect waves-light custom-btn btn-primary">Submit</button>
+              <button type="button" *ngIf="isLoading" class="btn waves-effect loading-btn waves-light btn-primary" type="button">
+                <i class="fa fa-spinner fa-spin"></i>Loading
+              </button>
               <a class="btn waves-effect waves-light custom-btn btn-danger" (click)="d('Cross click')">Cancel</a>
           </div>
         </form>

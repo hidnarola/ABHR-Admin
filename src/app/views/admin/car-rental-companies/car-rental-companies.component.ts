@@ -49,6 +49,7 @@ export class CarRentalCompaniesComponent implements OnInit {
   message: any;
   msgs: Message[] = [];
   closeResult: string;
+  isLoading: boolean;
 
 constructor(
   public renderer: Renderer,
@@ -175,6 +176,7 @@ open2(content, item) {
       this.AddEditForm.controls['phone_number'].setValue('');
     }
   });
+  this.submitted= false;
 }
 //add-edit popup ends here
 
@@ -216,10 +218,12 @@ ngOnDestroy(): void {
 closePopup() {
   var element = document.getElementById('closepopup');
   element.click();
+  this.isLoading = false;
 }
 onSubmit() {
   this.submitted = true;
   if (!this.AddEditForm.invalid) {
+    this.isLoading = true;
     let formData: FormData = new FormData();
     this.formData = this.AddEditForm.value;
     console.log('formadata==>',this.formData);
@@ -251,6 +255,8 @@ onSubmit() {
     }
     this.isEdit = false;
     this.submitted = false;
+  }else{
+    return
   }
 }
 
