@@ -91,17 +91,29 @@ export class CarsComponent implements OnInit {
           data: 'Brand Name',
           name: 'brandDetails.brand_name',
         },
-        // {
-        //   data: 'Model Name',
-        //   name: 'car_model',
-        // },
         {
-          data: 'Year', 
-          name: 'car_model_release_year',
+          data: 'Model Name',
+          name: 'modelDetails.model_name',
+        },
+        {
+          data: 'Car Class',
+          name: 'car_class',
+        },
+        {
+          data: 'Transmission',
+          name: 'brandDetails.transmission',
         },
         {
           data: 'Available',
           name: 'is_avialable',
+        },
+        {
+          data: 'Year', 
+          name: 'modelDetails.release_year',
+        },
+        {
+          data: 'Price',
+          name: 'rent_price',
         },
         {
           data: 'Actions',

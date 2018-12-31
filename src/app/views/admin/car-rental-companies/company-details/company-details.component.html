@@ -47,7 +47,10 @@
                 <!-- <th>Id</th> -->
                 <th>Brand Name</th>
                 <th>Model Name</th>
+                <th> Car Class </th>
+                <th> Transmission </th>
                 <th>Year</th>
+                <th> Price </th>
                 <th>Available</th>
                 <th class="disabled" >Actions</th>
                 </tr>
@@ -64,12 +67,27 @@
                   </td>
                   <td>
                     <span>
-                      {{ item.car_model}}
+                        {{ item.modelDetails && item.modelDetails.model_name ?item.modelDetails.model_name:'-' }}
                     </span>
                   </td>
                   <td>
                     <span>
-                      {{ item.car_model_release_year }}
+                      {{ item.car_class | titlecase}}
+                    </span>
+                  </td>
+                  <td>
+                    <span> 
+                      {{item.transmission | titlecase}} 
+                    </span>
+                  </td>
+                  <td>
+                    <span>
+                        {{ item.modelDetails && item.modelDetails.release_year ?item.modelDetails.release_year:'-' }}
+                    </span>
+                  </td>
+                  <td>
+                    <span> 
+                      {{item.rent_price}} 
                     </span>
                   </td>
                   <td>

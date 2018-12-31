@@ -104,30 +104,30 @@ const AdminRoutes: Routes = [
             urls: [{title: 'Dashboard',url: '/admin/dashboard'},{title: 'Companies', url: '/admin/car-rental-companies'}, {title: 'Company Detail'}]
             },
           },
-          // {
-          //   path: 'car-rental-companies/car/view/:id',
-          //   component: CarDetailsComponent,
-          //   data: {
-          //     title: 'View Car',
-          //     urls: [{title: 'Admin Dashboard',url: '/admin/dashboard'},{title: 'Companies', url: '/admin/car-rental-companies'}, {title: 'Company Detail', url: '/admin/car-rental-companies/view/_id'}, {title: 'Car Detail'}]
-          //     },
-          // },
-          // {
-          //   path: 'car-rental-companies/car/edit/:id',
-          //   component: AddEditCarComponent,
-          //   data: {
-          //     title: 'Edit Car',
-          //     urls: [{title: 'Admin Dashboard',url: '/admin/dashboard'},{title: 'Companies', url: '/admin/car-rental-companies'}, {title: 'Company Detail', url: '/admin/car-rental-companies/view/_id'}, {title: 'Car Detail'}]
-          //     },
-          // },
-          // {
-          //   path: 'car-rental-companies/car/add',
-          //   component: AddEditCarComponent,
-          //   data: {
-          //   title: 'Add Car',
-          //   urls: [{title: 'Admin Dashboard',url: '/admin/dashboard'},{title: 'Companies', url: '/admin/car-rental-companies'}, {title: 'Company Detail', url: '/admin/car-rental-companies/view/_id'}, {title: 'Add Company'}]
-          //   },
-          // },
+          {
+            path: 'car-rental-companies/car/view/:id',
+            component: CarDetailsComponent,
+            data: {
+              title: 'View Car',
+              urls: [{title: 'Dashboard',url: '/admin/dashboard'},{title: 'Companies', url: '/admin/car-rental-companies'}, {title: 'Company Detail', url: '/admin/car-rental-companies/view/:id'}, {title: 'Car Detail'}]
+              },
+          },
+          {
+            path: 'car-rental-companies/car/edit/:id',
+            component: AddEditCarComponent,
+            data: {
+              title: 'Edit Car',
+              urls: [{title: 'Dashboard',url: '/admin/dashboard'},{title: 'Companies', url: '/admin/car-rental-companies'}, {title: 'Company Detail', url: '/admin/car-rental-companies/view/_id'}, {title: 'Car Detail'}]
+              },
+          },
+          {
+            path: 'car-rental-companies/car/add',
+            component: AddEditCarComponent,
+            data: {
+            title: 'Add Car',
+            urls: [{title: 'Admin Dashboard',url: '/admin/dashboard'},{title: 'Companies', url: '/admin/car-rental-companies'}, {title: 'Company Detail', url: '/admin/car-rental-companies/view/_id'}, {title: 'Add Company'}]
+            },
+          },
         ] 
       },
       {

@@ -66,7 +66,6 @@ export class LoginGuard implements CanActivate {
       }
      }
      else if(this.CurrentAdmin == 'company'){
-     
       try {
         loginUserCompany = JSON.parse(loginUserCompany);
         if (loginUserCompany['_id'] && token) {

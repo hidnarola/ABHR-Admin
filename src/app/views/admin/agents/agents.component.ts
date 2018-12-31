@@ -223,15 +223,6 @@ export class AgentsComponent implements OnInit {
   ngAfterViewInit(): void {
     this.dtTrigger.next();
   }
-
-  AddModel() {
-    // const dialogRef = this.dialog.open(AgentAddEditComponent, {
-    //   height: '600px',
-    //   width: '600px',
-    //   data: {}
-    // });
-  }
-
   
   //model
   closeResult: string;
