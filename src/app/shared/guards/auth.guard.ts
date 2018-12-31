@@ -11,23 +11,18 @@ export class AuthGuard implements CanActivate {
 
   constructor(private router: Router) { }
 
-  // canActivate(
-  //   next: ActivatedRouteSnapshot,
-  //   state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-  //   return true;
-  // }
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     const url: string = state.url;
     return this.checkLogin(url);
   }
   checkLogin(url: string): boolean {
-    var array = url.split('/');
+    const array = url.split('/');
     this.CurrentAdmin = array[1];
     let islogin = true;
     let loginUserAdmin = localStorage.getItem('admin');
     let loginUserCompany = localStorage.getItem('company-admin');
-    let token = localStorage.getItem('token');
-    if(this.CurrentAdmin == 'admin'){
+    const token = localStorage.getItem('token');
+    if(this.CurrentAdmin === 'admin'){
       try {
         loginUserAdmin = JSON.parse(loginUserAdmin);
         if (loginUserAdmin['_id'] && token) {
@@ -43,8 +38,7 @@ export class AuthGuard implements CanActivate {
         return false;
       }
      // return true;
-    }
-     else if(this.CurrentAdmin == 'company'){
+    } else if (this.CurrentAdmin === 'company') {
       try {
         loginUserCompany = JSON.parse(loginUserCompany);
         if (loginUserCompany['_id'] && token) {

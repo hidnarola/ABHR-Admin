@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import {FormsModule,ReactiveFormsModule} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DataTablesModule } from 'angular-datatables';
-import {ConfirmDialogModule} from 'primeng/confirmdialog';
-import {ToastModule} from 'primeng/toast';
-import { ChartistModule} from 'ng-chartist';
+// import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast';
+import { ChartistModule } from 'ng-chartist';
 import { ChartsModule } from 'ng2-charts'
-//child component
+// child component
 import { Routes, RouterModule } from '@angular/router';
 import { CarsComponent } from './cars/cars.component';
 import { CompanyReportsComponent } from './company-reports/company-reports.component';
@@ -22,13 +22,13 @@ const CompanyRoutes: Routes = [{
     data: {
         title: 'Dashboard',
     },
-	children: [
+    children: [
         {
-            path : 'dashboard',
+            path: 'dashboard',
             component: CompaniesComponent,
             data: {
                 title: 'Dashboard',
-                urls: [{title: 'Dashboard'}]
+                urls: [{ title: 'Dashboard' }]
             },
         },
         {
@@ -36,51 +36,51 @@ const CompanyRoutes: Routes = [{
             component: CarsComponent,
             data: {
                 title: 'Manage Cars',
-                urls: [{ title: 'Dashboard', url: '/company/dashboard'},{ title: 'Cars'}]
+                urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Cars' }]
             },
         },
         {
             path: 'car/view/:id',
             component: CarDetailsComponent,
             data: {
-              title: 'View Car',
-              urls: [{ title: 'Dashboard', url: '/company/dashboard'},{ title: 'Cars' , url: '/company/car'}, {title: 'Car Detail'}]
+                title: 'View Car',
+                urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Cars', url: '/company/car' }, { title: 'Car Detail' }]
             },
         },
         {
             path: 'car/edit/:id',
             component: CarAddEditComponent,
             data: {
-              title: 'Edit Car',
-              urls: [{ title: 'Dashboard', url: '/company/dashboard'},{ title: 'Cars' , url: '/company/car'},  {title: 'Edit Company'}]
+                title: 'Edit Car',
+                urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Cars', url: '/company/car' }, { title: 'Edit Company' }]
             },
         },
         {
             path: 'car/add',
             component: CarAddEditComponent,
             data: {
-            title: 'Add Car',
-            urls: [{title: 'Dashboard',url: '/company/dashboard'}, { title: 'Cars' , url: '/company/car'}, {title: 'Add Company'}]
+                title: 'Add Car',
+                urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Cars', url: '/company/car' }, { title: 'Add Company' }]
             },
-          },
+        },
     ]
 },
 ]
 @NgModule({
-	imports: [
-    	CommonModule, 
+    imports: [
+        CommonModule,
         FormsModule,
         DataTablesModule,
         ReactiveFormsModule,
-        ConfirmDialogModule,
+        // ConfirmDialogModule,
         ToastModule,
         NgbModule,
         ChartsModule,
         ChartistModule,
-    	RouterModule.forChild(CompanyRoutes)
+        RouterModule.forChild(CompanyRoutes)
     ],
     exports: [RouterModule],
-	declarations: [
+    declarations: [
         CarsComponent,
         CarDetailsComponent,
         CarAddEditComponent,

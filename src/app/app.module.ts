@@ -8,11 +8,11 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 import { FullComponent } from './layouts/full/full.component';
 import { BlankComponent } from './layouts/blank/blank.component';
-//shared component
+// shared component
 import { NavigationComponent } from './shared/header-navigation/navigation.component';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import { BreadcrumbComponent } from './shared/breadcrumb/breadcrumb.component';
-//import { RentalsComponent } from './shared/components/rentals/rentals.component';
+// import { RentalsComponent } from './shared/components/rentals/rentals.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
@@ -26,11 +26,14 @@ import { SpinnerComponent } from './shared/spinner.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ModalDialogModule } from 'ngx-modal-dialog';
 
-import {ConfirmDialogModule} from 'primeng/confirmdialog';
-import {ConfirmationService} from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 
-//third party modules
+// Prime Modules
+import { ToastModule } from 'primeng/toast';
+
+// third party modules
 import { DataTablesModule } from 'angular-datatables';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -52,29 +55,29 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   imports: [
     CommonModule,
     BrowserModule,
-    BrowserAnimationsModule,   
+    BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    NgbModule.forRoot(),  
+    NgbModule.forRoot(),
     PerfectScrollbarModule,
     AppRoutingModule,
     DataTablesModule,
     ConfirmDialogModule,
     NgxSpinnerModule,
-    ModalDialogModule
-   
+    ModalDialogModule,
+    ToastModule
   ],
   providers: [
     MessageService,
     ConfirmationService,
-      {
+    {
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-    },{
-    provide: LocationStrategy,
-    useClass: HashLocationStrategy
-  }],
+    }, {
+      provide: LocationStrategy,
+      useClass: HashLocationStrategy
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

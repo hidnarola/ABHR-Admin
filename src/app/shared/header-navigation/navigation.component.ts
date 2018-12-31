@@ -1,32 +1,38 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { NgbModal, ModalDismissReasons, NgbPanelChangeEvent, NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar'; 
-import { Router, ActivatedRoute } from "@angular/router";
+import { Router, ActivatedRoute, RouterStateSnapshot } from '@angular/router';
 @Component({
-  selector: 'ap-navigation',
+  selector: 'app-navigation',
   templateUrl: './navigation.component.html'
 })
 export class NavigationComponent implements AfterViewInit {
-  name:string;
+  user;
+  public CurrentAdmin;
+  public company;
+  name: string;
   public AdminType;
   public AdminEmail;
   public AdminNumber;
   public config: PerfectScrollbarConfigInterface = {};
   constructor(private modalService: NgbModal,
-              private router: Router,) {
-                var user = JSON.parse(localStorage.getItem('admin'));
-                let company = JSON.parse(localStorage.getItem('company-admin'));
-                if(user != null && user != undefined){
+              private router: Router ) {
+                const urlSegment = this.router.url;
+                const array = urlSegment.split('/');
+                this.CurrentAdmin = array[1];
+                const user = JSON.parse(localStorage.getItem('admin'));
+                const company = JSON.parse(localStorage.getItem('company-admin'));
+                if (user != null && user !== undefined) {
                     this.AdminType = user.first_name;
                     this.AdminEmail = user.email;
-                    this.AdminNumber =user.phone_number;
+                    this.AdminNumber = user.phone_number;
                 }
-                if(company !=null && company != undefined){
+                if (company != null && company !== undefined) {
                     this.AdminType = company.name;
                     this.AdminEmail = company.email;
-                    this.AdminNumber =company.phone_number;
+                    this.AdminNumber = company.phone_number;
                 }
-                if(company ==null && company == undefined && user == null && user == undefined){
+                if (company == null && company === undefined && user == null && user === undefined) {
                     this.AdminType = 'Admin';
                     this.AdminEmail = 'dse@narola.email';
                     this.AdminNumber = '9654788458';
@@ -37,81 +43,81 @@ export class NavigationComponent implements AfterViewInit {
   notifications: Object[] = [{
     round: 'round-danger',
     icon: 'ti-link',
-    title: 'Luanch Admin',    
+    title: 'Luanch Admin',
     subject: 'Just see the my new admin!',
-    time: '9:30 AM'  
+    time: '9:30 AM'
   }, {
     round: 'round-success',
     icon: 'ti-calendar',
-    title: 'Event today',    
+    title: 'Event today',
     subject: 'Just a reminder that you have event',
     time: '9:10 AM'
   }, {
-    round: 'round-info', 
+    round: 'round-info',
     icon: 'ti-settings',
-    title: 'Settings',    
+    title: 'Settings',
     subject: 'You can customize this template as you want',
     time: '9:08 AM'
   }, {
     round: 'round-primary',
     icon: 'ti-user',
-    title: 'Pavan kumar',    
+    title: 'Pavan kumar',
     subject: 'Just see the my admin!',
     time: '9:00 AM'
   }];
-  
+
   // This is for Mymessages
   mymessages: Object[] = [{
     useravatar: 'assets/images/users/1.jpg',
     status: 'online',
-    from: 'Pavan kumar',    
+    from: 'Pavan kumar',
     subject: 'Just see the my admin!',
-    time: '9:30 AM'  
+    time: '9:30 AM'
   }, {
     useravatar: 'assets/images/users/2.jpg',
     status: 'busy',
-    from: 'Sonu Nigam',    
+    from: 'Sonu Nigam',
     subject: 'I have sung a song! See you at',
     time: '9:10 AM'
   }, {
     useravatar: 'assets/images/users/2.jpg',
     status: 'away',
-    from: 'Arijit Sinh',    
+    from: 'Arijit Sinh',
     subject: 'I am a singer!',
     time: '9:08 AM'
   }, {
     useravatar: 'assets/images/users/4.jpg',
     status: 'offline',
-    from: 'Pavan kumar',    
+    from: 'Pavan kumar',
     subject: 'Just see the my admin!',
     time: '9:00 AM'
   }];
-    
   ngAfterViewInit() {
-      
-      var set = function() {
-          var width = (window.innerWidth > 0) ? window.innerWidth : this.screen.width;
-          var topOffset = 0;
+      const set = function() {
+          const width = (window.innerWidth > 0) ? window.innerWidth : this.screen.width;
+          const topOffset = 0;
           if (width < 1170) {
-              $("#main-wrapper").addClass("mini-sidebar");
+              $('#main-wrapper').addClass('mini-sidebar');
           } else {
-              $("#main-wrapper").removeClass("mini-sidebar");
+              $('#main-wrapper').removeClass('mini-sidebar');
           }
       };
       $(window).ready(set);
-      $(window).on("resize", set);
-
-      
-      $(".search-box a, .search-box .app-search .srh-btn").on('click', function () {
-          $(".app-search").toggle(200);
+      $(window).on('resize', set);
+      $('.search-box a, .search-box .app-search .srh-btn').on('click', function () {
+          $('.app-search').toggle(200);
       });
-      
-      
-      $("body").trigger("resize");
+      $('body').trigger('resize');
   }
 
   logout() {
     localStorage.clear();
-    this.router.navigate(['/admin/login']);
+    if (this.CurrentAdmin === 'admin') {
+      this.router.navigate(['/admin/login']);
+    } else if (this.CurrentAdmin === 'company') {
+      this.router.navigate(['/company/login']);
+    } else {
+      this.router.navigate(['/admin/login']);
+    }
   }
 }

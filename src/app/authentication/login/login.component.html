@@ -1,9 +1,5 @@
 <div class="login-register" style="background-image:url(assets/images/background/login-register.jpg);">
   
- <!--Alert message--> 
-<!-- <p-toast position="top-center"></p-toast> -->
-<p-toast></p-toast>
-
   <div class="login-box card">
     <div class="card-body">
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="form-horizontal form-material" id="loginform">
@@ -38,7 +34,7 @@
               <input id="checkbox-signup" type="checkbox">
               <label for="checkbox-signup"> Remember me </label>
             </div>  -->
-            <a href="javascript:void(0)" id="to-recover" class="text-dark pull-right" [routerLink]="['/admin/forget-password']">
+            <a href="javascript:void(0)" id="to-recover" class="text-dark pull-right" (click)="forgetPass()">
               Forgot password?</a> 
             </div>
         </div>

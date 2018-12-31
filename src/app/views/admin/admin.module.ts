@@ -2,15 +2,15 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ChartistModule} from 'ng-chartist';
+import { ChartistModule } from 'ng-chartist';
 import { ChartsModule } from 'ng2-charts';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { DataTablesModule } from 'angular-datatables';
-import {MatDialogModule} from '@angular/material/dialog';
-import {FormsModule,ReactiveFormsModule} from '@angular/forms';
-import {ConfirmDialogModule} from 'primeng/confirmdialog';
-import {ToastModule} from 'primeng/toast';
+import { MatDialogModule } from '@angular/material/dialog';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast';
 
 
 import { AdminComponent } from './admin.component';
@@ -29,7 +29,7 @@ import { StaffDetailComponent } from './staff/staff-detail/staff-detail.componen
 import { CarDetailsComponent } from './car-rental-companies/company-details/car-details/car-details.component';
 import { AddEditCarComponent } from '../admin/car-rental-companies/company-details/add-edit-car/add-edit-car.component';
 
-//shared component
+// shared component
 import { RentalsComponent } from '../../shared/components/rentals/rentals.component';
 import { AlertComponent } from '../../shared/components/alert/alert.component';
 
@@ -47,7 +47,7 @@ const AdminRoutes: Routes = [
         component: AdminComponent,
         data: {
           title: 'Dashboard',
-          urls: [{title: 'Dashboard',url: '/admin'}]
+          urls: [{ title: 'Dashboard', url: '/admin' }]
         },
       },
       {
@@ -55,7 +55,7 @@ const AdminRoutes: Routes = [
         component: AgentsComponent,
         data: {
           title: 'Manage Agents',
-          urls: [{title: 'Dashboard',url: '/admin/dashboard'},{title: 'Agents'}]
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Agents' }]
         },
       },
       {
@@ -63,7 +63,7 @@ const AdminRoutes: Routes = [
         component: AgentDetailComponent,
         data: {
           title: 'View Agent Detail',
-          urls: [{title: 'Dashboard',url: '/admin/dashboard'},{title: 'Agents', url: '/admin/agents'}, {title: 'Agent Detail'}]
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Agents', url: '/admin/agents' }, { title: 'Agent Detail' }]
         },
       },
       {
@@ -71,7 +71,7 @@ const AdminRoutes: Routes = [
         component: StaffComponent,
         data: {
           title: 'Manage Staff',
-          urls: [{title: 'Dashboard',url: '/admin/dashboard'},{title: 'Staff'}]
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Staff' }]
         },
       },
       {
@@ -79,7 +79,7 @@ const AdminRoutes: Routes = [
         component: StaffDetailComponent,
         data: {
           title: 'View Staff',
-          urls: [{title: 'Dashboard',url: '/admin/dashboard'},{title: 'Staff', url: '/admin/staff'}, {title: 'Staff Detail'}]
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Staff', url: '/admin/staff' }, { title: 'Staff Detail' }]
         },
       },
       {
@@ -92,16 +92,19 @@ const AdminRoutes: Routes = [
             path: 'car-rental-companies',
             component: CarRentalCompaniesComponent,
             data: {
-            title: 'Manage Companies',
-            urls: [{title: 'Dashboard',url: '/admin/dashboard'},{title: 'Companies'}]
+              title: 'Manage Companies',
+              urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Companies' }]
             },
           },
           {
             path: 'car-rental-companies/view/:id',
             component: CompanyDetailsComponent,
             data: {
-            title: 'View Company Detail',
-            urls: [{title: 'Dashboard',url: '/admin/dashboard'},{title: 'Companies', url: '/admin/car-rental-companies'}, {title: 'Company Detail'}]
+              title: 'View Company Detail',
+              urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, {
+                title: 'Companies',
+                url: '/admin/car-rental-companies'
+              }, { title: 'Company Detail' }]
             },
           },
           {
@@ -109,33 +112,51 @@ const AdminRoutes: Routes = [
             component: CarDetailsComponent,
             data: {
               title: 'View Car',
-              urls: [{title: 'Dashboard',url: '/admin/dashboard'},{title: 'Companies', url: '/admin/car-rental-companies'}, {title: 'Company Detail', url: '/admin/car-rental-companies/view/:id'}, {title: 'Car Detail'}]
-              },
+              urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, {
+                title: 'Companies',
+                url: '/admin/car-rental-companies'
+              }, {
+                title: 'Company Detail',
+                url: '/admin/car-rental-companies/view/:id'
+              }, { title: 'Car Detail' }]
+            },
           },
           {
             path: 'car-rental-companies/car/edit/:id',
             component: AddEditCarComponent,
             data: {
               title: 'Edit Car',
-              urls: [{title: 'Dashboard',url: '/admin/dashboard'},{title: 'Companies', url: '/admin/car-rental-companies'}, {title: 'Company Detail', url: '/admin/car-rental-companies/view/_id'}, {title: 'Car Detail'}]
-              },
+              urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, {
+                title: 'Companies',
+                url: '/admin/car-rental-companies'
+              }, {
+                title: 'Company Detail',
+                url: '/admin/car-rental-companies/view/_id'
+              }, { title: 'Car Detail' }]
+            },
           },
           {
             path: 'car-rental-companies/car/add',
             component: AddEditCarComponent,
             data: {
-            title: 'Add Car',
-            urls: [{title: 'Admin Dashboard',url: '/admin/dashboard'},{title: 'Companies', url: '/admin/car-rental-companies'}, {title: 'Company Detail', url: '/admin/car-rental-companies/view/_id'}, {title: 'Add Company'}]
+              title: 'Add Car',
+              urls: [{ title: 'Admin Dashboard', url: '/admin/dashboard' }, {
+                title:
+                  'Companies', url: '/admin/car-rental-companies'
+              }, {
+                title: 'Company Detail',
+                url: '/admin/car-rental-companies/view/_id'
+              }, { title: 'Add Company' }]
             },
           },
-        ] 
+        ]
       },
       {
         path: 'users',
         component: UsersComponent,
         data: {
           title: 'Manage Users',
-          urls: [{title: 'Dashboard',url: '/admin/dashboard'},{title: 'Users'}]
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Users' }]
         },
       },
       {
@@ -143,7 +164,7 @@ const AdminRoutes: Routes = [
         component: AdminTransactionsComponent,
         data: {
           title: 'Manage Transactions',
-          urls: [{title: 'Dashboard',url: '/admin/dashboard'},{title: 'Transactions'}]
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Transactions' }]
         },
       },
       {
@@ -151,7 +172,7 @@ const AdminRoutes: Routes = [
         component: AdminReportsComponent,
         data: {
           title: 'Manage Reports',
-          urls: [{title: 'Dashboard',url: '/admin/dashboard'},{title: 'Reports'}]
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Reports' }]
         },
       },
       {
@@ -159,7 +180,7 @@ const AdminRoutes: Routes = [
         component: OperationsComponent,
         data: {
           title: 'Operations',
-          urls: [{title: 'Dashboard',url: '/admin/dashboard'},{title: 'Operations'}]
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Operations' }]
         },
       },
       {
@@ -167,46 +188,46 @@ const AdminRoutes: Routes = [
         component: SettingsComponent,
         data: {
           title: 'Settings',
-          urls: [{title: 'Dashboard',url: '/admin/dashboard'},{title: 'Settings'}]
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Settings' }]
         },
       },
     ]
   },
 ]
 @NgModule({
-	imports: [
-      CommonModule, 
-      NgbModule,
-      ChartsModule,
-      ChartistModule,
-      RouterModule.forChild(AdminRoutes),
-      NgxDatatableModule,
-      Ng2SmartTableModule,
-      DataTablesModule,
-      MatDialogModule,
-      FormsModule,
-      ReactiveFormsModule,
-      ConfirmDialogModule,
-      ToastModule
-    ],
-    exports: [RouterModule],
-    declarations: [
-        AgentsComponent,
-        StaffComponent,
-        CarRentalCompaniesComponent,
-        AdminComponent,
-        AdminTransactionsComponent,
-        AdminReportsComponent,
-        UsersComponent,
-        OperationsComponent,
-        SettingsComponent,
-        AgentDetailComponent,
-        StaffDetailComponent,
-        CompanyDetailsComponent,
-        RentalsComponent,
-        AlertComponent,
-        CarDetailsComponent,
-        AddEditCarComponent
-    ]
+  imports: [
+    CommonModule,
+    NgbModule,
+    ChartsModule,
+    ChartistModule,
+    RouterModule.forChild(AdminRoutes),
+    NgxDatatableModule,
+    Ng2SmartTableModule,
+    DataTablesModule,
+    MatDialogModule,
+    FormsModule,
+    ReactiveFormsModule,
+    ConfirmDialogModule,
+    ToastModule
+  ],
+  exports: [RouterModule],
+  declarations: [
+    AgentsComponent,
+    StaffComponent,
+    CarRentalCompaniesComponent,
+    AdminComponent,
+    AdminTransactionsComponent,
+    AdminReportsComponent,
+    UsersComponent,
+    OperationsComponent,
+    SettingsComponent,
+    AgentDetailComponent,
+    StaffDetailComponent,
+    CompanyDetailsComponent,
+    RentalsComponent,
+    AlertComponent,
+    CarDetailsComponent,
+    AddEditCarComponent
+  ]
 })
 export class AdminModule { }

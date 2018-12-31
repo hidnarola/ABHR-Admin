@@ -1,28 +1,28 @@
-import { Component, OnInit, Renderer, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Renderer, ViewChild, ViewEncapsulation, AfterViewInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import { ActivatedRoute } from '@angular/router';
-//service
-import { DataSharingService } from '../../../shared/services/data-sharing.service'
+// service
+import { DataSharingService } from '../../../shared/services/data-sharing.service';
 import { CrudService } from '../../../shared/services/crud.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-//popup-forms
+// popup-forms
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-//model
+// model
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-//primng
-import {ConfirmationService, Message} from 'primeng/api';
-//alert
+// primng
+import { ConfirmationService, Message } from 'primeng/api';
+// alert
 import { MessageService } from 'primeng/api';
-import { Subscription } from 'rxjs'
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-cars',
   templateUrl: './cars.component.html',
   styleUrls: ['./cars.component.css']
 })
-export class CarsComponent implements OnInit {
+export class CarsComponent implements OnInit, AfterViewInit {
   @ViewChild(DataTableDirective)
   dtElement: DataTableDirective;
   dtOptions: DataTables.Settings = {};
@@ -53,12 +53,12 @@ export class CarsComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private messageService: MessageService,
   ) {
-    let company = JSON.parse(localStorage.getItem('company-admin'));
+    const company = JSON.parse(localStorage.getItem('company-admin'));
     this.companyId = company._id;
-    console.log('companyid==>', this.companyId)
+    console.log('companyid==>', this.companyId);
   }
 
-  UsersListData(){
+  UsersListData() {
     this.spinner.show();
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -66,11 +66,11 @@ export class CarsComponent implements OnInit {
       processing: true,
       serverSide: true,
       ordering: false,
-      language: { "processing": "<i class='fa fa-refresh loader fa-spin'></i>" },
+      language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
       ajax: (dataTablesParameters: any, callback) => {
         setTimeout(() => {
-          dataTablesParameters.company_id = this.companyId; 
-          console.log('dtaparametes car==>',dataTablesParameters);
+          dataTablesParameters.company_id = this.companyId;
+          console.log('dtaparametes car==>', dataTablesParameters);
           this.service.post('admin/company/car_list', dataTablesParameters).subscribe(res => {
             this.users = res['result']['data'];
             console.log(this.users);
@@ -80,8 +80,8 @@ export class CarsComponent implements OnInit {
               recordsFiltered: res['result']['recordsTotal'],
               data: []
             });
-          })
-        }, 1000)
+          });
+        }, 1000);
       },
       columns: [
         // {
@@ -108,7 +108,7 @@ export class CarsComponent implements OnInit {
           name: 'is_avialable',
         },
         {
-          data: 'Year', 
+          data: 'Year',
           name: 'modelDetails.release_year',
         },
         {
@@ -126,51 +126,50 @@ export class CarsComponent implements OnInit {
     this.dtTrigger.next();
   }
 
-//dlt popup
-delete(userId) {
-  console.log('userId==>',userId);
-  this.confirmationService.confirm({
+  // dlt popup
+  delete(userId) {
+    console.log('userId==>', userId);
+    this.confirmationService.confirm({
       message: 'Are you sure want to delete this record?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-      this.service.put('admin/company/delete', {company_id : userId}).subscribe(res => {
-        this.render();
-        this.messageService.add({severity:'success', summary:'Success', detail: res['message']});
-        //setTimeout(()=>{ this.closePopup()},1000);
-      },err => {
-        err = err.error
-        this.messageService.add({severity:'error', summary:'Error', detail: err['message']});        
-      });
+        this.service.put('admin/company/car/delete', { car_id: userId }).subscribe(res => {
+          this.render();
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
+        }, err => {
+          err = err.error;
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
+        });
       },
       reject: () => {
-    }
-  });
-}
-// dlt pop up ends here
+      }
+    });
+  }
+  // dlt pop up ends here
 
-render(): void {
-  this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-    // Destroy the table first
-    dtInstance.destroy();
-    // Call the dtTrigger to rerender again
-    this.dtTrigger.next();
-  });
-}
+  render(): void {
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      // Destroy the table first
+      dtInstance.destroy();
+      // Call the dtTrigger to rerender again
+      this.dtTrigger.next();
+    });
+  }
 
-ngOnDestroy(): void {
-  this.dtTrigger.unsubscribe();
-}
+  ngDestroy(): void {
+    this.dtTrigger.unsubscribe();
+  }
 
-closePopup() {
-  var element = document.getElementById('closepopup');
-  element.click();
-}
+  closePopup() {
+    const element = document.getElementById('closepopup');
+    element.click();
+  }
 
-onSubmit() {}
+  onSubmit() { }
 
-ngOnInit() {
-  this.UsersListData();
-}
+  ngOnInit() {
+    this.UsersListData();
+  }
 
 }
