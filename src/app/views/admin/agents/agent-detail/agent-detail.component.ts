@@ -148,19 +148,16 @@ RentalData(){
        }, 1000)
     },
     columns: [
-      // {
-      //   data: 'Id', 
-      // },
       {
-        data: 'Car Id',
+        data: 'Contract No.',
         name: 'car_id'
       },
       {
-        data: 'Booking Id', 
+        data: 'Name', 
         name:'booking_number',
       },
       {
-        data: 'Booking Rent',
+        data: 'Price',
         name: 'booking_rent',
       },
       {
