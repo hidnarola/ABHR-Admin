@@ -201,6 +201,7 @@ export class CompanyDetailsComponent implements OnInit {
       serverSide: true,
       searching: false,
       ordering: true,
+      order: [[0, 'desc']],
       language: { "processing": "<i class='fa fa-refresh loader fa-spin'></i>" },
       ajax: (dataTablesParameters: any, callback) => {
         console.log('dataparametes car==>', dataTablesParameters);

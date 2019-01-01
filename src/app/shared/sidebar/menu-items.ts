@@ -21,9 +21,9 @@ export const ROUTES: RouteInfo[] = [
             },
         ]
     },
-    // {
-    //     path: '/admin/users', title: 'Users', icon: 'fa fa-users', class: '', label: '', labelClass: '', extralink: false, submenu: []
-    // },
+    {
+        path: '/admin/users', title: 'Users', icon: 'fa fa-users', class: '', label: '', labelClass: '', extralink: false, submenu: []
+    },
     // {
     //     path: '/admin/transactions', title: 'Transactions', icon: 'fa fa-credit-card',
     // class: '', label: '', labelClass: '', extralink: false, submenu: []
@@ -50,4 +50,4 @@ export const COMPANY_ROUTES: RouteInfo[] = [
     {
         path: '/company/car', title: 'Cars', icon: 'fa fa-car', class: '', label: '', labelClass: '', extralink: false, submenu: []
     },
-]
+];

@@ -23,10 +23,8 @@ export class LoginGuard implements CanActivate {
   checkLogin(url: string): boolean {
     const array = url.split('/');
     this.CurrentAdmin = array[1];
-    console.log('array var==>', array[1] ) ;
     let islogin = false;
     let loginUserAdmin = localStorage.getItem('admin');
-    console.log('login user ==>', loginUserAdmin);
     let loginUserCompany = localStorage.getItem('company-admin');
     const token = localStorage.getItem('token');
     if (this.CurrentAdmin === 'admin') {
@@ -62,10 +60,12 @@ export class LoginGuard implements CanActivate {
      } else if (this.CurrentAdmin === 'reset-password') {
       loginUserAdmin = JSON.parse(loginUserAdmin);
       this.AdminDetail = loginUserAdmin;
-      console.log('login user admin detail', loginUserAdmin);
       this.adminUserType = this.AdminDetail.type;
-      console.log('user type ==>', this.adminUserType);
-      if (this.adminUserType === 'admin') {
+      console.log(typeof this.adminUserType);
+      loginUserCompany = localStorage.getItem('company-admin');
+      const loginUserCompanyType = JSON.parse(loginUserCompany);
+      console.log(loginUserCompanyType);
+      if (this.adminUserType === 'admin' && this.adminUserType) {
         try {
           loginUserAdmin = JSON.parse(loginUserAdmin);
           if (loginUserAdmin['_id'] && token) {
@@ -78,13 +78,25 @@ export class LoginGuard implements CanActivate {
         }
         if (islogin) {
           this.router.navigate(['/admin/dashboard']);
-          // return false;
         }
         return false;
+      } else if (!(this.adminUserType ) || (this.adminUserType === undefined) ||  (this.adminUserType === null)) {
+        try {
+          loginUserCompany = JSON.parse(loginUserCompany);
+          if (loginUserCompany['_id'] && token) {
+            islogin = true;
+          } else {
+            islogin = false;
+          }
+        } catch (e) {
+          islogin = false;
+        }
+        if (islogin) {
+          this.router.navigate(['/company/dashboard']);
+          // return false;
+        }
       }
-      // else if() {}
      }
-
      return true;
      }
   }
