@@ -13,8 +13,8 @@ import { CarsComponent } from './cars/cars.component';
 import { CompanyReportsComponent } from './company-reports/company-reports.component';
 import { CompanyTransactionsComponent } from './../companies/company-transactions/company-transactions.component';
 import { CompaniesComponent } from './companies.component';
-import { CarDetailsComponent } from './cars/CompanyAdmin_car-details/car-details.component';
-import { CarAddEditComponent } from './cars/CompanyAdmin-car-add-edit/company-admin-car-add-edit.component';
+// import { CarDetailsComponent } from './cars/CompanyAdmin_car-details/car-details.component';
+// import { CarAddEditComponent } from './cars/CompanyAdmin-car-add-edit/company-admin-car-add-edit.component';
 
 
 const CompanyRoutes: Routes = [{
@@ -39,30 +39,30 @@ const CompanyRoutes: Routes = [{
                 urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Cars' }]
             },
         },
-        {
-            path: 'car/view/:id',
-            component: CarDetailsComponent,
-            data: {
-                title: 'View Car',
-                urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Cars', url: '/company/car' }, { title: 'Car Detail' }]
-            },
-        },
-        {
-            path: 'car/edit/:id',
-            component: CarAddEditComponent,
-            data: {
-                title: 'Edit Car',
-                urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Cars', url: '/company/car' }, { title: 'Edit Company' }]
-            },
-        },
-        {
-            path: 'car/add',
-            component: CarAddEditComponent,
-            data: {
-                title: 'Add Car',
-                urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Cars', url: '/company/car' }, { title: 'Add Company' }]
-            },
-        },
+        // {
+        //     path: 'car/view/:id',
+        //     component: CarDetailsComponent,
+        //     data: {
+        //         title: 'View Car',
+        //         urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Cars', url: '/company/car' }, { title: 'Car Detail' }]
+        //     },
+        // },
+        // {
+        //     path: 'car/edit/:id',
+        //     component: CarAddEditComponent,
+        //     data: {
+        //         title: 'Edit Car',
+        //         urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Cars', url: '/company/car' }, { title: 'Edit Company' }]
+        //     },
+        // },
+        // {
+        //     path: 'car/add',
+        //     component: CarAddEditComponent,
+        //     data: {
+        //         title: 'Add Car',
+        //         urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Cars', url: '/company/car' }, { title: 'Add Company' }]
+        //     },
+        // },
     ]
 },
 ]
@@ -82,8 +82,8 @@ const CompanyRoutes: Routes = [{
     exports: [RouterModule],
     declarations: [
         CarsComponent,
-        CarDetailsComponent,
-        CarAddEditComponent,
+        // CarDetailsComponent,
+        // CarAddEditComponent,
         CompanyTransactionsComponent,
         CompanyReportsComponent,
         CompaniesComponent
