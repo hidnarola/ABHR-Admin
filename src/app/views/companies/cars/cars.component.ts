@@ -65,7 +65,8 @@ export class CarsComponent implements OnInit, AfterViewInit {
       pageLength: 10,
       processing: true,
       serverSide: true,
-      ordering: false,
+      ordering: true,
+      order: [[0, 'desc']],
       language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
       ajax: (dataTablesParameters: any, callback) => {
         setTimeout(() => {

@@ -32,6 +32,7 @@ import { AddEditCarComponent } from '../admin/car-rental-companies/company-detai
 // shared component
 import { RentalsComponent } from '../../shared/components/rentals/rentals.component';
 import { AlertComponent } from '../../shared/components/alert/alert.component';
+import { UserDetailComponent } from './users/user-detail/user-detail.component';
 
 
 
@@ -160,6 +161,14 @@ const AdminRoutes: Routes = [
         },
       },
       {
+        path: 'users/view/:id',
+        component: UserDetailComponent,
+        data: {
+          title: 'View User Detail',
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Users', url: '/admin/users' }, { title: 'User Detail' }]
+        },
+      },
+      {
         path: 'transactions',
         component: AdminTransactionsComponent,
         data: {
@@ -227,7 +236,8 @@ const AdminRoutes: Routes = [
     RentalsComponent,
     AlertComponent,
     CarDetailsComponent,
-    AddEditCarComponent
+    AddEditCarComponent,
+    UserDetailComponent,
   ]
 })
 export class AdminModule { }

@@ -22,7 +22,7 @@ export class AuthGuard implements CanActivate {
     let loginUserAdmin = localStorage.getItem('admin');
     let loginUserCompany = localStorage.getItem('company-admin');
     const token = localStorage.getItem('token');
-    if(this.CurrentAdmin === 'admin'){
+    if (this.CurrentAdmin === 'admin') {
       try {
         loginUserAdmin = JSON.parse(loginUserAdmin);
         if (loginUserAdmin['_id'] && token) {
@@ -37,7 +37,7 @@ export class AuthGuard implements CanActivate {
         this.router.navigate(['/admin/login']);
         return false;
       }
-     // return true;
+      // return true;
     } else if (this.CurrentAdmin === 'company') {
       try {
         loginUserCompany = JSON.parse(loginUserCompany);
@@ -53,9 +53,9 @@ export class AuthGuard implements CanActivate {
         this.router.navigate(['/company/login']);
         return false;
       }
-     // return true;
+      // return true;
     }
     return true;
-    }
+  }
 }
 

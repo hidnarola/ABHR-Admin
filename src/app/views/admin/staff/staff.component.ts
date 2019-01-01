@@ -150,6 +150,7 @@ UsersListData(){
     processing: true,
     serverSide: true,
     ordering: true,
+    order: [[0, 'desc']],
     language: { "processing": "<i class='fa fa-refresh loader fa-spin'></i>" },
     ajax: (dataTablesParameters: any, callback) => {
       setTimeout(() => {
