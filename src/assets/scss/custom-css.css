@@ -85,3 +85,4 @@ table.dataTable tbody td {
 }
 
 .page-wrapper{ height: inherit !important; }
+.agents-dtl-box{ max-width:100% !important; margin:0 15px 0 15px; }
