@@ -153,16 +153,20 @@ RentalData(){
         name: 'car_id'
       },
       {
-        data: 'Name', 
-        name:'booking_number',
+        data: 'Name',
+        name: 'booking_number',
       },
       {
         data: 'Price',
         name: 'booking_rent',
       },
       {
-        data: 'Trip Status',
-        name: 'trip_status',
+        data: 'Start Of Rent',
+        name: 'from_time',
+      },
+      {
+        data: 'End Of Rent',
+        name: 'to_time',
       }
     ]
   };

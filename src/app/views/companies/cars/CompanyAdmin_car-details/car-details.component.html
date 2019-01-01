@@ -1,0 +1,38 @@
+<div class="card">
+  <div class="card-body">
+      <div class="cars-dtl-box" *ngIf="carDetails"> 
+        <h4 id="blue" class="mt-45"> Car Detail Of {{carDetails.car_rental_company_name}} </h4>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="cars-dtl-box-inr"><b>brand name : </b><span>{{carDetails.car_brand}}</span></div>
+            <div class="cars-dtl-box-inr"><b>model name : </b>  <span>{{ carDetails.modelDetails && carDetails.modelDetails.model_name ?carDetails.modelDetails.model_name:'-' }}</span>  </div>
+            <div class="cars-dtl-box-inr"><b>relese year : </b>  <span>{{ carDetails.modelDetails && carDetails.modelDetails.release_year ?carDetails.modelDetails.release_year:'-' }}</span>  </div>
+            <div class="cars-dtl-box-inr"><b>car class : </b><span>{{carDetails.car_class | titlecase }}</span></div>
+            <div class="cars-dtl-box-inr"><b>car color : </b><span>{{carDetails.car_color| titlecase }}</span></div>
+            <div class="cars-dtl-box-inr"><b>driving eligibility : </b><span>{{carDetails.driving_eligibility_criteria}}</span></div>
+            <div class="cars-dtl-box-inr"><b>AC : </b><span>{{carDetails.is_AC?'Yes':'No' }}</span></div>
+          </div>
+          <div class="col-md-6">
+            <div class="cars-dtl-box-inr"><b>milage : </b>  <span>{{ carDetails.milage | titlecase }}</span>  </div>
+            <div class="cars-dtl-box-inr"><b>luggage carrier : </b> <span>{{ carDetails.is_luggage_carrier?'Yes':'No' }}</span>  </div>
+            <div class="cars-dtl-box-inr"><b>navigation : </b> <span>{{ carDetails.is_navigation?'Yes':'No' }}</span>  </div>
+            <div class="cars-dtl-box-inr"><b>avialable : </b> <span>{{ carDetails.is_avialable?'Yes':'No' }}</span>  </div>
+            <div class="cars-dtl-box-inr"><b>delieverd : </b> <span>{{ carDetails.is_delieverd?'Yes':'No' }}</span>  </div>
+            <div class="cars-dtl-box-inr"><b>licence plate : </b> <span>{{ carDetails.licence_plate }}</span>  </div>
+            <div class="cars-dtl-box-inr"><b>rent price : </b> <span>{{ carDetails.rent_price }}</span>  </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div><h4 id="blue"> Car Gallery </h4></div>
+    <div class="row" *ngIf="carDetails">
+      <div class="col-md-4" *ngFor="let image of carDetails.car_gallery">
+        <img [src]="imgUrl+image.name" class="img-responsive img-rounded" alt="car_jpeg" >
+      </div>
+    </div>
+  </div>
+</div>
