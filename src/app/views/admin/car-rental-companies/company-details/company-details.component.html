@@ -3,7 +3,7 @@
   <div class="card-body">
     <div class="row pb-3">
       <div class="col-lg-12 text-right">
-          <button type="button" class="btn btn-primary btn-rounded" 
+          <button type="button" class="btn btn-primary custom-add-btn" 
           (click)="open2(content, userDetails)">
               <i class="fa fa-edit" aria-hidden="true"></i> Edit
           </button>
@@ -27,8 +27,8 @@
   <div class="card-body">
     <div class="row pb-3">
       <div class="col-lg-6"><h4 class="table-header">List of Cars </h4></div>
-      <div class="col-lg-12 text-right">
-        <button type="button" class="btn btn-primary btn-rounded m-r-10">
+      <div class="col-lg-6 text-right">
+        <button type="button" class="btn btn-primary custom-add-btn m-r-10">
           <i class="fa fa-external-link" aria-hidden="true"></i> Export
         </button>
         <!-- <button type="button" class="btn btn-primary btn-rounded" [routerLink]="['/admin/car-rental-companies/car/add']">
@@ -50,7 +50,7 @@
                 <th>Year</th>
                 <th> Price </th>
                 <th>Available</th>
-                <th class="disabled" >Actions</th>
+                <th class="disabled text-center" >Actions</th>
                 </tr>
               </thead>
               <tbody *ngIf="carData?.length != 0">
@@ -93,8 +93,9 @@
                       {{ item.is_avialable?'Yes':'No' }}
                     </span>
                   </td>
-                  <td>
-                    <button type="button" class="btn btn-primary btn-rounded" [routerLink]="['/admin/car-rental-companies/car/view/',item._id]">View</button>
+                  <td class="text-center">
+                      <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="View" [routerLink]="['/admin/car-rental-companies/car/view/',item._id]"><i
+                        class="fa fa-eye text-default m-r-20"></i></a>
                   </td>
                   <!-- <td>
                     <div ngbDropdown class="d-inline-block">

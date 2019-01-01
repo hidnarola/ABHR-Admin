@@ -3,7 +3,7 @@
     <div class="row pb-3">
       <div class="col-lg-6"><h4 class="table-header">List of Rentals </h4></div>
       <div class="col-lg-6 text-right">
-          <button type="button" class="btn btn-primary btn-rounded">
+          <button type="button" class="btn btn-primary custom-add-btn">
            <i class="fa fa-external-link" aria-hidden="true"></i> Export
           </button>
       </div>
@@ -15,10 +15,10 @@
               <thead>
                 <tr>
                 <!-- <th>Id</th> -->
-                <th>Car Id</th>
-                <th>Booking Id</th>
-                <th>Price</th>
-                <th class="disabled">Status</th>
+                <th style="width:40%">Car Id</th>
+                <th style="width:20%">Booking Id</th>
+                <th style="width:10%">Price</th>
+                <th style="width:30%" class="disabled">Status</th>
                 </tr>
               </thead>
               <tbody *ngIf="rentalData?.length != 0">
