@@ -28,9 +28,9 @@
     <div class="row pb-3">
       <div class="col-lg-6"><h4 class="table-header">List of Cars </h4></div>
       <div class="col-lg-6 text-right">
-        <button type="button" class="btn btn-primary custom-add-btn m-r-10">
+        <!-- <button type="button" class="btn btn-primary custom-add-btn m-r-10">
           <i class="fa fa-external-link" aria-hidden="true"></i> Export
-        </button>
+        </button> -->
         <!-- <button type="button" class="btn btn-primary btn-rounded" [routerLink]="['/admin/car-rental-companies/car/add']">
           <i class="mdi mdi-account-plus" aria-hidden="true"></i> Add
         </button> -->
@@ -42,11 +42,10 @@
             <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table">
               <thead>
                 <tr>
-                <!-- <th>Id</th> -->
-                <th>Brand Name</th>
-                <th>Model Name</th>
-                <th> Car Class </th>
-                <th> Transmission </th>
+                <th>Car Brand</th>
+                <th>Car Model</th>
+                <!-- <th> Car Class </th>
+                <th> Transmission </th> -->
                 <th>Year</th>
                 <th> Price </th>
                 <th>Available</th>
@@ -55,9 +54,6 @@
               </thead>
               <tbody *ngIf="carData?.length != 0">
                 <tr *ngFor="let item of carData; let i = index">
-                  <!-- <td>
-                    {{i+1}}
-                  </td> -->
                   <td>
                     <span>
                       {{ item.brandDetails.brand_name }}
@@ -68,7 +64,7 @@
                         {{ item.modelDetails && item.modelDetails.model_name ?item.modelDetails.model_name:'-' }}
                     </span>
                   </td>
-                  <td>
+                  <!-- <td>
                     <span>
                       {{ item.car_class | titlecase}}
                     </span>
@@ -77,7 +73,7 @@
                     <span> 
                       {{item.transmission | titlecase}} 
                     </span>
-                  </td>
+                  </td> -->
                   <td>
                     <span>
                         {{ item.modelDetails && item.modelDetails.release_year ?item.modelDetails.release_year:'-' }}

@@ -85,16 +85,13 @@ export class CarsComponent implements OnInit, AfterViewInit {
         }, 1000);
       },
       columns: [
-        // {
-        //   data: 'Id',
-        // },
         {
-          data: 'Brand Name',
-          name: 'brandDetails.brand_name',
+          data: 'Car Model',
+          name: 'modelDetails.model_name',
         },
         {
-          data: 'Model Name',
-          name: 'modelDetails.model_name',
+          data: 'Car Brand',
+          name: 'brandDetails.brand_name',
         },
         {
           data: 'Car Class',

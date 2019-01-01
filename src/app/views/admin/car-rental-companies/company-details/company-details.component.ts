@@ -224,25 +224,22 @@ export class CompanyDetailsComponent implements OnInit {
         }, 1000)
       },
       columns: [
-        // {
-        //   data: 'Id',
-        // },
         {
-          data: 'Brand Name',
+          data: 'Car Brand',
           name: 'brandDetails.brand_name',
         },
         {
-          data: 'Model Name',
+          data: 'Car Model',
           name: 'modelDetails.model_name',
         },
-        {
-          data: 'Car Class',
-          name: 'car_class',
-        },
-        {
-          data: 'Transmission',
-          name: 'brandDetails.transmission',
-        },
+        // {
+        //   data: 'Car Class',
+        //   name: 'car_class',
+        // },
+        // {
+        //   data: 'Transmission',
+        //   name: 'brandDetails.transmission',
+        // },
         {
           data: 'Year',
           name: 'modelDetails.release_year',

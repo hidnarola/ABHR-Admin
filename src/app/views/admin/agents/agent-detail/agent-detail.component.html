@@ -15,8 +15,8 @@
             <div class="agents-dtl-box" *ngIf="agentDetails">
               <h4 id="blue"> Details of {{agentDetails.first_name}} {{agentDetails.last_name}}</h4>
               <!-- <div class="agents-dtl-box-inr"><b>Id : </b> <span>{{ agentDetails._id }}</span> </div> -->
-              <div class="agents-dtl-box-inr"><b>First Name : </b> <span>{{agentDetails.first_name}}</span> </div>
-              <div class="agents-dtl-box-inr"><b>Last Name : </b> <span>{{agentDetails.last_name}}</span> </div>
+              <div class="agents-dtl-box-inr"><b>First Name : </b> <span>{{agentDetails.first_name | titlecase }}</span> </div>
+              <div class="agents-dtl-box-inr"><b>Last Name : </b> <span>{{agentDetails.last_name | titlecase }}</span> </div>
               <div class="agents-dtl-box-inr"><b>Email : </b> <span>{{ agentDetails.email }}</span> </div>
               <!-- <div class="agents-dtl-box-inr"><b>Device Type : </b> <span>{{ agentDetails.deviceType | titlecase }}</span> </div> -->
               <div class="agents-dtl-box-inr"><b>Phone Number : </b> <span>{{ agentDetails.phone_number ?
@@ -36,9 +36,9 @@
             <h4 class="table-header">List of Rentals </h4>
           </div>
           <div class="col-lg-6 text-right">
-            <button type="button" class="btn btn-primary custom-add-btn">
+            <!-- <button type="button" class="btn btn-primary custom-add-btn">
               <i class="fa fa-external-link" aria-hidden="true"></i> Export
-            </button>
+            </button> -->
           </div>
         </div>
         <div class="row">
@@ -47,9 +47,8 @@
               <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table">
                 <thead>
                   <tr>
-                    <!-- <th>Id</th> -->
                     <th style="width:20%">Contract No.</th>
-                    <th style="width:30%">Name</th>
+                    <th style="width:30%">Client Name</th>
                     <th style="width:10%">Price</th>
                     <th style="width:20%">Start Of Rent</th>
                     <th style="width:20%">End Of Rent</th>
@@ -57,15 +56,12 @@
                 </thead>
                 <tbody *ngIf="rentalData?.length != 0">
                   <tr *ngFor="let item of rentalData; let i = index">
-                    <!-- <td>
-                    {{i+1}}
-                  </td> -->
                     <td>
                         {{ item.booking_number }}
                     </td>
                     <td>
                       <span>
-                        {{ item.booking_number }}
+                        {{ item.userId.first_name | titlecase  }}
                       </span>
                     </td>
                     <td>
@@ -75,12 +71,12 @@
                     </td>
                     <td>
                       <span>
-                        {{ item.from_time }}
+                        {{ item.from_time  | date:"MM/dd/yy" }}
                       </span>
                     </td>
                     <td>
                       <span>
-                        {{ item.to_time }}
+                        {{ item.to_time  | date:"MM/dd/yy" }}
                       </span>
                     </td>
                   </tr>
@@ -108,7 +104,8 @@
     <ng-template #content let-c="close" let-d="dismiss">
       <div class="modal-header">
         <h4 class="modal-title">Edit Agent</h4>
-        <button type="button" class="close" id="closepopup" aria-label="Close" (click)="d('Cross click')">
+        <button type="button" class="close" id="closepopup" aria-label="Close" 
+        (click)="d('Cross click')">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -179,7 +176,8 @@
         </div> -->
           <div class="col-sm-12">
             <button type="submit" class="btn waves-effect waves-light custom-btn btn-primary">Submit</button>
-            <a class="btn waves-effect waves-light custom-btn btn-danger" (click)="d('Cross click')">Cancel</a>
+            <a class="btn waves-effect waves-light custom-btn btn-danger" 
+            (click)="d('Cross click')">Cancel</a>
           </div>
         </form>
       </div>
