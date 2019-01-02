@@ -91,7 +91,7 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
       processing: true,
       serverSide: true,
       ordering: true,
-      order: [[0, 'desc']],
+      order: [[5, 'desc']],
       language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
       ajax: (dataTablesParameters: any, callback) => {
         setTimeout(() => {
@@ -131,6 +131,7 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
         },
         {
           data: 'Actions',
+          name: 'createdAt',
           orderable: false
         }
       ]

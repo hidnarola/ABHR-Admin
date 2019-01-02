@@ -172,7 +172,7 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
       serverSide: true,
       responsive: true,
       ordering: true,
-      order: [[0, 'desc']],
+      order: [[4, 'desc']],
       language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
       ajax: (dataTablesParameters: any, callback) => {
         setTimeout(() => {
@@ -190,9 +190,6 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
         }, 1000);
       },
       columns: [
-        // {
-        //   data: 'Id',
-        // },
         {
           data: 'First Name',
           name: 'first_name',
@@ -215,8 +212,9 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
         },
         {
           data: 'Actions',
+          name: 'createdAt',
           orderable: false
-        }
+        },
       ]
     };
   }

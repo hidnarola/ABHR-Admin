@@ -200,7 +200,7 @@ export class CompanyDetailsComponent implements OnInit {
       processing: true,
       serverSide: true,
       ordering: true,
-      order: [[0, 'desc']],
+      order: [[5, 'desc']],
       language: { "processing": "<i class='fa fa-refresh loader fa-spin'></i>" },
       ajax: (dataTablesParameters: any, callback) => {
         console.log('dataparametes car==>', dataTablesParameters);
@@ -256,6 +256,7 @@ export class CompanyDetailsComponent implements OnInit {
         },
         {
           data: 'Actions',
+          name: 'createdAt',
           orderable: false
         }
       ]

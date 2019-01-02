@@ -150,7 +150,7 @@ UsersListData(){
     processing: true,
     serverSide: true,
     ordering: true,
-    order: [[0, 'desc']],
+    order: [[4, 'desc']],
     language: { "processing": "<i class='fa fa-refresh loader fa-spin'></i>" },
     ajax: (dataTablesParameters: any, callback) => {
       setTimeout(() => {
@@ -168,9 +168,6 @@ UsersListData(){
       }, 1000)
     },
     columns: [
-      // {
-      //   data: 'Id',
-      // },
       {
         data: 'First Name',
         name: 'first_name',
@@ -189,6 +186,7 @@ UsersListData(){
       },
       {
         data: 'Actions',
+        name: 'createdAt',
         orderable: false
       }
     ]

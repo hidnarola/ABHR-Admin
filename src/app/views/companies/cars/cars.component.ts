@@ -66,7 +66,7 @@ export class CarsComponent implements OnInit, AfterViewInit {
       processing: true,
       serverSide: true,
       ordering: true,
-      order: [[0, 'desc']],
+      order: [[5, 'desc']],
       language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
       ajax: (dataTablesParameters: any, callback) => {
         setTimeout(() => {
@@ -115,6 +115,7 @@ export class CarsComponent implements OnInit, AfterViewInit {
         },
         {
           data: 'Actions',
+          name: 'createdAt',
           orderable: false
         }
       ]
