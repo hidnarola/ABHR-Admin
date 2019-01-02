@@ -181,6 +181,8 @@
               formControlName="rent_price" [ngClass]="{'is-invalid': submitted && f.rent_price.errors }">
             <div *ngIf=" submitted && f.rent_price.errors " class="invalid-feedback">
               <div *ngIf="f.rent_price.errors.required"> Rent Price is required</div>
+              <div *ngIf="f.rent_price.errors.pattern">Invalid Price</div>
+              <!-- <div *ngIf="f.rent_price.errors.min">Invalid Price</div> -->
             </div>
           </div>
         </div>
@@ -188,17 +190,17 @@
         <div class="col-md-2">
           <div class="form-group">
             <label> No Of Persons :</label>
-            <input class="form-control" placeholder="No Of Persons" type="string" required="" name="no_of_person"
-              formControlName="no_of_person" [ngClass]="{'is-invalid': submitted && f.no_of_person.errors }">
-            <!-- <select class="custom-select col-12" id="inlineFormCustomSelect" name="no_of_person" class="form-control" formControlName="no_of_person" [ngClass]= "{ 'is-invalid': submitted && f.no_of_person.errors }">
+            <!-- <input class="form-control" placeholder="No Of Persons" type="string" required="" name="no_of_person"
+              formControlName="no_of_person" [ngClass]="{'is-invalid': submitted && f.no_of_person.errors }"> -->
+            <select class="custom-select col-12" id="inlineFormCustomSelect" name="no_of_person" class="form-control" formControlName="no_of_person" [ngClass]= "{ 'is-invalid': submitted && f.no_of_person.errors }">
                   <option value="" disabled selected>Choose...</option>
-                  <option value="2">2</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                  <option value="6">6</option>
-                  <option value="8">8</option>
-                  <option value="12">12</option>
-                </select> -->
+                  <option [value]="2">2</option>
+                  <option [value]="4">4</option>
+                  <option [value]="5">5</option>
+                  <option [value]="6">6</option>
+                  <option [value]="8">8</option>
+                  <option [value]="12">12</option>
+                </select>
             <div *ngIf=" submitted && f.no_of_person.errors " class="invalid-feedback">
               <div *ngIf="f.no_of_person.errors.required"> No Of Person is required</div>
             </div>
@@ -208,7 +210,7 @@
         <!-- <div class="col-md-8">
           <div class="form-group">
             <label> Car Image :</label>
-            <input class="form-control" type="file" required="" name="car_gallery" formControlName="car_gallery"> -->
+            <input class="form-control" type="file" name="car_gallery" formControlName="car_gallery"> -->
             <!-- <div *ngIf=" submitted && f.car_gallery.errors " class="invalid-feedback">
               <div *ngIf="f.car_gallery.errors.required"> Car Image is required</div>
             </div> -->

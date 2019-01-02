@@ -215,6 +215,7 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
         },
         {
           data: 'Actions',
+          orderable: false
         }
       ]
     };

@@ -189,6 +189,7 @@ UsersListData(){
       },
       {
         data: 'Actions',
+        orderable: false
       }
     ]
   };

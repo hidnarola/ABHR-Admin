@@ -199,18 +199,20 @@ export class CompanyDetailsComponent implements OnInit {
       pageLength: 10,
       processing: true,
       serverSide: true,
-      searching: false,
       ordering: true,
       order: [[0, 'desc']],
       language: { "processing": "<i class='fa fa-refresh loader fa-spin'></i>" },
       ajax: (dataTablesParameters: any, callback) => {
         console.log('dataparametes car==>', dataTablesParameters);
+        dataTablesParameters['columns'][2]['isNumber'] = true;
+        dataTablesParameters['columns'][3]['isNumber'] = true;
+        dataTablesParameters['columns'][4]['isBoolean '] = true;
         setTimeout(() => {
           dataTablesParameters.company_id = this.userId;
           console.log('dtaparametes car==>', dataTablesParameters);
           this.service.post('admin/company/car_list', dataTablesParameters).subscribe(res => {
-            console.log('user id in car data table', this.userId)
-            console.log('car data in res==>', res)
+            console.log('user id in car data table', this.userId);
+            console.log('car data in res==>', res);
             this.carData = res['result']['data'];
             console.log(this.carData);
             // this.dataShare.changeLoading(false);
@@ -220,8 +222,8 @@ export class CompanyDetailsComponent implements OnInit {
               recordsFiltered: res['result']['recordsTotal'],
               data: []
             });
-          })
-        }, 1000)
+          });
+        }, 1000);
       },
       columns: [
         {
@@ -254,6 +256,7 @@ export class CompanyDetailsComponent implements OnInit {
         },
         {
           data: 'Actions',
+          orderable: false
         }
       ]
     };

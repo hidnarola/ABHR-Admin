@@ -129,9 +129,12 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
       processing: true,
       serverSide: true,
       ordering: true,
+      order: [[0, 'desc']],
       language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
       ajax: (dataTablesParameters: any, callback) => {
         console.log('dataparametes==>', dataTablesParameters);
+        dataTablesParameters['columns'][0]['isNumber'] = true;
+        dataTablesParameters['columns'][2]['isNumber'] = true;
         setTimeout(() => {
           this.service.post('admin/agents/rental_list', dataTablesParameters).subscribe(res => {
             console.log('rentals res in agents', res);

@@ -86,25 +86,21 @@ export class CarsComponent implements OnInit, AfterViewInit {
       },
       columns: [
         {
-          data: 'Car Model',
-          name: 'modelDetails.model_name',
-        },
-        {
           data: 'Car Brand',
           name: 'brandDetails.brand_name',
         },
         {
-          data: 'Car Class',
-          name: 'car_class',
+          data: 'Car Model',
+          name: 'modelDetails.model_name',
         },
-        {
-          data: 'Transmission',
-          name: 'brandDetails.transmission',
-        },
-        {
-          data: 'Available',
-          name: 'is_avialable',
-        },
+        // {
+        //   data: 'Car Class',
+        //   name: 'car_class',
+        // },
+        // {
+        //   data: 'Transmission',
+        //   name: 'brandDetails.transmission',
+        // },
         {
           data: 'Year',
           name: 'modelDetails.release_year',
@@ -114,7 +110,12 @@ export class CarsComponent implements OnInit, AfterViewInit {
           name: 'rent_price',
         },
         {
+          data: 'Available',
+          name: 'is_avialable',
+        },
+        {
           data: 'Actions',
+          orderable: false
         }
       ]
     };

@@ -78,7 +78,7 @@ export class CarAddEditComponent implements OnInit {
       car_id: this.carId,
       car_brand_id: ['', Validators.required],
       car_model_id: ['', Validators.required],
-      rent_price: ['', Validators.required],
+      rent_price: ['', [Validators.required, Validators.pattern('[0-9]*')]],
       no_of_person: ['', Validators.required],
       transmission: ['', Validators.required],
       milage: ['', Validators.required],
@@ -120,6 +120,7 @@ export class CarAddEditComponent implements OnInit {
       if ((res['data'] !== undefined) && (res['data'] != null) && res['data']) {
         this.modelList = res['data'].model;
       } else {
+        // this.AddEditCarForm.controls['car_model_id'].setValue( 'null');
         this.modelList = [{ _id: null, model_name: 'No models are available' }];
       }
     });
