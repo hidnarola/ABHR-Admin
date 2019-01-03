@@ -101,7 +101,7 @@
         <form [formGroup]="AddEditForm" (ngSubmit)="onSubmit()" class="form-horizontal form-material row">
           <div class="col-sm-6">
             <div class="form-group">
-              <label>First Name :</label>
+              <label class="required">First Name </label>
               <input class="form-control" type="text" required="" name="first_name" placeholder="Enter Firstname"
                 formControlName="first_name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.first_name.errors }">
               <div *ngIf=" submitted && f.first_name.errors " class="invalid-feedback">
@@ -111,7 +111,7 @@
           </div>
           <div class="col-sm-6 ">
             <div class="form-group">
-              <label>Last name :</label>
+              <label class="required">Last name </label>
               <input class="form-control" type="text" required="" name="last_name" placeholder="Enter Lastname"
                 formControlName="last_name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.last_name.errors }">
               <div *ngIf=" submitted && f.last_name.errors " class="invalid-feedback">
@@ -121,7 +121,7 @@
           </div>
           <div class="col-sm-6 ">
             <div class="form-group">
-              <label>Email :</label>
+              <label class="required">Email</label>
               <input class="form-control" type="text" required="" placeholder="Enter Email" formControlName="email"
                 name="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }">
               <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
@@ -132,7 +132,7 @@
           </div>
           <div class="col-sm-6">
             <div class="form-group">
-              <label>Phone Number :</label>
+              <label>Phone Number </label>
               <input class="form-control" type="string" name="phone_number" placeholder="Enter Phone Number"
                 formControlName="phone_number" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.phone_number.errors }">
               <div *ngIf=" submitted && f.phone_number.errors " class="invalid-feedback">
