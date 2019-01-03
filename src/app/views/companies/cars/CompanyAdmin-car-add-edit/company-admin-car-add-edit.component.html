@@ -217,9 +217,9 @@
           </div>
         </div>
 
-        <div class="col-md-12">
+        <div class="col-md-12" *ngIf="CarImage.length > 0">
           <div class="form-group">
-            <label> Uploaded Car Image(s) :</label>
+            <label> Car Image(s) Preview:</label>
             <div class="row">
               <div class="column img_wrap" *ngFor="let img of CarImage; let i = index">
                 <img [src]="img" height="100px" alt="cars" width="auto">
