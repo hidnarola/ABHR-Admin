@@ -46,6 +46,7 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
   public isDelete: boolean;
   public users;
   private subscription: Subscription;
+  checked: boolean;
   message: any;
   msgs: Message[] = [];
   closeResult: string;
@@ -128,6 +129,9 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
         {
           data: 'Phone Number',
           name: 'phone_number',
+        }, {
+          data: 'Status',
+          name: 'status',
         },
         {
           data: 'Actions',
@@ -219,6 +223,24 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
     element.click();
     this.isLoading = false;
   }
+
+  handleChange(e, id) {
+    console.log(e);
+    console.log('comp id => ', id);
+    const params = {
+      company_id: id,
+      status: e.checked
+    };
+    this.service.post('admin/company/change_status', params)
+      .subscribe(res => {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Status change succesfully' });
+      }, error => {
+        console.log(error);
+        e.checked = !e.checked;
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Something went wrong' });
+      });
+  }
+
   onSubmit() {
     this.submitted = true;
     if (!this.AddEditForm.invalid) {

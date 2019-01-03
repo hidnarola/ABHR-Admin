@@ -1,0 +1,46 @@
+.column {
+  float: left;
+  width: 33.33%;
+  padding: 5px;
+}
+
+/* Clearfix (clear floats) */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.img_wrap {
+  display: inline-block;
+  position: relative;
+  padding: 0;
+  text-align: center;
+  border: 1px solid #ddd;
+  margin: 10px;
+  width: auto;
+}
+
+.close {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  font-size: 21px;
+  background: white;
+  color: #000 !important;
+  font-weight: 100;
+  opacity: 1;
+  border: 1px solid #cacad3;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+}
+
+.close:hover {
+
+  background: #3dc1cc;
+  color: white;
+  border-color: #3dc1cc;
+  transition: .3s
+}

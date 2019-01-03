@@ -1,17 +1,17 @@
 import { Component, AfterViewInit } from '@angular/core';
-import {NgbProgressbarConfig} from '@ng-bootstrap/ng-bootstrap';
+import { NgbProgressbarConfig } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'app-companies',
-  templateUrl: './companies.component.html',
-  styleUrls: ['./companies.component.css']
+    selector: 'app-companies',
+    templateUrl: './companies.component.html',
+    styleUrls: ['./companies.component.css']
 })
 export class CompaniesComponent implements AfterViewInit {
 
-  subtitle:string;	
-	constructor() {
-		this.subtitle = "This is some text within a card block."
-	}
+    subtitle: string;
+    constructor() {
+        this.subtitle = "This is some text within a card block."
+    }
     // This is for the dashboar line chart
     // lineChart
     public lineChartData: Array<any> = [
@@ -43,42 +43,42 @@ export class CompaniesComponent implements AfterViewInit {
     ];
     public lineChartOptions: any = {
         scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true
-            },
-            gridLines: {
-              color: "rgba(120, 130, 140, 0.13)"
-            }  
-          }],
-          xAxes: [{
-            gridLines: {
-              color: "rgba(120, 130, 140, 0.13)"
-            },
-          }]
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                },
+                gridLines: {
+                    color: "rgba(120, 130, 140, 0.13)"
+                }
+            }],
+            xAxes: [{
+                gridLines: {
+                    color: "rgba(120, 130, 140, 0.13)"
+                },
+            }]
         },
         responsive: true,
         maintainAspectRatio: false
     };
     public lineChartOptions2: any = {
         scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true
-            },
-            gridLines: {
-              color: "rgba(120, 130, 140, 0.13)"
-            }  
-          }],
-          xAxes: [{
-            gridLines: {
-              color: "rgba(120, 130, 140, 0.13)"
-            },
-          }]
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                },
+                gridLines: {
+                    color: "rgba(120, 130, 140, 0.13)"
+                }
+            }],
+            xAxes: [{
+                gridLines: {
+                    color: "rgba(120, 130, 140, 0.13)"
+                },
+            }]
         },
         responsive: true,
         maintainAspectRatio: false,
-        elements : { line : { tension : 0 } }
+        elements: { line: { tension: 0 } }
     };
     public lineChartColors: Array<any> = [
         {
@@ -99,14 +99,14 @@ export class CompaniesComponent implements AfterViewInit {
             pointHoverBackgroundColor: '#fff',
             pointHoverBorderColor: 'rgba(38,218,210,0.5)'
         }
-        
+
     ];
     public lineChartLegend: boolean = true;
     public lineChartLegend2: boolean = false;
     public lineChartType: string = 'line';
-   
-	ngAfterViewInit(){
-        (<any>$('#spark8')).sparkline([ 4, 5, 0, 10, 9, 12, 4, 9], {
+
+    ngAfterViewInit() {
+        (<any>$('#spark8')).sparkline([4, 5, 0, 10, 9, 12, 4, 9], {
             type: 'bar',
             width: '100%',
             height: '40',
@@ -115,7 +115,7 @@ export class CompaniesComponent implements AfterViewInit {
             barSpacing: '5',
             barColor: '#26c6da'
         });
-        (<any>$('#spark9')).sparkline([ 0, 5, 6, 10, 9, 12, 4, 9], {
+        (<any>$('#spark9')).sparkline([0, 5, 6, 10, 9, 12, 4, 9], {
             type: 'bar',
             width: '100%',
             height: '40',
@@ -124,7 +124,7 @@ export class CompaniesComponent implements AfterViewInit {
             barSpacing: '5',
             barColor: '#ef5350'
         });
-        (<any>$('#spark10')).sparkline([ 0, 5, 6, 10, 9, 12, 4, 9], {
+        (<any>$('#spark10')).sparkline([0, 5, 6, 10, 9, 12, 4, 9], {
             type: 'bar',
             width: '100%',
             height: '40',
@@ -152,9 +152,9 @@ export class CompaniesComponent implements AfterViewInit {
             barColor: 'rgba(255, 255, 255, 0.3)'
         });
 
-        $(".list-task .list-group-item .checkbox label.custom-control").click(function () {
-            $(this).toggleClass("task-done");
-        });
+        // $(".list-task .list-group-item .checkbox label.custom-control").click(function () {
+        //     $(this).toggleClass("task-done");
+        // });
     }
 
 }

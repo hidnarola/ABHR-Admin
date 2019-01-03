@@ -209,12 +209,24 @@
         <div class="col-md-8">
           <div class="form-group">
             <label> Car Image :</label>
-            <input class="form-control" type="file" name="car_gallery" formControlName="car_gallery"  (change)="handleFileInput($event)"
-            accept="image/*" required multiple>
-        <!-- <div *ngIf=" submitted && f.car_gallery.errors " class="invalid-feedback">
+            <input class="form-control" type="file" name="car_gallery" formControlName="car_gallery" (change)="handleFileInput($event)"
+              accept="image/*" required multiple>
+            <!-- <div *ngIf=" submitted && f.car_gallery.errors " class="invalid-feedback">
               <div *ngIf="f.car_gallery.errors.required"> Car Image is required</div>
             </div> -->
+          </div>
         </div>
+
+        <div class="col-md-12">
+          <div class="form-group">
+            <label> Uploaded Car Image(s) :</label>
+            <div class="row">
+              <div class="column img_wrap" *ngFor="let img of CarImage; let i = index">
+                <img [src]="img" height="100px" alt="cars" width="auto">
+                <i class="close fa fa-close" (click)="deleteImage(i)"></i>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="col-sm-12 text-center">
