@@ -30,8 +30,8 @@
   <div class="card-body">
     <div><h4 id="blue"> Car Gallery </h4></div>
     <div class="row" *ngIf="carDetails">
-      <div class="col-md-4" *ngFor="let image of carDetails.car_gallery">
-        <img [src]="imgUrl+ 'car/' + image.name" class="img-responsive img-rounded" alt="car_jpeg" >
+      <div class="col-md-3" *ngFor="let image of carDetails.car_gallery">
+        <img [src]="imgUrl+ 'car/' + image.name" class="img-fluid img-rounded"  alt="car_jpeg" >
       </div>
     </div>
   </div>

@@ -69,7 +69,6 @@ export class CarAddEditComponent implements OnInit {
           // console.log('car_gallery => ', environment.imgUrl + 'car/' + file.name);
           this.CarOldImage.push(file);
         });
-
         this.AddEditCarForm.controls['driving_eligibility_criteria'].setValue(this.carDetails.driving_eligibility_criteria);
         this.AddEditCarForm.controls['is_navigation'].setValue(this.carDetails.is_navigation);
         this.AddEditCarForm.controls['is_AC'].setValue(this.carDetails.is_AC);
@@ -94,6 +93,9 @@ export class CarAddEditComponent implements OnInit {
       milage: ['', Validators.required],
       car_class: ['', Validators.required],
       car_gallery: [''],
+      new_images: [],
+      old_images: [],
+      is_change_photo: [false],
       driving_eligibility_criteria: ['', [Validators.required, Validators.min(18), Validators.max(120),
       Validators.pattern('[0-9]*')]],
       is_navigation: [false],
@@ -164,32 +166,29 @@ export class CarAddEditComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     console.log('this.CarImage.length => ', this.CarImage.length);
-    if (this.CarImage.length > 2 || ( Number(this.CarOldImage.length) + Number(this.CarImage.length) ) > 2 ) {
+    if (this.CarImage.length > 2 || (Number(this.CarOldImage.length) + Number(this.CarImage.length)) > 2) {
       this.f.car_gallery.setErrors(null);
     } else {
       this.f.car_gallery.setErrors({ 'minImages': true });
       return;
     }
+    const formData = new FormData();
+    formData.append('car_rental_company_id', this.f.car_rental_company_id.value);
+    formData.append('car_brand_id', this.f.car_brand_id.value);
+    formData.append('car_model_id', this.f.car_model_id.value);
+    formData.append('rent_price', this.f.rent_price.value);
+    formData.append('no_of_person', this.f.no_of_person.value);
+    formData.append('transmission', this.f.transmission.value);
+    formData.append('milage', this.f.milage.value);
+    formData.append('car_class', this.f.car_class.value);
+    formData.append('driving_eligibility_criteria', this.f.driving_eligibility_criteria.value);
+    formData.append('is_navigation', this.f.is_navigation.value);
+    formData.append('is_AC', this.f.is_AC.value);
+    formData.append('is_luggage_carrier', this.f.is_luggage_carrier.value);
+    formData.append('licence_plate', this.f.licence_plate.value);
+    formData.append('car_color', this.f.car_color.value);
     if (!this.AddEditCarForm.invalid) {
-      const formData = new FormData();
-      formData.append('car_rental_company_id', this.f.car_rental_company_id.value);
-      // formData.append('car_id', this.f.car_id.value);
-      formData.append('car_brand_id', this.f.car_brand_id.value);
-      formData.append('car_model_id', this.f.car_model_id.value);
-      formData.append('rent_price', this.f.rent_price.value);
-      formData.append('no_of_person', this.f.no_of_person.value);
-      formData.append('transmission', this.f.transmission.value);
-      formData.append('milage', this.f.milage.value);
-      formData.append('car_class', this.f.car_class.value);
-      formData.append('driving_eligibility_criteria', this.f.driving_eligibility_criteria.value);
-      formData.append('is_navigation', this.f.is_navigation.value);
-      formData.append('is_AC', this.f.is_AC.value);
-      formData.append('is_luggage_carrier', this.f.is_luggage_carrier.value);
-      formData.append('licence_plate', this.f.licence_plate.value);
-      formData.append('car_color', this.f.car_color.value);
-      for (let i = 0; i < this.CarImageRAW.length; i++) {
-        formData.append('car_gallery', this.CarImageRAW[i]);
-      }
+
       console.log('this.AddEditCarForm.value => ', this.AddEditCarForm.value);
       console.log('this.CarImageRAW => ', this.CarImageRAW);
       // formData.append('car_rental_company_id', this.companyId);
@@ -198,18 +197,34 @@ export class CarAddEditComponent implements OnInit {
       headers.set('Content-Type', null);
       headers.set('Accept', 'multipart/form-data');
       if (this.isEdit) {
-        this.formData = this.AddEditCarForm.value;
-        console.log('AddEditCarForm.value => ', this.AddEditCarForm.value);
-        this.service.post('admin/company/car/edit', this.formData, headers).subscribe(res => {
-          console.log('res', res);
-          this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
-          this.router.navigate(['/company/car']);
-        }, err => {
-          err = err.error;
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
+        formData.append('car_id', this.f.car_id.value);
+        for (let i = 0; i < this.CarImageRAW.length; i++) {
+          formData.append('new_images', this.CarImageRAW[i]);
         }
-        );
+        if (this.CarImageRAW.length > 0) {
+          this.AddEditCarForm.controls['is_change_photo'].setValue(true);
+        } else {
+          this.AddEditCarForm.controls['is_change_photo'].setValue(false);
+        }
+        this.AddEditCarForm.controls['old_images'].setValue(this.CarOldImage);
+        console.log('this.CarOldImage => ', this.CarOldImage);
+        console.log('this.CarImageNew => ', this.CarImageRAW);
+        // this.formData = this.AddEditCarForm.value;
+        console.log('AddEditCarForm.value => ', this.AddEditCarForm.value);
+        // this.service.post('admin/company/car/edit', formData, headers).subscribe(res => {
+        //   console.log('res', res);
+        //   this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
+        //   this.router.navigate(['/company/car']);
+        // }, err => {
+        //   err = err.error;
+        //   this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
+        // }
+        // );
+        // this.isEdit = false;
       } else {
+        for (let i = 0; i < this.CarImageRAW.length; i++) {
+          formData.append('car_gallery', this.CarImageRAW[i]);
+        }
         this.service.post('admin/company/car/add', formData, headers).subscribe(res => {
           console.log('res', res);
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
@@ -224,7 +239,6 @@ export class CarAddEditComponent implements OnInit {
     } else {
       return;
     }
-    this.isEdit = false;
   }
   ngOnInit() { }
 

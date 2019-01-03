@@ -211,7 +211,7 @@
 
         <div class="col-md-8">
           <div class="form-group">
-            <label> Car Image :</label>
+            <label class="required"> Car Image :</label>
             <input class="form-control" type="file" name="car_gallery" formControlName="car_gallery" (change)="handleFileInput($event)"
               [ngClass]="{ 'is-invalid': submitted && f.car_gallery.errors }" accept="image/*" multiple>
             <div *ngIf=" submitted && f.car_gallery.errors " class="invalid-feedback">
@@ -247,7 +247,7 @@
             <button type="button" *ngIf="isLoading" class="btn waves-effect loading-btn waves-light btn-primary" type="button">
               <i class="fa fa-spinner fa-spin"></i>Loading
             </button>
-            <a class="btn waves-effect waves-light custom-btn btn-danger">Cancel</a>
+            <a class="btn waves-effect waves-light custom-btn btn-danger"  [routerLink]="['/company/car']">Cancel</a>
         </div>
 
       </div>
