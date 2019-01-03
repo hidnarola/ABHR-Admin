@@ -68,6 +68,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
       //   },
       //   {
       //     data: 'Actions',
+        // orderable: false
       //   }
       // ]
     };

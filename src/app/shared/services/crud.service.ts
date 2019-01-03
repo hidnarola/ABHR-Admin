@@ -8,8 +8,14 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 export class CrudService {
 
   public httpOptions;
+  defaultHeaders: any ;
   constructor(private http: HttpClient) {
     this.httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+    this.defaultHeaders = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       })
@@ -31,10 +37,14 @@ export class CrudService {
     return this.http.get(url, { params: Params });
   }
 
-  post(apiUrl, data) {
+  post(apiUrl, data, options?) {
     console.log('data===>,', data);
+    const _headers = {
+      ...this.defaultHeaders,
+      ...options
+    };
     const url = environment.apiUrl + apiUrl;
-    return this.http.post(url, data, this.httpOptions);
+    return this.http.post(url, data, _headers);
   }
 
   put(apiUrl, data) {
@@ -76,5 +86,5 @@ export class CrudService {
     const url = environment.apiUrl + apiUrl;
     return this.http.put(url, formData);
   }
-  
+
 }

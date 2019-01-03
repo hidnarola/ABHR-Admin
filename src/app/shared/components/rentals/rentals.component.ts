@@ -71,24 +71,25 @@ RentalData(){
        }, 1000)
     },
     columns: [
-      // {
-      //   data: 'Id', 
-      // },
       {
-        data: 'Car Id',
-        name: 'car_id'
+        data: 'Contract No.',
+        name: 'booking_number'
       },
       {
-        data: 'Booking Id', 
-        name:'booking_number',
+        data: 'Client Name',
+        name: 'userId.first_name',
       },
       {
-        data: 'Booking Rent',
+        data: 'Price',
         name: 'booking_rent',
       },
       {
-        data: 'Trip Status',
-        name: 'trip_status',
+        data: 'Start Of Rent',
+        name: 'from_time  | date:"MM/dd/yy" ',
+      },
+      {
+        data: 'End Of Rent',
+        name: 'to_time  | date:"MM/dd/yy"  ',
       }
     ]
   };

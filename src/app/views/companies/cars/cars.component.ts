@@ -66,9 +66,12 @@ export class CarsComponent implements OnInit, AfterViewInit {
       processing: true,
       serverSide: true,
       ordering: true,
-      order: [[0, 'desc']],
+      order: [[5, 'desc']],
       language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
       ajax: (dataTablesParameters: any, callback) => {
+        dataTablesParameters['columns'][2]['isNumber'] = true;
+        dataTablesParameters['columns'][3]['isNumber'] = true;
+        dataTablesParameters['columns'][4]['isBoolean'] = true;
         setTimeout(() => {
           dataTablesParameters.company_id = this.companyId;
           console.log('dtaparametes car==>', dataTablesParameters);
@@ -85,29 +88,22 @@ export class CarsComponent implements OnInit, AfterViewInit {
         }, 1000);
       },
       columns: [
-        // {
-        //   data: 'Id',
-        // },
         {
-          data: 'Brand Name',
+          data: 'Car Brand',
           name: 'brandDetails.brand_name',
         },
         {
-          data: 'Model Name',
+          data: 'Car Model',
           name: 'modelDetails.model_name',
         },
-        {
-          data: 'Car Class',
-          name: 'car_class',
-        },
-        {
-          data: 'Transmission',
-          name: 'brandDetails.transmission',
-        },
-        {
-          data: 'Available',
-          name: 'is_avialable',
-        },
+        // {
+        //   data: 'Car Class',
+        //   name: 'car_class',
+        // },
+        // {
+        //   data: 'Transmission',
+        //   name: 'brandDetails.transmission',
+        // },
         {
           data: 'Year',
           name: 'modelDetails.release_year',
@@ -117,7 +113,13 @@ export class CarsComponent implements OnInit, AfterViewInit {
           name: 'rent_price',
         },
         {
+          data: 'Available',
+          name: 'is_avialable',
+        },
+        {
           data: 'Actions',
+          name: 'createdAt',
+          orderable: false
         }
       ]
     };
