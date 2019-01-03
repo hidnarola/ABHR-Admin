@@ -83,7 +83,7 @@
             <label>Navigation Status :</label>
             <div class="custom-radio-wrap">
               <div class="custom-control custom-radio">
-                <input type="radio" id="navigation1" class="custom-control-input" [value]="true" name="is_navigation" 
+                <input type="radio" id="navigation1" class="custom-control-input" [value]="true" name="is_navigation"  required="" 
                   formControlName="is_navigation">
                 <label class="custom-control-label" for="navigation1">Yes</label>
               </div>
@@ -92,9 +92,9 @@
                   formControlName="is_navigation">
                 <label class="custom-control-label" for="navigation2">No</label>
               </div>
-              <!-- <div *ngIf=" submitted && f.is_navigation.errors " class="invalid-feedback">
+              <div *ngIf=" submitted && f.is_navigation.errors " class="invalid-feedback">
                 <div *ngIf="f.is_navigation.errors.required"> Navigation is required</div>
-              </div> -->
+              </div>
             </div>
           </div>
         </div>
@@ -104,16 +104,16 @@
             <label>AC :</label>
             <div class="custom-radio-wrap">
               <div class="custom-control custom-radio">
-                <input type="radio" id="ac1" class="custom-control-input" [value]="true"  name="is_AC" formControlName="is_AC">
+                <input type="radio" id="ac1" class="custom-control-input" [value]="true"  required="" name="is_AC" formControlName="is_AC">
                 <label class="custom-control-label" for="ac1">Yes</label>
               </div>
               <div class="custom-control custom-radio">
                 <input type="radio" id="ac2" class="custom-control-input" [value]="false" name="is_AC" formControlName="is_AC">
                 <label class="custom-control-label" for="ac2">No</label>
               </div>
-              <!-- <div *ngIf=" submitted && f.is_AC.errors " class="invalid-feedback">
+              <div *ngIf=" submitted && f.is_AC.errors " class="invalid-feedback">
                 <div *ngIf="f.is_AC.errors.required"> AC is required</div>
-              </div> -->
+              </div>
             </div>
           </div>
         </div>
@@ -123,7 +123,7 @@
             <label>Luggage Carrier :</label>
             <div class="custom-radio-wrap">
               <div class="custom-control custom-radio">
-                <input type="radio" id="luggage1" class="custom-control-input" [value]="true"  name="is_luggage_carrier"
+                <input type="radio" id="luggage1" class="custom-control-input" [value]="true"  required="" name="is_luggage_carrier"
                   formControlName="is_luggage_carrier">
                 <label class="custom-control-label" for="luggage1">Yes</label>
               </div>
@@ -133,9 +133,9 @@
                 <label class="custom-control-label" for="luggage2">No</label>
               </div>
             </div>
-            <!-- <div *ngIf=" submitted && f.is_luggage_carrier.errors " class="invalid-feedback">
+            <div *ngIf=" submitted && f.is_luggage_carrier.errors " class="invalid-feedback">
               <div *ngIf="f.is_luggage_carrier.errors.required"> Luggage Carrier is required</div>
-            </div> -->
+            </div>
           </div>
         </div>
 

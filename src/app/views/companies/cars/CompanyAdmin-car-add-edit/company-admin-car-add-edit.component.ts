@@ -88,9 +88,9 @@ export class CarAddEditComponent implements OnInit {
       car_gallery: [''],
       driving_eligibility_criteria: ['', [Validators.required, Validators.min(18), Validators.max(120),
       Validators.pattern('[0-9]*')]],
-      is_navigation: [''],
-      is_AC: [''],
-      is_luggage_carrier: [''],
+      is_navigation: ['', Validators.required],
+      is_AC: ['', Validators.required],
+      is_luggage_carrier: ['', Validators.required ],
       licence_plate: ['', Validators.required],
       car_color: ['', Validators.required]
     });
