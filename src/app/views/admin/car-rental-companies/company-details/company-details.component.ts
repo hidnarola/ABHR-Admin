@@ -206,7 +206,7 @@ export class CompanyDetailsComponent implements OnInit {
         console.log('dataparametes car==>', dataTablesParameters);
         dataTablesParameters['columns'][2]['isNumber'] = true;
         dataTablesParameters['columns'][3]['isNumber'] = true;
-        dataTablesParameters['columns'][4]['isBoolean '] = true;
+        dataTablesParameters['columns'][4]['isBoolean'] = true;
         setTimeout(() => {
           dataTablesParameters.company_id = this.userId;
           console.log('dtaparametes car==>', dataTablesParameters);

@@ -69,6 +69,9 @@ export class CarsComponent implements OnInit, AfterViewInit {
       order: [[5, 'desc']],
       language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
       ajax: (dataTablesParameters: any, callback) => {
+        dataTablesParameters['columns'][2]['isNumber'] = true;
+        dataTablesParameters['columns'][3]['isNumber'] = true;
+        dataTablesParameters['columns'][4]['isBoolean'] = true;
         setTimeout(() => {
           dataTablesParameters.company_id = this.companyId;
           console.log('dtaparametes car==>', dataTablesParameters);

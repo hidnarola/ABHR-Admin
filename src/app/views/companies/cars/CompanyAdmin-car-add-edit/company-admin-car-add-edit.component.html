@@ -1,6 +1,6 @@
 <div class="card">
   <div class="card-body">
-    <form [formGroup]="AddEditCarForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="AddEditCarForm" enctype="multipart/form-data" (ngSubmit)="onSubmit()">
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
@@ -73,6 +73,7 @@
             </select>
             <div *ngIf=" submitted && f.car_model_id.errors " class="invalid-feedback">
               <div *ngIf="f.car_model_id.errors.required"> Car Model is required</div>
+              <div *ngIf="f.car_model_id.errors.isExist"> Car Model is not available</div>
             </div>
           </div>
         </div>
@@ -167,9 +168,8 @@
               formControlName="driving_eligibility_criteria" [ngClass]="{'is-invalid': submitted && f.driving_eligibility_criteria.errors }">
             <div *ngIf=" submitted && f.driving_eligibility_criteria.errors " class="invalid-feedback">
               <div *ngIf="f.driving_eligibility_criteria.errors.required"> Age Of Driver is required</div>
-              <div *ngIf="f.driving_eligibility_criteria.errors.pattern">Invalid Age</div>
-              <div *ngIf="f.driving_eligibility_criteria.errors.min"> Not Eligible for Driving</div>
-              <div *ngIf="f.driving_eligibility_criteria.errors.max"> Not Eligible for Driving</div>
+              <div *ngIf="f.driving_eligibility_criteria.errors.min || f.driving_eligibility_criteria.errors.pattern || f.driving_eligibility_criteria.errors.max">
+                Not Eligible for Driving</div>
             </div>
           </div>
         </div>
@@ -192,36 +192,38 @@
             <label> No Of Persons :</label>
             <!-- <input class="form-control" placeholder="No Of Persons" type="string" required="" name="no_of_person"
               formControlName="no_of_person" [ngClass]="{'is-invalid': submitted && f.no_of_person.errors }"> -->
-            <select class="custom-select col-12" id="inlineFormCustomSelect" name="no_of_person" class="form-control" formControlName="no_of_person" [ngClass]= "{ 'is-invalid': submitted && f.no_of_person.errors }">
-                  <option value="" disabled selected>Choose...</option>
-                  <option [value]="2">2</option>
-                  <option [value]="4">4</option>
-                  <option [value]="5">5</option>
-                  <option [value]="6">6</option>
-                  <option [value]="8">8</option>
-                  <option [value]="12">12</option>
-                </select>
+            <select class="custom-select col-12" id="inlineFormCustomSelect" name="no_of_person" class="form-control"
+              formControlName="no_of_person" [ngClass]="{ 'is-invalid': submitted && f.no_of_person.errors }">
+              <option value="" disabled selected>Choose...</option>
+              <option [value]="2">2</option>
+              <option [value]="4">4</option>
+              <option [value]="5">5</option>
+              <option [value]="6">6</option>
+              <option [value]="8">8</option>
+              <option [value]="12">12</option>
+            </select>
             <div *ngIf=" submitted && f.no_of_person.errors " class="invalid-feedback">
               <div *ngIf="f.no_of_person.errors.required"> No Of Person is required</div>
             </div>
           </div>
         </div>
 
-        <!-- <div class="col-md-8">
+        <div class="col-md-8">
           <div class="form-group">
             <label> Car Image :</label>
-            <input class="form-control" type="file" name="car_gallery" formControlName="car_gallery"> -->
-            <!-- <div *ngIf=" submitted && f.car_gallery.errors " class="invalid-feedback">
+            <input class="form-control" type="file" name="car_gallery" formControlName="car_gallery"  (change)="handleFileInput($event)"
+            accept="image/*" required multiple>
+        <!-- <div *ngIf=" submitted && f.car_gallery.errors " class="invalid-feedback">
               <div *ngIf="f.car_gallery.errors.required"> Car Image is required</div>
             </div> -->
-          <!-- </div>
-        </div> -->
+        </div>
+        </div>
 
         <div class="col-sm-12 text-center">
           <div class="form-group">
             <button type="submit" class="btn waves-effect waves-light custom-btn btn-primary">Submit</button>
           </div>
-        </div> 
+        </div>
 
       </div>
     </form>
