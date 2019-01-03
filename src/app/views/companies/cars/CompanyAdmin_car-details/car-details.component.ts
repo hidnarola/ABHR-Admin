@@ -22,16 +22,16 @@ export class CarDetailsComponent implements OnInit {
     private spinner: NgxSpinnerService
     ) {
       this.route.params.subscribe(params => { this.carId = params.id; }); 
-      console.log('carId==>', this.carId)
+      console.log('carId==>', this.carId);
      }
 
   CarDetails(){
   this.spinner.show();
-  this.service.post('admin/company/car/details/',{car_id : this.carId}).subscribe ( res =>{
+  this.service.post('admin/company/car/details/', {car_id : this.carId}).subscribe ( res =>{
     console.log('cardetails RES==>', res);
     this.carDetails = res['data'].carDetail;
     console.log('carDetails ==>', this.carDetails);
-    this.spinner.hide();
+    this.spinner.hide(); 
   }, error => {
     this.spinner.hide();
   });

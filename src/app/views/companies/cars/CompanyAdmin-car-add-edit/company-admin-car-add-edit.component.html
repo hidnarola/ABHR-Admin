@@ -66,8 +66,8 @@
         <div class="col-md-6">
           <div class="form-group">
             <label> Car Model :</label>
-            <select class="form-control" type="String" required="" id="inlineFormCustomSelect" name="car_model_id"  required="" 
-              formControlName="car_model_id" [ngClass]="{'is-invalid': submitted && f.car_model_id.errors }">
+            <select class="form-control" type="String" required="" id="inlineFormCustomSelect" name="car_model_id"
+              required="" formControlName="car_model_id" [ngClass]="{'is-invalid': submitted && f.car_model_id.errors }">
               <option value="" disabled selected>Choose Car Brand</option>
               <option [value]="data._id" *ngFor="let data of modelList">{{data.model_name}}</option>
             </select>
@@ -83,8 +83,8 @@
             <label>Navigation Status :</label>
             <div class="custom-radio-wrap">
               <div class="custom-control custom-radio">
-                <input type="radio" id="navigation1" class="custom-control-input" [value]="true" name="is_navigation"  required="" 
-                  formControlName="is_navigation">
+                <input type="radio" id="navigation1" class="custom-control-input" [value]="true" name="is_navigation"
+                  required="" formControlName="is_navigation">
                 <label class="custom-control-label" for="navigation1">Yes</label>
               </div>
               <div class="custom-control custom-radio">
@@ -104,7 +104,8 @@
             <label>AC :</label>
             <div class="custom-radio-wrap">
               <div class="custom-control custom-radio">
-                <input type="radio" id="ac1" class="custom-control-input" [value]="true"  required="" name="is_AC" formControlName="is_AC">
+                <input type="radio" id="ac1" class="custom-control-input" [value]="true" required="" name="is_AC"
+                  formControlName="is_AC">
                 <label class="custom-control-label" for="ac1">Yes</label>
               </div>
               <div class="custom-control custom-radio">
@@ -123,7 +124,7 @@
             <label>Luggage Carrier :</label>
             <div class="custom-radio-wrap">
               <div class="custom-control custom-radio">
-                <input type="radio" id="luggage1" class="custom-control-input" [value]="true"  required="" name="is_luggage_carrier"
+                <input type="radio" id="luggage1" class="custom-control-input" [value]="true" required="" name="is_luggage_carrier"
                   formControlName="is_luggage_carrier">
                 <label class="custom-control-label" for="luggage1">Yes</label>
               </div>
@@ -210,16 +211,27 @@
           <div class="form-group">
             <label> Car Image :</label>
             <input class="form-control" type="file" name="car_gallery" formControlName="car_gallery" (change)="handleFileInput($event)"
-              accept="image/*" required multiple>
-            <!-- <div *ngIf=" submitted && f.car_gallery.errors " class="invalid-feedback">
-              <div *ngIf="f.car_gallery.errors.required"> Car Image is required</div>
-            </div> -->
+              [ngClass]="{ 'is-invalid': submitted && f.car_gallery.errors }" accept="image/*" multiple>
+            <div *ngIf=" submitted && f.car_gallery.errors " class="invalid-feedback">
+              <div *ngIf="f.car_gallery.errors.minImages">Add Minimum 3 images</div>
+            </div>
           </div>
         </div>
 
+        <div class="col-md-12" *ngIf="CarOldImage.length > 0">
+          <div class="form-group">
+            <label>Uploaded Car Image(s) Preview:</label>
+            <div class="row">
+              <div class="column img_wrap" *ngFor="let img of CarOldImage; let i = index">
+                <img [src]="imgUrl + 'car/' + img.name" height="100px" alt="cars" width="auto">
+                <i class="close fa fa-close" (click)="deleteOldImage(i)"></i>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="col-md-12" *ngIf="CarImage.length > 0">
           <div class="form-group">
-            <label> Car Image(s) Preview:</label>
+            <label>Car Image(s) Preview:</label>
             <div class="row">
               <div class="column img_wrap" *ngFor="let img of CarImage; let i = index">
                 <img [src]="img" height="100px" alt="cars" width="auto">
@@ -228,7 +240,6 @@
             </div>
           </div>
         </div>
-
         <div class="col-sm-12 text-center">
           <div class="form-group">
             <button type="submit" class="btn waves-effect waves-light custom-btn btn-primary">Submit</button>

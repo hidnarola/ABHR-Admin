@@ -7,6 +7,7 @@ import { MessageService } from 'primeng/api';
 
 import { Router } from '@angular/router';
 import { HttpHeaders } from '@angular/common/http';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-company-admin-car-add-edit',
@@ -15,7 +16,9 @@ import { HttpHeaders } from '@angular/common/http';
 })
 export class CarAddEditComponent implements OnInit {
   CarImage: any = [];
+  CarOldImage: any = [];
   CarImageRAW: any = [];
+  imgUrl = environment.imgUrl;
   AddEditCarForm: FormGroup;
   submitted = false;
   public formData: any;
@@ -61,7 +64,12 @@ export class CarAddEditComponent implements OnInit {
         this.AddEditCarForm.controls['transmission'].setValue(this.carDetails.transmission);
         this.AddEditCarForm.controls['milage'].setValue(this.carDetails.milage);
         this.AddEditCarForm.controls['car_class'].setValue(this.carDetails.car_class);
-        this.AddEditCarForm.controls['car_gallery'].setValue(this.carDetails.car_gallery);
+        // this.AddEditCarForm.controls['car_gallery'].setValue(this.carDetails.car_gallery);
+        this.carDetails.car_gallery.forEach(file => {
+          // console.log('car_gallery => ', environment.imgUrl + 'car/' + file.name);
+          this.CarOldImage.push(file);
+        });
+
         this.AddEditCarForm.controls['driving_eligibility_criteria'].setValue(this.carDetails.driving_eligibility_criteria);
         this.AddEditCarForm.controls['is_navigation'].setValue(this.carDetails.is_navigation);
         this.AddEditCarForm.controls['is_AC'].setValue(this.carDetails.is_AC);
@@ -150,9 +158,18 @@ export class CarAddEditComponent implements OnInit {
     this.CarImage.splice(index, 1);
     this.CarImageRAW.splice(index, 1);
   }
-
+  deleteOldImage(index) {
+    this.CarOldImage.splice(index, 1);
+  }
   onSubmit() {
     this.submitted = true;
+    console.log('this.CarImage.length => ', this.CarImage.length);
+    if (this.CarImage.length > 2 || ( Number(this.CarOldImage.length) + Number(this.CarImage.length) ) > 2 ) {
+      this.f.car_gallery.setErrors(null);
+    } else {
+      this.f.car_gallery.setErrors({ 'minImages': true });
+      return;
+    }
     if (!this.AddEditCarForm.invalid) {
       const formData = new FormData();
       formData.append('car_rental_company_id', this.f.car_rental_company_id.value);
@@ -164,7 +181,6 @@ export class CarAddEditComponent implements OnInit {
       formData.append('transmission', this.f.transmission.value);
       formData.append('milage', this.f.milage.value);
       formData.append('car_class', this.f.car_class.value);
-      // formData.append('car_gallery', this.f.car_gallery.value);
       formData.append('driving_eligibility_criteria', this.f.driving_eligibility_criteria.value);
       formData.append('is_navigation', this.f.is_navigation.value);
       formData.append('is_AC', this.f.is_AC.value);
@@ -177,9 +193,14 @@ export class CarAddEditComponent implements OnInit {
       console.log('this.AddEditCarForm.value => ', this.AddEditCarForm.value);
       console.log('this.CarImageRAW => ', this.CarImageRAW);
       // formData.append('car_rental_company_id', this.companyId);
+      const headers = new HttpHeaders();
+      // this is the important step. You need to set content type as null
+      headers.set('Content-Type', null);
+      headers.set('Accept', 'multipart/form-data');
       if (this.isEdit) {
         this.formData = this.AddEditCarForm.value;
-        this.service.post('admin/company/car/edit', this.formData).subscribe(res => {
+        console.log('AddEditCarForm.value => ', this.AddEditCarForm.value);
+        this.service.post('admin/company/car/edit', this.formData, headers).subscribe(res => {
           console.log('res', res);
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
           this.router.navigate(['/company/car']);
@@ -189,18 +210,14 @@ export class CarAddEditComponent implements OnInit {
         }
         );
       } else {
-        const headers = new HttpHeaders();
-        // this is the important step. You need to set content type as null
-        headers.set('Content-Type', null);
-        headers.set('Accept', 'multipart/form-data');
         this.service.post('admin/company/car/add', formData, headers).subscribe(res => {
           console.log('res', res);
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
           this.router.navigate(['/company/car']);
         }, err => {
-          // err = err.error;
+          err = err.error;
           console.log('err => ', err);
-          // this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
         }
         );
       }

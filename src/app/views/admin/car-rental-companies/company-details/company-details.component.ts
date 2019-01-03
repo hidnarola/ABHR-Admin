@@ -62,19 +62,18 @@ export class CompanyDetailsComponent implements OnInit {
       this.route.params.subscribe(params => {
         this.userId = params.id;
       });
-      
     } else {
       this.userId = localStorage.getItem('companyId');
       this.router.navigate(['/admin/car-rental-companies/view/' + this.userId]);
     }
-    console.log('userid in admin comapny', this.userId)
-    //addform validation
+    console.log('userid in admin comapny', this.userId);
+    // addform validation
     const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
     this.AddEditForm = this.fromBuilder.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
-      site_url: ['', [Validators.required, Validators.pattern("^(https?:\/\/)?[0-9a-zA-Z]+\.[-_0-9a-zA-Z]+\.[0-9a-zA-Z]+$")]],
-      phone_number: ['', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern("[0-9]{10}")]],
+      site_url: ['', [Validators.required, Validators.pattern('^(https?:\/\/)?[0-9a-zA-Z]+\.[-_0-9a-zA-Z]+\.[0-9a-zA-Z]+$')]],
+      phone_number: ['', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]{10}')]],
       email: ['', [Validators.required, Validators.email, Validators.pattern(pattern)]]
     })
     this.formData = {
@@ -95,36 +94,23 @@ export class CompanyDetailsComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     if (!this.AddEditForm.invalid) {
-      //console.log('in valid', this.userId);
+      // console.log('in valid', this.userId);
       let formData: FormData = new FormData();
       this.formData = this.AddEditForm.value;
       // if (this.isEdit) {
       this.formData.company_id = this.userId;
       console.log('form data in company view page', this.formData);
       this.service.put('admin/company/update', this.formData).subscribe(res => {
-        //console.log('response after edit===>', res);
-        //console.log('this.userDetails==>',this.userDetails);
+        // console.log('response after edit===>', res);
+        console.log('this.userDetails==>',this.userDetails);
         this.userDetails = this.formData;
         this.closePopup();
         this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
       }, err => {
-        err = err.error
+        err = err.error;
         this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
         this.closePopup();
       })
-      // }
-      //  else {
-      // this.title = "Add Company";
-      // this.service.post('admin/company/add', this.formData).subscribe(res => {
-      //   this.render();
-      //   this.closePopup();
-      //   this.messageService.add({severity:'success', summary:'Success', detail:'Company is added!!'});
-      // }, error => {
-      //   this.messageService.add({severity:'error', summary:'Error', detail:'Something went wrong, please try again!!'});
-      //   this.closePopup();
-      // })
-      // }
-      // this.isEdit = false;
       this.submitted = false;
     }
   }
@@ -142,7 +128,7 @@ export class CompanyDetailsComponent implements OnInit {
 
   //model
   open2(content, userDetails) {
-    //console.log('userDetails====>',userDetails);
+    // console.log('userDetails====>',userDetails);
     // if( userDetails != 'undefined' && userDetails ){
     // this.title = "Edit Company";
     // this.isEdit = true;
@@ -151,9 +137,6 @@ export class CompanyDetailsComponent implements OnInit {
     this.AddEditForm.controls['email'].setValue(userDetails.email);
     this.AddEditForm.controls['site_url'].setValue(userDetails.site_url);
     this.AddEditForm.controls['phone_number'].setValue(userDetails.phone_number);
-    // } 
-    // else {
-    // this.title = "Add Company";
     // }
     const options: NgbModalOptions = {
       keyboard: false,
@@ -162,14 +145,6 @@ export class CompanyDetailsComponent implements OnInit {
     this.modalService.open(content, options).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
-      // if (reason == 'Cross click' || reason == 0) {
-      //   this.isEdit = false;
-      //   this.AddEditForm.controls['name'].setValue('');
-      //   this.AddEditForm.controls['description'].setValue('');
-      //   this.AddEditForm.controls['email'].setValue('');
-      //   this.AddEditForm.controls['site_url'].setValue('');
-      //   this.AddEditForm.controls['phone_number'].setValue('');
-      // }
     });
   }
 
@@ -262,6 +237,7 @@ export class CompanyDetailsComponent implements OnInit {
       ]
     };
   }
+
 
   ngOnInit() {
     console.log('company ID===> ', this.userId);
