@@ -39,8 +39,8 @@
 
 .close:hover {
 
-  background: #3dc1cc;
-  color: white;
-  border-color: #3dc1cc;
+  background: #1976d2;
+  color: white !important;
+  border-color: #1976d2;
   transition: .3s
 }
