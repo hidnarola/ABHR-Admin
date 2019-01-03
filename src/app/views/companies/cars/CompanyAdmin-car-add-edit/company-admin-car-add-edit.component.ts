@@ -88,9 +88,9 @@ export class CarAddEditComponent implements OnInit {
       car_gallery: [''],
       driving_eligibility_criteria: ['', [Validators.required, Validators.min(18), Validators.max(120),
       Validators.pattern('[0-9]*')]],
-      is_navigation: [''],
-      is_AC: [''],
-      is_luggage_carrier: [''],
+      is_navigation: [false],
+      is_AC: [false],
+      is_luggage_carrier: [false],
       licence_plate: ['', Validators.required],
       car_color: ['', Validators.required]
     });
@@ -132,13 +132,12 @@ export class CarAddEditComponent implements OnInit {
   }
   handleFileInput(event) {
     const files = event.target.files;
-
+    console.log('files => ', files);
+    this.CarImageRAW = files;
     if (files) {
       // this.CarImageRAW = files;
       for (const file of files) {
-        this.CarImageRAW.push(file);
-        // this.CarImageRAW = file;
-
+        // this.CarImageRAW = files;
         const reader = new FileReader();
         reader.onload = (e: any) => {
           this.CarImage.push(e.target.result);
@@ -147,6 +146,11 @@ export class CarAddEditComponent implements OnInit {
       }
     }
   }
+  deleteImage(index) {
+    this.CarImage.splice(index, 1);
+    this.CarImageRAW.splice(index, 1);
+  }
+
   onSubmit() {
     this.submitted = true;
     if (!this.AddEditCarForm.invalid) {
@@ -167,8 +171,9 @@ export class CarAddEditComponent implements OnInit {
       formData.append('is_luggage_carrier', this.f.is_luggage_carrier.value);
       formData.append('licence_plate', this.f.licence_plate.value);
       formData.append('car_color', this.f.car_color.value);
-      // formData = this.AddEditCarForm.value;
-      formData.append('car_gallery', this.CarImageRAW);
+      for (let i = 0; i < this.CarImageRAW.length; i++) {
+        formData.append('car_gallery', this.CarImageRAW[i]);
+      }
       console.log('this.AddEditCarForm.value => ', this.AddEditCarForm.value);
       console.log('this.CarImageRAW => ', this.CarImageRAW);
       // formData.append('car_rental_company_id', this.companyId);

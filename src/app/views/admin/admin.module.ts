@@ -11,7 +11,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
-
+import { InputSwitchModule } from 'primeng/inputswitch';
 
 import { AdminComponent } from './admin.component';
 // Child components
@@ -217,7 +217,8 @@ const AdminRoutes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     ConfirmDialogModule,
-    ToastModule
+    ToastModule,
+    InputSwitchModule
   ],
   exports: [RouterModule],
   declarations: [
@@ -240,4 +241,4 @@ const AdminRoutes: Routes = [
     // UserDetailComponent,
   ]
 })
-export class AdminModule {}
+export class AdminModule { }
