@@ -31,6 +31,7 @@ export class CarAddEditComponent implements OnInit {
   public users;
   public brandlist;
   public modelList;
+  isLoading: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -188,7 +189,6 @@ export class CarAddEditComponent implements OnInit {
     formData.append('licence_plate', this.f.licence_plate.value);
     formData.append('car_color', this.f.car_color.value);
     if (!this.AddEditCarForm.invalid) {
-
       console.log('this.AddEditCarForm.value => ', this.AddEditCarForm.value);
       console.log('this.CarImageRAW => ', this.CarImageRAW);
       // formData.append('car_rental_company_id', this.companyId);
@@ -202,31 +202,37 @@ export class CarAddEditComponent implements OnInit {
           formData.append('new_images', this.CarImageRAW[i]);
         }
         if (this.CarImageRAW.length > 0) {
-          this.AddEditCarForm.controls['is_change_photo'].setValue(true);
+          formData.append('is_change_photo', 'true');
+          // this.AddEditCarForm.controls['is_change_photo'].setValue(true);
         } else {
-          this.AddEditCarForm.controls['is_change_photo'].setValue(false);
+          // this.AddEditCarForm.controls['is_change_photo'].setValue(false);
+          formData.append('is_change_photo', 'false');
         }
-        this.AddEditCarForm.controls['old_images'].setValue(this.CarOldImage);
+        // this.AddEditCarForm.controls['old_images'].setValue(this.CarOldImage);
+        formData.append('old_images', this.CarOldImage);
         console.log('this.CarOldImage => ', this.CarOldImage);
         console.log('this.CarImageNew => ', this.CarImageRAW);
         // this.formData = this.AddEditCarForm.value;
+        this.isLoading = true;
         console.log('AddEditCarForm.value => ', this.AddEditCarForm.value);
-        // this.service.post('admin/company/car/edit', formData, headers).subscribe(res => {
-        //   console.log('res', res);
-        //   this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
-        //   this.router.navigate(['/company/car']);
-        // }, err => {
-        //   err = err.error;
-        //   this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
-        // }
-        // );
-        // this.isEdit = false;
+        this.service.post('admin/company/car/edit', formData, headers).subscribe(res => {
+          console.log('res', res);
+          this.isLoading = false;
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
+          this.router.navigate(['/company/car']);
+        }, err => {
+          err = err.error;
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
+        }
+        );
       } else {
         for (let i = 0; i < this.CarImageRAW.length; i++) {
           formData.append('car_gallery', this.CarImageRAW[i]);
         }
+        this.isLoading = true;
         this.service.post('admin/company/car/add', formData, headers).subscribe(res => {
           console.log('res', res);
+          this.isLoading = false;
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
           this.router.navigate(['/company/car']);
         }, err => {
