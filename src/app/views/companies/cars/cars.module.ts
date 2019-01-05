@@ -14,12 +14,12 @@ import { Routes, RouterModule } from '@angular/router';
 // ]
 
 @NgModule({
-    imports: [
-      CommonModule,
+  imports: [
+    CommonModule,
     //   RouterModule.forChild(routes)
-    ],
-    exports: [RouterModule],
-    // declarations: [CarsComponent]
+  ],
+  exports: [RouterModule],
+  // declarations: [CarsComponent]
 })
 
 export class CarsModule { }

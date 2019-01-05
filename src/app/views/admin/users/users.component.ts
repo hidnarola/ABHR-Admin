@@ -34,43 +34,43 @@ export class UsersComponent implements OnInit, AfterViewInit {
       ordering: true,
       order: [[0, 'desc']],
       language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
-      // ajax: (dataTablesParameters: any, callback) => {
-      //   setTimeout(() => {
-      //     console.log('dtaparametes car==>', dataTablesParameters);
-      //     this.service.post('admin/agents/list', dataTablesParameters).subscribe(res => {
-      //       this.users = res['result']['data'];
-      //       console.log(this.users);
-      //       this.spinner.hide();
-      //       callback({
-      //         recordsTotal: res['result']['recordsTotal'],
-      //         recordsFiltered: res['result']['recordsTotal'],
-      //         data: []
-      //       });
-      //     });
-      //   }, 1000);
-      // },
-      // columns: [
-      //   {
-      //     data: 'Name',
-      //     name: '',
-      //   },
-      //   {
-      //     data: 'Email',
-      //     name: '',
-      //   },
-      //   {
-      //     data: 'Member Since',
-      //     name: '',
-      //   },
-      //   {
-      //     data: 'No Of Rentals',
-      //     name: '',
-      //   },
-      //   {
-      //     data: 'Actions',
-        // orderable: false
-      //   }
-      // ]
+      ajax: (dataTablesParameters: any, callback) => {
+        setTimeout(() => {
+          console.log('dtaparametes car==>', dataTablesParameters);
+          this.service.post('admin/user/list', dataTablesParameters).subscribe(res => {
+            this.users = res['result']['data'];
+            console.log(this.users);
+            this.spinner.hide();
+            callback({
+              recordsTotal: res['result']['recordsTotal'],
+              recordsFiltered: res['result']['recordsTotal'],
+              data: []
+            });
+          });
+        }, 1000);
+      },
+      columns: [
+        {
+          data: 'Name',
+          name: '',
+        },
+        {
+          data: 'Email',
+          name: '',
+        },
+        {
+          data: 'Member Since',
+          name: '',
+        },
+        {
+          data: 'No Of Rentals',
+          name: '',
+        },
+        {
+          data: 'Actions',
+          orderable: false
+        }
+      ]
     };
   }
 

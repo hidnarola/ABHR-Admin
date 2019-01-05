@@ -6,7 +6,7 @@ import { DataTablesModule } from 'angular-datatables';
 // import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { ChartistModule } from 'ng-chartist';
-import { ChartsModule } from 'ng2-charts'
+import { ChartsModule } from 'ng2-charts';
 // child component
 import { Routes, RouterModule } from '@angular/router';
 import { CarsComponent } from './cars/cars.component';
@@ -65,7 +65,7 @@ const CompanyRoutes: Routes = [{
         },
     ]
 },
-]
+];
 @NgModule({
     imports: [
         CommonModule,

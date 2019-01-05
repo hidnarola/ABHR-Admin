@@ -36,6 +36,7 @@ import { ToastModule } from 'primeng/toast';
 // third party modules
 import { DataTablesModule } from 'angular-datatables';
 
+
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
   wheelSpeed: 2,

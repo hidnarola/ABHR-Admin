@@ -32,9 +32,7 @@ import { AddEditCarComponent } from '../admin/car-rental-companies/company-detai
 // shared component
 import { RentalsComponent } from '../../shared/components/rentals/rentals.component';
 import { AlertComponent } from '../../shared/components/alert/alert.component';
-// import { UserDetailComponent } from './users/user-detail/user-detail.component';
-
-
+import { AddEditUsersComponent } from './users/add-edit-users/add-edit-users.component';
 
 const AdminRoutes: Routes = [
   {
@@ -132,7 +130,7 @@ const AdminRoutes: Routes = [
                 url: '/admin/car-rental-companies'
               }, {
                 title: 'Company Detail',
-                url: '/admin/car-rental-companies/view/_id'
+                url: '/admin/car-rental-companies/view/:_id'
               }, { title: 'Car Detail' }]
             },
           },
@@ -146,8 +144,8 @@ const AdminRoutes: Routes = [
                   'Companies', url: '/admin/car-rental-companies'
               }, {
                 title: 'Company Detail',
-                url: '/admin/car-rental-companies/view/_id'
-              }, { title: 'Add Company' }]
+                url: '/admin/car-rental-companies/view/:_id'
+              }, { title: 'Add Car' }]
             },
           },
         ]
@@ -160,6 +158,14 @@ const AdminRoutes: Routes = [
           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Users' }]
         },
       },
+      {
+        path: 'users/edit/:id',
+        component: AddEditUsersComponent,
+        data: {
+          title: 'Edit User Detail',
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Users', url: '/admin/users' }, { title: 'User Detail' }]
+        },
+      },
       // {
       //   path: 'users/view/:id',
       //   component: UserDetailComponent,
@@ -168,6 +174,14 @@ const AdminRoutes: Routes = [
       //     urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Users', url: '/admin/users' }, { title: 'User Detail' }]
       //   },
       // },
+      {
+        path: 'users/add',
+        component: AddEditUsersComponent,
+        data: {
+          title: 'Add User Detail',
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Users', url: '/admin/users' }, { title: 'User Detail' }]
+        },
+      },
       {
         path: 'transactions',
         component: AdminTransactionsComponent,
@@ -238,7 +252,7 @@ const AdminRoutes: Routes = [
     AlertComponent,
     CarDetailsComponent,
     AddEditCarComponent,
-    // UserDetailComponent,
+    AddEditUsersComponent,
   ]
 })
 export class AdminModule { }

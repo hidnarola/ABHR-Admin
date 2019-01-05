@@ -16,15 +16,18 @@ export const routes: Routes = [
         path: '',
         component: FullComponent,
         children: [
-            { path: 'admin', loadChildren: './views/admin/admin.module#AdminModule',
-            canActivate: [AuthGuard]
-        },
-            { path: '', redirectTo: '/admin/dashboard', pathMatch: 'full', 
-            canActivate: [AuthGuard] 
-        },
-        { path: 'company', loadChildren: './views/companies/companies.module#CompaniesModule',
-            canActivate: [AuthGuard]
-        },
+            {
+                path: 'admin', loadChildren: './views/admin/admin.module#AdminModule',
+                canActivate: [AuthGuard]
+            },
+            {
+                path: '', redirectTo: '/admin/dashboard', pathMatch: 'full',
+                canActivate: [AuthGuard]
+            },
+            {
+                path: 'company', loadChildren: './views/companies/companies.module#CompaniesModule',
+                canActivate: [AuthGuard]
+            },
         ]
     },
     {
