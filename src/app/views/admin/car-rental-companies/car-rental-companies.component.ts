@@ -96,6 +96,7 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
       language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
       ajax: (dataTablesParameters: any, callback) => {
         setTimeout(() => {
+          dataTablesParameters['columns'][5]['isBoolean'] = true;
           console.log('dtaparametes car rental company==>', dataTablesParameters);
           this.service.post('admin/company/list', dataTablesParameters).subscribe(res => {
             this.users = res['result']['data'];
@@ -131,7 +132,8 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
           name: 'phone_number',
         }, {
           data: 'Status',
-          name: 'status',
+          name: 'is_Active',
+          searchable: false
         },
         {
           data: 'Actions',

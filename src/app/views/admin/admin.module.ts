@@ -9,9 +9,13 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { DataTablesModule } from 'angular-datatables';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+// PrimeNG Module
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { TooltipModule } from 'primeng/tooltip';
+import { MenuModule } from 'primeng/menu';
 
 import { AdminComponent } from './admin.component';
 // Child components
@@ -32,7 +36,7 @@ import { AddEditCarComponent } from '../admin/car-rental-companies/company-detai
 // shared component
 import { RentalsComponent } from '../../shared/components/rentals/rentals.component';
 import { AlertComponent } from '../../shared/components/alert/alert.component';
-import { AddEditUsersComponent } from './users/add-edit-users/add-edit-users.component';
+import { UserDetailsComponent } from './users/user-details/user-details.component';
 
 const AdminRoutes: Routes = [
   {
@@ -159,26 +163,10 @@ const AdminRoutes: Routes = [
         },
       },
       {
-        path: 'users/edit/:id',
-        component: AddEditUsersComponent,
+        path: 'users/view/:id',
+        component: UserDetailsComponent,
         data: {
-          title: 'Edit User Detail',
-          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Users', url: '/admin/users' }, { title: 'User Detail' }]
-        },
-      },
-      // {
-      //   path: 'users/view/:id',
-      //   component: UserDetailComponent,
-      //   data: {
-      //     title: 'View User Detail',
-      //     urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Users', url: '/admin/users' }, { title: 'User Detail' }]
-      //   },
-      // },
-      {
-        path: 'users/add',
-        component: AddEditUsersComponent,
-        data: {
-          title: 'Add User Detail',
+          title: 'View User Detail',
           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Users', url: '/admin/users' }, { title: 'User Detail' }]
         },
       },
@@ -232,7 +220,9 @@ const AdminRoutes: Routes = [
     ReactiveFormsModule,
     ConfirmDialogModule,
     ToastModule,
-    InputSwitchModule
+    InputSwitchModule,
+    TooltipModule,
+    MenuModule
   ],
   exports: [RouterModule],
   declarations: [
@@ -252,7 +242,7 @@ const AdminRoutes: Routes = [
     AlertComponent,
     CarDetailsComponent,
     AddEditCarComponent,
-    AddEditUsersComponent,
+    UserDetailsComponent,
   ]
 })
 export class AdminModule { }
