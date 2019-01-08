@@ -18,7 +18,6 @@
           <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table">
             <thead>
               <tr>
-                <!-- <th>Id</th> -->
                 <th>Company Name</th>
                 <th>Description</th>
                 <th>Email</th>
@@ -30,9 +29,6 @@
             </thead>
             <tbody *ngIf="users?.length != 0">
               <tr *ngFor="let item of users; let i = index">
-                <!-- <td>
-                  {{i+1}}
-                </td> -->
                 <td>
                   <span>
                     {{ item.name }}

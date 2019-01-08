@@ -36,3 +36,66 @@
     </div>
   </div>
 </div>
+
+
+<div class="card">
+  <div class="card-body">
+    <div class="row pb-3">
+      <div class="col-lg-6"><h4 class="table-header">List of Rentals </h4></div>
+      <div class="col-lg-6 text-right">
+          <!-- <button type="button" class="btn btn-primary custom-add-btn">
+           <i class="fa fa-external-link" aria-hidden="true"></i> Export
+          </button> -->
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="table table-responsive table-striped">
+            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table">
+              <thead>
+                <tr>
+                <th style="width:20%">Contract No.</th>
+                    <th style="width:30%">Client Name</th>
+                    <th style="width:10%">Price</th>
+                    <th style="width:20%">Start Of Rent</th>
+                    <th style="width:20%">End Of Rent</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="rentalData?.length != 0">
+                <tr *ngFor="let item of rentalData; let i = index">
+                  <td>
+                    {{ item.booking_number }}
+                </td>
+                <td>
+                  <span>
+                    {{ item.userId.first_name | titlecase  }}
+                  </span>
+                </td>
+                <td>
+                  <span>
+                    {{ item.booking_rent }}
+                  </span>
+                </td>
+                <td>
+                  <span>
+                    {{ item.from_time  | date:"MM/dd/yy" }}
+                  </span>
+                </td>
+                <td>
+                  <span>
+                    {{ item.to_time  | date:"MM/dd/yy" }}
+                  </span>
+                </td>
+                </tr>
+              </tbody>
+              <tbody *ngIf="rentalData?.length == 0">
+                <tr>
+                  <td colspan="8" class="no-data-available">No record found!</td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

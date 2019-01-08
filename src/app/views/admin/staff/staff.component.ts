@@ -15,10 +15,11 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 // model
-import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
 // primng
 import { ConfirmationService, Message } from 'primeng/api';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 // alert
 import { AlertService } from '../../../shared/services/alert.service';
@@ -50,6 +51,7 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
   public title = 'Add Company';
   // model
   closeResult: string;
+  isLoading: boolean;
 
   constructor(
     public renderer: Renderer,
@@ -62,6 +64,7 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
     private modalService: NgbModal,
     private fromBuilder: FormBuilder,
     private messageService: MessageService,
+    private spinner: NgxSpinnerService
   ) {
     // addform validation
     const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
@@ -87,10 +90,12 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
   closePopup() {
     const element = document.getElementById('closepopup');
     element.click();
+    this.isLoading = false;
   }
   onSubmit() {
     this.submitted = true;
     if (!this.AddEditForm.invalid) {
+      this.isLoading = true;
       this.formData = this.AddEditForm.value;
       console.log('formadata==>', this.formData);
       if (this.isEdit) {
@@ -146,6 +151,7 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   UsersListData() {
+    this.spinner.show();
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
@@ -160,7 +166,8 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
           this.service.post('admin/staff/list', dataTablesParameters).subscribe(res => {
             this.users = res['result']['data'];
             console.log(this.users);
-            this.dataShare.changeLoading(false);
+            // this.dataShare.changeLoading(false);
+            this.spinner.hide();
             callback({
               recordsTotal: res['result']['recordsTotal'],
               recordsFiltered: res['result']['recordsTotal'],
@@ -213,7 +220,11 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       this.title = 'Add Company';
     }
-    this.modalService.open(content).result.then((result) => {
+    const options: NgbModalOptions = {
+      keyboard: false,
+      backdrop: 'static'
+    };
+    this.modalService.open(content, options).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       if (reason === 'Cross click' || reason === 0) {
@@ -223,17 +234,7 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
         this.AddEditForm.controls['email'].setValue('');
         this.AddEditForm.controls['phone_number'].setValue('');
       }
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
-  }
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
   }
   // add-edit popup ends here
 
@@ -248,14 +249,13 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
         this.service.put('admin/staff/delete', { user_id: userId }).subscribe(res => {
           this.render();
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
-          // setTimeout(()=>{ this.closePopup()},1000);
         }, err => {
           err = err.error;
           this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
         });
       },
       reject: () => {
-        this.messageService.add({ severity: 'info', summary: 'Information', detail: 'Your request is canceled for delete.' });
+        // this.messageService.add({ severity: 'info', summary: 'Information', detail: 'Your request is canceled for delete.' });
       }
     });
   }

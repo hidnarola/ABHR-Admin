@@ -15,6 +15,8 @@ import { CompanyTransactionsComponent } from './../companies/company-transaction
 import { CompaniesComponent } from './companies.component';
 import { CarDetailsComponent } from './cars/CompanyAdmin_car-details/car-details.component';
 import { CarAddEditComponent } from './cars/CompanyAdmin-car-add-edit/company-admin-car-add-edit.component';
+// shared component
+// import { RentalsComponent } from '../../shared/components/rentals-for-car/rentals.component';
 
 
 const CompanyRoutes: Routes = [{
@@ -86,7 +88,8 @@ const CompanyRoutes: Routes = [{
         CarAddEditComponent,
         CompanyTransactionsComponent,
         CompanyReportsComponent,
-        CompaniesComponent
+        CompaniesComponent,
+        // RentalsComponent,
     ]
 })
 export class CompaniesModule { }

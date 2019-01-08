@@ -16,7 +16,7 @@ export class CarDetailsComponent implements OnInit {
   public carId;
   public carDetails;
   public carGallery;
-  public imgUrl = environment.imgUrl;
+  public imgUrl = environment.imgUrl + 'car/';
 
   constructor(
     private route: ActivatedRoute,
@@ -25,7 +25,7 @@ export class CarDetailsComponent implements OnInit {
     private spinner: NgxSpinnerService
   ) {
     this.route.params.subscribe(params => { this.carId = params.id; });
-    console.log('carId==>', this.carId)
+    console.log('carId==>', this.carId);
 
   }
 

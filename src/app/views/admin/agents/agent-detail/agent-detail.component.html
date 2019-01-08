@@ -61,7 +61,7 @@
                     </td>
                     <td>
                       <span>
-                        {{ item.userId.first_name | titlecase  }}
+                        {{ item.userId ? item.userId.first_name : '-'  }}
                       </span>
                     </td>
                     <td>

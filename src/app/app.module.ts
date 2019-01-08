@@ -12,7 +12,6 @@ import { BlankComponent } from './layouts/blank/blank.component';
 import { NavigationComponent } from './shared/header-navigation/navigation.component';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import { BreadcrumbComponent } from './shared/breadcrumb/breadcrumb.component';
-// import { RentalsComponent } from './shared/components/rentals/rentals.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
@@ -37,6 +36,11 @@ import { ToastModule } from 'primeng/toast';
 import { DataTablesModule } from 'angular-datatables';
 import { Constant } from './shared/constant/constant';
 
+// import { RentalModule } from './shared/components/rentals-for-car/rentals.module';
+// import { ComponentsModule } from './shared/components/components.module';
+// import { RentalsComponent } from './shared/components/rentals-for-car/rentals.component';
+// import { ViewsModule } from './views/views.module';
+
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -53,6 +57,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NavigationComponent,
     BreadcrumbComponent,
     SidebarComponent,
+    // RentalsComponent,
+    // ComponentsModule
   ],
   imports: [
     CommonModule,
@@ -68,7 +74,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ConfirmDialogModule,
     NgxSpinnerModule,
     ModalDialogModule,
-    ToastModule
+    ToastModule,
+    // ViewsModule,
+    // RentalModule
   ],
   providers: [
     Constant,

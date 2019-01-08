@@ -7,15 +7,16 @@ import { Router } from '@angular/router';
 import { CrudService } from '../../../../shared/services/crud.service';
 import { DataSharingService } from '../../../../shared/services/data-sharing.service';
 
-//model
-import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+// model
+import { NgbModal, ModalDismissReasons, NgbActiveModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+import { NgxSpinnerService } from 'ngx-spinner';
 
-//popup-forms
+// popup-forms
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-//alert
+// alert
 import { MessageService } from 'primeng/api';
-import { Subscription } from 'rxjs'
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-staff-detail',
@@ -28,6 +29,7 @@ export class StaffDetailComponent implements OnInit {
   public viewData;
   public userId;
   public userDetails;
+  closeResult: string;
 
   private subscription: Subscription;
   message: any;
@@ -45,6 +47,7 @@ export class StaffDetailComponent implements OnInit {
     public router: Router,
     private fromBuilder: FormBuilder,
     private messageService: MessageService,
+    private spinner: NgxSpinnerService
   ) {
     this.route.params.subscribe(params => {
       this.userId = params.id;
@@ -54,7 +57,7 @@ export class StaffDetailComponent implements OnInit {
     this.AddEditForm = this.fromBuilder.group({
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
-      phone_number: ['', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern("[0-9]{10}")]],
+      phone_number: ['', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]{10}')]],
       email: ['', [Validators.required, Validators.email, Validators.pattern(pattern)]],
       // deviceType: [''],
     });
@@ -95,18 +98,21 @@ export class StaffDetailComponent implements OnInit {
   }
 
   UserDetails() {
+    this.spinner.show();
     this.service.get('admin/staff/details/' + this.userId).subscribe(res => {
       console.log('userdetails==>', res);
       this.userDetails = res['user'];
       console.log('userDetails==>', this.userDetails);
-    })
+      this.spinner.hide();
+    }, error => {
+      this.spinner.hide();
+    });
   }
 
   // model
-  closeResult: string;
   open2(content, userDetails) {
     console.log('userDetails====>', userDetails);
-    if (userDetails != 'undefined' && userDetails) {
+    if (userDetails !== 'undefined' && userDetails) {
       this.isEdit = true;
       this.AddEditForm.controls['first_name'].setValue(userDetails.first_name);
       this.AddEditForm.controls['last_name'].setValue(userDetails.last_name);
@@ -114,9 +120,13 @@ export class StaffDetailComponent implements OnInit {
       this.AddEditForm.controls['phone_number'].setValue(userDetails.phone_number);
       // this.AddEditForm.controls['deviceType'].setValue(userDetails.deviceType);
       console.log('firstname', userDetails.first_name);
-      console.log('lastname===>', userDetails.last_name)
+      console.log('lastname===>', userDetails.last_name);
+    }
+    const options: NgbModalOptions = {
+      keyboard: false,
+      backdrop: 'static'
     };
-    this.modalService.open(content).result.then((result) => {
+    this.modalService.open(content, options).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -131,7 +141,7 @@ export class StaffDetailComponent implements OnInit {
       return `with: ${reason}`;
     }
   }
-  //add-edit popup ends here
+  // add-edit popup ends here
 
   ngOnInit() {
     this.UserDetails();

@@ -55,7 +55,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
             console.log('dtaparametes car==>', dataTablesParameters);
             this.service.post('admin/user/list', dataTablesParameters).subscribe(res => {
               this.users = res['result']['data'];
-              console.log(this.users);
+              console.log('response in users', this.users);
               this.spinner.hide();
               callback({
                 recordsTotal: res['result']['recordsTotal'],

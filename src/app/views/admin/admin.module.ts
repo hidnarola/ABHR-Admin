@@ -32,11 +32,12 @@ import { CompanyDetailsComponent } from './car-rental-companies/company-details/
 import { StaffDetailComponent } from './staff/staff-detail/staff-detail.component';
 import { CarDetailsComponent } from './car-rental-companies/company-details/car-details/car-details.component';
 import { AddEditCarComponent } from '../admin/car-rental-companies/company-details/add-edit-car/add-edit-car.component';
+import { UserDetailsComponent } from './users/user-details/user-details.component';
 
 // shared component
-import { RentalsComponent } from '../../shared/components/rentals/rentals.component';
+import { RentalsComponent } from '../../shared/components/rentals-for-car/rentals.component';
 import { AlertComponent } from '../../shared/components/alert/alert.component';
-import { UserDetailsComponent } from './users/user-details/user-details.component';
+import { RentalHistoryComponent } from './users/rental-history/rental-history.component';
 
 const AdminRoutes: Routes = [
   {
@@ -73,7 +74,7 @@ const AdminRoutes: Routes = [
         path: 'staff',
         component: StaffComponent,
         data: {
-          title: 'Manage Staff',
+          title: 'Manage Staffs',
           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Staff' }]
         },
       },
@@ -171,6 +172,14 @@ const AdminRoutes: Routes = [
         },
       },
       {
+        path: 'users/history/:id',
+        component: RentalHistoryComponent,
+        data: {
+          title: 'View Rental History',
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Users', url: '/admin/users' }, { title: 'Rental History' }]
+        },
+      },
+      {
         path: 'transactions',
         component: AdminTransactionsComponent,
         data: {
@@ -243,6 +252,7 @@ const AdminRoutes: Routes = [
     CarDetailsComponent,
     AddEditCarComponent,
     UserDetailsComponent,
+    RentalHistoryComponent,
   ]
 })
 export class AdminModule { }
