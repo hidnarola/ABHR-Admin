@@ -1,0 +1,10 @@
+.right_top_image {
+  height: 100px;
+  position: absolute;
+  right: -10px;
+  top: -15px;
+}
+
+.license_image {
+  height: 150px;
+}

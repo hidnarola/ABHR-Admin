@@ -8,7 +8,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 export class CrudService {
 
   public httpOptions;
-  defaultHeaders: any ;
+  defaultHeaders: any;
   constructor(private http: HttpClient) {
     this.httpOptions = {
       headers: new HttpHeaders({
@@ -31,7 +31,9 @@ export class CrudService {
     const url = environment.apiUrl + apiUrl;
     let Params = new HttpParams();
     for (const key in data) {
-      Params = Params.append(key, data[key]);
+      if (key) {
+        Params = Params.append(key, data[key]);
+      }
     }
     // Begin assigning parameters
     return this.http.get(url, { params: Params });

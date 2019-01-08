@@ -70,6 +70,8 @@ export class CarAddEditComponent implements OnInit {
           // console.log('car_gallery => ', environment.imgUrl + 'car/' + file.name);
           this.CarOldImage.push(file);
         });
+        console.log('this.carDetails.car_gallery => ', this.carDetails.car_gallery);
+        console.log('this.CarOldImage => ', this.CarOldImage);
         this.AddEditCarForm.controls['driving_eligibility_criteria'].setValue(this.carDetails.driving_eligibility_criteria);
         this.AddEditCarForm.controls['is_navigation'].setValue(this.carDetails.is_navigation);
         this.AddEditCarForm.controls['is_AC'].setValue(this.carDetails.is_AC);
@@ -144,10 +146,10 @@ export class CarAddEditComponent implements OnInit {
   handleFileInput(event) {
     const files = event.target.files;
     console.log('files => ', files);
-    this.CarImageRAW = files;
     if (files) {
       // this.CarImageRAW = files;
       for (const file of files) {
+        this.CarImageRAW.push(file);
         // this.CarImageRAW = files;
         const reader = new FileReader();
         reader.onload = (e: any) => {
@@ -209,7 +211,10 @@ export class CarAddEditComponent implements OnInit {
           formData.append('is_change_photo', 'false');
         }
         // this.AddEditCarForm.controls['old_images'].setValue(this.CarOldImage);
-        formData.append('old_images', this.CarOldImage);
+        // for (let i = 0; i < this.CarOldImage.length; i++) {
+        //   formData.append('old_images', this.CarOldImage[i]);
+        // }
+        formData.append('old_images', JSON.stringify(this.CarOldImage));
         console.log('this.CarOldImage => ', this.CarOldImage);
         console.log('this.CarImageNew => ', this.CarImageRAW);
         // this.formData = this.AddEditCarForm.value;

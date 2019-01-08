@@ -7,4 +7,6 @@ export const environment = {
   production: false,
   apiUrl: 'http://18.219.16.50:4000/',
   imgUrl: 'http://18.219.16.50:4000/upload/',
+  // apiUrl: 'http://192.168.100.32:4000/',
+  // imgUrl: 'http://192.168.100.32:4000/upload/',
 };

@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer, ViewChild } from '@angular/core';
+import { Component, OnInit, Renderer, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import { ActivatedRoute } from '@angular/router';
@@ -9,22 +9,22 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { CrudService } from '../../../../shared/services/crud.service';
 import { DataSharingService } from '../../../../shared/services/data-sharing.service';
 
-//model
+// model
 import { NgbModal, ModalDismissReasons, NgbActiveModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
-//popup-forms
+// popup-forms
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-//alert
+// alert
 import { MessageService } from 'primeng/api';
-import { Subscription } from 'rxjs'
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-company-details',
   templateUrl: './company-details.component.html',
   styleUrls: ['./company-details.component.css']
 })
-export class CompanyDetailsComponent implements OnInit {
+export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public index;
   public viewData;
@@ -40,7 +40,7 @@ export class CompanyDetailsComponent implements OnInit {
   public formData: any;
   public isEdit;
   closeResult: string;
-  public title = "Add Company";
+  public title = 'Add Company';
 
   @ViewChild(DataTableDirective)
   dtElementcar: DataTableDirective;
@@ -58,9 +58,10 @@ export class CompanyDetailsComponent implements OnInit {
     private messageService: MessageService,
     private spinner: NgxSpinnerService
   ) {
-    if (this.route.snapshot.paramMap.has('id') && this.route.snapshot.paramMap.get('id') != ':id') {
+    if (this.route.snapshot.paramMap.has('id') && this.route.snapshot.paramMap.get('id') !== ':id') {
       this.route.params.subscribe(params => {
         this.userId = params.id;
+        localStorage.setItem('companyId', this.userId);
       });
     } else {
       this.userId = localStorage.getItem('companyId');
@@ -75,7 +76,7 @@ export class CompanyDetailsComponent implements OnInit {
       site_url: ['', [Validators.required, Validators.pattern('^(https?:\/\/)?[0-9a-zA-Z]+\.[-_0-9a-zA-Z]+\.[0-9a-zA-Z]+$')]],
       phone_number: ['', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]{10}')]],
       email: ['', [Validators.required, Validators.email, Validators.pattern(pattern)]]
-    })
+    });
     this.formData = {
       name: String,
       description: String,
@@ -85,24 +86,24 @@ export class CompanyDetailsComponent implements OnInit {
     };
   }
 
-  //add-edit-popup form validation
+  // add-edit-popup form validation
   get f() { return this.AddEditForm.controls; }
   closePopup() {
-    var element = document.getElementById('closepopup');
+    const element = document.getElementById('closepopup');
     element.click();
   }
   onSubmit() {
     this.submitted = true;
     if (!this.AddEditForm.invalid) {
       // console.log('in valid', this.userId);
-      let formData: FormData = new FormData();
+      const formData: FormData = new FormData();
       this.formData = this.AddEditForm.value;
       // if (this.isEdit) {
       this.formData.company_id = this.userId;
       console.log('form data in company view page', this.formData);
       this.service.put('admin/company/update', this.formData).subscribe(res => {
         // console.log('response after edit===>', res);
-        console.log('this.userDetails==>',this.userDetails);
+        console.log('this.userDetails==>', this.userDetails);
         this.userDetails = this.formData;
         this.closePopup();
         this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
@@ -110,7 +111,7 @@ export class CompanyDetailsComponent implements OnInit {
         err = err.error;
         this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
         this.closePopup();
-      })
+      });
       this.submitted = false;
     }
   }
@@ -123,10 +124,10 @@ export class CompanyDetailsComponent implements OnInit {
       // this.spinner.hide();
       // }, error => {
       // this.spinner.hide();
-    })
+    });
   }
 
-  //model
+  // model
   open2(content, userDetails) {
     // console.log('userDetails====>',userDetails);
     // if( userDetails != 'undefined' && userDetails ){
@@ -141,14 +142,14 @@ export class CompanyDetailsComponent implements OnInit {
     const options: NgbModalOptions = {
       keyboard: false,
       backdrop: 'static'
-    }
+    };
     this.modalService.open(content, options).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
     });
   }
 
-  //add-edit popup ends here
+  // add-edit popup ends here
 
   render(): void {
     this.dtElementcar.dtInstance.then((dtInstance: DataTables.Api) => {
@@ -176,7 +177,7 @@ export class CompanyDetailsComponent implements OnInit {
       serverSide: true,
       ordering: true,
       order: [[5, 'desc']],
-      language: { "processing": "<i class='fa fa-refresh loader fa-spin'></i>" },
+      language: { 'processing': '<i class=\'fa fa-refresh loader fa-spin\'></i>' },
       ajax: (dataTablesParameters: any, callback) => {
         console.log('dataparametes car==>', dataTablesParameters);
         dataTablesParameters['columns'][2]['isNumber'] = true;

@@ -9,9 +9,13 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { DataTablesModule } from 'angular-datatables';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+// PrimeNG Module
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { TooltipModule } from 'primeng/tooltip';
+import { MenuModule } from 'primeng/menu';
 
 import { AdminComponent } from './admin.component';
 // Child components
@@ -32,9 +36,7 @@ import { AddEditCarComponent } from '../admin/car-rental-companies/company-detai
 // shared component
 import { RentalsComponent } from '../../shared/components/rentals/rentals.component';
 import { AlertComponent } from '../../shared/components/alert/alert.component';
-// import { UserDetailComponent } from './users/user-detail/user-detail.component';
-
-
+import { UserDetailsComponent } from './users/user-details/user-details.component';
 
 const AdminRoutes: Routes = [
   {
@@ -132,7 +134,7 @@ const AdminRoutes: Routes = [
                 url: '/admin/car-rental-companies'
               }, {
                 title: 'Company Detail',
-                url: '/admin/car-rental-companies/view/_id'
+                url: '/admin/car-rental-companies/view/:_id'
               }, { title: 'Car Detail' }]
             },
           },
@@ -146,8 +148,8 @@ const AdminRoutes: Routes = [
                   'Companies', url: '/admin/car-rental-companies'
               }, {
                 title: 'Company Detail',
-                url: '/admin/car-rental-companies/view/_id'
-              }, { title: 'Add Company' }]
+                url: '/admin/car-rental-companies/view/:_id'
+              }, { title: 'Add Car' }]
             },
           },
         ]
@@ -160,14 +162,14 @@ const AdminRoutes: Routes = [
           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Users' }]
         },
       },
-      // {
-      //   path: 'users/view/:id',
-      //   component: UserDetailComponent,
-      //   data: {
-      //     title: 'View User Detail',
-      //     urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Users', url: '/admin/users' }, { title: 'User Detail' }]
-      //   },
-      // },
+      {
+        path: 'users/view/:id',
+        component: UserDetailsComponent,
+        data: {
+          title: 'View User Detail',
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Users', url: '/admin/users' }, { title: 'User Detail' }]
+        },
+      },
       {
         path: 'transactions',
         component: AdminTransactionsComponent,
@@ -218,7 +220,9 @@ const AdminRoutes: Routes = [
     ReactiveFormsModule,
     ConfirmDialogModule,
     ToastModule,
-    InputSwitchModule
+    InputSwitchModule,
+    TooltipModule,
+    MenuModule
   ],
   exports: [RouterModule],
   declarations: [
@@ -238,7 +242,7 @@ const AdminRoutes: Routes = [
     AlertComponent,
     CarDetailsComponent,
     AddEditCarComponent,
-    // UserDetailComponent,
+    UserDetailsComponent,
   ]
 })
 export class AdminModule { }

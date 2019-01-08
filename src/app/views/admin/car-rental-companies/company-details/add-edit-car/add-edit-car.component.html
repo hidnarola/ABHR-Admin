@@ -1,240 +1,256 @@
 <div class="card">
   <div class="card-body">
-    <form [formGroup]="AddEditCarForm" (ngSubmit)="onSubmit()" >
+    <form [formGroup]="AddEditCarForm" enctype="multipart/form-data" (ngSubmit)="onSubmit()">
       <div class="row">
         <div class="col-md-6">
-
           <div class="form-group">
-                <label> Car Rental Company :</label>
-                <input class="form-control" placeholder="Car Rental Company" type="text" required="" name="car_rental_company"
-                formControlName="car_rental_company" [ngClass]="{'is-invalid': submitted && f.car_rental_company.errors }">
-                <div *ngIf=" submitted && f.car_rental_company.errors " class="invalid-feedback">
-                  <div *ngIf="f.car_rental_company.errors.required"> Car Rental Company  is required</div>
-                </div>
-          </div>
-
-          <!-- <div class="form-group">
-                <label> Car Brand  :</label>
-                <input class="form-control" placeholder="Car Brand" type="text" required="" name="car_brand"
-                formControlName="car_brand" [ngClass]="{'is-invalid': submitted && f.car_brand.errors }">
-                <div *ngIf=" submitted && f.car_brand.errors " class="invalid-feedback">
-                  <div *ngIf="f.car_brand.errors.required"> Car Brand is required</div>
-                </div>
-          </div> -->
-
-          <div class="form-group">
-                <label> Car Model :</label>
-                <input class="form-control" placeholder="Car Model" type="text" required="" name="car_model"
-                formControlName="car_model" [ngClass]="{'is-invalid': submitted && f.car_model.errors }" >
-                <div *ngIf=" submitted && f.car_model.errors " class="invalid-feedback">
-                  <div *ngIf="f.car_model.errors.required"> Car Model is required</div>
-                </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label>licence plate number :</label>
-                <input class="form-control" placeholder="" type="text" required="" name="licence_plate"
-                formControlName="licence_plate" [ngClass]="{'is-invalid': submitted && f.licence_plate.errors }" >
-                <div *ngIf=" submitted && f.licence_plate.errors " class="invalid-feedback">
-                  <div *ngIf="f.licence_plate.errors.required"> Licence Plate Number is required</div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                  <label>car color :</label>
-                  <input class="form-control" placeholder="Car Color" type="text" required="" name="car_color"
-                  formControlName="car_color" [ngClass]="{'is-invalid': submitted && f.car_color.errors }" >
-                  <div *ngIf=" submitted && f.car_color.errors " class="invalid-feedback">
-                    <div *ngIf="f.car_color.errors.required"> Car Color is required</div>
-                  </div>
-              </div>
+            <label class="required"> Car Brand</label>
+            <select class="form-control" type="String" required="" (change)="model($event.target.value)" id="inlineFormCustomSelect"
+              name="car_brand_id" formControlName="car_brand_id" [ngClass]="{'is-invalid': submitted && f.car_brand_id.errors }">
+              <option value="" disabled selected>Choose Car Brand</option>
+              <option [value]="data._id" *ngFor="let data of brandlist">{{data.brand_name}}</option>
+            </select>
+            <div *ngIf=" submitted && f.car_brand_id.errors " class="invalid-feedback">
+              <div *ngIf="f.car_brand_id.errors.required"> Car Brand Id is required</div>
             </div>
           </div>
-
-          <div class="row">
-            <div class="col-md-4">
-                <div class="form-group">
-                        <label> age for driving criteria :</label>
-                        <input class="form-control" type="text" required="" name="driving_eligibility_criteria"
-                        formControlName="driving_eligibility_criteria" [ngClass]="{'is-invalid': submitted && f.driving_eligibility_criteria.errors }" >
-                        <div *ngIf=" submitted && f.driving_eligibility_criteria.errors " class="invalid-feedback">
-                          <div *ngIf="f.driving_eligibility_criteria.errors.required"> Age Of Driver is required</div>
-                          <div *ngIf="f.driving_eligibility_criteria.errors.min"> Not Eligible for Driving</div>
-                        </div>
-                  </div>
-              </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                        <label> Rent Price :</label>
-                        <input class="form-control" placeholder="Rent Price" type="text" required="" name="rent_price"
-                        formControlName="rent_price" [ngClass]="{'is-invalid': submitted && f.rent_price.errors }" >
-                        <div *ngIf=" submitted && f.rent_price.errors " class="invalid-feedback">
-                          <div *ngIf="f.rent_price.errors.required"> Rent Price is required</div>
-                        </div>
-                  </div>
-            </div>
-            <div class="col-md-4">
-              <div class="form-group">
-                    <label> No Of Persons :</label>
-                    <input class="form-control" type="text" required="" name="no_of_person"
-                    formControlName="no_of_person" [ngClass]="{'is-invalid': submitted && f.no_of_person.errors }" >
-                    <div *ngIf=" submitted && f.no_of_person.errors " class="invalid-feedback">
-                      <div *ngIf="f.no_of_person.errors.required"> No Of Person is required</div>
-                    </div>
-              </div>
-            </div>
-            
-          </div>
-
-          <!-- <div class="form-group">
-                <label> Car Image :</label>
-                <input class="form-control" type="file" required="" name="car_gallery"
-                formControlName="car_gallery" > -->
-                <!-- <div *ngIf=" submitted && f.car_gallery.errors " class="invalid-feedback">
-                  <div *ngIf="f.car_gallery.errors.required"> Car Image is required</div>
-                </div> -->
-          <!-- </div> -->
-          
         </div>
 
+        <div class="col-md-2">
+          <div class="form-group">
+            <label class="required">Transmission </label>
+            <select class="custom-select col-12" type="String" id="inlineFormCustomSelect" name="transmission" class="form-control"
+              formControlName="transmission" [ngClass]="{ 'is-invalid': submitted && f.transmission.errors }">
+              <option value="" disabled selected>Choose...</option>
+              <option value="manual">Manual</option>
+              <option value="automatic">Automatic</option>
+            </select>
+            <div *ngIf=" submitted && f.transmission.errors " class="invalid-feedback">
+              <div *ngIf="f.transmission.errors.required"> Transmission is required</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <div class="form-group">
+            <label class="required"> Milage</label>
+            <select class="custom-select col-12" type="String" id="inlineFormCustomSelect" name="milage" class="form-control"
+              formControlName="milage" [ngClass]="{ 'is-invalid': submitted && f.milage.errors }">
+              <option value="" disabled selected>Choose...</option>
+              <option value="open">Open</option>
+              <option value="limited">Limited</option>
+            </select>
+            <div *ngIf=" submitted && f.milage.errors " class="invalid-feedback">
+              <div *ngIf="f.milage.errors.required"> Milage is required</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <div class="form-group">
+            <label class="required"> Car Class</label>
+            <select class="custom-select col-12" type="String" id="inlineFormCustomSelect" name="car_class" class="form-control"
+              formControlName="car_class" [ngClass]="{ 'is-invalid': submitted && f.car_class.errors }">
+              <option value="" disabled selected>Choose...</option>
+              <option value="economy">Economy</option>
+              <option value="luxury">Luxury</option>
+              <option value="suv">Suv</option>
+              <option value="family">Family</option>
+            </select>
+            <div *ngIf=" submitted && f.car_class.errors " class="invalid-feedback">
+              <div *ngIf="f.car_class.errors.required"> Car Class is required</div>
+            </div>
+          </div>
+        </div>
 
         <div class="col-md-6">
+          <div class="form-group">
+            <label class="required"> Car Model</label>
+            <select class="form-control" type="String" required="" id="inlineFormCustomSelect" name="car_model_id"
+              required="" formControlName="car_model_id" [ngClass]="{'is-invalid': submitted && f.car_model_id.errors }">
+              <option value="" disabled selected>Choose Car Brand</option>
+              <option [value]="data._id" *ngFor="let data of modelList">{{data.model_name}}</option>
+            </select>
+            <div *ngIf=" submitted && f.car_model_id.errors " class="invalid-feedback">
+              <div *ngIf="f.car_model_id.errors.required"> Car Model is required</div>
+              <div *ngIf="f.car_model_id.errors.isExist"> Car Model is not available</div>
+            </div>
+          </div>
+        </div>
 
-        <div class="form-group">
-              <label> Car Rental Company Id :</label>
-              <input class="form-control" placeholder="Car Rental Company Id" type="text" required="" name="car_rental_company_id"
-              formControlName="car_rental_company_id" [ngClass]="{'is-invalid': submitted && f.car_rental_company_id.errors }">
-              <div *ngIf=" submitted && f.car_rental_company_id.errors " class="invalid-feedback">
-                <div *ngIf="f.car_rental_company_id.errors.required"> Car Rental Company Id is required</div>
+        <div class="col-md-2">
+          <div class="form-group">
+            <label>Navigation Status :</label>
+            <div class="custom-radio-wrap">
+              <div class="custom-control custom-radio">
+                <input type="radio" id="navigation1" class="custom-control-input" [value]="true" name="is_navigation"
+                  required="" formControlName="is_navigation">
+                <label class="custom-control-label" for="navigation1">Yes</label>
               </div>
-        </div>
-
-        <div class="form-group">
-              <label> Car Brand Id :</label>
-              <input class="form-control" placeholder="Car Brand Id" type="text" required="" name="car_brand_id"
-              formControlName="car_brand_id" [ngClass]="{'is-invalid': submitted && f.car_brand_id.errors }">
-              <div *ngIf=" submitted && f.car_brand_id.errors " class="invalid-feedback">
-                <div *ngIf="f.car_brand_id.errors.required"> Car Brand Id is required</div>
+              <div class="custom-control custom-radio">
+                <input type="radio" id="navigation2" class="custom-control-input" [value]="false" name="is_navigation"
+                  formControlName="is_navigation">
+                <label class="custom-control-label" for="navigation2">No</label>
               </div>
-        </div>
-
-        <div class="form-group">
-              <label> Car Model Id :</label>
-              <input class="form-control" placeholder="Car Model Id" type="text" required="" name="car_model_id"
-              formControlName="car_model_id" [ngClass]="{'is-invalid': submitted && f.car_model_id.errors }">
-              <div *ngIf=" submitted && f.car_model_id.errors " class="invalid-feedback">
-                <div *ngIf="f.car_model_id.errors.required"> Car Model Id is required</div>
+              <div *ngIf=" submitted && f.is_navigation.errors " class="invalid-feedback">
+                <div *ngIf="f.is_navigation.errors.required"> Navigation is required</div>
               </div>
-        </div>
-
-
-        <div class="row">
-          <div class="col-md-4">
-            <div class="form-group">
-                  <label> Transmission :</label>
-                  <select class="custom-select col-12" id="inlineFormCustomSelect" name="transmission" class="form-control" formControlName="transmission" [ngClass]= "{ 'is-invalid': submitted && f.transmission.errors }">
-                      <option value="" selected>Choose...</option>
-                      <option value="manual">Manual</option>
-                      <option value="automatic">Automatic</option>
-                  </select>
-                  <div *ngIf=" submitted && f.transmission.errors " class="invalid-feedback">
-                    <div *ngIf="f.transmission.errors.required"> Transmission is required</div>
-                  </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="form-group">
-                  <label> Milage :</label>
-                  <select class="custom-select col-12" id="inlineFormCustomSelect" name="milage" class="form-control" formControlName="milage" [ngClass]= "{ 'is-invalid': submitted && f.milage.errors }">
-                      <option value="" selected>Choose...</option>
-                      <option value="open">Open</option>
-                      <option value="limited">Limited</option>
-                  </select>
-                  <div *ngIf=" submitted && f.milage.errors " class="invalid-feedback">
-                    <div *ngIf="f.milage.errors.required"> Milage is required</div>
-                  </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="form-group">
-                  <label> Car Class :</label>
-                  <select class="custom-select col-12" id="inlineFormCustomSelect" name="car_class" class="form-control" formControlName="car_class" [ngClass]= "{ 'is-invalid': submitted && f.car_class.errors }">
-                      <option value="">Choose...</option>
-                      <option value="economy">Economy</option>
-                      <option value="luxury">Luxury</option>
-                      <option value="suv">Suv</option>
-                      <option value="family">Family</option>
-                  </select>
-                  <div *ngIf=" submitted && f.car_class.errors " class="invalid-feedback">
-                    <div *ngIf="f.car_class.errors.required"> Car Class is required</div>
-                  </div>
             </div>
           </div>
         </div>
 
-        <!-- <div class="row">
-          <div class="col-md-4">
-            <div class="form-group">
-              <label>Navigation Status :</label>
-                <div class="custom-radio-wrap">
-                  <div class="custom-control custom-radio">
-                      <input type="radio" id="customRadio1" class="custom-control-input" value="true" name="is_navigation" formControlName="is_navigation" [ngClass]="{ 'is-invalid': submitted && f.is_navigation.errors }">
-                      <label class="custom-control-label" for="customRadio1">Yes</label>
-                  </div>
-                  <div class="custom-control custom-radio">
-                      <input type="radio" id="customRadio2" class="custom-control-input" value="false" name="is_navigation" formControlName="is_navigation" [ngClass]="{ 'is-invalid': submitted && f.is_navigation.errors }">
-                      <label class="custom-control-label" for="customRadio2">No</label>
-                  </div>
-                </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="form-group">
-              <label>AC :</label>
-                <div class="custom-radio-wrap">
-                  <div class="custom-control custom-radio">
-                      <input type="radio" id="customRadio1" class="custom-control-input" value="true" name="is_AC" formControlName="is_AC" [ngClass]="{ 'is-invalid': submitted && f.is_AC.errors }">
-                      <label class="custom-control-label" for="customRadio1">Yes</label>
-                  </div>
-                  <div class="custom-control custom-radio">
-                      <input type="radio" id="customRadio2" class="custom-control-input" value="false" name="is_AC" formControlName="is_AC" [ngClass]="{ 'is-invalid': submitted && f.is_AC.errors }">
-                      <label class="custom-control-label" for="customRadio2">No</label>
-                  </div>
-                </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="form-group">
-                <label>Luggage Carrier :</label>
-                  <div class="custom-radio-wrap">
-                    <div class="custom-control custom-radio">
-                        <input type="radio" id="customRadio1" class="custom-control-input" value="true" name="is_luggage_carrier" formControlName="is_luggage_carrier" [ngClass]="{ 'is-invalid': submitted && f.is_luggage_carrier.errors }">
-                        <label class="custom-control-label" for="customRadio1">Yes</label>
-                    </div>
-                    <div class="custom-control custom-radio">
-                        <input type="radio" id="customRadio2" class="custom-control-input" value="false" name="is_luggage_carrier" formControlName="is_luggage_carrier" [ngClass]="{ 'is-invalid': submitted && f.is_luggage_carrier.errors }">
-                        <label class="custom-control-label" for="customRadio2">No</label>
-                    </div>
-                  </div>
+        <div class="col-md-2">
+          <div class="form-group">
+            <label>AC :</label>
+            <div class="custom-radio-wrap">
+              <div class="custom-control custom-radio">
+                <input type="radio" id="ac1" class="custom-control-input" [value]="true" required="" name="is_AC"
+                  formControlName="is_AC">
+                <label class="custom-control-label" for="ac1">Yes</label>
               </div>
+              <div class="custom-control custom-radio">
+                <input type="radio" id="ac2" class="custom-control-input" [value]="false" name="is_AC" formControlName="is_AC">
+                <label class="custom-control-label" for="ac2">No</label>
+              </div>
+              <div *ngIf=" submitted && f.is_AC.errors " class="invalid-feedback">
+                <div *ngIf="f.is_AC.errors.required"> AC is required</div>
+              </div>
+            </div>
           </div>
-        </div> -->
-        
         </div>
+
+        <div class="col-md-2">
+          <div class="form-group">
+            <label>Luggage Carrier :</label>
+            <div class="custom-radio-wrap">
+              <div class="custom-control custom-radio">
+                <input type="radio" id="luggage1" class="custom-control-input" [value]="true" required="" name="is_luggage_carrier"
+                  formControlName="is_luggage_carrier">
+                <label class="custom-control-label" for="luggage1">Yes</label>
+              </div>
+              <div class="custom-control custom-radio">
+                <input type="radio" id="luggage2" class="custom-control-input" [value]="false" name="is_luggage_carrier"
+                  formControlName="is_luggage_carrier">
+                <label class="custom-control-label" for="luggage2">No</label>
+              </div>
+            </div>
+            <div *ngIf=" submitted && f.is_luggage_carrier.errors " class="invalid-feedback">
+              <div *ngIf="f.is_luggage_carrier.errors.required"> Luggage Carrier is required</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-group">
+            <label class="required">Licence plate number</label>
+            <input class="form-control" placeholder="Licence plate number" type="string" required="" name="licence_plate"
+              formControlName="licence_plate" [ngClass]="{'is-invalid': submitted && f.licence_plate.errors }">
+            <div *ngIf=" submitted && f.licence_plate.errors " class="invalid-feedback">
+              <div *ngIf="f.licence_plate.errors.required"> Licence Plate Number is required</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-group">
+            <label class="required">car color</label>
+            <input class="form-control" placeholder="Car Color" type="string" required="" name="car_color"
+              formControlName="car_color" [ngClass]="{'is-invalid': submitted && f.car_color.errors }">
+            <div *ngIf=" submitted && f.car_color.errors " class="invalid-feedback">
+              <div *ngIf="f.car_color.errors.required"> Car Color is required</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <div class="form-group">
+            <label class="required"> Age</label>
+            <input class="form-control" placeholder="Age" type="string" required="" name="driving_eligibility_criteria"
+              formControlName="driving_eligibility_criteria" [ngClass]="{'is-invalid': submitted && f.driving_eligibility_criteria.errors }">
+            <div *ngIf=" submitted && f.driving_eligibility_criteria.errors " class="invalid-feedback">
+              <div *ngIf="f.driving_eligibility_criteria.errors.required"> Age Of Driver is required</div>
+              <div *ngIf="f.driving_eligibility_criteria.errors.min || f.driving_eligibility_criteria.errors.pattern || f.driving_eligibility_criteria.errors.max">
+                Not Eligible for Driving</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <div class="form-group">
+            <label class="required"> Rent Price</label>
+            <input class="form-control" placeholder="Rent Price" type="text" required="" name="rent_price"
+              formControlName="rent_price" [ngClass]="{'is-invalid': submitted && f.rent_price.errors }">
+            <div *ngIf=" submitted && f.rent_price.errors " class="invalid-feedback">
+              <div *ngIf="f.rent_price.errors.required"> Rent Price is required</div>
+              <div *ngIf="f.rent_price.errors.pattern">Invalid Price</div>
+              <!-- <div *ngIf="f.rent_price.errors.min">Invalid Price</div> -->
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <div class="form-group">
+            <label class="required"> No Of Persons</label>
+            <!-- <input class="form-control" placeholder="No Of Persons" type="string" required="" name="no_of_person"
+              formControlName="no_of_person" [ngClass]="{'is-invalid': submitted && f.no_of_person.errors }"> -->
+            <select class="custom-select col-12" id="inlineFormCustomSelect" name="no_of_person" class="form-control"
+              formControlName="no_of_person" [ngClass]="{ 'is-invalid': submitted && f.no_of_person.errors }">
+              <option value="" disabled selected>Choose...</option>
+              <option [value]="2">2</option>
+              <option [value]="4">4</option>
+              <option [value]="5">5</option>
+              <option [value]="6">6</option>
+              <option [value]="8">8</option>
+              <option [value]="12">12</option>
+            </select>
+            <div *ngIf=" submitted && f.no_of_person.errors " class="invalid-feedback">
+              <div *ngIf="f.no_of_person.errors.required"> No Of Person is required</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-8">
+          <div class="form-group">
+            <label class="required"> Car Image :</label>
+            <input class="form-control" type="file" name="car_gallery" formControlName="car_gallery" (change)="handleFileInput($event)"
+              [ngClass]="{ 'is-invalid': submitted && f.car_gallery.errors }" accept="image/*" multiple>
+            <div *ngIf=" submitted && f.car_gallery.errors " class="invalid-feedback">
+              <div *ngIf="f.car_gallery.errors.minImages">Add Minimum 3 images</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12" *ngIf="CarOldImage.length > 0">
+          <div class="form-group">
+            <label>Uploaded Car Image(s) Preview:</label>
+            <div class="row">
+              <div class="column img_wrap" *ngFor="let img of CarOldImage; let i = index">
+                <img [src]="imgUrl + 'car/' + img.name" height="100px" alt="cars" width="auto">
+                <i class="close fa fa-close" (click)="deleteOldImage(i)"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12" *ngIf="CarImage.length > 0">
+          <div class="form-group">
+            <label>Car Image(s) Preview:</label>
+            <div class="row">
+              <div class="column img_wrap" *ngFor="let img of CarImage; let i = index">
+                <img [src]="img" height="100px" alt="cars" width="auto">
+                <i class="close fa fa-close" (click)="deleteImage(i)"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12">
+          <button type="submit" *ngIf="!isLoading" class="btn waves-effect waves-light custom-btn btn-primary">Submit</button>
+          <button type="button" *ngIf="isLoading" class="btn waves-effect loading-btn waves-light btn-primary" type="button">
+            <i class="fa fa-spinner fa-spin"></i>Loading
+          </button>
+          <a class="btn waves-effect waves-light custom-btn btn-danger" [routerLink]="['/admin/car-rental-companies/view/' + companyId]">Cancel</a>
+        </div>
+
       </div>
-      <!-- <div class="col-sm-12">
-          <button type="submit" class="btn waves-effect waves-light custom-btn btn-primary" >Submit</button>
-          <a class="btn waves-effect waves-light custom-btn btn-danger">Cancel</a>
-      </div> -->
-      <div class="col-sm-12 text-center"> 
-        <div class="form-group">
-          <button type="submit" class="btn waves-effect waves-light custom-btn btn-primary">Submit</button>
-        </div>
-      </div>
-
     </form>
   </div>
 </div>
