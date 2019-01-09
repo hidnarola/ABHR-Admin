@@ -190,7 +190,16 @@ const AdminRoutes: Routes = [
         },
       },
       {
-        path: 'transactions',
+        path: 'reports/admin-car-reports',
+        component: AdminCarReportComponent,
+
+        data: {
+          title: 'Manage Car Reports',
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Reports', url: 'admin/reports' }, { title: 'Car Reports' }]
+        },
+      },
+      {
+        path: 'reports/transactions',
         component: AdminTransactionsComponent,
         data: {
           title: 'Transaction Reports',
@@ -198,7 +207,7 @@ const AdminRoutes: Routes = [
         },
       },
       {
-        path: 'transactions/view/:id',
+        path: 'reports/transactions/view/:id',
         component: AdminTransactionDetailComponent,
         data: {
           title: 'View Transaction Report',

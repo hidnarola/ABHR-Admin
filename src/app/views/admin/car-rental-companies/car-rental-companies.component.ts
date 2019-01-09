@@ -1,4 +1,5 @@
-import { Component, OnInit, Renderer, ViewChild, ViewEncapsulation, OnDestroy, AfterViewInit, ElementRef } from '@angular/core';
+/// <reference types="@types/googlemaps" />
+import { Component, OnInit, Renderer, ViewChild, OnDestroy, AfterViewInit, ElementRef, NgZone, ChangeDetectorRef } from '@angular/core';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 
@@ -69,6 +70,8 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
     private messageService: MessageService,
     private spinner: NgxSpinnerService,
     // private mapsAPILoader: MapsAPILoader,
+    private cd: ChangeDetectorRef,
+    // private ngZone: NgZone,
   ) {
     // addform validation
     const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
@@ -79,6 +82,7 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
       phone_number: ['', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]{10}')]],
       email: ['', [Validators.required, Validators.email, Validators.pattern(pattern)]],
       address: [''],
+      latitude: ['']
     });
 
     this.formData = {
@@ -289,9 +293,34 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
     }
   }
 
+  // getCity(addressArray) {
+  //   const city = addressArray.find((obj) => {
+  //     if (obj['types'].indexOf('locality') !== -1) {
+  //       return true;
+  //     }
+  //   });
+  //   return city['long_name'];
+  // }
+
   // Address() {
   //   this.mapsAPILoader.load().then(() => {
-  //     const autocomplete = new google.maps.places.Autocomplete();
+  //     const autocomplete = new google.maps.places.Autocomplete(
+  //       this.searchElementRef.nativeElement, {
+  //         types: ['(cities)']
+  //       });
+  //       autocomplete.addListener('place_changed', () => {
+  //         this.ngZone.run(() => {
+  //           const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+  //           if (place.geometry === undefined || place.geometry === null) {
+  //             return;
+  //           }
+  //           const lng = place.geometry.location.lng();
+  //           const lat = place.geometry.location.lat();
+  //           this.users.location = { type: 'Point', coordinates: [lng, lat] }
+  //           this.users.city = this.getCity(place['address_components']);
+  //           this.users.formatted_address = this.searchElementRef.nativeElement.value;
+  //         });
+  //       });
   //   });
   // }
   ngOnInit() {
