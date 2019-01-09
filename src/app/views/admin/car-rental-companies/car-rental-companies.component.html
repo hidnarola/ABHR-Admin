@@ -149,8 +149,8 @@
             <div class="form-group">
               <label>Address :</label>
               <div class="input-wrap">
-                <input type="text" placeholder="Enter address" class="form-control" formControlName="address" name="address">
-                <input type="hidden">
+                <input type="text" placeholder="Enter address" class="form-control" [(ngModel)] =users.address formControlName="address" name="address">
+                <input type="hidden" name="lat" formControlName="latitude" [(ngModel)]="users['location']['coordinates'][1]" />
               </div>
             </div>
           </div> -->

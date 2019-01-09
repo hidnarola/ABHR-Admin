@@ -81,8 +81,8 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
       site_url: ['', [Validators.required, Validators.pattern('^(https?:\/\/)?[0-9a-zA-Z]+\.[-_0-9a-zA-Z]+\.[0-9a-zA-Z]+$')]],
       phone_number: ['', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]{10}')]],
       email: ['', [Validators.required, Validators.email, Validators.pattern(pattern)]],
-      address: [''],
-      latitude: ['']
+      // address: [''],
+      // latitude: ['']
     });
 
     this.formData = {
@@ -304,27 +304,28 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
 
   // Address() {
   //   this.mapsAPILoader.load().then(() => {
-  //     const autocomplete = new google.maps.places.Autocomplete(
-  //       this.searchElementRef.nativeElement, {
-  //         types: ['(cities)']
+  //     const autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
+  //       types: ['(cities)']
+  //     });
+  //     autocomplete.addListener('place_changed', () => {
+  //       this.ngZone.run(() => {
+  //         const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+  //         // verify result
+  //         if (place.geometry === undefined || place.geometry === null) {
+  //           return;
+  //         }
+  //         const lng = place.geometry.location.lng();
+  //         const lat = place.geometry.location.lat();
+  //         this.users.location = { type: 'Point', coordinates: [lng, lat] }
+  //         this.users.city = this.getCity(place['address_components']);
+  //         this.users.formatted_address = this.searchElementRef.nativeElement.value;
   //       });
-  //       autocomplete.addListener('place_changed', () => {
-  //         this.ngZone.run(() => {
-  //           const place: google.maps.places.PlaceResult = autocomplete.getPlace();
-  //           if (place.geometry === undefined || place.geometry === null) {
-  //             return;
-  //           }
-  //           const lng = place.geometry.location.lng();
-  //           const lat = place.geometry.location.lat();
-  //           this.users.location = { type: 'Point', coordinates: [lng, lat] }
-  //           this.users.city = this.getCity(place['address_components']);
-  //           this.users.formatted_address = this.searchElementRef.nativeElement.value;
-  //         });
-  //       });
+  //     });
   //   });
   // }
   ngOnInit() {
     this.UsersListData();
+    // this.Address();
   }
 
 }

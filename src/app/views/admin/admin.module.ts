@@ -40,6 +40,7 @@ import { AlertComponent } from '../../shared/components/alert/alert.component';
 import { RentalHistoryComponent } from './users/rental-history/rental-history.component';
 import { AdminCarReportComponent } from './admin-reports/admin-car-report/admin-car-report.component';
 import { AdminTransactionDetailComponent } from './admin-transactions/admin-transaction-detail/admin-transaction-detail.component';
+import { AdminUsersReportComponent } from './admin-reports/admin-users-report/admin-users-report.component';
 
 const AdminRoutes: Routes = [
   {
@@ -190,12 +191,19 @@ const AdminRoutes: Routes = [
         },
       },
       {
-        path: 'reports/admin-car-reports',
+        path: 'reports/car-reports',
         component: AdminCarReportComponent,
-
         data: {
           title: 'Manage Car Reports',
           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Reports', url: 'admin/reports' }, { title: 'Car Reports' }]
+        },
+      },
+      {
+        path: 'reports/user-reports',
+        component: AdminUsersReportComponent,
+        data: {
+          title: 'Manage User Reports',
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Reports', url: 'admin/reports' }, { title: 'User Reports' }]
         },
       },
       {
@@ -274,6 +282,7 @@ const AdminRoutes: Routes = [
     RentalHistoryComponent,
     AdminCarReportComponent,
     AdminTransactionDetailComponent,
+    AdminUsersReportComponent,
   ]
 })
 export class AdminModule { }

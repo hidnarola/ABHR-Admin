@@ -32,13 +32,17 @@ export const ROUTES: RouteInfo[] = [
         path: '/admin/reports', title: 'Reports', icon: 'fa fa-file-text-o', class: 'has-arrow',
     label: '', labelClass: '', extralink: false, submenu: [
         {
-            path: '/admin/reports/admin-car-reports', title: 'Car Report', icon: '',
+            path: '/admin/reports/car-reports', title: 'Car Report', icon: '',
             class: '', label: '', labelClass: '', extralink: false, submenu: []
         },
-        {
-            path: '/admin/reports/transactions', title: 'Transaction Reports', icon: '',
-            class: '', label: '', labelClass: '', extralink: false, submenu: []
-        }
+        // {
+        //     path: '/admin/reports/transactions', title: 'Transaction Reports', icon: '',
+        //     class: '', label: '', labelClass: '', extralink: false, submenu: []
+        // },
+        // {
+        //     path: '/admin/reports/user-reports', title: 'User Report', icon: '',
+        //     class: '', label: '', labelClass: '', extralink: false, submenu: []
+        // },
     ]
     },
     // {
