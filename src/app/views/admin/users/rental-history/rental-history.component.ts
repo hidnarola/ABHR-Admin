@@ -51,6 +51,7 @@ export class RentalHistoryComponent implements OnInit, OnDestroy, AfterViewInit 
       pageLength: 10,
       processing: true,
       serverSide: true,
+      searching: false,
       ordering: true,
       language: {'processing': '<i class="fa fa-refresh loader fa-spin"></i>'},
       ajax: (dataTablesParameters: any, callback) => {

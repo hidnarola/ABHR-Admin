@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
-            <label class="required"> Car Brand</label>
+            <label class="required"> Car Brand :</label>
             <select class="form-control" type="String" required="" (change)="model($event.target.value)" id="inlineFormCustomSelect"
               name="car_brand_id" formControlName="car_brand_id" [ngClass]="{'is-invalid': submitted && f.car_brand_id.errors }">
               <option value="" disabled selected>Choose Car Brand</option>
@@ -18,7 +18,7 @@
 
         <div class="col-md-2">
           <div class="form-group">
-            <label class="required">Transmission </label>
+            <label class="required">Transmission :</label>
             <select class="custom-select col-12" type="String" id="inlineFormCustomSelect" name="transmission" class="form-control"
               formControlName="transmission" [ngClass]="{ 'is-invalid': submitted && f.transmission.errors }">
               <option value="" disabled selected>Choose...</option>
@@ -33,7 +33,7 @@
 
         <div class="col-md-2">
           <div class="form-group">
-            <label class="required"> Milage</label>
+            <label class="required"> Milage :</label>
             <select class="custom-select col-12" type="String" id="inlineFormCustomSelect" name="milage" class="form-control"
               formControlName="milage" [ngClass]="{ 'is-invalid': submitted && f.milage.errors }">
               <option value="" disabled selected>Choose...</option>
@@ -48,7 +48,7 @@
 
         <div class="col-md-2">
           <div class="form-group">
-            <label class="required"> Car Class</label>
+            <label class="required"> Car Class :</label>
             <select class="custom-select col-12" type="String" id="inlineFormCustomSelect" name="car_class" class="form-control"
               formControlName="car_class" [ngClass]="{ 'is-invalid': submitted && f.car_class.errors }">
               <option value="" disabled selected>Choose...</option>
@@ -65,7 +65,7 @@
 
         <div class="col-md-6">
           <div class="form-group">
-            <label class="required"> Car Model</label>
+            <label class="required"> Car Model :</label>
             <select class="form-control" type="String" required="" id="inlineFormCustomSelect" name="car_model_id"
               required="" formControlName="car_model_id" [ngClass]="{'is-invalid': submitted && f.car_model_id.errors }">
               <option value="" disabled selected>Choose Car Brand</option>
@@ -142,7 +142,7 @@
 
         <div class="col-md-3">
           <div class="form-group">
-            <label class="required">Licence plate number</label>
+            <label class="required">Licence plate number :</label>
             <input class="form-control" placeholder="Licence plate number" type="string" required="" name="licence_plate"
               formControlName="licence_plate" [ngClass]="{'is-invalid': submitted && f.licence_plate.errors }">
             <div *ngIf=" submitted && f.licence_plate.errors " class="invalid-feedback">
@@ -153,7 +153,7 @@
 
         <div class="col-md-3">
           <div class="form-group">
-            <label class="required">car color</label>
+            <label class="required">car color :</label>
             <input class="form-control" placeholder="Car Color" type="string" required="" name="car_color"
               formControlName="car_color" [ngClass]="{'is-invalid': submitted && f.car_color.errors }">
             <div *ngIf=" submitted && f.car_color.errors " class="invalid-feedback">
@@ -164,7 +164,7 @@
 
         <div class="col-md-2">
           <div class="form-group">
-            <label class="required"> Age</label>
+            <label class="required"> Age :</label>
             <input class="form-control" placeholder="Age" type="string" required="" name="driving_eligibility_criteria"
               formControlName="driving_eligibility_criteria" [ngClass]="{'is-invalid': submitted && f.driving_eligibility_criteria.errors }">
             <div *ngIf=" submitted && f.driving_eligibility_criteria.errors " class="invalid-feedback">
@@ -177,7 +177,7 @@
 
         <div class="col-md-2">
           <div class="form-group">
-            <label class="required"> Rent Price</label>
+            <label class="required"> Rent Price :</label>
             <input class="form-control" placeholder="Rent Price" type="text" required="" name="rent_price"
               formControlName="rent_price" [ngClass]="{'is-invalid': submitted && f.rent_price.errors }">
             <div *ngIf=" submitted && f.rent_price.errors " class="invalid-feedback">
@@ -190,7 +190,7 @@
 
         <div class="col-md-2">
           <div class="form-group">
-            <label class="required"> No Of Persons</label>
+            <label class="required"> No Of Persons :</label>
             <!-- <input class="form-control" placeholder="No Of Persons" type="string" required="" name="no_of_person"
               formControlName="no_of_person" [ngClass]="{'is-invalid': submitted && f.no_of_person.errors }"> -->
             <select class="custom-select col-12" id="inlineFormCustomSelect" name="no_of_person" class="form-control"
@@ -222,7 +222,7 @@
 
         <div class="col-md-12" *ngIf="CarOldImage.length > 0">
           <div class="form-group">
-            <label>Uploaded Car Image(s) Preview:</label>
+            <label>Uploaded Car Image(s) Preview :</label>
             <div class="row">
               <div class="column img_wrap" *ngFor="let img of CarOldImage; let i = index">
                 <img [src]="imgUrl + 'car/' + img.name" height="100px" alt="cars" width="auto">
@@ -233,7 +233,7 @@
         </div>
         <div class="col-md-12" *ngIf="CarImage.length > 0">
           <div class="form-group">
-            <label>Car Image(s) Preview:</label>
+            <label>Car Image(s) Preview :</label>
             <div class="row">
               <div class="column img_wrap" *ngFor="let img of CarImage; let i = index">
                 <img [src]="img" height="100px" alt="cars" width="auto">

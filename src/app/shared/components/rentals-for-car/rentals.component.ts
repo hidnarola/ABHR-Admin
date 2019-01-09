@@ -57,7 +57,6 @@ RentalData() {
     pagingType: 'full_numbers',
     pageLength: 10,
     processing: true,
-    search: false,
     searching: false,
     serverSide: true,
     ordering: true,

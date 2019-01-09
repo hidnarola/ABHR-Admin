@@ -38,6 +38,8 @@ import { UserDetailsComponent } from './users/user-details/user-details.componen
 import { RentalsComponent } from '../../shared/components/rentals-for-car/rentals.component';
 import { AlertComponent } from '../../shared/components/alert/alert.component';
 import { RentalHistoryComponent } from './users/rental-history/rental-history.component';
+import { AdminCarReportComponent } from './admin-reports/admin-car-report/admin-car-report.component';
+import { AdminTransactionDetailComponent } from './admin-transactions/admin-transaction-detail/admin-transaction-detail.component';
 
 const AdminRoutes: Routes = [
   {
@@ -180,19 +182,27 @@ const AdminRoutes: Routes = [
         },
       },
       {
-        path: 'transactions',
-        component: AdminTransactionsComponent,
-        data: {
-          title: 'Manage Transactions',
-          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Transactions' }]
-        },
-      },
-      {
         path: 'reports',
         component: AdminReportsComponent,
         data: {
           title: 'Manage Reports',
           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Reports' }]
+        },
+      },
+      {
+        path: 'transactions',
+        component: AdminTransactionsComponent,
+        data: {
+          title: 'Transaction Reports',
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Transaction Reports' }]
+        },
+      },
+      {
+        path: 'transactions/view/:id',
+        component: AdminTransactionDetailComponent,
+        data: {
+          title: 'View Transaction Report',
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Transaction Reports' }, { title: 'Transaction Report Detail'}]
         },
       },
       {
@@ -253,6 +263,8 @@ const AdminRoutes: Routes = [
     AddEditCarComponent,
     UserDetailsComponent,
     RentalHistoryComponent,
+    AdminCarReportComponent,
+    AdminTransactionDetailComponent,
   ]
 })
 export class AdminModule { }

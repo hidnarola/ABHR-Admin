@@ -1,3 +1,71 @@
-<p>
-  admin-transactions works!
-</p>
+<div class="card">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-lg-6 mb-3">
+        <h4 class="table-header">List of Transaction Reports </h4>
+      </div>
+      <div class="col-lg-6 text-right">
+        <!-- <button type="button" class="btn btn-primary custom-add-btn m-r-10">
+          <i class="fa fa-external-link" aria-hidden="true"></i> Export
+        </button> -->
+        <!-- <button type="button" class="btn btn-primary custom-add-btn" (click)="open2(content, '')">
+          <i class="mdi mdi-account-plus" aria-hidden="true"></i> Add
+        </button> -->
+      </div>
+      <div class="col-lg-12">
+        <div class="table table-responsive table-striped">
+          <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table">
+            <thead>
+              <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <!-- <th>Device Type</th> -->
+                <th>Phone Number</th>
+                <th class="disabled text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="transaction?.length != 0">
+              <tr *ngFor="let item of transaction; let i = index">
+                <td>
+                  <span>
+                    {{ item.first_name }}
+                  </span>
+                </td>
+                <td>
+                  <span>
+                    {{ item.last_name }}
+                  </span>
+                </td>
+                <td>
+                  <span>
+                    {{ item.email }}
+                  </span>
+                </td>
+                <!-- <td>
+                  <span class="badge badge-primary">
+                    {{ item.deviceType  | titlecase }}
+                  </span>
+                </td> -->
+                <td>
+                  <span>
+                    {{ item.phone_number ? item.phone_number : '-'}}
+                  </span>
+                </td>
+                <td>
+                  <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="View" [routerLink]="['/admin/transactions/view/',item._id]"><i
+                      class="fa fa-eye text-default m-r-20"></i></a>
+                </td>
+              </tr>
+            </tbody>
+            <tbody *ngIf="agents?.length == 0">
+              <tr>
+                <td colspan="8" class="no-data-available">No record found!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

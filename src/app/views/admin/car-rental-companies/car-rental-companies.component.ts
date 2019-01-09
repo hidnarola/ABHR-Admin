@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer, ViewChild, ViewEncapsulation, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Renderer, ViewChild, ViewEncapsulation, OnDestroy, AfterViewInit, ElementRef } from '@angular/core';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 
@@ -25,6 +25,10 @@ import { ConfirmationService, Message } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 
+// AGM
+import { MapsAPILoader } from '@agm/core';
+import { google } from '@agm/core/services/google-maps-types';
+
 @Component({
   selector: 'app-car-rental-companies',
   templateUrl: './car-rental-companies.component.html',
@@ -36,6 +40,7 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
   dtElement: DataTableDirective;
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject();
+  public searchElementRef: ElementRef;
 
   AddEditForm: FormGroup;
   submitted = false;
@@ -59,11 +64,11 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
     public router: Router,
     private route: ActivatedRoute,
     private confirmationService: ConfirmationService,
-    // model
     private modalService: NgbModal,
     private fromBuilder: FormBuilder,
     private messageService: MessageService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    // private mapsAPILoader: MapsAPILoader,
   ) {
     // addform validation
     const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
@@ -72,7 +77,8 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
       description: ['', Validators.required],
       site_url: ['', [Validators.required, Validators.pattern('^(https?:\/\/)?[0-9a-zA-Z]+\.[-_0-9a-zA-Z]+\.[0-9a-zA-Z]+$')]],
       phone_number: ['', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]{10}')]],
-      email: ['', [Validators.required, Validators.email, Validators.pattern(pattern)]]
+      email: ['', [Validators.required, Validators.email, Validators.pattern(pattern)]],
+      address: [''],
     });
 
     this.formData = {
@@ -80,7 +86,8 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
       description: String,
       phone_number: Number,
       email: String,
-      site_url: String
+      site_url: String,
+      address: String,
     };
   }
   get f() { return this.AddEditForm.controls; }
@@ -282,6 +289,11 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
     }
   }
 
+  // Address() {
+  //   this.mapsAPILoader.load().then(() => {
+  //     const autocomplete = new google.maps.places.Autocomplete();
+  //   });
+  // }
   ngOnInit() {
     this.UsersListData();
   }

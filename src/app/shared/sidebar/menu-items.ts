@@ -28,10 +28,15 @@ export const ROUTES: RouteInfo[] = [
     //     path: '/admin/transactions', title: 'Transactions', icon: 'fa fa-credit-card',
     // class: '', label: '', labelClass: '', extralink: false, submenu: []
     // },
-    // {
-    //     path: '/admin/reports', title: 'Reports', icon: 'fa fa-file-text-o', class: '',
-    // label: '', labelClass: '', extralink: false, submenu: []
-    // },
+    {
+        path: '/admin/reports', title: 'Reports', icon: 'fa fa-file-text-o', class: 'has-arrow',
+    label: '', labelClass: '', extralink: false, submenu: [
+        {
+            path: '/admin/transactions', title: 'Transaction Reports', icon: '',
+            class: '', label: '', labelClass: '', extralink: false, submenu: []
+        }
+    ]
+    },
     // {
     //     path: '/admin/operations', title: 'Operations', icon: 'mdi mdi-widgets',
     // class: '', label: '', labelClass: '', extralink: false, submenu: []

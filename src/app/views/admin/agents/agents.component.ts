@@ -2,11 +2,8 @@ import { Component, OnInit, Renderer, ViewChild, AfterViewInit, ViewContainerRef
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-
-// routing
 import { Routes, RouterModule, ActivatedRoute } from '@angular/router';
 import { NgModule } from '@angular/core';
-
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ModalDialogService } from 'ngx-modal-dialog';
 
