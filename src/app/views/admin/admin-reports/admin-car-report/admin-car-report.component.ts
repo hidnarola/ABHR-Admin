@@ -43,12 +43,13 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
         processing: true,
         serverSide: true,
         ordering: true,
-        // searching: false,
         order: [[0, 'desc']],
         language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
 
         ajax: (dataTablesParameters: any, callback) => {
           // this.dtparams = dataTablesParameters;
+          dataTablesParameters['columns'][3]['isNumber'] = true;
+          dataTablesParameters['columns'][4]['isNumber'] = true;
           setTimeout(() => {
             // if (filterBy) { dataTablesParameters['filtered_by'] = filterBy; }
             // if (this.DDfilter !== '') {
@@ -68,25 +69,25 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
         },
         columns: [
           {
-            data: 'First Name',
-            name: 'first_name',
+            data: 'Car Brand',
+            name: 'car_brand',
           },
           {
-            data: 'Last Name',
-            name: 'last_name',
+            data: 'Car Modal',
+            name: 'car_modal',
           },
           {
-            data: 'Email',
-            name: 'email',
+            data: 'Compnay Name',
+            name: 'company_name',
           },
           {
-            data: 'Member Since',
-            name: 'createdAt',
+            data: 'No Of Rented',
+            name: 'no_of_rented',
           },
           {
-            data: 'Actions',
-            orderable: false
-          }
+            data: 'Total Rent',
+            name: 'totalrent',
+          },
         ]
       };
     } catch (error) {
