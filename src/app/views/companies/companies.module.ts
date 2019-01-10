@@ -15,6 +15,8 @@ import { CompanyTransactionsComponent } from './../companies/company-transaction
 import { CompaniesComponent } from './companies.component';
 import { CarDetailsComponent } from './cars/CompanyAdmin_car-details/car-details.component';
 import { CarAddEditComponent } from './cars/CompanyAdmin-car-add-edit/company-admin-car-add-edit.component';
+import { CarReportComponent } from './company-reports/car-report/car-report.component';
+import { UserReportComponent } from './company-reports/user-report/user-report.component';
 // shared component
 // import { RentalsComponent } from '../../shared/components/rentals-for-car/rentals.component';
 
@@ -65,6 +67,30 @@ const CompanyRoutes: Routes = [{
                 urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Cars', url: '/company/car' }, { title: 'Add Company' }]
             },
         },
+        {
+            path: 'reports',
+            component: CompanyReportsComponent,
+            data: {
+                title: 'Manage Reports',
+                urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Reports' }]
+            },
+        },
+        {
+            path: 'reports/car-reports',
+            component: CarReportComponent,
+            data: {
+                title: 'Manage Car Reports',
+                urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Reports', url: 'company/reports' }, { title: 'Car Reports' }]
+            },
+        },
+        {
+            path: 'reports/user-reports',
+            component: UserReportComponent,
+            data: {
+                title: 'Manage User Reports',
+                urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Reports', url: 'company/reports' }, { title: 'User Reports' }]
+            },
+        },
     ]
 },
 ];
@@ -89,6 +115,8 @@ const CompanyRoutes: Routes = [{
         CompanyTransactionsComponent,
         CompanyReportsComponent,
         CompaniesComponent,
+        CarReportComponent,
+        UserReportComponent,
         // RentalsComponent,
     ]
 })
