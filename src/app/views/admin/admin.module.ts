@@ -41,6 +41,7 @@ import { RentalHistoryComponent } from './users/rental-history/rental-history.co
 import { AdminCarReportComponent } from './admin-reports/admin-car-report/admin-car-report.component';
 import { AdminTransactionDetailComponent } from './admin-transactions/admin-transaction-detail/admin-transaction-detail.component';
 import { AdminUsersReportComponent } from './admin-reports/admin-users-report/admin-users-report.component';
+import { AdminAccountSettingComponent } from './admin-account-setting/admin-account-setting.component';
 
 const AdminRoutes: Routes = [
   {
@@ -238,6 +239,14 @@ const AdminRoutes: Routes = [
           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Settings' }]
         },
       },
+      {
+        path: 'account-setting',
+        component: AdminAccountSettingComponent,
+        data: {
+          title: 'Account Setting',
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Account Settings' }]
+        }
+      }
     ]
   },
 ];
@@ -283,6 +292,7 @@ const AdminRoutes: Routes = [
     AdminCarReportComponent,
     AdminTransactionDetailComponent,
     AdminUsersReportComponent,
+    AdminAccountSettingComponent,
   ]
 })
 export class AdminModule { }

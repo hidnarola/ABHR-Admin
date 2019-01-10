@@ -15,6 +15,7 @@ import { CompanyTransactionsComponent } from './../companies/company-transaction
 import { CompaniesComponent } from './companies.component';
 import { CarDetailsComponent } from './cars/CompanyAdmin_car-details/car-details.component';
 import { CarAddEditComponent } from './cars/CompanyAdmin-car-add-edit/company-admin-car-add-edit.component';
+import { CompanyAccountSettingComponent } from './company-account-setting/company-account-setting.component';
 // shared component
 // import { RentalsComponent } from '../../shared/components/rentals-for-car/rentals.component';
 
@@ -65,6 +66,14 @@ const CompanyRoutes: Routes = [{
                 urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Cars', url: '/company/car' }, { title: 'Add Company' }]
             },
         },
+        {
+            path: 'account-setting',
+            component: CompanyAccountSettingComponent,
+            data: {
+              title: 'Account Setting',
+              urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Account Settings' }]
+            }
+          }
     ]
 },
 ];
@@ -89,6 +98,7 @@ const CompanyRoutes: Routes = [{
         CompanyTransactionsComponent,
         CompanyReportsComponent,
         CompaniesComponent,
+        CompanyAccountSettingComponent,
         // RentalsComponent,
     ]
 })

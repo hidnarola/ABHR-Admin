@@ -11,6 +11,7 @@ export class NavigationComponent implements AfterViewInit {
   public CurrentAdmin;
   public company;
   name: string;
+  public AdminName;
   public AdminType;
   public AdminEmail;
   public AdminNumber;
@@ -21,19 +22,22 @@ export class NavigationComponent implements AfterViewInit {
                 const array = urlSegment.split('/');
                 this.CurrentAdmin = array[1];
                 const user = JSON.parse(localStorage.getItem('admin'));
+                console.log('user type in nav bar===>', user);
                 const company = JSON.parse(localStorage.getItem('company-admin'));
                 if (user != null && user !== undefined) {
-                    this.AdminType = user.first_name;
+                    this.AdminName = user.first_name;
                     this.AdminEmail = user.email;
                     this.AdminNumber = user.phone_number;
+                    this.AdminType = 'admin';
                 }
                 if (company != null && company !== undefined) {
-                    this.AdminType = company.name;
+                    this.AdminName = company.name;
                     this.AdminEmail = company.email;
                     this.AdminNumber = company.phone_number;
+                    this.AdminType = 'company_admin';
                 }
                 if (company == null && company === undefined && user == null && user === undefined) {
-                    this.AdminType = 'Admin';
+                    this.AdminName = 'Admin';
                     this.AdminEmail = 'dse@narola.email';
                     this.AdminNumber = '9654788458';
                 }

@@ -159,7 +159,7 @@
                                 <div class="dw-user-box">
                                     <div class="u-img"><img src="assets/images/users/1.jpg" alt="user"></div>
                                     <div class="u-text">
-                                        <h4>{{AdminType}}</h4>
+                                        <h4>{{AdminName}}</h4>
                                         <p class="text-muted"> {{AdminEmail}} </p>
                                         <p class="text-muted"> {{AdminNumber}} </p>
                                         <!-- <a href="pages-profile.html" class="btn btn-rounded btn-danger btn-sm">View Profile</a> -->
@@ -171,7 +171,12 @@
                                 <li><a href="#"><i class="ti-wallet"></i> My Balance</a></li>
                                 <li><a href="#"><i class="ti-email"></i> Inbox</a></li> -->
                             <li role="separator" class="divider"></li>
-                            <li><a href="#"><i class="ti-settings"></i> Account Setting</a></li>
+                            <li *ngIf="AdminType === 'admin'">
+                                <a href="/#/admin/account-setting"><i class="ti-settings"></i> Account Setting</a>
+                            </li>
+                            <li *ngIf="AdminType === 'company_admin'">
+                                <a href="/#/company/account-setting"><i class="ti-settings"></i> Account Setting</a>
+                            </li>
                             <li role="separator" class="divider"></li>
                             <li><a (click)="logout()"><i class="fa fa-power-off"></i> Logout</a></li>
                         </ul>
