@@ -39,10 +39,10 @@ export const ROUTES: RouteInfo[] = [
         //     path: '/admin/reports/transactions', title: 'Transaction Reports', icon: '',
         //     class: '', label: '', labelClass: '', extralink: false, submenu: []
         // },
-        // {
-        //     path: '/admin/reports/user-reports', title: 'User Report', icon: '',
-        //     class: '', label: '', labelClass: '', extralink: false, submenu: []
-        // },
+        {
+            path: '/admin/reports/user-reports', title: 'User Report', icon: '',
+            class: '', label: '', labelClass: '', extralink: false, submenu: []
+        },
     ]
     },
     // {
