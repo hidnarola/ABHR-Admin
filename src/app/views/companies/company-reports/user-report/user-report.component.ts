@@ -3,6 +3,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { CrudService } from '../../../../shared/services/crud.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
@@ -19,14 +20,27 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public reports;
   // Data table parameters
-  // dtparams: any;
-  // DDfilter = '';
+  dtparams: any;
+  DDfilter = '';
+  fromDate: NgbDateStruct;
+  toDate: NgbDateStruct;
+  public newDate;
+  public model: NgbDateStruct;
 
   constructor(
     public renderer: Renderer,
     public service: CrudService,
     private spinner: NgxSpinnerService,
   ) { }
+
+  DatePicker(date: NgbDateStruct) {
+    console.log('check => ', date);
+    this.newDate = date.year + '-' + date.month + '-'  + date.day;
+    console.log('newDate => ', this.newDate);
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.draw();
+    });
+  }
 
   ngOnInit() {
     this.ReportData();
@@ -47,14 +61,14 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
         language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
 
         ajax: (dataTablesParameters: any, callback) => {
-          // this.dtparams = dataTablesParameters;
+          this.dtparams = dataTablesParameters;
           dataTablesParameters['columns'][3]['isNumber'] = true;
           dataTablesParameters['columns'][4]['isNumber'] = true;
           setTimeout(() => {
             // if (filterBy) { dataTablesParameters['filtered_by'] = filterBy; }
-            // if (this.DDfilter !== '') {
-            //   dataTablesParameters['filtered_by'] = this.DDfilter;
-            // }
+            if (this.newDate !== '') {
+              dataTablesParameters['filtered_by'] = this.newDate;
+            }
             this.service.post('admin/user/report_list', dataTablesParameters).subscribe(res => {
               this.reports = res['result']['data'];
               console.log('response in reports', res);
