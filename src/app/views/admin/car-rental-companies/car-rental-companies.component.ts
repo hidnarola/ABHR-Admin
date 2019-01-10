@@ -21,6 +21,7 @@ import { NgbModal, ModalDismissReasons, NgbModalOptions } from '@ng-bootstrap/ng
 
 // primng
 import { ConfirmationService, Message } from 'primeng/api';
+import {AutoCompleteModule} from 'primeng/autocomplete';
 
 // alert
 import { MessageService } from 'primeng/api';
