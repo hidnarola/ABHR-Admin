@@ -30,20 +30,20 @@ export const ROUTES: RouteInfo[] = [
     // },
     {
         path: '/admin/reports', title: 'Reports', icon: 'fa fa-file-text-o', class: 'has-arrow',
-    label: '', labelClass: '', extralink: false, submenu: [
-        {
-            path: '/admin/reports/car-reports', title: 'Car Report', icon: '',
-            class: '', label: '', labelClass: '', extralink: false, submenu: []
-        },
-        // {
-        //     path: '/admin/reports/transactions', title: 'Transaction Reports', icon: '',
-        //     class: '', label: '', labelClass: '', extralink: false, submenu: []
-        // },
-        {
-            path: '/admin/reports/user-reports', title: 'User Report', icon: '',
-            class: '', label: '', labelClass: '', extralink: false, submenu: []
-        },
-    ]
+        label: '', labelClass: '', extralink: false, submenu: [
+            {
+                path: '/admin/reports/car-reports', title: 'Car Report', icon: '',
+                class: '', label: '', labelClass: '', extralink: false, submenu: []
+            },
+            // {
+            //     path: '/admin/reports/transactions', title: 'Transaction Reports', icon: '',
+            //     class: '', label: '', labelClass: '', extralink: false, submenu: []
+            // },
+            {
+                path: '/admin/reports/user-reports', title: 'User Report', icon: '',
+                class: '', label: '', labelClass: '', extralink: false, submenu: []
+            },
+        ]
     },
     // {
     //     path: '/admin/operations', title: 'Operations', icon: 'mdi mdi-widgets',
@@ -63,4 +63,18 @@ export const COMPANY_ROUTES: RouteInfo[] = [
     {
         path: '/company/car', title: 'Cars', icon: 'fa fa-car', class: '', label: '', labelClass: '', extralink: false, submenu: []
     },
+    {
+        path: '/company/reports', title: 'Reports', icon: 'fa fa-file-text-o', class: 'has-arrow',
+        label: '', labelClass: '', extralink: false, submenu: [
+            {
+                path: '/company/reports/car-reports', title: 'Car Report', icon: '',
+                class: '', label: '', labelClass: '', extralink: false, submenu: []
+            },
+            {
+                path: '/company/reports/user-reports', title: 'User Report', icon: '',
+                class: '', label: '', labelClass: '', extralink: false, submenu: []
+            },
+
+        ]
+    }
 ];
