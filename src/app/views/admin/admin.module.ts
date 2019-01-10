@@ -219,7 +219,7 @@ const AdminRoutes: Routes = [
         component: AdminTransactionDetailComponent,
         data: {
           title: 'View Transaction Report',
-          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Transaction Reports' }, { title: 'Transaction Report Detail'}]
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Transaction Reports' }, { title: 'Transaction Report Detail' }]
         },
       },
       {
