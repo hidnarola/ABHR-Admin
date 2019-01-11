@@ -68,6 +68,7 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
               dataTablesParameters['date'] = this.newDate;
             }
             this.service.post('admin/user/report_list', dataTablesParameters).subscribe(res => {
+              console.log('dataTablesParameters in user report => ', dataTablesParameters );
               this.reports = res['result']['data'];
               console.log('response in reports', res);
               this.spinner.hide();

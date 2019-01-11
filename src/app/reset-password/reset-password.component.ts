@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 // service
 import { CrudService } from '../shared/services/crud.service';
 import { MessageService } from 'primeng/api';
-import { Subscription } from 'rxjs'
+import { Subscription } from 'rxjs';
 import { routerNgProbeToken } from '@angular/router/src/router_module';
 
 @Component({
@@ -53,12 +53,12 @@ export class ResetPasswordComponent implements OnInit {
                     const currentTime = new Date().getTime();
                     if (this.linkData.expire_time < currentTime) {
                       this.isExpired = true;
-                      this.alerts.push({ type: 'danger', msg: 'Your link is expired',})
+                      this.alerts.push({ type: 'danger', msg: 'Your link is expired', });
                     } else {
                       this.isExpired = false;
                     }
                   }
-                })
+                });
               }
 
   ngOnInit() {
@@ -77,7 +77,7 @@ export class ResetPasswordComponent implements OnInit {
     this.submitted = true;
     if (!this.resetPasswordForm.invalid) {
       console.log('type', this.UserType);
-      if(this.UserType === 'company') {
+      if (this.UserType === 'company') {
         this.formData = { 'company_id': this.userId,
                           'new_password': this.resetPasswordForm.value.password
                        };

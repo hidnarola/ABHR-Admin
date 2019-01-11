@@ -146,3 +146,18 @@ a#to-recover:hover,
 a#to-recover:focus { color: #1976d2!important }
 
 .login-box{width: 450px !important; margin: 110px auto !important;}
+span.filter_by {color: #5c5c5c; font-weight: 400; }
+button.btn.btn-outline-secondary.datepicker_button{ background-color: #e9e9eb;border-color: #ced4da; box-shadow: 0px;box-shadow: initial;}
+button.btn.btn-outline-secondary.datepicker_button:hover,
+button.btn.btn-outline-secondary.datepicker_button:active,
+button.btn.btn-outline-secondary.datepicker_button:focus{background-color: #1976d2!important ;border-color: #1976d2!important;color: white!important; box-shadow: 0 14px 26px -12px rgba(169, 169, 169, 0.42), 0 4px 23px 0 rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(169, 169, 169, 0.2);}  
+.btn-link{color: #1976d2 !important}
+.ngb-dp-weekday[_ngcontent-c10], .ngb-dp-week-number[_ngcontent-c10]{font-style: normal !important;}
+.btn-light:not(:disabled):not(.disabled):active, 
+.btn-light:not(:disabled):not(.disabled).active, 
+.show > .btn-light.dropdown-toggle {background-color: #1976d2 !important;border-color: #1976d2 !important;color: #fff !important}
+.btn-light:not(:disabled):not(.disabled):hover, 
+.btn-light:not(:disabled):not(.disabled).hover, 
+.btn-light:not(:disabled):not(.disabled):focus, 
+.btn-light:not(:disabled):not(.disabled).focus, 
+.show > .btn-light.dropdown-toggle {background-color: #e9e9eb  !important;border-color: #e9e9eb  !important;color: #6c757d !important}

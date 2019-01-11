@@ -4,13 +4,14 @@
       <div class="col-lg-6 mb-3">
         <h4 class="table-header">List of Car Reports </h4>
       </div>
-      <div class="col-lg-6 text-right">
+      <div class="col-lg-4 offset-lg-2 justify-content-end">
           <form class="form-inline">
             <div class="form-group">
+                <span class="filter_by">Filter By :</span>
               <div class="input-group">
                 <input class="form-control" placeholder="yyyy-mm-dd" (ngModelChange)="DatePicker($event)" name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
                 <div class="input-group-append">
-                  <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                  <button class="btn btn-outline-secondary datepicker_button" (click)="d.toggle()" type="button">
                     <i class="ti-calendar"></i>
                   </button>
                 </div>

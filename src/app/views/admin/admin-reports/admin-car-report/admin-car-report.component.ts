@@ -35,7 +35,7 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
   DatePicker(date: NgbDateStruct) {
     console.log('check => ', date);
     this.newDate = date.year + '-' + date.month + '-'  + date.day;
-    console.log('newDate => ', this.newDate);
+    console.log('newDate in car report => ', this.newDate);
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.draw();
     });
@@ -58,7 +58,6 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
         ordering: true,
         order: [[0, 'desc']],
         language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
-
         ajax: (dataTablesParameters: any, callback) => {
           this.dtparams = dataTablesParameters;
           dataTablesParameters['columns'][3]['isNumber'] = true;
@@ -66,11 +65,12 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
           setTimeout(() => {
             // if (filterBy) { dataTablesParameters['filtered_by'] = filterBy; }
             if (this.newDate !== '') {
-              dataTablesParameters['filtered_by'] = this.newDate;
+              dataTablesParameters['date'] = this.newDate;
             }
             this.service.post('admin/cars/report_list', dataTablesParameters).subscribe(res => {
+              console.log('dataTablesParameters in car report => ', dataTablesParameters );
               this.reports = res['result']['data'];
-              console.log('response in reports', res);
+              console.log('response in car reports', res);
               this.spinner.hide();
               callback({
                 recordsTotal: res['result']['recordsTotal'],
