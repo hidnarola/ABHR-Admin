@@ -4,9 +4,21 @@
   <div class="card-body">
     <div class="row">
       <div class="col-lg-6 mb-3">
-        <h4 class="table-header">List of Car Reports </h4>
+        <h4 class="table-header">List of User Reports </h4>
       </div>
       <div class="col-lg-6 text-right">
+          <form class="form-inline">
+            <div class="form-group">
+              <div class="input-group">
+                <input class="form-control" placeholder="yyyy-mm-dd" (ngModelChange)="DatePicker($event)" name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                    <i class="ti-calendar"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
         <!-- <button type="button" class="btn btn-primary custom-add-btn m-r-10">
           <i class="fa fa-external-link" aria-hidden="true"></i> Export
         </button> -->

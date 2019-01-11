@@ -30,7 +30,10 @@ import { Subscription } from 'rxjs';
 // AGM
 import { MapsAPILoader } from '@agm/core';
 import { google } from '@agm/core/services/google-maps-types';
+import { Address } from 'ngx-google-places-autocomplete/objects/address';
+import { GooglePlaceDirective } from 'ngx-google-places-autocomplete';
 
+// declare var self: any;
 @Component({
   selector: 'app-car-rental-companies',
   templateUrl: './car-rental-companies.component.html',
@@ -39,11 +42,13 @@ import { google } from '@agm/core/services/google-maps-types';
 export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild(DataTableDirective)
+  // @ViewChild('placesRef') placesRef: GooglePlaceDirective;
+  // @ViewChild('search')
   dtElement: DataTableDirective;
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject();
-  public searchElementRef: ElementRef;
-
+  // public searchElementRef: ElementRef;
+  public header;
   AddEditForm: FormGroup;
   submitted = false;
   public formData: any;
@@ -51,7 +56,7 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
   public userId;
   public isEdit: boolean;
   public isDelete: boolean;
-  public users;
+  users: any;
   private subscription: Subscription;
   checked: boolean;
   message: any;
@@ -74,6 +79,10 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
     private cd: ChangeDetectorRef,
     // private ngZone: NgZone,
   ) {
+    // if (this.users.hasOwnProperty('location')) {
+    // } else {
+    //   this.users['location'] = { type: 'Point', coordinates: [] }
+    // }
     // addform validation
     const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
     this.AddEditForm = this.fromBuilder.group({
@@ -156,6 +165,9 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
     };
   }
 
+//   public handleAddressChange(address: Address) {
+//   // Do some stuff
+// }
 
   ngAfterViewInit(): void {
     this.dtTrigger.next();
@@ -299,7 +311,7 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
   //     if (obj['types'].indexOf('locality') !== -1) {
   //       return true;
   //     }
-  //   });
+  //   })
   //   return city['long_name'];
   // }
 
@@ -308,6 +320,7 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
   //     const autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
   //       types: ['(cities)']
   //     });
+  //     console.log('here==>', autocomplete);
   //     autocomplete.addListener('place_changed', () => {
   //       this.ngZone.run(() => {
   //         const place: google.maps.places.PlaceResult = autocomplete.getPlace();
@@ -325,8 +338,8 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
   //   });
   // }
   ngOnInit() {
-    this.UsersListData();
     // this.Address();
+    this.UsersListData();
   }
 
 }

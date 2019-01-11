@@ -89,7 +89,8 @@ const CompanyRoutes: Routes = [{
             component: CarReportComponent,
             data: {
                 title: 'Manage Car Reports',
-                urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Reports', url: 'company/reports' }, { title: 'Car Reports' }]
+                urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Reports', url: 'company/reports' },
+                { title: 'Car Reports' }]
             },
         },
         {
@@ -97,7 +98,8 @@ const CompanyRoutes: Routes = [{
             component: UserReportComponent,
             data: {
                 title: 'Manage User Reports',
-                urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Reports', url: 'company/reports' }, { title: 'User Reports' }]
+                urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Reports', url: 'company/reports' },
+                { title: 'User Reports' }]
             },
         },
     ]
