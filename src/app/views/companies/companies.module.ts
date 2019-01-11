@@ -72,11 +72,11 @@ const CompanyRoutes: Routes = [{
             path: 'account-setting',
             component: CompanyAccountSettingComponent,
             data: {
-              title: 'Account Setting',
-              urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Account Settings' }]
+                title: 'Account Setting',
+                urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Account Settings' }]
             }
-          },
-          {
+        },
+        {
             path: 'reports',
             component: CompanyReportsComponent,
             data: {
