@@ -15,12 +15,9 @@ import { CompanyTransactionsComponent } from './../companies/company-transaction
 import { CompaniesComponent } from './companies.component';
 import { CarDetailsComponent } from './cars/CompanyAdmin_car-details/car-details.component';
 import { CarAddEditComponent } from './cars/CompanyAdmin-car-add-edit/company-admin-car-add-edit.component';
-<<<<<<< HEAD
 import { CompanyAccountSettingComponent } from './company-account-setting/company-account-setting.component';
-=======
 import { CarReportComponent } from './company-reports/car-report/car-report.component';
 import { UserReportComponent } from './company-reports/user-report/user-report.component';
->>>>>>> 893152a064067f796817494b7da649339cb8fc9d
 // shared component
 // import { RentalsComponent } from '../../shared/components/rentals-for-car/rentals.component';
 
@@ -72,15 +69,14 @@ const CompanyRoutes: Routes = [{
             },
         },
         {
-<<<<<<< HEAD
             path: 'account-setting',
             component: CompanyAccountSettingComponent,
             data: {
-              title: 'Account Setting',
-              urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Account Settings' }]
+                title: 'Account Setting',
+                urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Account Settings' }]
             }
-          }
-=======
+        },
+        {
             path: 'reports',
             component: CompanyReportsComponent,
             data: {
@@ -104,7 +100,6 @@ const CompanyRoutes: Routes = [{
                 urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Reports', url: 'company/reports' }, { title: 'User Reports' }]
             },
         },
->>>>>>> 893152a064067f796817494b7da649339cb8fc9d
     ]
 },
 ];
@@ -129,12 +124,9 @@ const CompanyRoutes: Routes = [{
         CompanyTransactionsComponent,
         CompanyReportsComponent,
         CompaniesComponent,
-<<<<<<< HEAD
         CompanyAccountSettingComponent,
-=======
         CarReportComponent,
         UserReportComponent,
->>>>>>> 893152a064067f796817494b7da649339cb8fc9d
         // RentalsComponent,
     ]
 })
