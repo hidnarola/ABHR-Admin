@@ -42,6 +42,7 @@ import { AdminCarReportComponent } from './admin-reports/admin-car-report/admin-
 import { AdminTransactionDetailComponent } from './admin-transactions/admin-transaction-detail/admin-transaction-detail.component';
 import { AdminUsersReportComponent } from './admin-reports/admin-users-report/admin-users-report.component';
 import { AdminAccountSettingComponent } from './admin-account-setting/admin-account-setting.component';
+import { KeywordsComponent } from './keywords/keywords.component';
 
 const AdminRoutes: Routes = [
   {
@@ -249,6 +250,14 @@ const AdminRoutes: Routes = [
       }
     ]
   },
+  {
+    path: 'keywords',
+    component: KeywordsComponent,
+    data: {
+      title: 'Manage Keywords',
+      urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Keywords' }]
+    },
+  },
 ];
 @NgModule({
   imports: [
@@ -293,6 +302,7 @@ const AdminRoutes: Routes = [
     AdminTransactionDetailComponent,
     AdminUsersReportComponent,
     AdminAccountSettingComponent,
+    KeywordsComponent,
   ]
 })
 export class AdminModule { }

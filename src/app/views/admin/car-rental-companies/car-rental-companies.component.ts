@@ -21,7 +21,7 @@ import { NgbModal, ModalDismissReasons, NgbModalOptions } from '@ng-bootstrap/ng
 
 // primng
 import { ConfirmationService, Message } from 'primeng/api';
-import {AutoCompleteModule} from 'primeng/autocomplete';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 // alert
 import { MessageService } from 'primeng/api';
@@ -30,8 +30,8 @@ import { Subscription } from 'rxjs';
 // AGM
 import { MapsAPILoader } from '@agm/core';
 import { google } from '@agm/core/services/google-maps-types';
-import { Address } from 'ngx-google-places-autocomplete/objects/address';
-import { GooglePlaceDirective } from 'ngx-google-places-autocomplete';
+//import { Address } from 'ngx-google-places-autocomplete/objects/address';
+//import { GooglePlaceDirective } from 'ngx-google-places-autocomplete';
 
 // declare var self: any;
 @Component({
@@ -165,9 +165,9 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
     };
   }
 
-//   public handleAddressChange(address: Address) {
-//   // Do some stuff
-// }
+  //   public handleAddressChange(address: Address) {
+  //   // Do some stuff
+  // }
 
   ngAfterViewInit(): void {
     this.dtTrigger.next();
