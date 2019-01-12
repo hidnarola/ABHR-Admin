@@ -62,13 +62,13 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
     private confirmationService: ConfirmationService,
     // model
     private modalService: NgbModal,
-    private fromBuilder: FormBuilder,
+    private formBuilder: FormBuilder,
     private messageService: MessageService,
     private spinner: NgxSpinnerService
   ) {
     // addform validation
     const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
-    this.AddEditForm = this.fromBuilder.group({
+    this.AddEditForm = this.formBuilder.group({
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
       phone_number: ['', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]{10}')]],

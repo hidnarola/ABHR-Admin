@@ -36,7 +36,7 @@ export class AddEditCarComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private fromBuilder: FormBuilder,
+    private formBuilder: FormBuilder,
     public service: CrudService,
     private messageService: MessageService,
     public router: Router,
@@ -88,7 +88,7 @@ export class AddEditCarComponent implements OnInit {
     });
 
     // addform validation
-    this.AddEditCarForm = this.fromBuilder.group({
+    this.AddEditCarForm = this.formBuilder.group({
       car_rental_company_id: this.companyId,
       car_id: this.carId,
       car_brand_id: ['', Validators.required],

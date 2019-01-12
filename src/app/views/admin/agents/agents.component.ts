@@ -70,14 +70,14 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
     private messageService: MessageService,
     // model
     private modalService: NgbModal,
-    private fromBuilder: FormBuilder,
+    private formBuilder: FormBuilder,
     private spinner: NgxSpinnerService,
     // modalService: ModalDialogService,
     viewRef: ViewContainerRef
   ) {
     // addform validation
     const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
-    this.AddEditForm = this.fromBuilder.group({
+    this.AddEditForm = this.formBuilder.group({
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
       // deviceType: ['', Validators.required],

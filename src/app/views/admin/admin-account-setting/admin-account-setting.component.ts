@@ -16,17 +16,18 @@ export class AdminAccountSettingComponent implements OnInit {
   submitted = false;
   public formData: any;
   public Id;
+  public user;
   isLoading: boolean;
   public UserDetails;
 
   constructor(
-    private fromBuilder: FormBuilder,
+    private formBuilder: FormBuilder,
     public service: CrudService,
     private messageService: MessageService,
     public router: Router,
   ) {
     const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
-    this.SettingForm = this.fromBuilder.group({
+    this.SettingForm = this.formBuilder.group({
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
       phone_number: ['', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^([0-9]){10}$/)]],
@@ -38,8 +39,8 @@ export class AdminAccountSettingComponent implements OnInit {
       phone_number: Number,
       email: String
     };
-    const user = JSON.parse(localStorage.getItem('admin'));
-    this.Id = user._id;
+    this.user = JSON.parse(localStorage.getItem('admin'));
+    this.Id = this.user._id;
     console.log('userId', this.Id);
     if (this.Id !== undefined && this.Id !== '' && this.Id != null) {
       this.service.get('admin/details/' + this.Id).subscribe(resp => {
@@ -62,6 +63,9 @@ export class AdminAccountSettingComponent implements OnInit {
         this.formData.user_id = this.Id;
         console.log('userId', this.Id);
         this.service.put('admin/update', this.formData).subscribe(res => {
+          console.log('updated data', res)
+          localStorage.setItem('admin', JSON.stringify(res['result'].data));
+         
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
           this.router.navigate(['/admin/dashboard']);
         }, err => {

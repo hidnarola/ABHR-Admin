@@ -72,7 +72,7 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
     private route: ActivatedRoute,
     private confirmationService: ConfirmationService,
     private modalService: NgbModal,
-    private fromBuilder: FormBuilder,
+    private formBuilder: FormBuilder,
     private messageService: MessageService,
     private spinner: NgxSpinnerService,
     // private mapsAPILoader: MapsAPILoader,
@@ -85,7 +85,7 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
     // }
     // addform validation
     const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
-    this.AddEditForm = this.fromBuilder.group({
+    this.AddEditForm = this.formBuilder.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
       site_url: ['', [Validators.required, Validators.pattern('^(https?:\/\/)?[0-9a-zA-Z]+\.[-_0-9a-zA-Z]+\.[0-9a-zA-Z]+$')]],

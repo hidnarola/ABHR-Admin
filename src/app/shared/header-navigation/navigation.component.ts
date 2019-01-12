@@ -25,7 +25,7 @@ export class NavigationComponent implements AfterViewInit {
                 console.log('user type in nav bar===>', user);
                 const company = JSON.parse(localStorage.getItem('company-admin'));
                 if (user != null && user !== undefined) {
-                    this.AdminName = user.first_name;
+                    this.AdminName = user.first_name + ' ' + user.last_name;
                     this.AdminEmail = user.email;
                     this.AdminNumber = user.phone_number;
                     this.AdminType = 'admin';

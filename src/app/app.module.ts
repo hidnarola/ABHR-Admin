@@ -36,11 +36,6 @@ import { ToastModule } from 'primeng/toast';
 import { DataTablesModule } from 'angular-datatables';
 import { Constant } from './shared/constant/constant';
 
-// import { RentalModule } from './shared/components/rentals-for-car/rentals.module';
-// import { ComponentsModule } from './shared/components/components.module';
-// import { RentalsComponent } from './shared/components/rentals-for-car/rentals.component';
-// import { ViewsModule } from './views/views.module';
-
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -57,8 +52,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NavigationComponent,
     BreadcrumbComponent,
     SidebarComponent,
-    // RentalsComponent,
-    // ComponentsModule
   ],
   imports: [
     CommonModule,
@@ -75,8 +68,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NgxSpinnerModule,
     ModalDialogModule,
     ToastModule,
-    // ViewsModule,
-    // RentalModule
   ],
   providers: [
     Constant,

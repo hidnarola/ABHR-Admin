@@ -135,13 +135,15 @@ const AdminRoutes: Routes = [
             component: AddEditCarComponent,
             data: {
               title: 'Edit Car',
-              urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, {
+              urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, 
+              {
                 title: 'Companies',
                 url: '/admin/car-rental-companies'
               }, {
                 title: 'Company Detail',
                 url: '/admin/car-rental-companies/view/:_id'
-              }, { title: 'Car Detail' }]
+              },
+              { title: 'Car Detail' }]
             },
           },
           {
@@ -149,13 +151,16 @@ const AdminRoutes: Routes = [
             component: AddEditCarComponent,
             data: {
               title: 'Add Car',
-              urls: [{ title: 'Admin Dashboard', url: '/admin/dashboard' }, {
+              urls: [{ title: 'Admin Dashboard', url: '/admin/dashboard' }, 
+              {
                 title:
                   'Companies', url: '/admin/car-rental-companies'
-              }, {
+              },
+              {
                 title: 'Company Detail',
                 url: '/admin/car-rental-companies/view/:_id'
-              }, { title: 'Add Car' }]
+              }, 
+              { title: 'Add Car' }]
             },
           },
         ]

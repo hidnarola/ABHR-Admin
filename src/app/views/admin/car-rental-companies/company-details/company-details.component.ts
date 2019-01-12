@@ -54,7 +54,7 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
     private service: CrudService,
     private modalService: NgbModal,
     public router: Router,
-    private fromBuilder: FormBuilder,
+    private formBuilder: FormBuilder,
     private messageService: MessageService,
     private spinner: NgxSpinnerService
   ) {
@@ -70,7 +70,7 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
     console.log('userid in admin comapny', this.userId);
     // addform validation
     const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
-    this.AddEditForm = this.fromBuilder.group({
+    this.AddEditForm = this.formBuilder.group({
       name: ['', Validators.required],
       description: ['', Validators.required],
       site_url: ['', [Validators.required, Validators.pattern('^(https?:\/\/)?[0-9a-zA-Z]+\.[-_0-9a-zA-Z]+\.[0-9a-zA-Z]+$')]],

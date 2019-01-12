@@ -45,7 +45,7 @@ export class StaffDetailComponent implements OnInit {
     private service: CrudService,
     private modalService: NgbModal,
     public router: Router,
-    private fromBuilder: FormBuilder,
+    private formBuilder: FormBuilder,
     private messageService: MessageService,
     private spinner: NgxSpinnerService
   ) {
@@ -54,7 +54,7 @@ export class StaffDetailComponent implements OnInit {
     });
     // addform validation
     const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
-    this.AddEditForm = this.fromBuilder.group({
+    this.AddEditForm = this.formBuilder.group({
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
       phone_number: ['', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]{10}')]],

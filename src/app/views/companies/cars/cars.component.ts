@@ -49,7 +49,7 @@ export class CarsComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private confirmationService: ConfirmationService,
     // private modalService: NgbModal,
-    // private fromBuilder: FormBuilder,
+    // private formBuilder: FormBuilder,
     private spinner: NgxSpinnerService,
     private messageService: MessageService,
   ) {

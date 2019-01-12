@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
     constructor(public router: Router,
                 public service: CrudService,
-                private fromBuilder: FormBuilder,
+                private formBuilder: FormBuilder,
                 private messageService: MessageService) {
                     const urlSegment = this.router.url;
                     console.log('urlsegment in login==>', urlSegment);
@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     ngOnInit() {
         this.formData = {};
         const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
-        this.loginForm = this.fromBuilder.group({
+        this.loginForm = this.formBuilder.group({
             password: ['', Validators.required],
             email: ['', [Validators.required, Validators.email,Validators.pattern(pattern)]],
         })
@@ -54,7 +54,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
                 this.service.post('admin/login', this.loginForm.value).subscribe( res => {
                     this.submitted = false;
                     console.log('result==>', res);
-                    localStorage.setItem('admin', JSON.stringify(res['result']))
+                    localStorage.setItem('admin', JSON.stringify(res['result']));
                     localStorage.setItem('token', res['token']);
                     console.log('token', res['result']);
                     this.router.navigate(['/admin/dashboard']);
