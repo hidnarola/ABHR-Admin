@@ -23,7 +23,7 @@ export const AuthenticationRoutes: Routes = [
     // {
     //   path: 'reset-password',
     //   component: ResetPasswordComponent
-    // },  
+    // }, 
     {
       path: 'login',
       component: LoginComponent,

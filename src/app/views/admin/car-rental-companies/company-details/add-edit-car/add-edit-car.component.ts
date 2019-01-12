@@ -63,6 +63,7 @@ export class AddEditCarComponent implements OnInit {
         this.AddEditCarForm.controls['car_model_id'].setValue(this.carDetails.car_model_id);
         this.AddEditCarForm.controls['rent_price'].setValue(this.carDetails.rent_price);
         this.AddEditCarForm.controls['no_of_person'].setValue(this.carDetails.no_of_person);
+        this.AddEditCarForm.controls['resident_criteria'].setValue(this.carDetails.resident_criteria);
         this.AddEditCarForm.controls['transmission'].setValue(this.carDetails.transmission);
         this.AddEditCarForm.controls['milage'].setValue(this.carDetails.milage);
         this.AddEditCarForm.controls['car_class'].setValue(this.carDetails.car_class);
@@ -80,6 +81,7 @@ export class AddEditCarComponent implements OnInit {
         this.AddEditCarForm.controls['licence_plate'].setValue(this.carDetails.licence_plate);
         this.AddEditCarForm.controls['car_color'].setValue(this.carDetails.car_color);
       });
+      console.log(' AddEditCarForm=> ', this.AddEditCarForm );
     }
     this.service.get('app/car/brandlist').subscribe(res => {
       this.brandlist = res['data'].brand;
@@ -93,6 +95,7 @@ export class AddEditCarComponent implements OnInit {
       car_model_id: ['', Validators.required],
       rent_price: ['', [Validators.required, Validators.pattern('[0-9]*')]],
       no_of_person: ['', Validators.required],
+      resident_criteria: ['', Validators.required],
       transmission: ['', Validators.required],
       milage: ['', Validators.required],
       car_class: ['', Validators.required],
@@ -114,6 +117,7 @@ export class AddEditCarComponent implements OnInit {
       car_model_id: String,
       rent_price: Number,
       no_of_person: Number,
+      resident_criteria: Number,
       transmission: String,
       milage: String,
       car_class: String,
@@ -182,6 +186,7 @@ export class AddEditCarComponent implements OnInit {
     formData.append('car_model_id', this.f.car_model_id.value);
     formData.append('rent_price', this.f.rent_price.value);
     formData.append('no_of_person', this.f.no_of_person.value);
+    formData.append('resident_criteria', this.f.resident_criteria.value);
     formData.append('transmission', this.f.transmission.value);
     formData.append('milage', this.f.milage.value);
     formData.append('car_class', this.f.car_class.value);

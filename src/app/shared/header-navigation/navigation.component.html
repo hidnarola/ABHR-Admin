@@ -171,15 +171,15 @@
                                 <li><a href="#"><i class="ti-wallet"></i> My Balance</a></li>
                                 <li><a href="#"><i class="ti-email"></i> Inbox</a></li> -->
                             <li role="separator" class="divider"></li>
-                            <li>
+                            <!-- <li>
                                 <a href="#"><i class="ti-settings"></i> Account Setting</a>
-                            </li>
-                            <!-- <li *ngIf="AdminType === 'admin'">
+                            </li> -->
+                            <li *ngIf="AdminType === 'admin'">
                                 <a href="/#/admin/account-setting"><i class="ti-settings"></i> Account Setting</a>
                             </li>
                             <li *ngIf="AdminType === 'company_admin'">
                                 <a href="/#/company/account-setting"><i class="ti-settings"></i> Account Setting</a>
-                            </li> -->
+                            </li>
                             <li role="separator" class="divider"></li>
                             <li><a (click)="logout()"><i class="fa fa-power-off"></i> Logout</a></li>
                         </ul>

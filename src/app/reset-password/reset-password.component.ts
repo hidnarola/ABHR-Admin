@@ -35,7 +35,8 @@ export class ResetPasswordComponent implements OnInit {
               ) {
                 this.route.queryParams.subscribe(params => {
                   if (params['detials']) {
-                    const strParams = atob(params['detials']);
+                    const decodedUrl = decodeURIComponent(params['detials']);
+                    const strParams = atob(decodedUrl);
                     console.log('string params', typeof strParams);
                     this.linkData = JSON.parse(strParams);
                     console.log('link data', this.linkData );
@@ -50,6 +51,11 @@ export class ResetPasswordComponent implements OnInit {
                       this.UserType = 'company';
                       this.userName = this.linkData.name;
                     }
+                    if(this.linkData.app_user_id){
+                      console.log('this.linkData.company_id');
+                      this.userId = this.linkData.app_user_id;
+                      this.UserType = 'appUser';
+                    }
                     const currentTime = new Date().getTime();
                     if (this.linkData.expire_time < currentTime) {
                       this.isExpired = true;
@@ -63,7 +69,7 @@ export class ResetPasswordComponent implements OnInit {
 
   ngOnInit() {
     this.resetPasswordForm = this.formBuilder.group({
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(13)]],
       repeatPassword: ['', Validators.required]
     }, {
       validator: MustMatch('password', 'repeatPassword')
@@ -78,6 +84,7 @@ export class ResetPasswordComponent implements OnInit {
     if (!this.resetPasswordForm.invalid) {
       console.log('type', this.UserType);
       if (this.UserType === 'company') {
+        localStorage.clear();
         this.formData = { 'company_id': this.userId,
                           'new_password': this.resetPasswordForm.value.password
                        };
@@ -90,6 +97,7 @@ export class ResetPasswordComponent implements OnInit {
           this.messageService.add({severity: 'error', summary: 'Error', detail: 'Something went wrong, please try again!!'});
         });
       } else if (this.UserType === 'admin') {
+        localStorage.clear();
         this.formData = { 'user_id': this.userId,
                           'new_password': this.resetPasswordForm.value.password
                         };
@@ -101,6 +109,22 @@ export class ResetPasswordComponent implements OnInit {
         }, error => {
           this.messageService.add({severity: 'error', summary: 'Error', detail: 'Something went wrong, please try again!!'});
         });
+      } else if ( this.UserType === 'appUser') {
+        localStorage.clear();
+        this.formData = { 'user_id': this.userId,
+                          'new_password': this.resetPasswordForm.value.password
+                        };
+        this.service.post('reset_password', this.formData).subscribe((res) => {
+          this.submitted = false;
+          this.messageService.add({severity: 'success', summary: 'Success', detail: res['message']});
+          console.log('result==>', res);
+          this.router.navigate(['reset-password']);
+        }, error => {
+          this.messageService.add({severity: 'error', summary: 'Error', detail: error['message']});
+        });
+        this.submitted = false;
+        this.resetPasswordForm.controls['password'].setValue('');
+        this.resetPasswordForm.controls['repeatPassword'].setValue('');
       }
     }
   }

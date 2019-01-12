@@ -10,10 +10,6 @@ export const ROUTES: RouteInfo[] = [
         label: '', labelClass: '', extralink: false, submenu: []
     },
     {
-        path: '/admin/keywords', title: 'Keywords', icon: 'fa fa-user-circle-o', class: '',
-        label: '', labelClass: '', extralink: false, submenu: []
-    },
-    {
         path: '/admin/staff', title: 'Staffs', icon: 'mdi mdi-widgets', class: '', label: '', labelClass: '', extralink: false, submenu: []
     },
     {
@@ -48,6 +44,10 @@ export const ROUTES: RouteInfo[] = [
                 class: '', label: '', labelClass: '', extralink: false, submenu: []
             },
         ]
+    },
+    {
+        path: '/admin/keywords', title: 'Keywords', icon: 'fa fa-language', class: '',
+        label: '', labelClass: '', extralink: false, submenu: []
     },
     // {
     //     path: '/admin/operations', title: 'Operations', icon: 'mdi mdi-widgets',

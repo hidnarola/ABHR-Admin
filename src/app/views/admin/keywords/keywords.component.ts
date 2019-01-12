@@ -46,7 +46,7 @@ export class KeywordsComponent implements OnInit, AfterViewInit, OnDestroy {
   AddEditForm: FormGroup;
   submitted = false;
   public formData: any;
-  public userId;
+  public Id;
   public isEdit: boolean;
   public isDelete: boolean;
   isLoading: boolean;
@@ -106,9 +106,9 @@ export class KeywordsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.formData = this.AddEditForm.value;
       console.log('formadata==>', this.formData);
       if (this.isEdit) {
-        this.formData.user_id = this.userId;
+        this.formData.keyword_id = this.Id;
         this.title = 'Edit Keywords';
-        console.log('userId', this.userId);
+        console.log('Id', this.Id);
         this.service.put('admin/keyword/edit', this.formData).subscribe(res => {
           this.render();
           this.closePopup();
@@ -218,7 +218,7 @@ export class KeywordsComponent implements OnInit, AfterViewInit, OnDestroy {
     if (item !== 'undefined' && item !== '') {
       this.title = 'Edit Keywords';
       this.isEdit = true;
-      this.userId = item._id;
+      this.Id = item._id;
       this.AddEditForm.controls['keyword'].setValue(item.keyword);
       this.AddEditForm.controls['english'].setValue(item.english);
       this.AddEditForm.controls['arabic'].setValue(item.arabic)
@@ -245,14 +245,14 @@ export class KeywordsComponent implements OnInit, AfterViewInit, OnDestroy {
   // add-edit popup ends here
 
   // dlt popup
-  delete(userId) {
-    console.log('userId==>', userId);
+  delete(Id) {
+    console.log('userId==>', Id);
     this.confirmationService.confirm({
       message: 'Are you sure want to delete this record?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.service.put('admin/agents/delete', { user_id: userId }).subscribe(res => {
+        this.service.put('admin/keyword/delete', { keyword_id: Id }).subscribe(res => {
           this.render();
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
         }, err => {

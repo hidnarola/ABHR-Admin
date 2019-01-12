@@ -10,6 +10,7 @@
             <div class="cars-dtl-box-inr"><b>car class : </b><span>{{carDetails.car_class | titlecase }}</span></div>
             <div class="cars-dtl-box-inr"><b>car color : </b><span>{{carDetails.car_color| titlecase }}</span></div>
             <div class="cars-dtl-box-inr"><b>driving eligibility : </b><span>{{carDetails.driving_eligibility_criteria}}</span></div>
+            <div class="cars-dtl-box-inr"><b>Resident Criteria :</b> <span> {{carDetails.resident_criteria}} </span></div>
             <div class="cars-dtl-box-inr"><b>AC : </b><span>{{carDetails.is_AC?'Yes':'No' }}</span></div>
           </div>
           <div class="col-md-6">
@@ -19,6 +20,7 @@
             <div class="cars-dtl-box-inr"><b>avialable : </b> <span>{{ carDetails.is_avialable?'Yes':'No' }}</span>  </div>
             <div class="cars-dtl-box-inr"><b>delieverd : </b> <span>{{ carDetails.is_delieverd?'Yes':'No' }}</span>  </div>
             <div class="cars-dtl-box-inr"><b>licence plate : </b> <span>{{ carDetails.licence_plate }}</span>  </div>
+            <div class="cars-dtl-box-inr"><b>No Of Persons : </b> <span>{{carDetails.no_of_person}}</span> </div>
             <div class="cars-dtl-box-inr"><b>rent price : </b> <span>{{ carDetails.rent_price }}</span>  </div>
           </div>
         </div>

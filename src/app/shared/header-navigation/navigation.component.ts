@@ -28,13 +28,13 @@ export class NavigationComponent implements AfterViewInit {
                     this.AdminName = user.first_name;
                     this.AdminEmail = user.email;
                     this.AdminNumber = user.phone_number;
-                    // this.AdminType = 'admin';
+                    this.AdminType = 'admin';
                 }
                 if (company != null && company !== undefined) {
                     this.AdminName = company.name;
                     this.AdminEmail = company.email;
                     this.AdminNumber = company.phone_number;
-                    // this.AdminType = 'company_admin';
+                    this.AdminType = 'company_admin';
                 }
                 if (company == null && company === undefined && user == null && user === undefined) {
                     this.AdminName = 'Admin';
