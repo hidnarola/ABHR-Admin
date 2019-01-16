@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CrudService } from '../../../shared/services/crud.service';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
+import { DataSharingService, AdminUser} from '../../../shared/services/data-sharing.service';
 
 @Component({
   selector: 'app-company-account-setting',
@@ -11,6 +12,7 @@ import { Router } from '@angular/router';
 })
 export class CompanyAccountSettingComponent implements OnInit {
 
+  public adminU: AdminUser;
   public SettingForm;
   submitted = false;
   public formData: any;
@@ -23,21 +25,20 @@ export class CompanyAccountSettingComponent implements OnInit {
     private formBuilder: FormBuilder,
     private service: CrudService,
     private router: Router,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private datashare: DataSharingService,
   ) {
     const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
     this.SettingForm = this.formBuilder.group({
       name: ['', Validators.required],
-      // last_name: ['', Validators.required],
       site_url: ['', [Validators.required, Validators.pattern('^(https?:\/\/)?[0-9a-zA-Z]+\.[-_0-9a-zA-Z]+\.[0-9a-zA-Z]+$')]],
       phone_number: ['', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^([0-9]){10}$/)]],
       email: ['', [Validators.required, Validators.email, Validators.pattern(pattern)]]
     });
     this.formData = {
       name: String,
-      // last_name: String,
       site_url: String,
-      phone_number: Number,
+      phone_number: String,
       email: String
     };
     this.companyUser = JSON.parse(localStorage.getItem('company-admin'));
@@ -49,7 +50,6 @@ export class CompanyAccountSettingComponent implements OnInit {
         console.log('resp => ', resp['data'].data);
         this.SettingForm.controls['name'].setValue(this.UserDetails.name);
         this.SettingForm.controls['site_url'].setValue(this.UserDetails.site_url);
-        // this.SettingForm.controls['last_name'].setValue(this.UserDetails.last_name);
         this.SettingForm.controls['phone_number'].setValue(this.UserDetails.phone_number);
         this.SettingForm.controls['email'].setValue(this.UserDetails.email);
       });
@@ -66,13 +66,21 @@ export class CompanyAccountSettingComponent implements OnInit {
       console.log('formadata==>', this.formData);
         this.formData.company_id = this.Id;
         console.log('companyUserId', this.Id);
-        this.service.put('admin/company/update', this.formData).subscribe(res => {
-          console.log('res => ', res);
-          localStorage.setItem('company-admin', JSON.stringify(res['data'].data));
+        this.service.put('company/update', this.formData).subscribe(res => {
+          this.isLoading = false;
+          localStorage.setItem('company-admin', JSON.stringify(res['result'].data));
+          this.adminU = {
+            first_name: '',
+            last_name: '',
+            phone_number: '',
+            email: '',
+          };
+          this.datashare.changeAdminUser(this.adminU);
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
           this.router.navigate(['/company/dashboard']);
         }, err => {
           err = err.error;
+          this.isLoading = false;
           this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
         });
   }

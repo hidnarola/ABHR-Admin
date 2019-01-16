@@ -161,3 +161,6 @@ button.btn.btn-outline-secondary.datepicker_button:focus{background-color: #1976
 .btn-light:not(:disabled):not(.disabled):focus, 
 .btn-light:not(:disabled):not(.disabled).focus, 
 .show > .btn-light.dropdown-toggle {background-color: #e9e9eb  !important;border-color: #e9e9eb  !important;color: #6c757d !important}
+.ngb-dp-weekday[_ngcontent-c19], .ngb-dp-week-number[_ngcontent-c19] {
+    font-style: normal !important;
+}

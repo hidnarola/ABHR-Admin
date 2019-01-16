@@ -35,6 +35,7 @@ import { ToastModule } from 'primeng/toast';
 // third party modules
 import { DataTablesModule } from 'angular-datatables';
 import { Constant } from './shared/constant/constant';
+import { DataSharingService, AdminUser } from './shared/services/data-sharing.service';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -72,6 +73,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   providers: [
     Constant,
     MessageService,
+    DataSharingService,
     ConfirmationService,
     {
       provide: PERFECT_SCROLLBAR_CONFIG,

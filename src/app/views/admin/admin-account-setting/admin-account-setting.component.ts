@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CrudService } from '../../../shared/services/crud.service';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
+import { DataSharingService, AdminUser } from '../../../shared/services/data-sharing.service';
 
 @Component({
   selector: 'app-admin-account-setting',
@@ -11,7 +12,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./admin-account-setting.component.css']
 })
 export class AdminAccountSettingComponent implements OnInit {
-
+  public adminU: AdminUser;
   SettingForm: FormGroup;
   submitted = false;
   public formData: any;
@@ -25,6 +26,7 @@ export class AdminAccountSettingComponent implements OnInit {
     public service: CrudService,
     private messageService: MessageService,
     public router: Router,
+    private datashare: DataSharingService,
   ) {
     const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
     this.SettingForm = this.formBuilder.group({
@@ -63,9 +65,14 @@ export class AdminAccountSettingComponent implements OnInit {
         this.formData.user_id = this.Id;
         console.log('userId', this.Id);
         this.service.put('admin/update', this.formData).subscribe(res => {
-          console.log('updated data', res)
           localStorage.setItem('admin', JSON.stringify(res['result'].data));
-         
+          this.adminU = {
+            first_name: res['result'].data.first_name,
+            last_name: res['result'].data.last_name,
+            phone_number: res['result'].data.phone_number,
+            email: res['result'].data.email
+          };
+          this.datashare.changeAdminUser(this.adminU);
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
           this.router.navigate(['/admin/dashboard']);
         }, err => {

@@ -2,6 +2,7 @@ import { Component, AfterViewInit } from '@angular/core';
 import { NgbModal, ModalDismissReasons, NgbPanelChangeEvent, NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { Router, ActivatedRoute, RouterStateSnapshot } from '@angular/router';
+import { DataSharingService } from '../services/data-sharing.service';
 @Component({
   selector: 'app-navigation',
   templateUrl: './navigation.component.html'
@@ -17,30 +18,33 @@ export class NavigationComponent implements AfterViewInit {
   public AdminNumber;
   public config: PerfectScrollbarConfigInterface = {};
   constructor(private modalService: NgbModal,
+              private datashare: DataSharingService,
               private router: Router ) {
                 const urlSegment = this.router.url;
                 const array = urlSegment.split('/');
                 this.CurrentAdmin = array[1];
-                const user = JSON.parse(localStorage.getItem('admin'));
-                console.log('user type in nav bar===>', user);
-                const company = JSON.parse(localStorage.getItem('company-admin'));
-                if (user != null && user !== undefined) {
+                this.datashare.currentAdminUser.subscribe((res) =>{
+                  var user = JSON.parse(localStorage.getItem('admin'));
+                  console.log('user type in nav bar===>', user);
+                  var company = JSON.parse(localStorage.getItem('company-admin'));
+                  if (user != null && user !== undefined) {
                     this.AdminName = user.first_name + ' ' + user.last_name;
                     this.AdminEmail = user.email;
                     this.AdminNumber = user.phone_number;
                     this.AdminType = 'admin';
-                }
-                if (company != null && company !== undefined) {
-                    this.AdminName = company.name;
-                    this.AdminEmail = company.email;
-                    this.AdminNumber = company.phone_number;
-                    this.AdminType = 'company_admin';
-                }
-                if (company == null && company === undefined && user == null && user === undefined) {
-                    this.AdminName = 'Admin';
-                    this.AdminEmail = 'dse@narola.email';
-                    this.AdminNumber = '9654788458';
-                }
+                  }
+                  if (company != null && company !== undefined) {
+                      this.AdminName = company.name;
+                      this.AdminEmail = company.email;
+                      this.AdminNumber = company.phone_number;
+                      this.AdminType = 'company_admin';
+                  }
+                  if (company == null && company === undefined && user == null && user === undefined) {
+                      this.AdminName = 'Admin';
+                      this.AdminEmail = 'dse@narola.email';
+                      this.AdminNumber = '9654788458';
+                  }
+                } );
   }
 
   // This is for Notifications

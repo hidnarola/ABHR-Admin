@@ -43,6 +43,7 @@ import { AdminTransactionDetailComponent } from './admin-transactions/admin-tran
 import { AdminUsersReportComponent } from './admin-reports/admin-users-report/admin-users-report.component';
 import { AdminAccountSettingComponent } from './admin-account-setting/admin-account-setting.component';
 import { KeywordsComponent } from './keywords/keywords.component';
+// import { DataSharingService } from '../../shared/services/data-sharing.service';
 
 const AdminRoutes: Routes = [
   {
@@ -308,6 +309,9 @@ const AdminRoutes: Routes = [
     AdminUsersReportComponent,
     AdminAccountSettingComponent,
     KeywordsComponent,
+  ],
+  providers: [
+    // DataSharingService,
   ]
 })
 export class AdminModule { }

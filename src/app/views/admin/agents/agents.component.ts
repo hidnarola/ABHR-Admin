@@ -16,7 +16,7 @@ import { CrudService } from '../../../shared/services/crud.service';
 
 // popup-forms
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl } from '@angular/forms';
 
 // primng
 import { ConfirmationService, Message } from 'primeng/api';
@@ -46,6 +46,7 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
   AddEditForm: FormGroup;
   submitted = false;
   public formData: any;
+  public emailData: any;
   public userId;
   public isEdit: boolean;
   public isDelete: boolean;
@@ -53,6 +54,7 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
   public agents;
   closeResult: string;
   public title = 'Add Agent';
+  // public pattern: any;
 
   private subscription: Subscription;
   message: any;
@@ -81,8 +83,9 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
       // deviceType: ['', Validators.required],
-      phone_number: ['', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^([0-9]){10}$/)]],
-      email: ['', [Validators.required, Validators.email, Validators.pattern(pattern)]]
+      phone_number: ['', Validators.compose([Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^([0-9]){10}$/)])],
+      email: ['', Validators.compose([Validators.required, Validators.email,
+        Validators.pattern(pattern), this.uniqueEmailValidator])],
     });
 
     this.formData = {
@@ -93,6 +96,41 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
       email: String
     };
   }
+
+  public uniqueEmailValidator = (control: FormControl) => {
+    let isWhitespace;
+    if ( isWhitespace = (control.value || '').trim().length === 0) {
+      return { 'required': true };
+    } else {
+      const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
+      var result = pattern.test(control.value);
+      if (!result) {
+        return { 'pattern': true };
+      } else {
+        this.emailData = {'email' : control.value};
+        if (this.isEdit) {
+          this.emailData = { 'email' : control.value, 'user_id': this.userId};
+        }
+        console.log('emailData===>', this.emailData);
+        return this.service.post('admin/checkemail', this.emailData).subscribe(res => {
+          // return (res['status'] === 'success') ? {'unique': true} : null;
+          // console.log('response of validation APi', res['status']);
+          // if (res['status'] === 'success') {
+          //   console.log('if==>');
+          // } else {
+          //   console.log('else==>');
+          // }
+          if (res['status'] === 'success') {
+            this.f.email.setErrors({'unique': true});
+            return;
+          } else {
+            this.f.email.setErrors(null);
+          }
+        });
+      }
+    }
+  }
+
   // add-edit-popup form validation
   get f() { return this.AddEditForm.controls; }
 
@@ -112,22 +150,26 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.title = 'Edit Agent';
         console.log('userId', this.userId);
         this.service.put('admin/agents/update', this.formData).subscribe(res => {
+          this.isLoading = false;
           this.render();
           this.closePopup();
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
         }, err => {
           err = err.error;
+          this.isLoading = false;
           this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
           this.closePopup();
         });
       } else {
         this.title = 'Add Agent';
         this.service.post('admin/agents/add', this.formData).subscribe(res => {
+          this.isLoading = false;
           this.render();
           this.closePopup();
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
         }, err => {
           err = err.error;
+          this.isLoading = false;
           this.messageService.add({ severity: 'error', summary: 'Error', detail: err['error'] });
           this.closePopup();
         });
