@@ -45,10 +45,10 @@ export const ROUTES: RouteInfo[] = [
             },
         ]
     },
-    {
-        path: '/admin/keywords', title: 'Keywords', icon: 'fa fa-language', class: '',
-        label: '', labelClass: '', extralink: false, submenu: []
-    },
+    // {
+    //     path: '/admin/keywords', title: 'Keywords', icon: 'fa fa-language', class: '',
+    //     label: '', labelClass: '', extralink: false, submenu: []
+    // },
     // {
     //     path: '/admin/operations', title: 'Operations', icon: 'mdi mdi-widgets',
     // class: '', label: '', labelClass: '', extralink: false, submenu: []
@@ -80,5 +80,9 @@ export const COMPANY_ROUTES: RouteInfo[] = [
             },
 
         ]
-    }
+    },
+    {
+        path: '/company/keywords', title: 'Keywords', icon: 'fa fa-language', class: '',
+        label: '', labelClass: '', extralink: false, submenu: []
+    },
 ];

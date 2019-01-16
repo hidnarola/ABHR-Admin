@@ -1,5 +1,6 @@
-/// <reference types="@types/googlemaps" />
-import { Component, OnInit, Renderer, ViewChild, OnDestroy, AfterViewInit, ElementRef, NgZone, ChangeDetectorRef } from '@angular/core';
+// <reference types="@types/googlemaps" />
+import { Component, OnInit, Renderer, ViewChild, OnDestroy, AfterViewInit, ElementRef, 
+  NgZone, ChangeDetectorRef, Input, Output, EventEmitter } from '@angular/core';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 
@@ -28,9 +29,9 @@ import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 
 // AGM
-import { MapsAPILoader } from '@agm/core';
+import { MapsAPILoader, GoogleMapsAPIWrapper } from '@agm/core';
 import { google } from '@agm/core/services/google-maps-types';
-
+// import { } from 'googlemaps';
 // declare var self: any;
 @Component({
   selector: 'app-car-rental-companies',
@@ -39,13 +40,16 @@ import { google } from '@agm/core/services/google-maps-types';
 })
 export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterViewInit {
 
+  // @Input() adressType: String;
+  // @Output() setAddress: EventEmitter<any> = new EventEmitter();
+  // @ViewChild('addresstext') addresstext: any;
   @ViewChild(DataTableDirective)
   // @ViewChild('placesRef') placesRef: GooglePlaceDirective;
-  // @ViewChild('search')
+  @ViewChild('search')
   dtElement: DataTableDirective;
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject();
-  // public searchElementRef: ElementRef;
+  public searchElementRef: ElementRef;
   public header;
   AddEditForm: FormGroup;
   submitted = false;
@@ -64,6 +68,9 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
   closeResult: string;
   isLoading: boolean;
 
+  // autocompleteInput: string;
+  // queryWait: boolean;
+
   constructor(
     public renderer: Renderer,
     public service: CrudService,
@@ -75,9 +82,10 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
     private formBuilder: FormBuilder,
     private messageService: MessageService,
     private spinner: NgxSpinnerService,
-    // private mapsAPILoader: MapsAPILoader,
     private cd: ChangeDetectorRef,
-    // private ngZone: NgZone,
+    public mapsAPILoader: MapsAPILoader,
+    private ngZone: NgZone,
+    googleMapsAPIWrapper: GoogleMapsAPIWrapper,
   ) {
     // if (this.users.hasOwnProperty('location')) {
     // } else {
@@ -102,7 +110,7 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
       phone_number: Number,
       email: String,
       site_url: String,
-      address: String,
+      // address: String,
     };
   }
 
@@ -243,6 +251,7 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
 
   ngAfterViewInit(): void {
     this.dtTrigger.next();
+    // this.getPlaceAutocomplete();
   }
 
   // Add-Edit pop up
@@ -378,14 +387,14 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
     }
   }
 
-  // getCity(addressArray) {
-  //   const city = addressArray.find((obj) => {
-  //     if (obj['types'].indexOf('locality') !== -1) {
-  //       return true;
-  //     }
-  //   })
-  //   return city['long_name'];
-  // }
+  getCity(addressArray) {
+    const city = addressArray.find((obj) => {
+      if (obj['types'].indexOf('locality') !== -1) {
+        return true;
+      }
+    })
+    return city['long_name'];
+  }
 
   // Address() {
   //   this.mapsAPILoader.load().then(() => {
@@ -409,8 +418,48 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
   //     });
   //   });
   // }
+
+  // private getPlaceAutocomplete() {
+  //   // const autocomplete = new google.maps.places.Autocomplete( this.addresstext.nativeElement,
+  //   //     {
+  //   //         componentRestrictions: { country: 'US' },
+  //   //         types: [this.adressType]  // 'establishment' / 'address' / 'geocode'
+  //   //     });
+  //   const autocomplete1 = new google.maps.places.Autocomplete( this.addresstext.nativeElement,
+  //     {
+  //         componentRestrictions: { country: 'US' },
+  //         types: [this.adressType]  // 'establishment' / 'address' / 'geocode'
+  //     });
+  //   // google.maps.event.addListener(autocomplete, 'place_changed', () => {
+  //   //     const place = autocomplete.getPlace();
+  //   //     this.invokeEvent(place);
+  //   // });
+  // }
+  //   invokeEvent(place: Object) {
+  //           this.setAddress.emit(place);
+  // }
+
   ngOnInit() {
-    // this.Address();
+    // this.mapsAPILoader.load().then(() => {
+    //   const autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
+    //     types: ['(cities)']
+    //   });
+    //   console.log('here==>', autocomplete);
+    //   autocomplete.addListener('place_changed', () => {
+    //     this.ngZone.run(() => {
+    //       const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+    //       // verify result
+    //       if (place.geometry === undefined || place.geometry === null) {
+    //         return;
+    //       }
+    //       const lng = place.geometry.location.lng();
+    //       const lat = place.geometry.location.lat();
+    //       this.users.location = { type: 'Point', coordinates: [lng, lat] }
+    //       this.users.city = this.getCity(place['address_components']);
+    //       this.users.formatted_address = this.searchElementRef.nativeElement.value;
+    //     });
+    //   });
+    // });
     this.UsersListData();
   }
 

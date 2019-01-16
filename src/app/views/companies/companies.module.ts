@@ -18,6 +18,7 @@ import { CarAddEditComponent } from './cars/CompanyAdmin-car-add-edit/company-ad
 import { CompanyAccountSettingComponent } from './company-account-setting/company-account-setting.component';
 import { CarReportComponent } from './company-reports/car-report/car-report.component';
 import { UserReportComponent } from './company-reports/user-report/user-report.component';
+import { KeywordsComponent } from './keywords/keywords.component';
 // shared component
 // import { RentalsComponent } from '../../shared/components/rentals-for-car/rentals.component';
 
@@ -104,6 +105,14 @@ const CompanyRoutes: Routes = [{
         },
     ]
 },
+{
+    path: 'keywords',
+    component: KeywordsComponent,
+    data: {
+      title: 'Manage Keywords',
+      urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Keywords' }]
+    },
+  },
 ];
 @NgModule({
     imports: [
@@ -129,6 +138,7 @@ const CompanyRoutes: Routes = [{
         CompanyAccountSettingComponent,
         CarReportComponent,
         UserReportComponent,
+        KeywordsComponent,
         // RentalsComponent,
     ]
 })
