@@ -12,7 +12,7 @@ import { CrudService } from '../../../shared/services/crud.service';
 
 // popup-forms
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 
 // model
 import { NgbModal, ModalDismissReasons, NgbActiveModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
@@ -41,6 +41,7 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
   AddEditForm: FormGroup;
   submitted = false;
   public formData: any;
+  public emailData: any;
   public userId;
   public isEdit: boolean;
   public isDelete: boolean;
@@ -48,7 +49,7 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
   private subscription: Subscription;
   message: any;
   msgs: Message[] = [];
-  public title = 'Add Company';
+  public title = 'Add Staff';
   // model
   closeResult: string;
   isLoading: boolean;
@@ -71,8 +72,8 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
     this.AddEditForm = this.formBuilder.group({
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
-      phone_number: ['', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]{10}')]],
-      email: ['', [Validators.required, Validators.email, Validators.pattern(pattern)]]
+      phone_number: ['',  Validators.compose([Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]{10}')])],
+      email: ['',  Validators.compose([Validators.required, Validators.email, Validators.pattern(pattern), this.uniqueEmailValidator])]
     });
 
     this.formData = {
@@ -84,6 +85,39 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
     };
   }
 
+  public uniqueEmailValidator = (control: FormControl) => {
+    let isWhitespace;
+    if ( isWhitespace = (control.value || '').trim().length === 0) {
+      return { 'required': true };
+    } else {
+      const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
+      var result = pattern.test(control.value);
+      if (!result) {
+        return { 'pattern': true };
+      } else {
+        this.emailData = {'email' : control.value};
+        if (this.isEdit) {
+          this.emailData = { 'email' : control.value, 'user_id': this.userId};
+        }
+        console.log('emailData===>', this.emailData);
+        return this.service.post('admin/checkemail', this.emailData).subscribe(res => {
+          // return (res['status'] === 'success') ? {'unique': true} : null;
+          // console.log('response of validation APi', res['status']);
+          // if (res['status'] === 'success') {
+          //   console.log('if==>');
+          // } else {
+          //   console.log('else==>');
+          // }
+          if (res['status'] === 'success') {
+            this.f.email.setErrors({'unique': true});
+            return;
+          } else {
+            this.f.email.setErrors(null);
+          }
+        });
+      }
+    }
+  }
   // add-edit-popup form validation
   get f() { return this.AddEditForm.controls; }
 
@@ -100,7 +134,7 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
       console.log('formadata==>', this.formData);
       if (this.isEdit) {
         this.formData.user_id = this.userId;
-        this.title = 'Edit Company';
+        this.title = 'Edit Staff';
         console.log('userId in staff', this.userId);
         this.service.put('admin/staff/update', this.formData).subscribe(res => {
           this.render();
@@ -112,7 +146,7 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
           this.closePopup();
         });
       } else {
-        this.title = 'Add Company';
+        this.title = 'Add Staff';
         console.log('formdata in add==>', this.formData);
         this.service.post('admin/staff/add', this.formData).subscribe(res => {
           console.log('staff adddata==>', res);
@@ -127,6 +161,8 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
       }
       this.isEdit = false;
       this.submitted = false;
+    } else {
+      return;
     }
   }
   // ends here
@@ -210,7 +246,7 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
   open2(content, item) {
     console.log('item==>', item);
     if (item !== 'undefined' && item !== '') {
-      this.title = 'Edit Company';
+      this.title = 'Edit Staff';
       this.isEdit = true;
       this.userId = item._id;
       this.AddEditForm.controls['first_name'].setValue(item.first_name);
@@ -218,7 +254,7 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
       this.AddEditForm.controls['email'].setValue(item.email);
       this.AddEditForm.controls['phone_number'].setValue(item.phone_number);
     } else {
-      this.title = 'Add Company';
+      this.title = 'Add Staff';
     }
     const options: NgbModalOptions = {
       keyboard: false,
@@ -235,6 +271,7 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
         this.AddEditForm.controls['phone_number'].setValue('');
       }
     });
+    this.submitted = false;
   }
   // add-edit popup ends here
 
@@ -255,7 +292,6 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
         });
       },
       reject: () => {
-        // this.messageService.add({ severity: 'info', summary: 'Information', detail: 'Your request is canceled for delete.' });
       }
     });
   }

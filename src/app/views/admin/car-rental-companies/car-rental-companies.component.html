@@ -110,6 +110,7 @@
                 formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.name.errors }">
               <div *ngIf=" submitted && f.name.errors " class="invalid-feedback">
                 <div *ngIf="f.name.errors.required"> Company Name is required</div>
+                <div *ngIf="f.name.errors.uniqueName">Company Name already exist</div>
               </div>
             </div>
           </div>
@@ -131,6 +132,7 @@
               <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                 <div *ngIf=" f.email.errors.required ">Email is required</div>
                 <div *ngIf=" f.email.errors.pattern"> Email format is wrong </div>
+                <div *ngIf="f.email.errors.unique">Email already exist</div>
               </div>
             </div>
           </div>
