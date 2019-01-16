@@ -83,9 +83,9 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
     private messageService: MessageService,
     private spinner: NgxSpinnerService,
     private cd: ChangeDetectorRef,
-    public mapsAPILoader: MapsAPILoader,
-    private ngZone: NgZone,
-    googleMapsAPIWrapper: GoogleMapsAPIWrapper,
+    // public mapsAPILoader: MapsAPILoader,
+    // private ngZone: NgZone,
+    // googleMapsAPIWrapper: GoogleMapsAPIWrapper,
   ) {
     // if (this.users.hasOwnProperty('location')) {
     // } else {

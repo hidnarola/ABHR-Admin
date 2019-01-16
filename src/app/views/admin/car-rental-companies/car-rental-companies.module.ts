@@ -17,7 +17,7 @@ import { CarRentalCompaniesComponent } from './car-rental-companies.component';
     }),
   ],
   providers: [
-    GoogleMapsAPIWrapper
+    // GoogleMapsAPIWrapper
   ]
 })
 export class CarRentalCompaniesModule { }
