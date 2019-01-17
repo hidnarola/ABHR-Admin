@@ -1,0 +1,6 @@
+.address-input .custom-autocomplete__input input{
+    height: 38px !important;
+    letter-spacing: 0.08em !important;
+    font-size: 13px !important;
+    color: #666 !important;
+    }

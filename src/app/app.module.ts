@@ -36,9 +36,8 @@ import { ToastModule } from 'primeng/toast';
 import { DataTablesModule } from 'angular-datatables';
 import { Constant } from './shared/constant/constant';
 import { DataSharingService, AdminUser } from './shared/services/data-sharing.service';
-import { GoogleMapsAPIWrapper } from '@agm/core';
+// import { GoogleMapsAPIWrapper } from '@agm/core';
 import { TokenInterceptor } from './shared/interface/token-interceptor';
-
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,

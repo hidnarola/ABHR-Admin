@@ -19,6 +19,7 @@ import { CompanyAccountSettingComponent } from './company-account-setting/compan
 import { CarReportComponent } from './company-reports/car-report/car-report.component';
 import { UserReportComponent } from './company-reports/user-report/user-report.component';
 import { KeywordsComponent } from './keywords/keywords.component';
+import { CompanyTermsComponent } from './company-terms/company-terms.component';
 // shared component
 // import { RentalsComponent } from '../../shared/components/rentals-for-car/rentals.component';
 
@@ -103,16 +104,24 @@ const CompanyRoutes: Routes = [{
                 { title: 'User Reports' }]
             },
         },
+        {
+            path: 'terms_and_conditions',
+            component: CompanyTermsComponent,
+            data: {
+                title: 'Terms & Conditions',
+                urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Terms & Conditions' }]
+            }
+        }
     ]
 },
 {
     path: 'keywords',
     component: KeywordsComponent,
     data: {
-      title: 'Manage Keywords',
-      urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Keywords' }]
+        title: 'Manage Keywords',
+        urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Keywords' }]
     },
-  },
+},
 ];
 @NgModule({
     imports: [
@@ -139,6 +148,7 @@ const CompanyRoutes: Routes = [{
         CarReportComponent,
         UserReportComponent,
         KeywordsComponent,
+        CompanyTermsComponent,
         // RentalsComponent,
     ]
 })

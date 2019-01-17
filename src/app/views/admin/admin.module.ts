@@ -16,6 +16,7 @@ import { ToastModule } from 'primeng/toast';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { TooltipModule } from 'primeng/tooltip';
 import { MenuModule } from 'primeng/menu';
+import { EditorModule } from 'primeng/editor';
 
 import { AdminComponent } from './admin.component';
 // Child components
@@ -44,6 +45,10 @@ import { AdminUsersReportComponent } from './admin-reports/admin-users-report/ad
 import { AdminAccountSettingComponent } from './admin-account-setting/admin-account-setting.component';
 import { KeywordsComponent } from './keywords/keywords.component';
 // import { DataSharingService } from '../../shared/services/data-sharing.service';
+
+import { Ng4GeoautocompleteModule } from 'ng4-geoautocomplete';
+import { AdminTermsComponent } from './admin-terms/admin-terms.component';
+import { QuillModule } from 'ngx-quill';
 
 const AdminRoutes: Routes = [
   {
@@ -136,7 +141,7 @@ const AdminRoutes: Routes = [
             component: AddEditCarComponent,
             data: {
               title: 'Edit Car',
-              urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, 
+              urls: [{ title: 'Dashboard', url: '/admin/dashboard' },
               {
                 title: 'Companies',
                 url: '/admin/car-rental-companies'
@@ -152,7 +157,7 @@ const AdminRoutes: Routes = [
             component: AddEditCarComponent,
             data: {
               title: 'Add Car',
-              urls: [{ title: 'Admin Dashboard', url: '/admin/dashboard' }, 
+              urls: [{ title: 'Admin Dashboard', url: '/admin/dashboard' },
               {
                 title:
                   'Companies', url: '/admin/car-rental-companies'
@@ -160,7 +165,7 @@ const AdminRoutes: Routes = [
               {
                 title: 'Company Detail',
                 url: '/admin/car-rental-companies/view/:_id'
-              }, 
+              },
               { title: 'Add Car' }]
             },
           },
@@ -253,6 +258,14 @@ const AdminRoutes: Routes = [
           title: 'Account Setting',
           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Account Settings' }]
         }
+      },
+      {
+        path: 'terms_and_conditions',
+        component: AdminTermsComponent,
+        data: {
+          title: 'Terms & Conditions',
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Terms & Conditions' }]
+        }
       }
     ]
   },
@@ -282,7 +295,10 @@ const AdminRoutes: Routes = [
     ToastModule,
     InputSwitchModule,
     TooltipModule,
-    MenuModule
+    MenuModule,
+    QuillModule,
+    EditorModule,
+    Ng4GeoautocompleteModule.forRoot()
   ],
   exports: [RouterModule],
   declarations: [
@@ -309,6 +325,7 @@ const AdminRoutes: Routes = [
     AdminUsersReportComponent,
     AdminAccountSettingComponent,
     KeywordsComponent,
+    AdminTermsComponent,
   ],
   providers: [
     // DataSharingService,

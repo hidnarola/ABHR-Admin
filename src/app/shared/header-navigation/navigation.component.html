@@ -49,24 +49,24 @@
 
                 <!-- Logo icon -->
                 <b>
-                <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
-                <!-- Dark Logo icon -->
+                    <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
+                    <!-- Dark Logo icon -->
 
-                <!-- <img src="assets/images/logo-icon.png" alt="homepage" class="dark-logo" /> -->
+                    <!-- <img src="assets/images/logo-icon.png" alt="homepage" class="dark-logo" /> -->
 
-                <!-- Light Logo icon -->
-                <!-- <img src="assets/images/logo-light-icon.png" alt="homepage" class="light-logo" /> -->
+                    <!-- Light Logo icon -->
+                    <!-- <img src="assets/images/logo-light-icon.png" alt="homepage" class="light-logo" /> -->
                 </b>
                 <!--End Logo icon -->
                 <!-- Logo text -->
                 <span>
-                <!-- dark Logo text -->
+                    <!-- dark Logo text -->
 
-                <!-- <img src="assets/images/logo-text.png" alt="homepage" class="dark-logo" /> -->
+                    <!-- <img src="assets/images/logo-text.png" alt="homepage" class="dark-logo" /> -->
 
-                <!-- Light Logo text -->
-                <!-- <img src="assets/images/logo-light-text.png" class="light-logo" alt="homepage" /> -->
-                </span> 
+                    <!-- Light Logo text -->
+                    <!-- <img src="assets/images/logo-light-text.png" class="light-logo" alt="homepage" /> -->
+                </span>
             </a>
         </div>
         <!-- ============================================================== -->
@@ -166,10 +166,17 @@
                                     </div>
                                 </div>
                             </li>
-                            <!-- <li role="separator" class="divider"></li> -->
-                            <!-- <li><a href="#"><i class="ti-user"></i> My Profile</a></li>
-                                <li><a href="#"><i class="ti-wallet"></i> My Balance</a></li>
-                                <li><a href="#"><i class="ti-email"></i> Inbox</a></li> -->
+                            <li role="separator" class="divider"></li>
+                            <li *ngIf="AdminType === 'admin'">
+                                <a href="/#/admin/terms_and_conditions">
+                                    <i class="fa fa-check-square-o"></i> Terms & Conditions
+                                </a>
+                            </li>
+                            <!-- <li *ngIf="AdminType === 'company_admin'">
+                                <a href="/#/company/terms_and_conditions">
+                                    <i class="fa fa-check-square-o"></i> Terms & Conditions
+                                </a>
+                            </li> -->
                             <li role="separator" class="divider"></li>
                             <!-- <li>
                                 <a href="#"><i class="ti-settings"></i> Account Setting</a>

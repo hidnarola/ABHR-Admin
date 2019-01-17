@@ -1,0 +1,15 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <p-editor formControlName="terms_and_condition" name="terms_and_condition" type="text" [style]="{'height':'320px'}"></p-editor>
+          </div>
+          <button type="submit" class="btn waves-effect loading-btn waves-light btn-primary"> Submit </button>
+          <a class="btn waves-effect waves-light custom-btn btn-danger" [routerLink]="['/admin/dashboard']">Cancel</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

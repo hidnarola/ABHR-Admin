@@ -147,38 +147,14 @@
               </div>
             </div>
           </div>
-          <!-- <div class="col-sm-6">
+          <div class="col-sm-6">
             <div class="form-group">
-              <label>Address :</label>
-              <div class="input-wrap">
-                <input type="text" placeholder="Enter address" class="form-control" #search [(ngModel)] =users.address formControlName="address" name="address">
-                <input type="hidden" name="lat" formControlName="latitude" [(ngModel)]="users['location']['coordinates'][1]" />
-              </div>
+              <label class="required"> Address :</label>
+              <ng4geo-autocomplete class="address-input" [userSettings]="userSettings" (componentCallback)="autoCompleteCallback1($event)"
+                (keyup)="test($event)">
+              </ng4geo-autocomplete>
             </div>
-          </div> -->
-          <!-- <div class="form-group">
-              <label>City</label>
-              <div class="input-wrap">
-                <input type="text" Placeholder="Select City" #search [(ngModel)]="user.address" name='address' class="form-control" formControlName="address"
-                />
-                <input type="hidden" name="lat" formControlName="latitude" [(ngModel)]="user['location']['coordinates'][1]" />
-              </div>
-              <div class="error" *ngIf="!form.controls['address'].valid && isFormSubmited">
-                <span>City is required</span>
-              </div>
-              <div class="error" *ngIf="!form.controls['latitude'].valid && isFormSubmited" [(ngModel)]="user['location']['coordinates']['1']">
-                <span>You must need to select city from suggestion.</span>
-              </div>
-          </div> -->
-          <!-- <div class="col-sm-6">
-            <div class="form-group">
-              <label> Address :</label>
-              <input ngx-google-places-autocomplete [options]="{
-                types: [],
-                componentRestrictions: { country: 'UA' }
-                }" #placesRef="ngx-places" (onAddressChange)="handleAddressChange($event)"/>
-            </div>
-          </div> -->
+          </div>
           <div class="col-sm-6">
             <div class="form-group">
               <label>Phone Number :</label>
