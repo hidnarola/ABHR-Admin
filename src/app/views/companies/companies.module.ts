@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DataTablesModule } from 'angular-datatables';
-// import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { ChartistModule } from 'ng-chartist';
 import { ChartsModule } from 'ng2-charts';
+import { EditorModule } from 'primeng/editor';
 // child component
 import { Routes, RouterModule } from '@angular/router';
 import { CarsComponent } from './cars/cars.component';
@@ -20,6 +20,7 @@ import { CarReportComponent } from './company-reports/car-report/car-report.comp
 import { UserReportComponent } from './company-reports/user-report/user-report.component';
 import { KeywordsComponent } from './keywords/keywords.component';
 import { CompanyTermsComponent } from './company-terms/company-terms.component';
+import { CancellationChargeComponent } from './cancellation-charge/cancellation-charge.component';
 // shared component
 // import { RentalsComponent } from '../../shared/components/rentals-for-car/rentals.component';
 
@@ -122,6 +123,14 @@ const CompanyRoutes: Routes = [{
         urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Keywords' }]
     },
 },
+{
+    path: 'cancellation_charge',
+    component: CancellationChargeComponent,
+    data: {
+        title: 'Manage Cancellation Charge',
+        urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Cancellation Charge' }]
+    },
+},
 ];
 @NgModule({
     imports: [
@@ -129,11 +138,11 @@ const CompanyRoutes: Routes = [{
         FormsModule,
         DataTablesModule,
         ReactiveFormsModule,
-        // ConfirmDialogModule,
         ToastModule,
         NgbModule,
         ChartsModule,
         ChartistModule,
+        EditorModule,
         RouterModule.forChild(CompanyRoutes)
     ],
     exports: [RouterModule],
@@ -149,6 +158,7 @@ const CompanyRoutes: Routes = [{
         UserReportComponent,
         KeywordsComponent,
         CompanyTermsComponent,
+        CancellationChargeComponent,
         // RentalsComponent,
     ]
 })

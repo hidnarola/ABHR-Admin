@@ -260,11 +260,11 @@ const AdminRoutes: Routes = [
         }
       },
       {
-        path: 'terms_and_conditions',
+        path: 'legal_settings',
         component: AdminTermsComponent,
         data: {
-          title: 'Terms & Conditions',
-          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Terms & Conditions' }]
+          title: 'Legal Settings',
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Legal Settings' }]
         }
       }
     ]

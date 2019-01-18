@@ -9,6 +9,7 @@
 
 body {color: #67757c; font-weight: 300; font-size: 1rem;}
 
+.sidebar-nav ul li a {padding: 8px 30px 8px 15px !important;}
 
 .dataTables_length, .dataTables_filter{ margin:0 0 20px;}
 .dataTables_filter label{font-size:14px; color:#666; text-transform: capitalize; font-weight:400; letter-spacing:.1em; margin:0;}

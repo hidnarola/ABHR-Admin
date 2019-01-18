@@ -1,13 +1,91 @@
 <div class="row">
-  <div class="col-12">
+  <div class="col-md-12">
     <div class="card">
       <div class="card-body">
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <!-- <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label>About Us : </label>
+                <p-editor formControlName="terms_and_condition" name="terms_and_condition" type="text" [style]="{'height':'200px'}"></p-editor>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <label>Copyright : </label>
+                <p-editor formControlName="terms_and_condition" name="terms_and_condition" type="text" [style]="{'height':'200px'}"></p-editor>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <label>Terms and Conditions : </label>
+                <p-editor formControlName="terms_and_condition" name="terms_and_condition" type="text" [style]="{'height':'200px'}"></p-editor>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <label>Privacy Policy : </label>
+                <p-editor formControlName="terms_and_condition" name="terms_and_condition" type="text" [style]="{'height':'200px'}"></p-editor>
+              </div>
+            </div>
+          </div> -->
+
+
+
           <div class="form-group">
-            <p-editor formControlName="terms_and_condition" name="terms_and_condition" type="text" [style]="{'height':'320px'}"></p-editor>
+            <div class="row">
+              <div class="col-md-2">
+                <div class="terms-detail-box"><label>About Us : </label></div>
+              </div>
+              <div class="col-md-10">
+                <p-editor formControlName="about_us" name="about_us" type="text" [style]="{'height':'200px'}"></p-editor>
+              </div>
+            </div>
           </div>
-          <button type="submit" class="btn waves-effect loading-btn waves-light btn-primary"> Submit </button>
-          <a class="btn waves-effect waves-light custom-btn btn-danger" [routerLink]="['/admin/dashboard']">Cancel</a>
+
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-2">
+                <div class="terms-detail-box"><label>Copyright : </label></div>
+              </div>
+              <div class="col-md-10">
+                <p-editor formControlName="copyright" name="copyright" type="text" [style]="{'height':'200px'}"></p-editor>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-2">
+                <div class="terms-detail-box2"><label>Terms and Conditions : </label></div>
+              </div>
+              <div class="col-md-10">
+                <p-editor formControlName="term_condition" name="term_condition" type="text" [style]="{'height':'200px'}"></p-editor>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="row">
+              <div class="col-md-2">
+                <div class="terms-detail-box"><label>Privacy Policy : </label></div>
+              </div>
+              <div class="col-md-10">
+                <p-editor formControlName="privacy_policy" name="privacy_policy" type="text" [style]="{'height':'200px'}"></p-editor>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 offset-md-6 text-right">
+              <button type="submit" *ngIf="!isLoading" class="btn waves-effect waves-light custom-btn btn-primary">Submit</button>
+              <button type="button" *ngIf="isLoading" class="btn waves-effect loading-btn waves-light btn-primary" type="button">
+                <i class="fa fa-spinner fa-spin"></i>Loading
+              </button>
+              <a class="btn waves-effect waves-light custom-btn btn-danger" [routerLink]="['/admin/dashboard']">Cancel</a>
+            </div>
+          </div>
+
         </form>
       </div>
     </div>
