@@ -1,24 +1,25 @@
 <div class="card">
   <div class="card-body">
     <div class="row">
-      <div class="col-lg-6 mb-3">
+      <div class="col-lg-6 col-md-6">
         <h4 class="table-header">List of Car Reports </h4>
       </div>
       <!-- <div class="col-lg-2"></div> -->
-      <div class="col-lg-4 offset-lg-2 justify-content-end">
-          <form class="form-inline">
-            <div class="form-group">
-              <span class="filter_by">Filter By :</span>
-              <div class="input-group">
-                <input class="form-control" placeholder="yyyy-mm-dd" (ngModelChange)="DatePicker($event)" name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
-                <div class="input-group-append">
-                  <button class="btn btn-outline-secondary datepicker_button" (click)="d.toggle()" type="button">
-                    <i class="ti-calendar"></i>
-                  </button>
-                </div>
+      <div class="col-lg-6 col-md-6 justify-content-end">
+        <form class="form-inline" style="justify-content: flex-end;">
+          <div class="form-group" style="margin-left:0;">
+            <span class="filter_by">Filter By :</span>
+            <div class="input-group">
+              <input class="form-control" placeholder="yyyy-mm-dd" (ngModelChange)="DatePicker($event)" name="dp"
+                [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary datepicker_button" (click)="d.toggle()" type="button">
+                  <i class="ti-calendar"></i>
+                </button>
               </div>
             </div>
-          </form>
+          </div>
+        </form>
         <!-- <button type="button" class="btn btn-primary custom-add-btn m-r-10">
             <i class="fa fa-external-link" aria-hidden="true"></i> Export
           </button> -->

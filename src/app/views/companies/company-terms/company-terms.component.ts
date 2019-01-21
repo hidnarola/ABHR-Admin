@@ -55,8 +55,6 @@ export class CompanyTermsComponent implements OnInit, AfterViewInit {
     this.isLoading = true;
     this.formData = this.form.value;
     this.formData.company_id = this.companyId;
-    console.log('check', this.formData.company_id)
-    console.log('this.formData => ', this.formData);
     this.service.put('company/terms_and_condition/update', this.form.value).subscribe(res => {
       console.log('data after submit', res);
       this.isLoading = false;

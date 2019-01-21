@@ -44,6 +44,7 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
   dtTrigger: Subject<any> = new Subject();
   public searchElementRef: ElementRef;
   public header;
+  // model: any = {};
   AddEditForm: FormGroup;
   submitted = false;
   public formData: any;
@@ -61,6 +62,8 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
   closeResult: string;
   isLoading: boolean;
   userSettings: any = {};
+  public company_address: any;
+  public service_location = []; // [<longitude>, <latitude>] 
 
   constructor(
     public renderer: Renderer,
@@ -84,7 +87,6 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
       Validators.pattern('^(https?:\/\/)?[0-9a-zA-Z]+\.[-_0-9a-zA-Z]+\.[0-9a-zA-Z]+$')])],
       phone_number: ['', Validators.compose([Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]{10}')])],
       email: ['', Validators.compose([Validators.required, Validators.email, Validators.pattern(pattern), this.uniqueEmailValidator])],
-      address: ['', Validators.required],
     });
 
     this.formData = {
@@ -92,8 +94,14 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
       description: String,
       phone_number: Number,
       email: String,
-      site_url: String,
-      address: String,
+      site_url: String
+    };
+
+    this.company_address = {
+      country: String,
+      state: String,
+      city: String,
+      address: String
     };
   }
 
@@ -241,11 +249,15 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
 
   // Add-Edit pop up
   open2(content, item) {
+    this.service_location = [];
     if (item !== 'undefined' && item !== '') {
       this.title = 'Edit Company';
       this.isEdit = true;
       console.log('title', this.title);
       this.userId = item._id;
+      this.userSettings.inputPlaceholderText = item.company_address.address;
+      this.service_location = item.service_location;
+      this.company_address = item.company_address;
       this.AddEditForm.controls['name'].setValue(item.name);
       this.AddEditForm.controls['description'].setValue(item.description);
       this.AddEditForm.controls['email'].setValue(item.email);
@@ -334,9 +346,12 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
 
   onSubmit() {
     this.submitted = true;
+    console.log(this.AddEditForm);
     if (!this.AddEditForm.invalid) {
       this.isLoading = true;
       this.formData = this.AddEditForm.value;
+      this.formData.company_address = this.company_address;
+      this.formData.service_location = this.service_location;
       console.log('formadata==>', this.formData);
       if (this.isEdit) {
         this.formData.company_id = this.userId;
@@ -355,6 +370,8 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
       } else {
         this.title = 'Add Company';
         this.service.post('admin/company/add', this.formData).subscribe(res => {
+          console.log('===================first time==================== ');
+          console.log(this.formData);
           this.render();
           this.closePopup();
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
@@ -369,12 +386,39 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
     } else {
       return;
     }
+    console.log('form data address', this.formData);
   }
 
   ngOnInit() {
     this.UsersListData();
   }
   autoCompleteCallback1(selectedData: any) {
+    this.service_location = [];
+    console.log('selectedData => ', selectedData);
+    var lng = selectedData.data.geometry.location.lng;
+    var lat = selectedData.data.geometry.location.lat;
+    this.company_address.address = selectedData.data.formatted_address;
+    this.service_location.push(lng);
+    this.service_location.push(lat);
+    console.log(this.service_location);
+    for (var i = 0; i < selectedData.data.address_components.length; i++) {
+      var addressType = selectedData.data.address_components[i].types[0];
+      console.log('addresstype====>', addressType);
+      var addressType = selectedData.data.address_components[i].types[0];
+      if (addressType == 'country') {
+        var country = selectedData.data.address_components[i].long_name;
+        this.company_address.country = country;
+      }
+      if (addressType == 'administrative_area_level_1') {
+        var state = selectedData.data.address_components[i].long_name;
+        this.company_address.state = state;
+      }
+      if (addressType == 'locality') {
+        var city = selectedData.data.address_components[i].long_name;
+        this.company_address.city = city;
+      }
+      console.log(this.company_address);
+    }
   }
 
   test(address) {

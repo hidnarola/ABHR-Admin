@@ -3,11 +3,11 @@
     <div class="cars-dtl-box" *ngIf="userData">
       <div class="row mb-15">
         <div class="col-md-6">
-            <h4 id="blue" class="mt-45"> Detail Of <strong>"{{userData.first_name}} {{userData.last_name}}"</strong> </h4>
+          <h4 id="blue" class="mt-45"> Detail Of {{userData.first_name}} {{userData.last_name}} </h4>
         </div>
         <div class="col-md-6 mt-45">
-            <img [src]="userData.profile_image?userData.profile_image:'/assets/images/users/user.png'" id="prfl-img" class="img-fluid img-rounded right_top_image"
-            alt="Profile_Image" />
+          <img [src]="userData.profile_image?userData.profile_image:'/assets/images/users/user.png'" id="prfl-img"
+            class="img-fluid img-rounded right_top_image" alt="Profile_Image" />
         </div>
       </div>
       <!-- <h4 id="blue" class="mt-45"> Detail Of <strong>"{{userData.first_name}} {{userData.last_name}}"</strong> </h4> -->
@@ -22,9 +22,9 @@
                 {{getVerificationStatus(userData?.email_verified)}}</label>
             </span>
           </div>
-          <div class="cars-dtl-box-inr"><b>Phone Number : </b> 
+          <div class="cars-dtl-box-inr"><b>Phone Number : </b>
             <span>
-              {{ (userData?.phone_number_verified === 0) ? '-' : userData?.phone_number }}</span>&nbsp; 
+              {{ (userData?.phone_number_verified === 0) ? '-' : userData?.phone_number }}</span>&nbsp;
             <!-- <span  *ngIf="userData.phone_number">{{userData?.phone_number}}</span>&nbsp; -->
             <span *ngIf="userData?.phone_number_verified"> <label class="label label-{{(userData?.phone_number_verified === 0) ? 'danger': (userData?.phone_number_verified === 1) ? 'warning': 'success'}}">
                 {{getVerificationStatus(userData?.phone_number_verified)}}</label>
@@ -34,7 +34,7 @@
           <div class="cars-dtl-box-inr" *ngIf="userData.address"><b>Address : </b>
             <span *ngFor="let address of userData?.address; let i = index">
               {{i + 1}}. {{address.city}} {{', ' + address.state}} {{', ' + address.country}} <br /></span>
-              <span *ngIf="userData?.address.length === 0">-</span>
+            <span *ngIf="userData?.address.length === 0">-</span>
           </div>
           <div class="cars-dtl-box-inr"><b>No. of Rentals : </b><span>{{userData?.count | number}}</span></div>
           <div class="cars-dtl-box-inr"><b>User Status : </b><span>{{userData?.app_user_status | titlecase}}</span></div>

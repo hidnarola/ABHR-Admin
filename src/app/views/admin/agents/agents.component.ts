@@ -60,6 +60,7 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
   message: any;
 
   msgs: Message[] = [];
+  hideSpinner: boolean;
 
   constructor(
     public renderer: Renderer,
@@ -74,9 +75,11 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private spinner: NgxSpinnerService,
+
     // modalService: ModalDialogService,
     viewRef: ViewContainerRef
   ) {
+    this.hideSpinner = true;
     // addform validation
     const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
     this.AddEditForm = this.formBuilder.group({
@@ -85,7 +88,7 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
       // deviceType: ['', Validators.required],
       phone_number: ['', Validators.compose([Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^([0-9]){10}$/)])],
       email: ['', Validators.compose([Validators.required, Validators.email,
-        Validators.pattern(pattern), this.uniqueEmailValidator])],
+      Validators.pattern(pattern), this.uniqueEmailValidator])],
     });
 
     this.formData = {
@@ -99,7 +102,7 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public uniqueEmailValidator = (control: FormControl) => {
     let isWhitespace;
-    if ( isWhitespace = (control.value || '').trim().length === 0) {
+    if (isWhitespace = (control.value || '').trim().length === 0) {
       return { 'required': true };
     } else {
       const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
@@ -107,9 +110,9 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
       if (!result) {
         return { 'pattern': true };
       } else {
-        this.emailData = {'email' : control.value};
+        this.emailData = { 'email': control.value };
         if (this.isEdit) {
-          this.emailData = { 'email' : control.value, 'user_id': this.userId};
+          this.emailData = { 'email': control.value, 'user_id': this.userId };
         }
         console.log('emailData===>', this.emailData);
         return this.service.post('admin/checkemail', this.emailData).subscribe(res => {
@@ -121,7 +124,7 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
           //   console.log('else==>');
           // }
           if (res['status'] === 'success') {
-            this.f.email.setErrors({'unique': true});
+            this.f.email.setErrors({ 'unique': true });
             return;
           } else {
             this.f.email.setErrors(null);
@@ -185,6 +188,11 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   render(): void {
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      // this.dtOptions = {
+      //   language: {
+      //     processing: '<i class= "fa fa-refresh loader fa-spin"></i>'
+      //   }
+      // };
       // Destroy the table first
       dtInstance.destroy();
       // Call the dtTrigger to rerender again
@@ -199,10 +207,12 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
   // public agentData = data;
 
   ngOnInit() {
+
     this.AgentsListData();
   }
 
   AgentsListData() {
+    console.log('this.hideSpinner => ', this.hideSpinner);
     this.spinner.show();
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -212,7 +222,10 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
       responsive: true,
       ordering: true,
       order: [[4, 'desc']],
-      language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
+      // language: {},
+      language: {
+        'processing': '',
+      },
       ajax: (dataTablesParameters: any, callback) => {
         setTimeout(() => {
           console.log('dtaparametes==>', dataTablesParameters);
@@ -261,6 +274,7 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.dtTrigger.next();
+    this.hideSpinner = false;
   }
 
   // model

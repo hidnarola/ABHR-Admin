@@ -1,4 +1,7 @@
-import { Component, OnInit, Renderer, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
+import {
+  Component, OnInit, Renderer, ViewChild, OnDestroy, AfterViewInit, ElementRef,
+  ChangeDetectorRef
+} from '@angular/core';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import { ActivatedRoute } from '@angular/router';
@@ -13,7 +16,7 @@ import { DataSharingService } from '../../../../shared/services/data-sharing.ser
 import { NgbModal, ModalDismissReasons, NgbActiveModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
 // popup-forms
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 
 // alert
 import { MessageService } from 'primeng/api';
@@ -47,6 +50,13 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
   dtElementrental: DataTableDirective;
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject();
+  public searchElementRef: ElementRef;
+  public header;
+  public emailData: any;
+  public nameData: any;
+  userSettings: any = {};
+  public company_address: any;
+  public service_location = []; // [<longitude>, <latitude>] 
   constructor(
     public renderer: Renderer,
     private dataShare: DataSharingService,
@@ -71,11 +81,12 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
     // addform validation
     const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
     this.AddEditForm = this.formBuilder.group({
-      name: ['', Validators.required],
+      name: ['', Validators.compose([Validators.required, this.uniqueNameValidator])],
       description: ['', Validators.required],
-      site_url: ['', [Validators.required, Validators.pattern('^(https?:\/\/)?[0-9a-zA-Z]+\.[-_0-9a-zA-Z]+\.[0-9a-zA-Z]+$')]],
-      phone_number: ['', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]{10}')]],
-      email: ['', [Validators.required, Validators.email, Validators.pattern(pattern)]]
+      site_url: ['', Validators.compose([Validators.required,
+      Validators.pattern('^(https?:\/\/)?[0-9a-zA-Z]+\.[-_0-9a-zA-Z]+\.[0-9a-zA-Z]+$')])],
+      phone_number: ['', Validators.compose([Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]{10}')])],
+      email: ['', Validators.compose([Validators.required, Validators.email, Validators.pattern(pattern), this.uniqueEmailValidator])],
     });
     this.formData = {
       name: String,
@@ -84,8 +95,75 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
       email: String,
       site_url: String
     };
+    this.company_address = {
+      country: String,
+      state: String,
+      city: String,
+      address: String
+    };
   }
 
+  public uniqueEmailValidator = (control: FormControl) => {
+    let isWhitespace1;
+    if (isWhitespace1 = (control.value || '').trim().length === 0) {
+      return { 'required': true };
+    } else {
+      const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
+      let result = pattern.test(control.value);
+      if (!result) {
+        return { 'pattern': true };
+      } else {
+        this.emailData = { 'email': control.value, 'company_id': this.userId };
+        console.log('emailData===>', this.emailData);
+        return this.service.post('admin/company/checkemail', this.emailData).subscribe(res => {
+          // return (res['status'] === 'success') ? {'unique': true} : null;
+          // console.log('response of validation APi', res['status']);
+          // if (res['status'] === 'success') {
+          //   console.log('if==>');
+          // } else {
+          //   console.log('else==>');
+          // }
+          if (res['status'] === 'success') {
+            this.f.email.setErrors({ 'unique': true });
+            return;
+          } else {
+            this.f.email.setErrors(null);
+          }
+        });
+      }
+    }
+  }
+
+  public uniqueNameValidator = (control: FormControl) => {
+    let isWhitespace2;
+    if ((isWhitespace2 = (control.value || '').trim().length === 1) || (isWhitespace2 = (control.value || '').trim().length === 0)) {
+      return { 'required': true };
+    } else {
+      // const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
+      // var result = pattern.test(control.value);
+      // if (!result) {
+      //   return { 'pattern': true };
+      // } else {
+      this.nameData = { 'name': control.value, 'company_id': this.userId };
+      console.log('nameData===>', this.nameData);
+      return this.service.post('admin/company/checkname', this.nameData).subscribe(res => {
+        // return (res['status'] === 'success') ? {'unique': true} : null;
+        // console.log('response of validation APi', res['status']);
+        // if (res['status'] === 'success') {
+        //   console.log('if==>');
+        // } else {
+        //   console.log('else==>');
+        // }
+        if (res['status'] === 'success') {
+          this.f.name.setErrors({ 'uniqueName': true });
+          return;
+        } else {
+          this.f.name.setErrors(null);
+        }
+      });
+      // }
+    }
+  }
   // add-edit-popup form validation
   get f() { return this.AddEditForm.controls; }
   closePopup() {
@@ -100,9 +178,12 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
       this.formData = this.AddEditForm.value;
       // if (this.isEdit) {
       this.formData.company_id = this.userId;
+      this.formData.company_address = this.company_address;
+      this.formData.service_location = this.service_location;
       console.log('form data in company view page', this.formData);
       this.service.put('admin/company/update', this.formData).subscribe(res => {
-        // console.log('response after edit===>', res);
+        console.log('response after edit===>', res);
+
         console.log('this.userDetails==>', this.userDetails);
         this.userDetails = this.formData;
         this.closePopup();
@@ -129,10 +210,14 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
 
   // model
   open2(content, userDetails) {
+    this.service_location = [];
     // console.log('userDetails====>',userDetails);
     // if( userDetails != 'undefined' && userDetails ){
     // this.title = "Edit Company";
     // this.isEdit = true;
+    this.userSettings.inputPlaceholderText = userDetails.company_address.address;
+    this.service_location = userDetails.service_location;
+    this.company_address = userDetails.company_address;
     this.AddEditForm.controls['name'].setValue(userDetails.name);
     this.AddEditForm.controls['description'].setValue(userDetails.description);
     this.AddEditForm.controls['email'].setValue(userDetails.email);
@@ -166,6 +251,12 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
 
   ngAfterViewInit(): void {
     this.dtTrigger.next();
+    this.userSettings = {
+      inputPlaceholderText: 'Enter Address',
+      showSearchButton: false,
+    };
+    this.userSettings = Object.assign({}, this.userSettings);
+    // Very Important Line to add after modifying settings.
   }
 
   CarData() {
@@ -244,5 +335,39 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
     console.log('company ID===> ', this.userId);
     this.CarData();
     this.UserDetails();
+  }
+
+  autoCompleteCallback1(selectedData: any) {
+    console.log('here1====>', this.service_location);
+    this.service_location = [];
+    console.log('selectedData => ', selectedData);
+    var lng = selectedData.data.geometry.location.lng;
+    var lat = selectedData.data.geometry.location.lat;
+    this.company_address.address = selectedData.data.formatted_address;
+    this.service_location.push(lng);
+    this.service_location.push(lat);
+    console.log(this.service_location);
+    for (var i = 0; i < selectedData.data.address_components.length; i++) {
+      var addressType = selectedData.data.address_components[i].types[0];
+      console.log('addresstype====>', addressType);
+      var addressType = selectedData.data.address_components[i].types[0];
+      if (addressType == 'country') {
+        var country = selectedData.data.address_components[i].long_name;
+        this.company_address.country = country;
+      }
+      if (addressType == 'administrative_area_level_1') {
+        var state = selectedData.data.address_components[i].long_name;
+        this.company_address.state = state;
+      }
+      if (addressType == 'locality') {
+        var city = selectedData.data.address_components[i].long_name;
+        this.company_address.city = city;
+      }
+      console.log(this.company_address);
+    }
+  }
+
+  test(address) {
+    console.log('address => ', address);
   }
 }

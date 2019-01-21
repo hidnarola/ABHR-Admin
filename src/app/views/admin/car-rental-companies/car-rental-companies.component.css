@@ -1,6 +1,11 @@
-.address-input .custom-autocomplete__input input{
-    height: 38px !important;
-    letter-spacing: 0.08em !important;
-    font-size: 13px !important;
-    color: #666 !important;
-    }
+.error-msg {
+  display: block;
+  width: 100%;
+  margin-top: .25rem;
+  font-size: 80%;
+  color: #dc3545;
+}
+
+.hide-error-msg {
+  display: none;
+}

@@ -5,3 +5,14 @@ export class Constant {
         { 'key': 2, 'value': 'Verified' }
     ];
 }
+export class Cancel {
+    hours: number;
+    rate: number;
+    descr: string;
+
+    constructor(hours, rate) {
+        this.hours = hours;
+        this.rate = rate;
+        this.descr = this.hours + ' ' + this.rate;
+    }
+}

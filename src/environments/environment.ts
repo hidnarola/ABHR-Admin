@@ -9,5 +9,5 @@ export const environment = {
   imgUrl: 'http://18.219.16.50:4000/upload/',
   // apiUrl: 'http://192.168.100.32:4000/',
   // imgUrl: 'http://192.168.100.32:4000/upload/',
-  google_api_key: 'AIzaSyDvUpbh2lBfJFLiGhpu4ooZWKkdURU1ymU',
+  google_api_key: 'AIzaSyBpm9w9TINRaRqoSi8yriMMZwtcBaPkukM',
 };

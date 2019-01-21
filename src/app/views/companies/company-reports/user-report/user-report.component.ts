@@ -3,7 +3,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { CrudService } from '../../../../shared/services/crud.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({
@@ -26,16 +26,21 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
   toDate: NgbDateStruct;
   public newDate;
   public model: NgbDateStruct;
+  public companyId;
 
   constructor(
     public renderer: Renderer,
     public service: CrudService,
     private spinner: NgxSpinnerService,
-  ) { }
+  ) {
+    const company = JSON.parse(localStorage.getItem('company-admin'));
+    this.companyId = company._id;
+    console.log('companyid in car reports==>', this.companyId);
+  }
 
   DatePicker(date: NgbDateStruct) {
     console.log('check => ', date);
-    this.newDate = date.year + '-' + date.month + '-'  + date.day;
+    this.newDate = date.year + '-' + date.month + '-' + date.day;
     console.log('newDate => ', this.newDate);
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.draw();
@@ -58,18 +63,18 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
         serverSide: true,
         ordering: true,
         order: [[0, 'desc']],
-        language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
-
+        language: { 'processing': '<i class="fa fa-spin fa-spinner"></i>' },
         ajax: (dataTablesParameters: any, callback) => {
+          dataTablesParameters['company_id'] = this.companyId;
           this.dtparams = dataTablesParameters;
           dataTablesParameters['columns'][3]['isNumber'] = true;
           dataTablesParameters['columns'][4]['isNumber'] = true;
           setTimeout(() => {
             // if (filterBy) { dataTablesParameters['filtered_by'] = filterBy; }
             if (this.newDate !== '') {
-              dataTablesParameters['filtered_by'] = this.newDate;
+              dataTablesParameters['date'] = this.newDate;
             }
-            this.service.post('admin/user/report_list', dataTablesParameters).subscribe(res => {
+            this.service.post('company/users/report_list', dataTablesParameters).subscribe(res => {
               this.reports = res['result']['data'];
               console.log('response in reports', res);
               this.spinner.hide();

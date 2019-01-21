@@ -1,21 +1,51 @@
-<div class="card">
+<!-- <div class="card">
   <div class="card-body">
-    <h4>Cancellation Charge Setting</h4>
-    <form>
+    <div class="Card-header mb-20">
+      <h4>Edit Cancellation</h4>
+    </div>
+    <form [formGroup]="CancellationForm" (ngSubmit)="onSubmit()">
       <div class="row">
+
         <div class="col-md-4">
           <div class="form-group">
-            <label>Hours :</label>
-            <input type="number">
+            <label class="required">{{ cancellationData[0].hours }}Hours :</label>
+            <input class="form-control" placeholder="Enter Hours" type="number" required="" name="hours" [value]="cancellationData[0].hours"
+              formControlName="hours" [ngClass]="{'is-invalid': submitted && f.hours.errors }">
+            <div *ngIf=" submitted && f.hours.errors " class="invalid-feedback">
+              <div *ngIf="f.hours.errors.required"> Hours are required</div>
+            </div>
           </div>
         </div>
+
         <div class="col-md-4">
           <div class="form-group">
-            <label>Rate :</label>
-            <input type="number">
+            <label class="required">Rate:</label>
+            <input class="form-control" placeholder="Enter Rate" type="number" required="" name="rate" formControlName="rate"
+              [value]="cancellationData[0].rate" [ngClass]="{'is-invalid': submitted && f.rate.errors }">
+            <div *ngIf=" submitted && f.rate.errors " class="invalid-feedback">
+              <div *ngIf="f.rate.errors.required"> Rate is required</div>
+            </div>
           </div>
         </div>
+
+        <div class="col-md-4">
+          <button type="button" class="btn btn-primary custom-add-btn" (click)="add(hours,rate)">
+            <i class="fa fa-plus" aria-hidden="true"></i> Add
+          </button>
+        </div>
+
+        <div></div>
+
+        <div class="col-sm-12">
+          <button type="submit" *ngIf="!isLoading" class="btn waves-effect waves-light custom-btn btn-primary">Submit
+          </button>
+          <button type="button" *ngIf="isLoading" class="btn waves-effect loading-btn waves-light btn-primary" type="button">
+            <i class="fa fa-spinner fa-spin"></i>Loading
+          </button>
+          <a class="btn waves-effect waves-light custom-btn btn-danger" [routerLink]="['/company/dashboard']">Cancel</a>
+        </div>
+
       </div>
     </form>
   </div>
-</div>
+</div> -->

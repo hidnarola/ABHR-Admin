@@ -1,11 +1,11 @@
 <!--details-->
 <div class="card">
   <div class="card-body">
-    <div class="row pb-2">
-      <div class="col-lg-10">
+    <div class="row pb-2 headding-btn-wrap">
+      <div class="col-lg-8 col-md-8">
         <h4> Details of {{userDetails?.name}} </h4>
       </div>
-      <div class="col-lg-2 text-right">
+      <div class="col-lg-4 col-md-4 text-right">
         <button type="button" class="btn btn-primary" (click)="open2(content, userDetails)">
           <i class="mdi mdi-account-edit" aria-hidden="true"></i> Edit
         </button>
@@ -17,6 +17,10 @@
         <div class="agents-dtl-box-inr"><b>Description : </b> <span>{{userDetails.description}}</span> </div>
         <div class="agents-dtl-box-inr"><b>Email : </b> <span>{{ userDetails.email }}</span> </div>
         <div class="agents-dtl-box-inr"><b>Site URL : </b> <span>{{ userDetails.site_url }}</span> </div>
+        <div class="agents-dtl-box-inr"><b>Address : </b> <span>{{ userDetails.company_address.address }}</span> </div>
+        <div class="agents-dtl-box-inr"><b>City : </b> <span>{{ userDetails.company_address.city }}</span> </div>
+        <div class="agents-dtl-box-inr"><b>Country : </b> <span>{{ userDetails.company_address.country }}</span> </div>
+        <div class="agents-dtl-box-inr"><b>State : </b> <span>{{ userDetails.company_address.state }}</span> </div>
         <div class="agents-dtl-box-inr"><b>Phone Number : </b> <span>{{ userDetails.phone_number ?
             userDetails.phone_number : '-' }}</span> </div>
       </div>
@@ -134,6 +138,7 @@
                 formControlName="name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.name.errors }">
               <div *ngIf=" submitted && f.name.errors " class="invalid-feedback">
                 <div *ngIf="f.name.errors.required"> Company Name is required</div>
+                <div *ngIf="f.name.errors.uniqueName">Company Name already exist</div>
               </div>
             </div>
           </div>
@@ -155,6 +160,7 @@
               <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                 <div *ngIf=" f.email.errors.required ">Email is required</div>
                 <div *ngIf=" f.email.errors.pattern"> Email format is wrong </div>
+                <div *ngIf="f.email.errors.unique">Email already exist</div>
               </div>
             </div>
           </div>
@@ -167,6 +173,19 @@
                 <div *ngIf=" f.site_url.errors.required ">URL is required</div>
                 <div *ngIf=" f.site_url.errors.pattern"> URL is wrong </div>
               </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label class="required"> Address :</label>
+              <ng4geo-autocomplete [userSettings]="userSettings" (componentCallback)="autoCompleteCallback1($event)"
+                (keyup)="test($event)">
+                <!-- [(ngModel)]="model.address" #address="ngModel" [ngModelOptions]="{standalone: true}"
+                          required -->
+              </ng4geo-autocomplete>
+              <!-- <div *ngIf="submitted && address.invalid" [ngClass]="{ 'error-msg' : submitted && address.invalid}">
+                          <div *ngIf="address.errors.required">Address is required</div>
+                        </div> -->
             </div>
           </div>
           <div class="col-sm-6">

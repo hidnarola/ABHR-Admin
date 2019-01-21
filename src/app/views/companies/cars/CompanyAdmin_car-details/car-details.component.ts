@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer, ViewChild, OnDestroy, AfterViewInit  } from '@angular/core';
+import { Component, OnInit, Renderer, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import { ActivatedRoute } from '@angular/router';
@@ -57,6 +57,7 @@ export class CarDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   ngOnInit() {
     this.CarDetails();
+    this.RentalData();
   }
   ngAfterViewInit(): void {
     this.dtTrigger.next();
@@ -68,21 +69,21 @@ export class CarDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
       processing: true,
       serverSide: true,
       ordering: true,
-      language: {'processing': '<i class="fa fa-refresh loader fa-spin"></i>'},
+      language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
       ajax: (dataTablesParameters: any, callback) => {
         console.log('dataparametes in rental==>', dataTablesParameters);
         setTimeout(() => {
           dataTablesParameters.car_id = this.carId;
           this.service.post('admin/company/car/rental_list', dataTablesParameters).subscribe(res => {
             console.log('res in rental', res);
-          this.rentalData = res['result']['data'];
-          callback({
-            recordsTotal: res['result']['recordsTotal'],
-            recordsFiltered: res['result']['recordsTotal'],
-            data: []
+            this.rentalData = res['result']['data'];
+            callback({
+              recordsTotal: res['result']['recordsTotal'],
+              recordsFiltered: res['result']['recordsTotal'],
+              data: []
+            });
           });
-        });
-         }, 1000);
+        }, 1000);
       },
       columns: [
         {
