@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer, ViewChild, OnDestroy, AfterViewInit} from '@angular/core';
+import { Component, OnInit, Renderer, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import { ActivatedRoute } from '@angular/router';
@@ -32,6 +32,7 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   public viewData;
   public userId;
   public agentDetails;
+  isCols: boolean;
 
   private subscription: Subscription;
   message: any;
@@ -47,6 +48,8 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   public isEdit;
   public rentalData;
   closeResult: string;
+  public pageNumber;
+  public totalRecords;
 
   constructor(
     public renderer: Renderer,
@@ -132,6 +135,7 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
       order: [[0, 'desc']],
       language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
       ajax: (dataTablesParameters: any, callback) => {
+        this.pageNumber = dataTablesParameters.length;
         console.log('dataparametes==>', dataTablesParameters);
         dataTablesParameters['columns'][0]['isNumber'] = true;
         dataTablesParameters['columns'][2]['isNumber'] = true;
@@ -139,7 +143,18 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
           this.service.post('admin/agents/rental_list', dataTablesParameters).subscribe(res => {
             console.log('rentals res in agents', res);
             this.rentalData = res['result']['data'];
-            // this.dataShare.changeLoading(false);
+            this.totalRecords = res['result']['recordsTotal'];
+            console.log('this.totalRecords => ', this.totalRecords);
+            // this.rentalData = [];
+            if (this.rentalData.length > 0) {
+              this.isCols = true;
+              $('.dataTables_wrapper').css('display', 'block');
+            }
+            if (this.totalRecords > this.pageNumber) {
+              $('.dataTables_paginate').css('display', 'block');
+            } else {
+              $('.dataTables_paginate').css('display', 'none');
+            }
             this.spinner.hide();
             callback({
               recordsTotal: res['result']['recordsTotal'],

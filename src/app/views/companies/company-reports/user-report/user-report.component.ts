@@ -27,6 +27,9 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
   public newDate;
   public model: NgbDateStruct;
   public companyId;
+  isCols: boolean;
+  public pageNumber;
+  public totalRecords;
 
   constructor(
     public renderer: Renderer,
@@ -65,10 +68,11 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
         order: [[0, 'desc']],
         language: { 'processing': '<i class="fa fa-spin fa-spinner"></i>' },
         ajax: (dataTablesParameters: any, callback) => {
+          this.pageNumber = dataTablesParameters.length;
           dataTablesParameters['company_id'] = this.companyId;
           this.dtparams = dataTablesParameters;
-          dataTablesParameters['columns'][3]['isNumber'] = true;
           dataTablesParameters['columns'][4]['isNumber'] = true;
+          dataTablesParameters['columns'][5]['isNumber'] = true;
           setTimeout(() => {
             // if (filterBy) { dataTablesParameters['filtered_by'] = filterBy; }
             if (this.newDate !== '') {
@@ -76,6 +80,17 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
             }
             this.service.post('company/users/report_list', dataTablesParameters).subscribe(res => {
               this.reports = res['result']['data'];
+              this.totalRecords = res['result']['recordsTotal'];
+              // this.reports = [];
+              if (this.reports.length > 0) {
+                this.isCols = true;
+                $('.dataTables_wrapper').css('display', 'block');
+              }
+              if (this.totalRecords > this.pageNumber) {
+                $('.dataTables_paginate').css('display', 'block');
+              } else {
+                $('.dataTables_paginate').css('display', 'none');
+              }
               console.log('response in reports', res);
               this.spinner.hide();
               callback({
@@ -95,9 +110,17 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
             data: 'Car Modal',
             name: 'car_modal',
           },
+          // {
+          //   data: 'Compnay Name',
+          //   name: 'company_name',
+          // },
           {
-            data: 'Compnay Name',
-            name: 'company_name',
+            data: 'First Name',
+            name: 'first_name',
+          },
+          {
+            data: 'Last Name',
+            name: 'last_name',
           },
           {
             data: 'No Of Rented',

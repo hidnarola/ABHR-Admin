@@ -1,13 +1,12 @@
-<div class="card">
+<div class="card card_one_data">
   <div class="card-body">
     <div class="cars-dtl-box" *ngIf="userData">
       <div class="row mb-15">
-        <div class="col-md-6">
-          <h4 id="blue" class="mt-45"> Detail Of {{userData.first_name}} {{userData.last_name}} </h4>
-        </div>
-        <div class="col-md-6 mt-45">
-          <img [src]="userData.profile_image?userData.profile_image:'/assets/images/users/user.png'" id="prfl-img"
-            class="img-fluid img-rounded right_top_image" alt="Profile_Image" />
+        <div class="col-md-12">
+          <h4 id="blue" class="h4_user_img"> Detail Of {{userData.first_name}} {{userData.last_name}}
+            <img [src]="userData.profile_image? imageURL+userData.profile_image:'/assets/images/users/user.png'" id="prfl-img"
+              class="img-fluid img-rounded right_top_image" alt="Profile_Image" />
+          </h4>
         </div>
       </div>
       <!-- <h4 id="blue" class="mt-45"> Detail Of <strong>"{{userData.first_name}} {{userData.last_name}}"</strong> </h4> -->
@@ -17,18 +16,20 @@
         <div class="col-md-12">
           <div class="cars-dtl-box-inr"><b>Full name : </b><span>{{userData.first_name}} {{userData.last_name}}</span></div>
           <div class="cars-dtl-box-inr"><b>Email : </b>
-            <span>{{ userData?.email_verified === 0 ? '' :userData?.email }}</span>&nbsp;
-            <span *ngIf="userData?.email_verified"> <label class="label label-{{(userData?.email_verified === 0) ? 'danger': (userData?.email_verified === 1) ? 'warning': 'success'}}">
-                {{getVerificationStatus(userData?.email_verified)}}</label>
+            <span>{{ userData?.email_verified === 0 ? '' :userData?.email }}
+              <label class="label label-{{(userData?.email_verified === 0) ? 'danger': (userData?.email_verified === 1) ? 'warning': 'success'}}">
+                {{userData?.email_msg}}</label>
             </span>
+
           </div>
           <div class="cars-dtl-box-inr"><b>Phone Number : </b>
             <span>
-              {{ (userData?.phone_number_verified === 0) ? '-' : userData?.phone_number }}</span>&nbsp;
-            <!-- <span  *ngIf="userData.phone_number">{{userData?.phone_number}}</span>&nbsp; -->
-            <span *ngIf="userData?.phone_number_verified"> <label class="label label-{{(userData?.phone_number_verified === 0) ? 'danger': (userData?.phone_number_verified === 1) ? 'warning': 'success'}}">
-                {{getVerificationStatus(userData?.phone_number_verified)}}</label>
+              {{ (userData?.phone_number_verified === 0) ? '-' : userData?.phone_number }}
+              <label class="label label-{{(userData?.phone_number_verified === 0) ? 'danger': (userData?.phone_number_verified === 1) ? 'warning': 'success'}}">
+                {{userData?.phone_msg}}</label>
             </span>
+            <!-- <span  *ngIf="userData.phone_number">{{userData?.phone_number}}</span>&nbsp; -->
+
             <!-- <span *ngIf="userData?.phone_number_verified === 0">-</span> -->
           </div>
           <div class="cars-dtl-box-inr" *ngIf="userData.address"><b>Address : </b>
@@ -45,24 +46,26 @@
   </div>
 </div>
 
-<div class="card">
+<div class="card card_one_data">
   <div class="card-body">
     <div>
-      <h4 id="blue"> License Details </h4>
+      <h4 class="mb-20"> License Details <label class="label label-{{(userData?.driving_license_verification === 0) ? 'danger': (userData?.driving_license_verification === 1) ? 'warning': 'success'}}">
+          {{userData?.license_msg}}
+        </label> </h4>
     </div>
     <div class="row" *ngIf="userData">
-      <div class="col-md-6" *ngIf="userData.driving_license">
+      <div class="col-md-12" *ngIf="userData.driving_license">
         <div class="cars-dtl-box-inr"><b>License Number : </b><span>{{userData.driving_license.number}}</span></div>
         <div class="cars-dtl-box-inr"><b>Country: </b><span>{{userData.driving_license.country}}</span></div>
         <div class="cars-dtl-box-inr"><b>Issue Date : </b><span>{{userData.driving_license.issue_date | date}}</span></div>
         <div class="cars-dtl-box-inr"><b>Expiry Date : </b><span>{{userData.driving_license.expiry_date | date}}</span></div>
       </div>
-      <div class="col-md-6" *ngIf="userData.driving_license">
+      <div class="col-md-12" *ngIf="userData.driving_license">
         <!-- <img [src]="imgUrl+ 'user/licence/' + image.name" class="img-fluid img-rounded" alt="Licence"> -->
         <!-- <img [src]="imgUrl+ 'user/licence/' + image.name" class="img-fluid img-rounded" alt="Licence"> -->
-        <img [src]="userData.driving_license.front_image?userData.driving_license.front_image:'/assets/images/document/license.png'"
+        <img [src]="userData.driving_license.front_image?imageURL+userData.driving_license.front_image:'/assets/images/document/license.png'"
           class="img-fluid img-rounded license_image" alt="Licence_Front">
-        <img [src]="userData.driving_license.back_image?userData.driving_license.back_image: '/assets/images/document/license.png'"
+        <img [src]="userData.driving_license.back_image?imageURL+userData.driving_license.back_image: '/assets/images/document/license.png'"
           class="img-fluid img-rounded license_image" alt="Licence_Back">
 
       </div>
@@ -70,17 +73,19 @@
   </div>
 </div>
 
-<div class="card">
+<div class="card card_one_data">
   <div class="card-body">
     <div>
-      <h4 id="blue"> Identity Card Details </h4>
+      <h4 class="mb-20"> Identity Card Details <label class="label label-{{(userData?.driving_license_verification === 0) ? 'danger': (userData?.driving_license_verification === 1) ? 'warning': 'success'}}">
+          {{userData?.id_msg}}
+        </label></h4>
     </div>
     <div class="row" *ngIf="userData">
-      <div class="col-md-6" *ngIf="userData.id_card">
+      <div class="col-md-12" *ngIf="userData.id_card">
         <div class="cars-dtl-box-inr"><b>Type : </b><span>{{userData.id_card.type}}</span></div>
-        <img [src]="userData.id_card.front_image?userData.id_card.front_image:'/assets/images/document/license.png'"
+        <img [src]="userData.id_card.front_image?imageURL+userData.id_card.front_image:'/assets/images/document/license.png'"
           class="img-fluid img-rounded license_image" alt="ID_Front">
-        <img [src]="userData.id_card.back_image?userData.id_card.back_image:'/assets/images/document/license.png'"
+        <img [src]="userData.id_card.back_image?imageURL+userData.id_card.back_image:'/assets/images/document/license.png'"
           class="img-fluid img-rounded license_image" alt="ID_Back">
       </div>
     </div>

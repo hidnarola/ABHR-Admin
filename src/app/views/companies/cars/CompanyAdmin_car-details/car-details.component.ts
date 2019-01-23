@@ -22,6 +22,9 @@ export class CarDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
   public carDetails;
   public imgUrl = environment.imgUrl;
   public rentalData;
+  isCols: boolean;
+  public pageNumber;
+  public totalRecords;
 
   constructor(
     private route: ActivatedRoute,
@@ -39,6 +42,18 @@ export class CarDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
       console.log('cardetails RES==>', res);
       this.carDetails = res['data'].carDetail;
       console.log('carDetails ==>', this.carDetails);
+      let carCriteria = this.carDetails.resident_criteria;
+      var CriteriaName = '';
+      if (carCriteria === 0) {
+        CriteriaName = 'Rented to Residents';
+      } else if (carCriteria === 1) {
+        CriteriaName = 'None Residents';
+      } else if (carCriteria === 2) {
+        CriteriaName = 'Both';
+      }
+      this.carDetails.resident_criteria = CriteriaName;
+      console.log('criteria name', CriteriaName);
+      localStorage.setItem('companyId', this.carDetails.car_rental_company_id);
       this.spinner.hide();
     }, error => {
       this.spinner.hide();
@@ -71,12 +86,23 @@ export class CarDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
       ordering: true,
       language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
       ajax: (dataTablesParameters: any, callback) => {
+        this.pageNumber = dataTablesParameters.length;
         console.log('dataparametes in rental==>', dataTablesParameters);
         setTimeout(() => {
           dataTablesParameters.car_id = this.carId;
           this.service.post('admin/company/car/rental_list', dataTablesParameters).subscribe(res => {
             console.log('res in rental', res);
             this.rentalData = res['result']['data'];
+            this.totalRecords = res['result']['recordsTotal'];
+            if (this.rentalData.length > 0) {
+              this.isCols = true;
+              $('.dataTables_wrapper').css('display', 'block');
+            }
+            if (this.totalRecords > this.pageNumber) {
+              $('.dataTables_paginate').css('display', 'block');
+            } else {
+              $('.dataTables_paginate').css('display', 'none');
+            }
             callback({
               recordsTotal: res['result']['recordsTotal'],
               recordsFiltered: res['result']['recordsTotal'],

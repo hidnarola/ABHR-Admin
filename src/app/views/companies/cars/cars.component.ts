@@ -40,6 +40,9 @@ export class CarsComponent implements OnInit, AfterViewInit {
   message: any;
   msgs: Message[] = [];
   closeResult: string;
+  isCols: boolean;
+  public pageNumber;
+  public totalRecords;
 
   constructor(
     public renderer: Renderer,
@@ -69,6 +72,7 @@ export class CarsComponent implements OnInit, AfterViewInit {
       order: [[5, 'desc']],
       language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
       ajax: (dataTablesParameters: any, callback) => {
+        this.pageNumber = dataTablesParameters.length;
         dataTablesParameters['columns'][2]['isNumber'] = true;
         dataTablesParameters['columns'][3]['isNumber'] = true;
         dataTablesParameters['columns'][4]['isBoolean'] = true;
@@ -77,6 +81,17 @@ export class CarsComponent implements OnInit, AfterViewInit {
           console.log('dtaparametes car==>', dataTablesParameters);
           this.service.post('admin/company/car_list', dataTablesParameters).subscribe(res => {
             this.users = res['result']['data'];
+            this.totalRecords = res['result']['recordsTotal'];
+            // this.users = []
+            if (this.users.length > 0) {
+              this.isCols = true;
+              $('.dataTables_wrapper').css('display', 'block');
+            }
+            if (this.totalRecords > this.pageNumber) {
+              $('.dataTables_paginate').css('display', 'block');
+            } else {
+              $('.dataTables_paginate').css('display', 'none');
+            }
             console.log(this.users);
             this.spinner.hide();
             callback({

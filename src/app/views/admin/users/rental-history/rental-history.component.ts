@@ -5,6 +5,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { CrudService } from '../../../../shared/services/crud.service';
 import { DataSharingService } from '../../../../shared/services/data-sharing.service';
 import { ActivatedRoute } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-rental-history',
@@ -18,17 +19,20 @@ export class RentalHistoryComponent implements OnInit, OnDestroy, AfterViewInit 
   dtTrigger: Subject<any> = new Subject();
   public rentalData;
   public userId;
+  isCols: boolean;
+  public pageNumber;
+  public totalRecords;
   constructor(
     private route: ActivatedRoute,
     public renderer: Renderer,
     private service: CrudService,
-    private dataShare: DataSharingService,
-    ) {
+    private spinner: NgxSpinnerService
+  ) {
     this.route.params.subscribe(params => { this.userId = params.id; });
     console.log('userId in rentals==>', this.userId);
-   }
+  }
 
-   render(): void {
+  render(): void {
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       // Destroy the table first
       dtInstance.destroy();
@@ -46,6 +50,7 @@ export class RentalHistoryComponent implements OnInit, OnDestroy, AfterViewInit 
     this.dtTrigger.next();
   }
   RentalData() {
+    this.spinner.show();
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
@@ -53,22 +58,33 @@ export class RentalHistoryComponent implements OnInit, OnDestroy, AfterViewInit 
       serverSide: true,
       searching: false,
       ordering: true,
-      language: {'processing': '<i class="fa fa-refresh loader fa-spin"></i>'},
+      language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
       ajax: (dataTablesParameters: any, callback) => {
         console.log('dataparametes in rental==>', dataTablesParameters);
+        this.pageNumber = dataTablesParameters.length;
         setTimeout(() => {
           dataTablesParameters.user_id = this.userId;
           this.service.post('admin/user/rented_list', dataTablesParameters).subscribe(res => {
             console.log('res in rental', res);
-          this.rentalData = res['result']['data'];
-          this.dataShare.changeLoading(false);
-          callback({
-            recordsTotal: res['result']['recordsTotal'],
-            recordsFiltered: res['result']['recordsTotal'],
-            data: []
+            this.rentalData = res['result']['data'];
+            this.totalRecords = res['result']['recordsTotal'];
+            if (this.rentalData.length > 0) {
+              this.isCols = true;
+              $('.dataTables_wrapper').css('display', 'block');
+            }
+            if (this.totalRecords > this.pageNumber) {
+              $('.dataTables_paginate').css('display', 'block');
+            } else {
+              $('.dataTables_paginate').css('display', 'none');
+            }
+            this.spinner.hide();
+            callback({
+              recordsTotal: res['result']['recordsTotal'],
+              recordsFiltered: res['result']['recordsTotal'],
+              data: []
+            });
           });
-        });
-         }, 1000);
+        }, 1000);
       },
       columns: [
         {

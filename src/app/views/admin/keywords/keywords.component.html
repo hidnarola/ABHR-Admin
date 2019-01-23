@@ -90,7 +90,8 @@
         </button>
       </div>
       <div class="modal-body">
-        <form [formGroup]="AddEditForm" (ngSubmit)="onSubmit()" class="form-horizontal form-material row">
+        <form [formGroup]="AddEditForm" (ngSubmit)="onSubmit()" class="form-horizontal form-material row"
+          (keydown.enter)="$event.preventDefault()">
           <div class="col-sm-6">
             <div class="form-group">
               <label class="required">Keyword :</label>

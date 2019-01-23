@@ -44,6 +44,13 @@
         </button>
       </div>
     </div>
+    <div *ngIf="!isCols">
+      <div class="p-grid p-dir-col">
+        <div class="p-col">
+          <div class="box">Add your First Car for Rent</div>
+        </div>
+      </div>
+    </div>
     <div class="row">
       <div class="col-lg-12">
         <div class="table table-responsive table-striped">
@@ -60,7 +67,7 @@
                 <th class="disabled text-center">Actions</th>
               </tr>
             </thead>
-            <tbody *ngIf="carData?.length != 0">
+            <tbody *ngIf="carData?.length != 0 && isCols">
               <tr *ngFor="let item of carData; let i = index">
                 <td>
                   <span>
@@ -130,7 +137,8 @@
         </button>
       </div>
       <div class="modal-body">
-        <form [formGroup]="AddEditForm" (ngSubmit)="onSubmit()" class="form-horizontal form-material row">
+        <form [formGroup]="AddEditForm" (ngSubmit)="onSubmit()" class="form-horizontal form-material row"
+          (keydown.enter)="$event.preventDefault()">
           <div class="col-sm-6">
             <div class="form-group">
               <label class="required">Company Name </label>

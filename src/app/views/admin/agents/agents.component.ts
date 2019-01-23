@@ -45,6 +45,7 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   AddEditForm: FormGroup;
   submitted = false;
+  isCols: boolean;
   public formData: any;
   public emailData: any;
   public userId;
@@ -55,6 +56,8 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
   closeResult: string;
   public title = 'Add Agent';
   // public pattern: any;
+  public pageNumber;
+  public totalRecords;
 
   private subscription: Subscription;
   message: any;
@@ -227,11 +230,24 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
         'processing': '',
       },
       ajax: (dataTablesParameters: any, callback) => {
+        this.pageNumber = dataTablesParameters.length;
         setTimeout(() => {
           console.log('dtaparametes==>', dataTablesParameters);
-          this.service.post('admin/agents/list', dataTablesParameters).subscribe(res => {
-            this.agents = res['result']['data'];
-            console.log(this.agents);
+          this.service.post('admin/agents/list', dataTablesParameters).subscribe(async (res: any) => {
+            this.agents = await res['result']['data'];
+            this.totalRecords = res['result']['recordsTotal'];
+            // this.agents = [];
+            if (this.agents.length > 0) {
+              this.isCols = true;
+              $('.dataTables_wrapper').css('display', 'block');
+            }
+            console.log('total records===>', this.totalRecords);
+            console.log('page number', this.pageNumber);
+            if (this.totalRecords > this.pageNumber) {
+              $('.dataTables_paginate').css('display', 'block');
+            } else {
+              $('.dataTables_paginate').css('display', 'none');
+            }
             this.spinner.hide();
             callback({
               recordsTotal: res['result']['recordsTotal'],

@@ -11,6 +11,11 @@
   display: table;
 }
 
+.err_msg{
+    font-size: 80%;
+    color: #ef5350;
+}
+
 .img_wrap {
   display: inline-block;
   position: relative;

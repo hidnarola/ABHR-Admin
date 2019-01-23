@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { environment } from './../../../../../environments/environment';
 import { CrudService } from '../../../../shared/services/crud.service';
 import _ from 'lodash';
 import { Constant } from '../../../../shared/constant/constant';
@@ -12,6 +13,7 @@ import { Constant } from '../../../../shared/constant/constant';
 export class UserDetailsComponent implements OnInit {
   userId: any;
   userData: any;
+  public imageURL = environment.imgUrl + 'user/licence/';
   constructor(private route: ActivatedRoute, private spinner: NgxSpinnerService,
     private service: CrudService, private CONST: Constant) { }
 
@@ -23,10 +25,13 @@ export class UserDetailsComponent implements OnInit {
   }
 
   getVerificationStatus(id) {
-    if (id) {
+    // if (parseInt(id, 2)) {
+    try {
       return (_.find(this.CONST.VERIFICATION_STATUS, { 'key': id })).value;
+    } catch (e) {
+      return '';
     }
-    return '';
+    // }
   }
 
   getUserDetail(id) {
@@ -34,6 +39,10 @@ export class UserDetailsComponent implements OnInit {
     this.service.get('admin/user/details/' + id).subscribe(res => {
       console.log('res => ', res);
       this.userData = res['result'];
+      this.userData.email_msg = this.getVerificationStatus(this.userData['email_verified']);
+      this.userData.phone_msg = this.getVerificationStatus(this.userData['phone_number_verified']);
+      this.userData.license_msg = this.getVerificationStatus(this.userData['driving_license_verification']);
+      this.userData.id_msg = this.getVerificationStatus(this.userData['id_card_verification']);
       console.log('carDetails ==>', this.userData);
       this.spinner.hide();
     }, error => {

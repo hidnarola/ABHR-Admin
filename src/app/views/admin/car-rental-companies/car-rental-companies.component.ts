@@ -63,7 +63,10 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
   isLoading: boolean;
   userSettings: any = {};
   public company_address: any;
-  public service_location = []; // [<longitude>, <latitude>] 
+  public service_location = []; // [<longitude>, <latitude>]
+  isCols: boolean;
+  public pageNumber;
+  public totalRecords;
 
   constructor(
     public renderer: Renderer,
@@ -187,12 +190,23 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
       order: [[5, 'desc']],
       language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
       ajax: (dataTablesParameters: any, callback) => {
+        this.pageNumber = dataTablesParameters.length;
         setTimeout(() => {
           dataTablesParameters['columns'][5]['isBoolean'] = true;
           console.log('dtaparametes car rental company==>', dataTablesParameters);
           this.service.post('admin/company/list', dataTablesParameters).subscribe(res => {
             this.users = res['result']['data'];
-            console.log(this.users);
+            this.totalRecords = res['result']['recordsTotal'];
+            // this.users = [];
+            if (this.users.length > 0) {
+              this.isCols = true;
+              $('.dataTables_wrapper').css('display', 'block');
+            }
+            if (this.totalRecords > this.pageNumber) {
+              $('.dataTables_paginate').css('display', 'block');
+            } else {
+              $('.dataTables_paginate').css('display', 'none');
+            }
             this.spinner.hide();
             callback({
               recordsTotal: res['result']['recordsTotal'],
@@ -206,10 +220,6 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
         {
           data: 'Company Name',
           name: 'name',
-        },
-        {
-          data: 'Description',
-          name: 'description',
         },
         {
           data: 'Email',

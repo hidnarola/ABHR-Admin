@@ -3,7 +3,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { CrudService } from '../../../../shared/services/crud.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-admin-users-report',
@@ -25,16 +25,19 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
   toDate: NgbDateStruct;
   public newDate;
   public model: NgbDateStruct;
+  isCols: boolean;
+  public pageNumber;
+  public totalRecords;
 
   constructor(
     public renderer: Renderer,
     public service: CrudService,
     private spinner: NgxSpinnerService,
-  ) {}
+  ) { }
 
   DatePicker(date: NgbDateStruct) {
     console.log('check => ', date);
-    this.newDate = date.year + '-' + date.month + '-'  + date.day;
+    this.newDate = date.year + '-' + date.month + '-' + date.day;
     console.log('newDate => ', this.newDate);
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.draw();
@@ -59,18 +62,29 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
         language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
 
         ajax: (dataTablesParameters: any, callback) => {
+          this.pageNumber = dataTablesParameters.length;
           this.dtparams = dataTablesParameters;
-          dataTablesParameters['columns'][3]['isNumber'] = true;
-          dataTablesParameters['columns'][4]['isNumber'] = true;
+          dataTablesParameters['columns'][5]['isNumber'] = true;
+          dataTablesParameters['columns'][6]['isNumber'] = true;
           setTimeout(() => {
             // if (filterBy) { dataTablesParameters['filtered_by'] = filterBy; }
             if (this.newDate !== '') {
               dataTablesParameters['date'] = this.newDate;
             }
             this.service.post('admin/user/report_list', dataTablesParameters).subscribe(res => {
-              console.log('dataTablesParameters in user report => ', dataTablesParameters );
+              console.log('dataTablesParameters in user report => ', dataTablesParameters);
               this.reports = res['result']['data'];
-              console.log('response in reports', res);
+              this.totalRecords = res['result']['recordsTotal'];
+              // this.reports = [];
+              if (this.reports.length > 0) {
+                this.isCols = true;
+                $('.dataTables_wrapper').css('display', 'block');
+              }
+              if (this.totalRecords > this.pageNumber) {
+                $('.dataTables_paginate').css('display', 'block');
+              } else {
+                $('.dataTables_paginate').css('display', 'none');
+              }
               this.spinner.hide();
               callback({
                 recordsTotal: res['result']['recordsTotal'],
@@ -92,6 +106,14 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
           {
             data: 'Compnay Name',
             name: 'company_name',
+          },
+          {
+            data: 'First Name',
+            name: 'first_name',
+          },
+          {
+            data: 'Last Name',
+            name: 'last_name',
           },
           {
             data: 'No Of Rented',

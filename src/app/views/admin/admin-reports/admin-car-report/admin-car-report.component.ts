@@ -3,7 +3,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { CrudService } from '../../../../shared/services/crud.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-admin-car-report',
@@ -21,10 +21,14 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
   // Data table parameters
   dtparams: any;
   DDfilter = '';
+  isCols: boolean;
   fromDate: NgbDateStruct;
   toDate: NgbDateStruct;
+  // public pageNumber = 10;
+  public pageNumber;
   public newDate;
   public model: NgbDateStruct;
+  public totalRecords;
 
   constructor(
     public renderer: Renderer,
@@ -34,21 +38,17 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
 
   DatePicker(date: NgbDateStruct) {
     console.log('check => ', date);
-    this.newDate = date.year + '-' + date.month + '-'  + date.day;
+    this.newDate = date.year + '-' + date.month + '-' + date.day;
     console.log('newDate in car report => ', this.newDate);
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.draw();
     });
   }
 
+
   ngOnInit() {
-    this.ReportData();
-  }
 
-  ReportData() {
     try {
-      this.spinner.show();
-
       this.dtOptions = {
         pagingType: 'full_numbers',
         pageLength: 10,
@@ -59,19 +59,37 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
         order: [[0, 'desc']],
         language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
         ajax: (dataTablesParameters: any, callback) => {
+          this.pageNumber = dataTablesParameters.length;
           this.dtparams = dataTablesParameters;
           dataTablesParameters['columns'][3]['isNumber'] = true;
           dataTablesParameters['columns'][4]['isNumber'] = true;
+          console.log(dataTablesParameters);
+          this.spinner.show();
           setTimeout(() => {
             // if (filterBy) { dataTablesParameters['filtered_by'] = filterBy; }
             if (this.newDate !== '') {
               dataTablesParameters['date'] = this.newDate;
             }
-            this.service.post('admin/cars/report_list', dataTablesParameters).subscribe(res => {
-              console.log('dataTablesParameters in car report => ', dataTablesParameters );
-              this.reports = res['result']['data'];
-              console.log('response in car reports', res);
+            console.log('dataTablesParameters in car report => ', dataTablesParameters);
+            this.service.post('admin/cars/report_list', dataTablesParameters).subscribe(async (res: any) => {
+              console.log('response====>', res);
+              this.reports = await res['result']['data'];
+              this.totalRecords = res['result']['recordsTotal'];
+              // this.reports = [];
               this.spinner.hide();
+              if (this.reports.length > 0) {
+                this.isCols = true;
+                $('.dataTables_wrapper').css('display', 'block');
+              }
+              console.log('res => ', res['result']['data']);
+              console.log('length===>', this.reports.length);
+              console.log('page number', this.pageNumber);
+
+              if (this.totalRecords > this.pageNumber) {
+                $('.dataTables_paginate').css('display', 'block');
+              } else {
+                $('.dataTables_paginate').css('display', 'none');
+              }
               callback({
                 recordsTotal: res['result']['recordsTotal'],
                 recordsFiltered: res['result']['recordsTotal'],
@@ -105,9 +123,11 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
       };
     } catch (error) {
       console.log('error => ', error);
+      this.spinner.hide();
     }
-
+    this.spinner.hide();
   }
+
   render(): void {
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       // Destroy the table first

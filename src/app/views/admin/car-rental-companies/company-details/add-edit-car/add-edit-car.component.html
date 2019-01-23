@@ -1,8 +1,8 @@
 <div class="card">
   <div class="card-body">
-    <form [formGroup]="AddEditCarForm" enctype="multipart/form-data" (ngSubmit)="onSubmit()">
+    <form [formGroup]="AddEditCarForm" enctype="multipart/form-data" (ngSubmit)="onSubmit()" (keydown.enter)="$event.preventDefault()">
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-3">
           <div class="form-group">
             <label class="required"> Car Brand :</label>
             <select class="form-control" type="String" required="" (change)="model($event.target.value)" id="inlineFormCustomSelect"
@@ -12,6 +12,23 @@
             </select>
             <div *ngIf=" submitted && f.car_brand_id.errors " class="invalid-feedback">
               <div *ngIf="f.car_brand_id.errors.required"> Car Brand Id is required</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-group">
+            <label class="required"> Car Model :</label>
+            <select class="form-control" type="String" required="" id="inlineFormCustomSelect" name="car_model_id"
+              required="" formControlName="car_model_id" [ngClass]="{'is-invalid': submitted && f.car_model_id.errors }">
+              <option value="" disabled selected>Choose Car Brand</option>
+              <option [value]="data._id" *ngFor="let data of modelList">{{data.model_name}}</option>
+            </select>
+            <div *ngIf=" submitted && f.car_model_id.errors " class="invalid-feedback">
+              <div *ngIf="f.car_model_id.errors.required"> Car Model is required</div>
+            </div>
+            <div class="err_msg">
+              <div *ngIf="f.car_model_id.errors.isExist"> Car Model is not available</div>
             </div>
           </div>
         </div>
@@ -63,20 +80,39 @@
           </div>
         </div>
 
-        <div class="col-md-6">
+
+
+
+
+        <div class="col-md-3">
           <div class="form-group">
-            <label class="required"> Car Model :</label>
-            <select class="form-control" type="String" required="" id="inlineFormCustomSelect" name="car_model_id"
-              required="" formControlName="car_model_id" [ngClass]="{'is-invalid': submitted && f.car_model_id.errors }">
-              <option value="" disabled selected>Choose Car Brand</option>
-              <option [value]="data._id" *ngFor="let data of modelList">{{data.model_name}}</option>
-            </select>
-            <div *ngIf=" submitted && f.car_model_id.errors " class="invalid-feedback">
-              <div *ngIf="f.car_model_id.errors.required"> Car Model is required</div>
-              <div *ngIf="f.car_model_id.errors.isExist"> Car Model is not available</div>
+            <label class="required">Licence plate number :</label>
+            <input class="form-control" placeholder="Licence plate number" type="string" required="" name="licence_plate"
+              formControlName="licence_plate" [ngClass]="{'is-invalid': submitted && f.licence_plate.errors }">
+            <div *ngIf=" submitted && f.licence_plate.errors " class="invalid-feedback">
+              <div *ngIf="f.licence_plate.errors.required"> Licence Plate Number is required</div>
+              <div *ngIf="f.licence_plate.errors.uniqueName">Licence Plate Number already exist</div>
             </div>
           </div>
         </div>
+
+        <div class="col-md-3">
+          <div class="form-group">
+            <label class="required">Resident Criteria :</label>
+            <select class="custom-select col-12" id="inlineFormCustomSelect" class="form-control" formControlName="resident_criteria"
+              [ngClass]="{ 'is-invalid': submitted && f.resident_criteria.errors }">
+              <option value="" disabled selected>Choose...</option>
+              <option [value]="0">Rented to Residents</option>
+              <option [value]="1">None Residents</option>
+              <option [value]="2">Both</option>
+            </select>
+            <div *ngIf=" submitted && f.resident_criteria.errors " class="invalid-feedback">
+              <div *ngIf="f.resident_criteria.errors.required">Resident Criteria is required</div>
+            </div>
+          </div>
+        </div>
+
+
 
         <div class="col-md-2">
           <div class="form-group">
@@ -140,13 +176,29 @@
           </div>
         </div>
 
-        <div class="col-md-2">
+
+        <div class="col-md-3">
           <div class="form-group">
-            <label class="required">Licence plate number :</label>
-            <input class="form-control" placeholder="Licence plate number" type="string" required="" name="licence_plate"
-              formControlName="licence_plate" [ngClass]="{'is-invalid': submitted && f.licence_plate.errors }">
-            <div *ngIf=" submitted && f.licence_plate.errors " class="invalid-feedback">
-              <div *ngIf="f.licence_plate.errors.required"> Licence Plate Number is required</div>
+            <label class="required"> Rent Price :</label>
+            <input class="form-control" placeholder="Rent Price" type="text" required="" name="rent_price"
+              formControlName="rent_price" [ngClass]="{'is-invalid': submitted && f.rent_price.errors }">
+            <div *ngIf=" submitted && f.rent_price.errors " class="invalid-feedback">
+              <div *ngIf="f.rent_price.errors.required"> Rent Price is required</div>
+              <div *ngIf="f.rent_price.errors.pattern">Invalid Price</div>
+              <!-- <div *ngIf="f.rent_price.errors.min">Invalid Price</div> -->
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="form-group">
+            <label class="required"> Deposit :</label>
+            <input class="form-control" placeholder="Deposit" type="text" required="" name="deposit" formControlName="deposit"
+              [ngClass]="{'is-invalid': submitted && f.deposit.errors }">
+            <div *ngIf=" submitted && f.deposit.errors " class="invalid-feedback">
+              <div *ngIf="f.deposit.errors.required"> Deposit is required</div>
+              <div *ngIf="f.rent_price.errors.pattern">Invalid Deposit</div>
+              <!-- <div *ngIf="f.rent_price.errors.min">Invalid Price</div> -->
             </div>
           </div>
         </div>
@@ -175,18 +227,7 @@
           </div>
         </div>
 
-        <div class="col-md-2">
-          <div class="form-group">
-            <label class="required"> Rent Price :</label>
-            <input class="form-control" placeholder="Rent Price" type="text" required="" name="rent_price"
-              formControlName="rent_price" [ngClass]="{'is-invalid': submitted && f.rent_price.errors }">
-            <div *ngIf=" submitted && f.rent_price.errors " class="invalid-feedback">
-              <div *ngIf="f.rent_price.errors.required"> Rent Price is required</div>
-              <div *ngIf="f.rent_price.errors.pattern">Invalid Price</div>
-              <!-- <div *ngIf="f.rent_price.errors.min">Invalid Price</div> -->
-            </div>
-          </div>
-        </div>
+
 
         <div class="col-md-2">
           <div class="form-group">
@@ -207,20 +248,7 @@
           </div>
         </div>
 
-        <div class="col-md-2">
-          <div class="form-group">
-            <label class="required">Resident Criteria :</label>
-            <select class="custom-select col-12" id="inlineFormCustomSelect" class="form-control" formControlName="resident_criteria" [ngClass]="{ 'is-invalid': submitted && f.resident_criteria.errors }">
-              <option value="" disabled selected>Choose...</option>
-              <option [value]="0">Rented to Residents</option>
-              <option [value]="1">None Residents</option>
-              <option [value]="2">Both</option>
-            </select>
-            <div *ngIf=" submitted && f.resident_criteria.errors " class="invalid-feedback">
-              <div *ngIf="f.resident_criteria.errors.required">Resident Criteria is required</div>
-            </div>
-          </div>
-        </div>
+
 
         <div class="col-md-8">
           <div class="form-group">

@@ -31,11 +31,12 @@
       </div>
     </div>
   </div>
+
   <div class="col-md-12">
     <!--rental-datatable-->
     <div class="card">
       <div class="card-body">
-        <div class="row pb-3">
+        <div class="row">
           <div class="col-lg-6">
             <h4 class="table-header">List of Rentals </h4>
           </div>
@@ -43,6 +44,13 @@
             <!-- <button type="button" class="btn btn-primary custom-add-btn">
               <i class="fa fa-external-link" aria-hidden="true"></i> Export
             </button> -->
+          </div>
+        </div>
+        <div *ngIf="!isCols">
+          <div class="p-grid p-dir-col">
+            <div class="p-col">
+              <div class="box">No Record found for Rentals</div>
+            </div>
           </div>
         </div>
         <div class="row">
@@ -58,7 +66,7 @@
                     <th style="width:20%">End Of Rent</th>
                   </tr>
                 </thead>
-                <tbody *ngIf="rentalData?.length != 0">
+                <tbody *ngIf="rentalData?.length != 0 && isCols">
                   <tr *ngFor="let item of rentalData; let i = index">
                     <td>
                       {{ item.booking_number }}
@@ -113,7 +121,8 @@
         </button>
       </div>
       <div class="modal-body">
-        <form [formGroup]="AddEditForm" (ngSubmit)="onSubmit()" class="form-horizontal form-material row">
+        <form [formGroup]="AddEditForm" (ngSubmit)="onSubmit()" class="form-horizontal form-material row"
+          (keydown.enter)="$event.preventDefault()">
           <div class="col-sm-6">
             <div class="form-group">
               <label class="required">First name </label>

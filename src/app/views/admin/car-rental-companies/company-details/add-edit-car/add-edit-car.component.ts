@@ -16,6 +16,7 @@ import { environment } from '../../../../../../environments/environment';
 })
 export class AddEditCarComponent implements OnInit {
 
+  public licencePlateData: any;
   CarImage: any = [];
   CarOldImage: any = [];
   CarImageRAW: any = [];
@@ -41,6 +42,7 @@ export class AddEditCarComponent implements OnInit {
     private messageService: MessageService,
     public router: Router,
   ) {
+
     // const company = JSON.parse(localStorage.getItem('companyId'));
     this.companyId = localStorage.getItem('companyId');
     // this.companyName = company.name;
@@ -81,7 +83,7 @@ export class AddEditCarComponent implements OnInit {
         this.AddEditCarForm.controls['licence_plate'].setValue(this.carDetails.licence_plate);
         this.AddEditCarForm.controls['car_color'].setValue(this.carDetails.car_color);
       });
-      console.log(' AddEditCarForm=> ', this.AddEditCarForm );
+      console.log(' AddEditCarForm=> ', this.AddEditCarForm);
     }
     this.service.get('app/car/brandlist').subscribe(res => {
       this.brandlist = res['data'].brand;
@@ -94,6 +96,7 @@ export class AddEditCarComponent implements OnInit {
       car_brand_id: ['', Validators.required],
       car_model_id: ['', Validators.required],
       rent_price: ['', [Validators.required, Validators.pattern('[0-9]*')]],
+      deposit: ['', Validators.compose([Validators.required, Validators.pattern('[0-9]*')])],
       no_of_person: ['', Validators.required],
       resident_criteria: ['', Validators.required],
       transmission: ['', Validators.required],
@@ -108,9 +111,10 @@ export class AddEditCarComponent implements OnInit {
       is_navigation: [false],
       is_AC: [false],
       is_luggage_carrier: [false],
-      licence_plate: ['', Validators.required],
+      licence_plate: ['', Validators.compose([Validators.required, this.uniqueCarNumberValidator])],
       car_color: ['', Validators.required]
     });
+    this.AddEditCarForm.controls['car_model_id'].setErrors({});
     console.log('this.companyId => ', this.companyId);
     this.formData = {
       car_brand_id: String,
@@ -127,8 +131,43 @@ export class AddEditCarComponent implements OnInit {
       is_luggage_carrier: Boolean,
       driving_eligibility_criteria: Number,
       licence_plate: String,
-      car_color: String
+      car_color: String,
+      deposit: Number,
     };
+  }
+
+  public uniqueCarNumberValidator = (control: FormControl) => {
+    let isWhitespace2;
+    if ((isWhitespace2 = (control.value || '').trim().length === 1) || (isWhitespace2 = (control.value || '').trim().length === 0)) {
+      return { 'required': true };
+    } else {
+      // const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
+      // var result = pattern.test(control.value);
+      // if (!result) {
+      //   return { 'pattern': true };
+      // } else {
+      this.licencePlateData = { 'licence_plate': control.value };
+      if (this.isEdit) {
+        this.licencePlateData = { 'licence_plate': control.value, 'car_id': this.carId };
+      }
+      console.log('licencePlateData===>', this.licencePlateData);
+      return this.service.post('checkcarNumber', this.licencePlateData).subscribe(res => {
+        // return (res['status'] === 'success') ? {'unique': true} : null;
+        // console.log('response of validation APi', res['status']);
+        // if (res['status'] === 'success') {
+        //   console.log('if==>');
+        // } else {
+        //   console.log('else==>');
+        // }
+        if (res['status'] === 'success') {
+          this.f.licence_plate.setErrors({ 'uniqueName': true });
+          return;
+        } else {
+          this.f.licence_plate.setErrors(null);
+        }
+      });
+      // }
+    }
   }
 
   modellist = (id) => {
@@ -141,11 +180,16 @@ export class AddEditCarComponent implements OnInit {
     this.service.post('app/car/modelList', { brand_ids: [id] }).subscribe(res => {
       if ((res['data'] !== undefined) && (res['data'] != null) && res['data']) {
         this.modelList = res['data'].model;
+        console.log('if => ');
       } else {
         this.AddEditCarForm.controls['car_model_id'].setErrors({ 'isExist': true });
         // this.modelList = [{ _id: null, model_name: 'No models are available' }];
-        this.modelList = [];
+        console.log('else => ');
       }
+      this.modelList = [];
+    }, error => {
+      console.log('error => ', error);
+      this.AddEditCarForm.controls['car_model_id'].setErrors({ 'isExist': true });
     });
   }
   handleFileInput(event) {

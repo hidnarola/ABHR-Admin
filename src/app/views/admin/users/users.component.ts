@@ -22,6 +22,9 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
   // Data table parameters
   dtparams: any;
   DDfilter = '';
+  isCols: boolean;
+  public pageNumber;
+  public totalRecords;
 
   // items: MenuItem[];
 
@@ -46,6 +49,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
         language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
 
         ajax: (dataTablesParameters: any, callback) => {
+          this.pageNumber = dataTablesParameters.length;
           this.dtparams = dataTablesParameters;
           setTimeout(() => {
             // if (filterBy) { dataTablesParameters['filtered_by'] = filterBy; }
@@ -55,7 +59,17 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
             console.log('dtaparametes car==>', dataTablesParameters);
             this.service.post('admin/user/list', dataTablesParameters).subscribe(res => {
               this.users = res['result']['data'];
-              console.log('response in users', this.users);
+              this.totalRecords = res['result']['recordsTotal'];
+              // this.users = [];
+              if (this.users.length > 0) {
+                this.isCols = true;
+                $('.dataTables_wrapper').css('display', 'block');
+              }
+              if (this.totalRecords > this.pageNumber) {
+                $('.dataTables_paginate').css('display', 'block');
+              } else {
+                $('.dataTables_paginate').css('display', 'none');
+              }
               this.spinner.hide();
               callback({
                 recordsTotal: res['result']['recordsTotal'],

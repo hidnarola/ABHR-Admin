@@ -1,8 +1,8 @@
 <div class="row">
   <div class="col-md-12">
     <div class="card">
-      <div class="card-body">
-        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="card-body card_cstm">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" (keydown.enter)="$event.preventDefault()">
           <!-- <div class="row">
             <div class="col-md-12">
               <div class="form-group">
@@ -57,7 +57,7 @@
           <div class="form-group">
             <div class="row">
               <div class="col-md-2">
-                <div class="terms-detail-box2"><label>Terms and Conditions : </label></div>
+                <div class="terms-detail-box"><label>Terms and Conditions : </label></div>
               </div>
               <div class="col-md-10">
                 <p-editor formControlName="term_condition" name="term_condition" type="text" [style]="{'height':'200px'}"></p-editor>

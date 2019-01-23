@@ -208,7 +208,7 @@ const AdminRoutes: Routes = [
         component: AdminCarReportComponent,
         data: {
           title: 'Manage Car Reports',
-          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Reports', url: 'admin/reports' }, { title: 'Car Reports' }]
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Car Reports' }]
         },
       },
       {
@@ -216,7 +216,7 @@ const AdminRoutes: Routes = [
         component: AdminUsersReportComponent,
         data: {
           title: 'Manage User Reports',
-          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Reports', url: 'admin/reports' }, { title: 'User Reports' }]
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'User Reports' }]
         },
       },
       {
@@ -232,7 +232,7 @@ const AdminRoutes: Routes = [
         component: AdminTransactionDetailComponent,
         data: {
           title: 'View Transaction Report',
-          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Transaction Reports' }, { title: 'Transaction Report Detail' }]
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Transaction Report Detail' }]
         },
       },
       {

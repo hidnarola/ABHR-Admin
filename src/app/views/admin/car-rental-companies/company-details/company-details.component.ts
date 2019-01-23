@@ -35,6 +35,7 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
   public userDetails;
   public carData;
   public rentalData;
+  isCols: boolean;
 
   private subscription: Subscription;
   message: any;
@@ -56,7 +57,9 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
   public nameData: any;
   userSettings: any = {};
   public company_address: any;
-  public service_location = []; // [<longitude>, <latitude>] 
+  public service_location = []; // [<longitude>, <latitude>]
+  public pageNumber;
+  public totalRecords;
   constructor(
     public renderer: Renderer,
     private dataShare: DataSharingService,
@@ -270,6 +273,7 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
       order: [[5, 'desc']],
       language: { 'processing': '<i class=\'fa fa-refresh loader fa-spin\'></i>' },
       ajax: (dataTablesParameters: any, callback) => {
+        this.pageNumber = dataTablesParameters.length;
         console.log('dataparametes car==>', dataTablesParameters);
         dataTablesParameters['columns'][2]['isNumber'] = true;
         dataTablesParameters['columns'][3]['isNumber'] = true;
@@ -281,8 +285,17 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
             console.log('user id in car data table', this.userId);
             console.log('car data in res==>', res);
             this.carData = res['result']['data'];
-            console.log(this.carData);
-            // this.dataShare.changeLoading(false);
+            this.totalRecords = res['result']['recordsTotal'];
+            // this.carData = [];
+            if (this.carData.length > 0) {
+              this.isCols = true;
+              $('.dataTables_wrapper').css('display', 'block');
+            }
+            if (this.totalRecords > this.pageNumber) {
+              $('.dataTables_paginate').css('display', 'block');
+            } else {
+              $('.dataTables_paginate').css('display', 'none');
+            }
             this.spinner.hide();
             callback({
               recordsTotal: res['result']['recordsTotal'],

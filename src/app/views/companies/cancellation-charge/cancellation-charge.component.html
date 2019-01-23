@@ -3,7 +3,7 @@
     <div class="Card-header mb-20">
       <h4>Edit Cancellation</h4>
     </div>
-    <form [formGroup]="CancellationForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="CancellationForm" (ngSubmit)="onSubmit()" (keydown.enter)="$event.preventDefault()">
       <div class="row">
 
         <div class="col-md-4">

@@ -1,6 +1,6 @@
 <div class="card">
   <div class="card-body">
-    <form [formGroup]="AddEditCarForm" enctype="multipart/form-data" (ngSubmit)="onSubmit()">
+    <form [formGroup]="AddEditCarForm" enctype="multipart/form-data" (ngSubmit)="onSubmit()" (keydown.enter)="$event.preventDefault()">
       <div class="row">
         <div class="col-md-6">
           <div class="form-group">
@@ -140,18 +140,19 @@
           </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-2">
           <div class="form-group">
             <label class="required">Licence plate number :</label>
             <input class="form-control" placeholder="Licence plate number" type="string" required="" name="licence_plate"
               formControlName="licence_plate" [ngClass]="{'is-invalid': submitted && f.licence_plate.errors }">
             <div *ngIf=" submitted && f.licence_plate.errors " class="invalid-feedback">
               <div *ngIf="f.licence_plate.errors.required"> Licence Plate Number is required</div>
+              <div *ngIf="f.licence_plate.errors.uniqueName">Licence Plate Number already exist</div>
             </div>
           </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-2">
           <div class="form-group">
             <label class="required">car color :</label>
             <input class="form-control" placeholder="Car Color" type="string" required="" name="car_color"
@@ -205,6 +206,22 @@
             </select>
             <div *ngIf=" submitted && f.no_of_person.errors " class="invalid-feedback">
               <div *ngIf="f.no_of_person.errors.required"> No Of Person is required</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+          <div class="form-group">
+            <label class="required">Resident Criteria :</label>
+            <select class="custom-select col-12" id="inlineFormCustomSelect" class="form-control" formControlName="resident_criteria"
+              [ngClass]="{ 'is-invalid': submitted && f.resident_criteria.errors }">
+              <option value="" disabled selected>Choose...</option>
+              <option [value]="0">Rented to Residents</option>
+              <option [value]="1">None Residents</option>
+              <option [value]="2">Both</option>
+            </select>
+            <div *ngIf=" submitted && f.resident_criteria.errors " class="invalid-feedback">
+              <div *ngIf="f.resident_criteria.errors.required">Resident Criteria is required</div>
             </div>
           </div>
         </div>

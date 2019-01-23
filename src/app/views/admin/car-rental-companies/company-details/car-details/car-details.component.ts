@@ -32,7 +32,7 @@ export class CarDetailsComponent implements OnInit {
 
   CarDetails() {
     // this.dataService.changeLoading(true);
-    this.spinner.show();
+    // this.spinner.show();
 
     this.service.post('admin/company/car/details/', { car_id: this.carId }).subscribe(res => {
       console.log('cardetails RES==>', res);
@@ -40,7 +40,7 @@ export class CarDetailsComponent implements OnInit {
       let carCriteria = this.carDetails.resident_criteria;
       var CriteriaName = '';
       if (carCriteria === 0) {
-         CriteriaName = 'Rented to Residents';
+        CriteriaName = 'Rented to Residents';
       } else if (carCriteria === 1) {
         CriteriaName = 'None Residents';
       } else if (carCriteria === 2) {
@@ -49,9 +49,9 @@ export class CarDetailsComponent implements OnInit {
       this.carDetails.resident_criteria = CriteriaName;
       console.log('criteria name', CriteriaName);
       localStorage.setItem('companyId', this.carDetails.car_rental_company_id);
-      this.spinner.hide();
+      // this.spinner.hide();
     }, error => {
-      this.spinner.hide();
+      // this.spinner.hide();
     });
   }
 

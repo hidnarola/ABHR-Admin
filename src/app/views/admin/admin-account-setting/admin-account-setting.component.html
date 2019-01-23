@@ -1,13 +1,12 @@
 <div class="card">
     <div class="card-body">
-        <form [formGroup] = "SettingForm" (ngSubmit)="onSubmit()"> 
+        <form [formGroup]="SettingForm" (ngSubmit)="onSubmit()" (keydown.enter)="$event.preventDefault()">
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
                         <label class="required"> First Name :</label>
-                        <input class="form-control" placeholder="Enter Firstname " type="text"
-                        name="first_name" formControlName="first_name"
-                        [ngClass]="{ 'is-invalid': submitted && f.first_name.errors }">
+                        <input class="form-control" placeholder="Enter Firstname " type="text" name="first_name"
+                            formControlName="first_name" [ngClass]="{ 'is-invalid': submitted && f.first_name.errors }">
                         <div *ngIf=" submitted && f.first_name.errors " class="invalid-feedback">
                             <div *ngIf="f.first_name.errors.required"> First name is required</div>
                         </div>
@@ -16,9 +15,8 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label class="required"> Last Name :</label>
-                        <input class="form-control" placeholder="Enter Lastname " type="text"
-                        formControlName="last_name" name="last_name"
-                        [ngClass]="{ 'is-invalid': submitted && f.last_name.errors }">
+                        <input class="form-control" placeholder="Enter Lastname " type="text" formControlName="last_name"
+                            name="last_name" [ngClass]="{ 'is-invalid': submitted && f.last_name.errors }">
                         <div *ngIf=" submitted && f.last_name.errors " class="invalid-feedback">
                             <div *ngIf="f.last_name.errors.required"> Last name is required</div>
                         </div>
@@ -27,8 +25,8 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label class="required"> Email :</label>
-                        <input class="form-control" placeholder="Enter Email " type="text" formControlName="email" name="email" 
-                        [ngClass]="{ 'is-invalid': submitted && f.email.errors }">
+                        <input class="form-control" placeholder="Enter Email " type="text" formControlName="email" name="email"
+                            [ngClass]="{ 'is-invalid': submitted && f.email.errors }">
                         <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                             <div *ngIf=" f.email.errors.required ">Email is required</div>
                             <div *ngIf=" f.email.errors.pattern"> Email format is wrong </div>
@@ -38,15 +36,17 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label class="required"> Phone Number :</label>
-                        <input class="form-control" placeholder="Enter Phone Number " type="string" name="phone_number" formControlName="phone_number" [ngClass]="{ 'is-invalid': submitted && f.phone_number.errors }">
+                        <input class="form-control" placeholder="Enter Phone Number " type="string" name="phone_number"
+                            formControlName="phone_number" [ngClass]="{ 'is-invalid': submitted && f.phone_number.errors }">
                         <div *ngIf=" submitted && f.phone_number.errors " class="invalid-feedback">
-                          <div *ngIf="f.phone_number.errors.pattern">Phone number is wrong</div>
+                            <div *ngIf="f.phone_number.errors.pattern">Phone number is wrong</div>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-12">
                     <button type="submit" *ngIf="!isLoading" class="btn waves-effect waves-light custom-btn btn-primary">Submit</button>
-                    <button type="button"  *ngIf="isLoading" class="btn waves-effect loading-btn waves-light btn-primary" type="button">
+                    <button type="button" *ngIf="isLoading" class="btn waves-effect loading-btn waves-light btn-primary"
+                        type="button">
                         <i class="fa fa-spinner fa-spin"></i>Loading
                     </button>
                     <a class="btn waves-effect waves-light custom-btn btn-danger" [routerLink]="['/admin/dashboard']">Cancel</a>
