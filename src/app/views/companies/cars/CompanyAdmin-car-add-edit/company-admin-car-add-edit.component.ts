@@ -62,6 +62,7 @@ export class CarAddEditComponent implements OnInit {
         this.AddEditCarForm.controls['car_brand_id'].setValue(this.carDetails.car_brand_id);
         this.AddEditCarForm.controls['car_model_id'].setValue(this.carDetails.car_model_id);
         this.AddEditCarForm.controls['rent_price'].setValue(this.carDetails.rent_price);
+        this.AddEditCarForm.controls['deposit'].setValue(this.carDetails.deposit);
         this.AddEditCarForm.controls['no_of_person'].setValue(this.carDetails.no_of_person);
         this.AddEditCarForm.controls['resident_criteria'].setValue(this.carDetails.resident_criteria);
         this.AddEditCarForm.controls['transmission'].setValue(this.carDetails.transmission);
@@ -93,6 +94,7 @@ export class CarAddEditComponent implements OnInit {
       car_brand_id: ['', Validators.required],
       car_model_id: ['', Validators.required],
       rent_price: ['', [Validators.required, Validators.pattern('[0-9]*')]],
+      deposit: ['', Validators.compose([Validators.required, Validators.pattern('[1-9][0-9]*')])],
       no_of_person: ['', Validators.required],
       resident_criteria: ['', Validators.required],
       transmission: ['', Validators.required],
@@ -126,7 +128,8 @@ export class CarAddEditComponent implements OnInit {
       is_luggage_carrier: Boolean,
       driving_eligibility_criteria: Number,
       licence_plate: String,
-      car_color: String
+      car_color: String,
+      deposit: Number,
     };
   }
 
@@ -218,6 +221,7 @@ export class CarAddEditComponent implements OnInit {
     formData.append('car_brand_id', this.f.car_brand_id.value);
     formData.append('car_model_id', this.f.car_model_id.value);
     formData.append('rent_price', this.f.rent_price.value);
+    formData.append('deposit', this.f.deposit.value);
     formData.append('no_of_person', this.f.no_of_person.value);
     formData.append('resident_criteria', this.f.resident_criteria.value);
     formData.append('transmission', this.f.transmission.value);

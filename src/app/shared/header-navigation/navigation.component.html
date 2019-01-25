@@ -187,6 +187,12 @@
                             <li *ngIf="AdminType === 'company_admin'">
                                 <a href="/#/company/account-setting"><i class="ti-settings"></i> Account Setting</a>
                             </li>
+                            <li *ngIf="AdminType === 'company_admin'" role="separator" class="divider"></li>
+                            <li *ngIf="AdminType === 'company_admin'">
+                                <a (click)="open2(content, '')">
+                                    <i class="fa fa-check-square-o"></i> Change Password
+                                </a>
+                            </li>
                             <li role="separator" class="divider"></li>
                             <li><a (click)="logout()"><i class="fa fa-power-off"></i> Logout</a></li>
                         </ul>
@@ -196,3 +202,66 @@
         </div>
     </nav>
 </header>
+
+
+
+<div class="row custm-modal" id="chng-pass-modal">
+    <div class="col-md-6">
+        <ng-template #content let-c="close" let-d="dismiss">
+            <div class="modal-header">
+                <h4 class="modal-title">Change Password</h4>
+                <button type="button" class="close" id="closepopup" aria-label="Close" (click)="d('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="changePassForm" (ngSubmit)="onSubmit()" class="form-horizontal form-material row"
+                    (keydown.enter)="$event.preventDefault()">
+                    <div class="col-sm-10 offset-sm-1">
+                        <div class="form-group">
+                            <label class="required">Old Password </label>
+                            <input class="form-control" type="password" required="" name="old_password" placeholder="Enter Old Password"
+                                formControlName="old_password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.old_password.errors }">
+                            <div *ngIf=" submitted && f.old_password.errors " class="invalid-feedback">
+                                <div *ngIf="f.old_password.errors.required"> Old Password is required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-10 offset-sm-1">
+                        <div class="form-group">
+                            <label class="required">New Password </label>
+                            <input class="form-control" type="password" required="" name="new_password" placeholder="Enter New Password"
+                                formControlName="new_password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.new_password.errors }">
+                            <div *ngIf=" submitted && f.new_password.errors " class="invalid-feedback">
+                                <div *ngIf="f.new_password.errors.required">New Password is required</div>
+                                <div *ngIf="f.new_password.errors.minlength || f.new_password.errors.maxlength">New
+                                    Password
+                                    should
+                                    be 6 to 13 characters</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-10 offset-sm-1">
+                        <div class="form-group">
+                            <label class="required">Repeat New Password </label>
+                            <input class="form-control" type="password" required="" placeholder="Repeat New Password"
+                                formControlName="repeat_new_password" name="repeat_new_password" [ngClass]="{ 'is-invalid': submitted && f.repeat_new_password.errors }">
+                            <div *ngIf="submitted && f.repeat_new_password.errors" class="invalid-feedback">
+                                <div *ngIf=" f.repeat_new_password.errors.required ">Repeat New Password is required</div>
+                                <div *ngIf="f.repeat_new_password.errors.mustMatch">Passwords must match</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 text-center">
+                        <button type="submit" *ngIf="!isLoading" class="btn waves-effect waves-light custom-btn btn-primary">Submit</button>
+                        <button type="button" *ngIf="isLoading" class="btn waves-effect loading-btn waves-light btn-primary"
+                            type="button">
+                            <i class="fa fa-spinner fa-spin"></i>Loading
+                        </button>
+                        <a class="btn waves-effect waves-light custom-btn btn-danger" (click)="d('Cross click')">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </ng-template>
+    </div>
+</div>

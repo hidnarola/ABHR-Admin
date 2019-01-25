@@ -4,28 +4,57 @@
       <h4 id="blue" class="mt-45"> Car Detail Of {{carDetails.car_rental_company_name}} </h4>
       <div class="row">
         <div class="col-md-6">
-          <div class="cars-dtl-box-inr"><b>brand name : </b><span>{{carDetails.car_brand}}</span></div>
-          <div class="cars-dtl-box-inr"><b>model name : </b> <span>{{ carDetails.car_model ?carDetails.car_model:'-' }}</span>
+          <div class="cars-dtl-box-inr">
+            <b>brand name : </b><span>{{carDetails.car_brand}}</span>
           </div>
-          <div class="cars-dtl-box-inr"><b>relese year : </b> <span>{{ carDetails.car_model_release_year
-              ?carDetails.car_model_release_year:'-' }}</span> </div>
-          <div class="cars-dtl-box-inr"><b>car class : </b><span>{{carDetails.car_class | titlecase }}</span></div>
-          <div class="cars-dtl-box-inr"><b>car color : </b><span>{{carDetails.car_color| titlecase }}</span></div>
-          <div class="cars-dtl-box-inr"><b>driving eligibility : </b><span>{{carDetails.driving_eligibility_criteria}}</span></div>
-          <div class="cars-dtl-box-inr"><b>Resident Criteria :</b> <span> {{carDetails.resident_criteria}} </span></div>
-          <div class="cars-dtl-box-inr"><b>AC : </b><span>{{carDetails.is_AC?'Yes':'No' }}</span></div>
+          <div class="cars-dtl-box-inr">
+            <b>model name : </b> <span>{{ carDetails.car_model ?carDetails.car_model:'-' }}</span>
+          </div>
+          <div class="cars-dtl-box-inr">
+            <b>relese year : </b> <span> {{ carDetails.car_model_release_year
+              ?carDetails.car_model_release_year:'-' }}</span>
+          </div>
+          <div class="cars-dtl-box-inr">
+            <b>Resident Criteria :</b> <span> {{carDetails.resident_criteria}} </span>
+          </div>
+          <div class="cars-dtl-box-inr">
+            <b>licence plate : </b> <span>{{ carDetails.licence_plate }}</span>
+          </div>
+          <div class="cars-dtl-box-inr">
+            <b>rent price : </b> <span>{{ carDetails.rent_price }}</span>
+          </div>
+          <div class="cars-dtl-box-inr">
+            <b>deposit : </b> <span>{{ carDetails.deposit }}</span>
+          </div>
+          <div class="cars-dtl-box-inr">
+            <b>driver's age : </b><span>{{carDetails.driving_eligibility_criteria}}</span>
+          </div>
         </div>
         <div class="col-md-6">
-          <div class="cars-dtl-box-inr"><b>milage : </b> <span>{{ carDetails.milage | titlecase }}</span> </div>
-          <div class="cars-dtl-box-inr"><b>luggage carrier : </b> <span>{{ carDetails.is_luggage_carrier?'Yes':'No' }}</span>
+          <div class="cars-dtl-box-inr">
+            <b>No Of Persons : </b> <span>{{carDetails.no_of_person}}</span>
           </div>
-          <div class="cars-dtl-box-inr"><b>navigation : </b> <span>{{ carDetails.is_navigation?'Yes':'No' }}</span>
+          <div class="cars-dtl-box-inr">
+            <b>milage : </b> <span>{{ carDetails.milage | titlecase }}</span>
           </div>
-          <div class="cars-dtl-box-inr"><b>avialable : </b> <span>{{ carDetails.is_avialable?'Yes':'No' }}</span> </div>
-          <div class="cars-dtl-box-inr"><b>delieverd : </b> <span>{{ carDetails.is_delieverd?'Yes':'No' }}</span> </div>
-          <div class="cars-dtl-box-inr"><b>licence plate : </b> <span>{{ carDetails.licence_plate }}</span> </div>
-          <div class="cars-dtl-box-inr"><b>No Of Persons : </b> <span>{{carDetails.no_of_person}}</span> </div>
-          <div class="cars-dtl-box-inr"><b>rent price : </b> <span>{{ carDetails.rent_price }}</span> </div>
+          <div class="cars-dtl-box-inr">
+            <b>car class : </b><span>{{carDetails.car_class | titlecase }}</span>
+          </div>
+          <div class="cars-dtl-box-inr">
+            <b>car color : </b><span>{{carDetails.car_color| titlecase }}</span>
+          </div>
+          <div class="cars-dtl-box-inr">
+            <b>navigation : </b> <span>{{ carDetails.is_navigation?'Yes':'No' }}</span>
+          </div>
+          <div class="cars-dtl-box-inr">
+            <b>AC : </b><span>{{carDetails.is_AC?'Yes':'No' }}</span>
+          </div>
+          <div class="cars-dtl-box-inr">
+            <b>luggage carrier : </b> <span>{{ carDetails.is_luggage_carrier?'Yes':'No' }}</span>
+          </div>
+          <div class="cars-dtl-box-inr">
+            <b>avialable : </b> <span>{{ carDetails.is_avialable?'Yes':'No' }}</span>
+          </div>
         </div>
       </div>
     </div>

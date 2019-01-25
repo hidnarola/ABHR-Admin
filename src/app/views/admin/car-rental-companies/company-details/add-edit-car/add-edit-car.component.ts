@@ -53,6 +53,7 @@ export class AddEditCarComponent implements OnInit {
     if (this.carId !== undefined && this.carId !== '' && this.carId != null) {
       this.service.post('admin/company/car/details/', { car_id: this.carId }).subscribe(resp => {
         this.carDetails = resp['data'].carDetail;
+        console.log('this.carDetails => ', this.carDetails);
         this.isEdit = true;
         this.service.post('app/car/modelList', { brand_ids: [this.carDetails.car_brand_id] }).subscribe(res => {
           if ((res['data'] !== undefined) && (res['data'] != null) && res['data']) {
@@ -64,6 +65,7 @@ export class AddEditCarComponent implements OnInit {
         this.AddEditCarForm.controls['car_brand_id'].setValue(this.carDetails.car_brand_id);
         this.AddEditCarForm.controls['car_model_id'].setValue(this.carDetails.car_model_id);
         this.AddEditCarForm.controls['rent_price'].setValue(this.carDetails.rent_price);
+        this.AddEditCarForm.controls['deposit'].setValue(this.carDetails.deposit);
         this.AddEditCarForm.controls['no_of_person'].setValue(this.carDetails.no_of_person);
         this.AddEditCarForm.controls['resident_criteria'].setValue(this.carDetails.resident_criteria);
         this.AddEditCarForm.controls['transmission'].setValue(this.carDetails.transmission);
@@ -96,7 +98,7 @@ export class AddEditCarComponent implements OnInit {
       car_brand_id: ['', Validators.required],
       car_model_id: ['', Validators.required],
       rent_price: ['', [Validators.required, Validators.pattern('[0-9]*')]],
-      deposit: ['', Validators.compose([Validators.required, Validators.pattern('[0-9]*')])],
+      deposit: ['', Validators.compose([Validators.required, Validators.pattern('[1-9][0-9]*')])],
       no_of_person: ['', Validators.required],
       resident_criteria: ['', Validators.required],
       transmission: ['', Validators.required],
@@ -114,7 +116,6 @@ export class AddEditCarComponent implements OnInit {
       licence_plate: ['', Validators.compose([Validators.required, this.uniqueCarNumberValidator])],
       car_color: ['', Validators.required]
     });
-    this.AddEditCarForm.controls['car_model_id'].setErrors({});
     console.log('this.companyId => ', this.companyId);
     this.formData = {
       car_brand_id: String,
@@ -171,7 +172,7 @@ export class AddEditCarComponent implements OnInit {
   }
 
   modellist = (id) => {
-    console.log(id);
+    console.log('id', id);
   }
   get f() { return this.AddEditCarForm.controls; }
 
@@ -180,18 +181,22 @@ export class AddEditCarComponent implements OnInit {
     this.service.post('app/car/modelList', { brand_ids: [id] }).subscribe(res => {
       if ((res['data'] !== undefined) && (res['data'] != null) && res['data']) {
         this.modelList = res['data'].model;
+        this.AddEditCarForm.controls['car_model_id'].setValue(this.modelList[0]._id);
+        console.log(this.modelList);
+        this.AddEditCarForm.controls['car_model_id'].setErrors(null);
         console.log('if => ');
       } else {
         this.AddEditCarForm.controls['car_model_id'].setErrors({ 'isExist': true });
-        // this.modelList = [{ _id: null, model_name: 'No models are available' }];
+        this.modelList = [];
         console.log('else => ');
       }
-      this.modelList = [];
     }, error => {
-      console.log('error => ', error);
+      this.modelList = [];
       this.AddEditCarForm.controls['car_model_id'].setErrors({ 'isExist': true });
+      console.log('error => ');
     });
   }
+
   handleFileInput(event) {
     const files = event.target.files;
     console.log('files => ', files);
@@ -216,6 +221,7 @@ export class AddEditCarComponent implements OnInit {
     this.CarOldImage.splice(index, 1);
   }
   onSubmit() {
+    console.log('AddEditCarForm.value on submit => ', this.AddEditCarForm);
     this.submitted = true;
     console.log('this.CarImage.length => ', this.CarImage.length);
     if (this.CarImage.length > 2 || (Number(this.CarOldImage.length) + Number(this.CarImage.length)) > 2) {
@@ -229,6 +235,7 @@ export class AddEditCarComponent implements OnInit {
     formData.append('car_brand_id', this.f.car_brand_id.value);
     formData.append('car_model_id', this.f.car_model_id.value);
     formData.append('rent_price', this.f.rent_price.value);
+    formData.append('deposit', this.f.deposit.value);
     formData.append('no_of_person', this.f.no_of_person.value);
     formData.append('resident_criteria', this.f.resident_criteria.value);
     formData.append('transmission', this.f.transmission.value);
@@ -271,7 +278,6 @@ export class AddEditCarComponent implements OnInit {
         this.isLoading = true;
         console.log('AddEditCarForm.value => ', this.AddEditCarForm.value);
         this.service.post('admin/company/car/edit', formData, headers).subscribe(res => {
-          console.log('res', res);
           this.isLoading = false;
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
           this.router.navigate(['/admin/car-rental-companies/view/' + localStorage.getItem('companyId')]);

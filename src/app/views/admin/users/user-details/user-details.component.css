@@ -16,3 +16,9 @@
 .mb-15{
   margin-bottom: 15px;
 }
+
+button.btn.btn-primary.custom-add-btn.green-btn {
+    background: #28a745 !important;
+    border: 1px solid #28a745 !important;
+    cursor: not-allowed;
+}

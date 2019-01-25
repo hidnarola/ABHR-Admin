@@ -48,10 +48,23 @@
 
 <div class="card card_one_data">
   <div class="card-body">
-    <div>
-      <h4 class="mb-20"> License Details <label class="label label-{{(userData?.driving_license_verification === 0) ? 'danger': (userData?.driving_license_verification === 1) ? 'warning': 'success'}}">
-          {{userData?.license_msg}}
-        </label> </h4>
+    <div class="row">
+      <div class="col-md-6">
+        <h4 class="mb-20"> License Details
+          <label class="label label-{{(userData?.driving_license_verification === 0) ? 'danger': (userData?.driving_license_verification === 1) ? 'warning': 'success'}}">
+            {{userData?.license_msg}}
+          </label>
+        </h4>
+      </div>
+      <div class="col-md-6 text-right">
+        <button type="button" class="btn btn-primary custom-add-btn" *ngIf="(userData?.driving_license_verification === 1)"
+          (click)="licenceVerification()">
+          <i class="mdi mdi-check" aria-hidden="true"></i> Verify
+        </button>
+        <button type="button" class="btn btn-primary custom-add-btn green-btn" *ngIf="(userData?.driving_license_verification === 2)">
+          <i class="mdi mdi-checkbox-multiple-marked" aria-hidden="true"></i> Verified
+        </button>
+      </div>
     </div>
     <div class="row" *ngIf="userData">
       <div class="col-md-12" *ngIf="userData.driving_license">
@@ -75,10 +88,23 @@
 
 <div class="card card_one_data">
   <div class="card-body">
-    <div>
-      <h4 class="mb-20"> Identity Card Details <label class="label label-{{(userData?.driving_license_verification === 0) ? 'danger': (userData?.driving_license_verification === 1) ? 'warning': 'success'}}">
-          {{userData?.id_msg}}
-        </label></h4>
+    <div class="row">
+      <div class="col-md-6">
+        <h4 class="mb-20"> Identity Card Details
+          <label class="label label-{{(userData?.id_card_verification === 0) ? 'danger': (userData?.id_card_verification === 1) ? 'warning': 'success'}}">
+            {{userData?.id_msg}}
+          </label>
+        </h4>
+      </div>
+      <div class="col-md-6 text-right">
+        <button type="button" class="btn btn-primary custom-add-btn" *ngIf="(userData?.id_card_verification === 1)"
+          (click)="idCardVerification()">
+          <i class="mdi mdi-check" aria-hidden="true"></i> Verify
+        </button>
+        <button type="button" class="btn btn-primary custom-add-btn green-btn" *ngIf="(userData?.id_card_verification === 2)">
+          <i class="mdi mdi-checkbox-multiple-marked" aria-hidden="true"></i> Verified
+        </button>
+      </div>
     </div>
     <div class="row" *ngIf="userData">
       <div class="col-md-12" *ngIf="userData.id_card">

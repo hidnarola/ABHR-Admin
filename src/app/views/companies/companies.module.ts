@@ -21,6 +21,7 @@ import { UserReportComponent } from './company-reports/user-report/user-report.c
 import { KeywordsComponent } from './keywords/keywords.component';
 import { CompanyTermsComponent } from './company-terms/company-terms.component';
 import { CancellationChargeComponent } from './cancellation-charge/cancellation-charge.component';
+import { ChangePassComponent } from './change-pass/change-pass.component';
 // shared component
 // import { RentalsComponent } from '../../shared/components/rentals-for-car/rentals.component';
 
@@ -159,6 +160,7 @@ const CompanyRoutes: Routes = [{
         KeywordsComponent,
         CompanyTermsComponent,
         CancellationChargeComponent,
+        ChangePassComponent,
         // RentalsComponent,
     ]
 })

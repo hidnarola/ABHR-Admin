@@ -27,53 +27,53 @@ export class ResetPasswordComponent implements OnInit {
   private subscription: Subscription;
   message: any;
 
-  constructor( private formBuilder: FormBuilder,
-              public service: CrudService,
-              public router: Router,
-              private route: ActivatedRoute,
-              private messageService: MessageService,
-              ) {
-                this.route.queryParams.subscribe(params => {
-                  if (params['detials']) {
-                    const decodedUrl = decodeURIComponent(params['detials']);
-                    const strParams = atob(decodedUrl);
-                    console.log('string params', typeof strParams);
-                    this.linkData = JSON.parse(strParams);
-                    console.log('link data', this.linkData );
-                    if (this.linkData.user_id) {
-                      this.userId = this.linkData.user_id;
-                      this.UserType = 'admin';
-                      this.userName = this.linkData.first_name;
-                    }
-                    if (this.linkData.company_id) {
-                      console.log('this.linkData.company_id');
-                      this.userId = this.linkData.company_id;
-                      this.UserType = 'company';
-                      this.userName = this.linkData.name;
-                    }
-                    if(this.linkData.app_user_id){
-                      console.log('this.linkData.company_id');
-                      this.userId = this.linkData.app_user_id;
-                      this.UserType = 'appUser';
-                    }
-                    const currentTime = new Date().getTime();
-                    if (this.linkData.expire_time < currentTime) {
-                      this.isExpired = true;
-                      this.alerts.push({ type: 'danger', msg: 'Your link is expired', });
-                    } else {
-                      this.isExpired = false;
-                    }
-                  }
-                });
-              }
+  constructor(private formBuilder: FormBuilder,
+    public service: CrudService,
+    public router: Router,
+    private route: ActivatedRoute,
+    private messageService: MessageService,
+  ) {
+    this.route.queryParams.subscribe(params => {
+      if (params['detials']) {
+        const decodedUrl = decodeURIComponent(params['detials']);
+        const strParams = atob(decodedUrl);
+        console.log('string params', typeof strParams);
+        this.linkData = JSON.parse(strParams);
+        console.log('link data', this.linkData);
+        if (this.linkData.user_id) {
+          this.userId = this.linkData.user_id;
+          this.UserType = 'admin';
+          this.userName = this.linkData.first_name;
+        }
+        if (this.linkData.company_id) {
+          console.log('this.linkData.company_id');
+          this.userId = this.linkData.company_id;
+          this.UserType = 'company';
+          this.userName = this.linkData.name;
+        }
+        if (this.linkData.app_user_id) {
+          console.log('this.linkData.company_id');
+          this.userId = this.linkData.app_user_id;
+          this.UserType = 'appUser';
+        }
+        const currentTime = new Date().getTime();
+        if (this.linkData.expire_time < currentTime) {
+          this.isExpired = true;
+          this.alerts.push({ type: 'danger', msg: 'Your link is expired', });
+        } else {
+          this.isExpired = false;
+        }
+      }
+    });
+  }
 
   ngOnInit() {
     this.resetPasswordForm = this.formBuilder.group({
-      password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(13)]],
+      password: ['', Validators.compose([Validators.required, Validators.minLength(6), Validators.maxLength(13)])],
       repeatPassword: ['', Validators.required]
     }, {
-      validator: MustMatch('password', 'repeatPassword')
-    }
+        validator: MustMatch('password', 'repeatPassword')
+      }
     );
   }
 
@@ -85,42 +85,45 @@ export class ResetPasswordComponent implements OnInit {
       console.log('type', this.UserType);
       if (this.UserType === 'company') {
         localStorage.clear();
-        this.formData = { 'company_id': this.userId,
-                          'new_password': this.resetPasswordForm.value.password
-                       };
+        this.formData = {
+          'company_id': this.userId,
+          'new_password': this.resetPasswordForm.value.password
+        };
         this.service.post('company/reset_password', this.formData).subscribe((res) => {
-        this.submitted = false;
-        this.messageService.add({severity: 'success', summary: 'Success', detail:  'Password has been Reset successfully!!'});
+          this.submitted = false;
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Password has been Reset successfully!!' });
           console.log('result==>', res);
           this.router.navigate(['company/login']);
         }, error => {
-          this.messageService.add({severity: 'error', summary: 'Error', detail: 'Something went wrong, please try again!!'});
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Something went wrong, please try again!!' });
         });
       } else if (this.UserType === 'admin') {
         localStorage.clear();
-        this.formData = { 'user_id': this.userId,
-                          'new_password': this.resetPasswordForm.value.password
-                        };
+        this.formData = {
+          'user_id': this.userId,
+          'new_password': this.resetPasswordForm.value.password
+        };
         this.service.post('reset_password', this.formData).subscribe((res) => {
           this.submitted = false;
-          this.messageService.add({severity: 'success', summary: 'Success', detail: 'Password has been Reset successfully!!'});
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Password has been Reset successfully!!' });
           console.log('result==>', res);
           this.router.navigate(['admin/login']);
         }, error => {
-          this.messageService.add({severity: 'error', summary: 'Error', detail: 'Something went wrong, please try again!!'});
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Something went wrong, please try again!!' });
         });
-      } else if ( this.UserType === 'appUser') {
+      } else if (this.UserType === 'appUser') {
         localStorage.clear();
-        this.formData = { 'user_id': this.userId,
-                          'new_password': this.resetPasswordForm.value.password
-                        };
+        this.formData = {
+          'user_id': this.userId,
+          'new_password': this.resetPasswordForm.value.password
+        };
         this.service.post('reset_password', this.formData).subscribe((res) => {
           this.submitted = false;
-          this.messageService.add({severity: 'success', summary: 'Success', detail: res['message']});
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
           console.log('result==>', res);
           this.router.navigate(['reset-password']);
         }, error => {
-          this.messageService.add({severity: 'error', summary: 'Error', detail: error['message']});
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: error['message'] });
         });
         this.submitted = false;
         this.resetPasswordForm.controls['password'].setValue('');

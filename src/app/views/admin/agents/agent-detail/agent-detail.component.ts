@@ -220,6 +220,7 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     };
     this.modalService.open(content, options).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
     });
   }
 

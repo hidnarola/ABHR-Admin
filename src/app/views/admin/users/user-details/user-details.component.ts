@@ -5,6 +5,7 @@ import { environment } from './../../../../../environments/environment';
 import { CrudService } from '../../../../shared/services/crud.service';
 import _ from 'lodash';
 import { Constant } from '../../../../shared/constant/constant';
+import { MessageService } from 'primeng/api';
 @Component({
   selector: 'app-user-details',
   templateUrl: './user-details.component.html',
@@ -14,8 +15,13 @@ export class UserDetailsComponent implements OnInit {
   userId: any;
   userData: any;
   public imageURL = environment.imgUrl + 'user/licence/';
-  constructor(private route: ActivatedRoute, private spinner: NgxSpinnerService,
-    private service: CrudService, private CONST: Constant) { }
+  constructor(
+    private route: ActivatedRoute,
+    private spinner: NgxSpinnerService,
+    private service: CrudService,
+    private CONST: Constant,
+    private messageService: MessageService,
+  ) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -25,6 +31,7 @@ export class UserDetailsComponent implements OnInit {
   }
 
   getVerificationStatus(id) {
+    console.log(id);
     // if (parseInt(id, 2)) {
     try {
       return (_.find(this.CONST.VERIFICATION_STATUS, { 'key': id })).value;
@@ -49,4 +56,37 @@ export class UserDetailsComponent implements OnInit {
       this.spinner.hide();
     });
   }
+
+  licenceVerification() {
+    var obj = {
+      'user_id': this.userId,
+      'driving_license_verification': true
+    };
+    this.service.post('admin/user/verify', obj).subscribe(res => {
+      if (res['status'] === 'success') {
+        this.getUserDetail(this.userId);
+      }
+      this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
+    }, err => {
+      err = err.error;
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
+    });
+  }
+
+  idCardVerification() {
+    var obj = {
+      'user_id': this.userId,
+      'id_card_verification': true
+    };
+    this.service.post('admin/user/verify', obj).subscribe(res => {
+      if (res['status'] === 'success') {
+        this.getUserDetail(this.userId);
+      }
+      this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
+    }, err => {
+      err = err.error;
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
+    });
+  }
+
 }
