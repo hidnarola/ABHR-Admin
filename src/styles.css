@@ -8,8 +8,8 @@
 }
 
 body {color: #67757c; font-weight: 300; font-size: 1rem;}
-
-.sidebar-nav ul li a {padding: 8px 30px 8px 15px !important;}
+a{cursor:pointer;}
+.sidebar-nav ul li a{padding:8px 30px 8px 15px !important;}
 
 .dataTables_length, .dataTables_filter{ margin:0 0 20px;}
 .dataTables_filter label{font-size:14px; color:#666; text-transform: capitalize; font-weight:400; letter-spacing:.1em; margin:0;}
@@ -196,7 +196,17 @@ body .card_one_data .license_image {height: auto;width: auto;margin-right: 10px;
 .card_one_data .cars-dtl-box {margin: 0;}
 #blue.h4_user_img img {right: auto;left: 0;top: 0;height: 70px;}
 
+.ui-dialog.ui-widget.ui-widget-content { width:500px; }
+.ui-dialog.ui-widget.ui-widget-content .form-material.row { margin:0 auto;}
+.ui-dialog.ui-widget.ui-widget-content .ui-dialog-content {padding:15px 5px; border:0; }
 
+.form-group{ position:relative;}
+.error-msg:after{content:''; border-bottom:1px solid #ef5350; width:100%; height:1px; position: absolute; top:60px; left:0;} 
+.error-msg:before{content:''; border-top:1px solid #ef5350; width:100%; height:1px; position: absolute; top:24px; left:0;} 
+.error-msg>div:after,
+.error-msg>div:before{content:''; position:absolute; top:25px;left:auto; right:auto; width:1px; height:36px;}
+.error-msg>div:before{border-left:1px solid #ef5350; left:0;}
+.error-msg>div:after{border-right:1px solid #ef5350; right:0;}
 
 /***media start here  **/
 

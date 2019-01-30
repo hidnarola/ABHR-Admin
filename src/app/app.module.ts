@@ -25,19 +25,20 @@ import { SpinnerComponent } from './shared/spinner.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ModalDialogModule } from 'ngx-modal-dialog';
 
+// Prime Modules
+import { ToastModule } from 'primeng/toast';
+// import { CalendarModule } from 'primeng/calendar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 
-// Prime Modules
-import { ToastModule } from 'primeng/toast';
-
 // third party modules
 import { DataTablesModule } from 'angular-datatables';
 import { Constant } from './shared/constant/constant';
-import { DataSharingService, AdminUser } from './shared/services/data-sharing.service';
-// import { GoogleMapsAPIWrapper } from '@agm/core';
+import { DataSharingService } from './shared/services/data-sharing.service';
 import { TokenInterceptor } from './shared/interface/token-interceptor';
+import { NavigationModule } from './shared/header-navigation/navigation.module';
+import { DialogModule } from 'primeng/dialog';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -70,6 +71,9 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NgxSpinnerModule,
     ModalDialogModule,
     ToastModule,
+    // CalendarModule,
+    DialogModule,
+    NavigationModule
   ],
   providers: [
     Constant,

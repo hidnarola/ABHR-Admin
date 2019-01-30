@@ -15,6 +15,7 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
   @ViewChild(DataTableDirective)
   dtElement: DataTableDirective;
   dtOptions: DataTables.Settings = {};
+  // dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject();
 
   public reports;
@@ -81,9 +82,6 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
                 this.isCols = true;
                 $('.dataTables_wrapper').css('display', 'block');
               }
-              console.log('res => ', res['result']['data']);
-              console.log('length===>', this.reports.length);
-              console.log('page number', this.pageNumber);
 
               if (this.totalRecords > this.pageNumber) {
                 $('.dataTables_paginate').css('display', 'block');
@@ -119,7 +117,12 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
             data: 'Total Rent',
             name: 'totalrent',
           },
-        ]
+        ],
+        // dom: 'Bfrtip',
+        // buttons: [
+        //   'excel',
+        //   'copy'
+        // ]
       };
     } catch (error) {
       console.log('error => ', error);

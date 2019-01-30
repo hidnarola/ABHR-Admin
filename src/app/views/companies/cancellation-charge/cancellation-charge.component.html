@@ -3,39 +3,43 @@
     <div class="Card-header mb-20">
       <h4>Edit Cancellation</h4>
     </div>
-    <form [formGroup]="CancellationForm" (ngSubmit)="onSubmit()" (keydown.enter)="$event.preventDefault()">
+    <form (ngSubmit)="onSubmit()" #f="ngForm" (keydown.enter)="$event.preventDefault()">
       <div class="row">
-
-        <div class="col-md-4">
-          <div class="form-group">
-            <label class="required">{{ cancellationData[0].hours }}Hours :</label>
-            <input class="form-control" placeholder="Enter Hours" type="number" required="" name="hours" [value]="cancellationData[0].hours"
-              formControlName="hours" [ngClass]="{'is-invalid': submitted && f.hours.errors }">
-            <div *ngIf=" submitted && f.hours.errors " class="invalid-feedback">
-              <div *ngIf="f.hours.errors.required"> Hours are required</div>
+        <div class="col-md-4"><label class="required">Hours :</label></div>
+        <div class="col-md-4"><label class="required">Rate :</label></div>
+      </div>
+      <div *ngFor="let item of submitArray; let i = index">
+        {{item | json}}
+        {{ submitArray[i] | json}}
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <input class="form-control" placeholder="Enter Hours" type="number" required="true" name="hours[i]"
+                [(ngModel)]="submitArray[i].hours">
+              <div class="invalid-feedback">
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="col-md-4">
-          <div class="form-group">
-            <label class="required">Rate:</label>
-            <input class="form-control" placeholder="Enter Rate" type="number" required="" name="rate" formControlName="rate"
-              [value]="cancellationData[0].rate" [ngClass]="{'is-invalid': submitted && f.rate.errors }">
-            <div *ngIf=" submitted && f.rate.errors " class="invalid-feedback">
-              <div *ngIf="f.rate.errors.required"> Rate is required</div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <input class="form-control" placeholder="Enter Rate" type="number" required="true" name="rate[i]"
+                [(ngModel)]="submitArray[i].rate">
+              <div class="invalid-feedback">
+              </div>
             </div>
           </div>
+
+          <div class="col-md-4">
+            <button type="button" *ngIf="i==0" class="btn btn-primary custom-add-btn" (click)="addNext()">
+              <i class="fa fa-plus" aria-hidden="true"></i> Add
+            </button>
+            <button type="button" *ngIf="i>0" class="btn btn-primary custom-add-btn" (click)="deleteThis(i)"> <i class="fa fa-minus" aria-hidden="true"></i> Remove</button>
+          </div>
         </div>
+      </div>
 
-        <div class="col-md-4">
-          <button type="button" class="btn btn-primary custom-add-btn" (click)="add(hours,rate)">
-            <i class="fa fa-plus" aria-hidden="true"></i> Add
-          </button>
-        </div>
-
-        <div></div>
-
+      <div class="row">
         <div class="col-sm-12">
           <button type="submit" *ngIf="!isLoading" class="btn waves-effect waves-light custom-btn btn-primary">Submit
           </button>
@@ -44,8 +48,8 @@
           </button>
           <a class="btn waves-effect waves-light custom-btn btn-danger" [routerLink]="['/company/dashboard']">Cancel</a>
         </div>
-
       </div>
+
     </form>
   </div>
 </div> -->

@@ -1,6 +1,8 @@
 import {
   Component, OnInit, Renderer, ViewChild, OnDestroy, AfterViewInit, ElementRef,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  OnChanges,
+  SimpleChange
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
@@ -67,6 +69,8 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
   isCols: boolean;
   public pageNumber;
   public totalRecords;
+  public placeData: any;
+  public addressError: boolean = false;
 
   constructor(
     public renderer: Renderer,
@@ -121,17 +125,8 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
         this.emailData = { 'email': control.value };
         if (this.isEdit) {
           this.emailData = { 'email': control.value, 'company_id': this.userId };
-          console.log('company id', this.userId);
         }
-        console.log('emailData===>', this.emailData);
         return this.service.post('admin/company/checkemail', this.emailData).subscribe(res => {
-          // return (res['status'] === 'success') ? {'unique': true} : null;
-          // console.log('response of validation APi', res['status']);
-          // if (res['status'] === 'success') {
-          //   console.log('if==>');
-          // } else {
-          //   console.log('else==>');
-          // }
           if (res['status'] === 'success') {
             this.f.email.setErrors({ 'unique': true });
             return;
@@ -148,25 +143,11 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
     if ((isWhitespace2 = (control.value || '').trim().length === 1) || (isWhitespace2 = (control.value || '').trim().length === 0)) {
       return { 'required': true };
     } else {
-      // const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
-      // var result = pattern.test(control.value);
-      // if (!result) {
-      //   return { 'pattern': true };
-      // } else {
       this.nameData = { 'name': control.value };
       if (this.isEdit) {
         this.nameData = { 'name': control.value, 'company_id': this.userId };
-        console.log('company id', this.userId);
       }
-      console.log('nameData===>', this.nameData);
       return this.service.post('admin/company/checkname', this.nameData).subscribe(res => {
-        // return (res['status'] === 'success') ? {'unique': true} : null;
-        // console.log('response of validation APi', res['status']);
-        // if (res['status'] === 'success') {
-        //   console.log('if==>');
-        // } else {
-        //   console.log('else==>');
-        // }
         if (res['status'] === 'success') {
           this.f.name.setErrors({ 'uniqueName': true });
           return;
@@ -174,7 +155,6 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
           this.f.name.setErrors(null);
         }
       });
-      // }
     }
   }
 
@@ -193,7 +173,6 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
         this.pageNumber = dataTablesParameters.length;
         setTimeout(() => {
           dataTablesParameters['columns'][5]['isBoolean'] = true;
-          console.log('dtaparametes car rental company==>', dataTablesParameters);
           this.service.post('admin/company/list', dataTablesParameters).subscribe(res => {
             this.users = res['result']['data'];
             this.totalRecords = res['result']['recordsTotal'];
@@ -263,7 +242,6 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
     if (item !== 'undefined' && item !== '') {
       this.title = 'Edit Company';
       this.isEdit = true;
-      console.log('title', this.title);
       this.userId = item._id;
       this.userSettings.inputPlaceholderText = item.company_address.address;
       this.service_location = item.service_location;
@@ -275,6 +253,16 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
       this.AddEditForm.controls['phone_number'].setValue(item.phone_number);
     } else {
       this.title = 'Add Company';
+      this.userSettings.inputPlaceholderText = 'Enter Address';
+      if (typeof this.placeData !== 'undefined') {
+        // this.addressError = true;
+        this.placeData.response = false;
+        console.log(' check here add 1=> ');
+      }
+      // } else {
+      //   this.placeData.response = false;
+      //   console.log(' check here add 3=> ');
+      // }
     }
     const options: NgbModalOptions = {
       keyboard: false,
@@ -290,6 +278,7 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
         this.AddEditForm.controls['email'].setValue('');
         this.AddEditForm.controls['site_url'].setValue('');
         this.AddEditForm.controls['phone_number'].setValue('');
+        this.addressError = false;
       }
     });
     this.submitted = false;
@@ -298,7 +287,6 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
 
   // dlt popup
   delete(userId) {
-    console.log('userId==>', userId);
     this.confirmationService.confirm({
       message: 'Are you sure want to delete this record?',
       header: 'Confirmation',
@@ -338,8 +326,6 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
   }
 
   handleChange(e, id) {
-    console.log(e);
-    console.log('comp id => ', id);
     const params = {
       company_id: id,
       status: e.checked
@@ -348,7 +334,6 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
       .subscribe(res => {
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Status change succesfully' });
       }, error => {
-        console.log(error);
         e.checked = !e.checked;
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Something went wrong' });
       });
@@ -356,19 +341,31 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
 
   onSubmit() {
     this.submitted = true;
-    console.log(this.AddEditForm);
+    console.log('on submit usersettings===>', typeof this.placeData);
+    console.log('placeData => ', this.placeData);
+    if (typeof this.placeData === 'undefined') {
+      this.addressError = true;
+      console.log(' check here 1=> ');
+    } else {
+      if (this.placeData.response === false) {
+        this.addressError = true;
+        console.log(' check here 2=> ');
+      } else if (this.placeData.response === true) {
+        this.addressError = false;
+      }
+      // this.addressError = true;
+      console.log(' check here 3=> ');
+    }
+
     if (!this.AddEditForm.invalid) {
       this.isLoading = true;
       this.formData = this.AddEditForm.value;
       this.formData.company_address = this.company_address;
       this.formData.service_location = this.service_location;
-      console.log('formadata==>', this.formData);
       if (this.isEdit) {
         this.formData.company_id = this.userId;
         this.title = 'Edit Company';
-        console.log('userId', this.userId);
         this.service.put('admin/company/update', this.formData).subscribe(res => {
-          console.log('after update==>', res);
           this.render();
           this.closePopup();
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
@@ -380,8 +377,6 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
       } else {
         this.title = 'Add Company';
         this.service.post('admin/company/add', this.formData).subscribe(res => {
-          console.log('===================first time==================== ');
-          console.log(this.formData);
           this.render();
           this.closePopup();
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
@@ -393,27 +388,39 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
       }
       this.isEdit = false;
       this.submitted = false;
+      this.placeData = [];
     } else {
       return;
     }
-    console.log('form data address', this.formData);
   }
 
   ngOnInit() {
     this.UsersListData();
+    console.log('this.placeData => ', this.placeData);
   }
   autoCompleteCallback1(selectedData: any) {
+    this.placeData = selectedData;
+    console.log('this.placeData selectedData => ', this.placeData);
+    if (typeof this.placeData === 'undefined') {
+      this.addressError = true;
+      console.log(' check here  auto complete 1=> ');
+    } else {
+      if (this.placeData.response === false) {
+        this.addressError = true;
+        console.log(' check here 2=> ');
+      } else if (this.placeData.response === true) {
+        this.addressError = false;
+      }
+      console.log(' check here auto complete 2=> ');
+    }
     this.service_location = [];
-    console.log('selectedData => ', selectedData);
     var lng = selectedData.data.geometry.location.lng;
     var lat = selectedData.data.geometry.location.lat;
     this.company_address.address = selectedData.data.formatted_address;
     this.service_location.push(lng);
     this.service_location.push(lat);
-    console.log(this.service_location);
     for (var i = 0; i < selectedData.data.address_components.length; i++) {
       var addressType = selectedData.data.address_components[i].types[0];
-      console.log('addresstype====>', addressType);
       var addressType = selectedData.data.address_components[i].types[0];
       if (addressType == 'country') {
         var country = selectedData.data.address_components[i].long_name;
@@ -427,11 +434,13 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
         var city = selectedData.data.address_components[i].long_name;
         this.company_address.city = city;
       }
-      console.log(this.company_address);
     }
   }
 
   test(address) {
     console.log('address => ', address);
+  }
+  onChangeAddress() {
+    console.log('==> => ');
   }
 }

@@ -67,6 +67,7 @@ export class ForgetPasswordComponent implements OnInit {
           this.submitted = false;
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
           this.router.navigate(['/admin/forget-password']);
+          this.forgetPasswordForm.controls['email'].setValue('');
         }, err => {
           err = err.error;
           this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
@@ -77,15 +78,19 @@ export class ForgetPasswordComponent implements OnInit {
           console.log('result==>', res);
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
           this.router.navigate(['/company/forget-password']);
-          console.log('alert', this.alerts);
+          this.forgetPasswordForm.controls['email'].setValue('');
         }, err => {
           err = err.error;
           this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
+          console.log('err => ');
         });
       }
+      this.submitted = false;
+      this.forgetPasswordForm.controls['email'].setValue('');
     }
   }
-  backToLogin(){
+
+  backToLogin() {
     if (this.currentUser === 'admin') {
       this.router.navigate(['/admin/login']);
     } else if (this.currentUser === 'company') {

@@ -154,13 +154,11 @@
               <div class="form-group">
                 <label class="required"> Address :</label>
                 <ng4geo-autocomplete [userSettings]="userSettings" (componentCallback)="autoCompleteCallback1($event)"
-                  (keyup)="test($event)">
-                  <!-- [(ngModel)]="model.address" #address="ngModel" [ngModelOptions]="{standalone: true}"
-                required -->
+                  (keyup)="test($event)" (onChange)="onChangeAddress()">
                 </ng4geo-autocomplete>
-                <!-- <div *ngIf="submitted && address.invalid" [ngClass]="{ 'error-msg' : submitted && address.invalid}">
-                <div *ngIf="address.errors.required">Address is required</div>
-              </div> -->
+                <div *ngIf="addressError" class="error-msg">
+                  <div *ngIf="addressError">Address is required</div>
+                </div>
               </div>
             </div>
             <div class="col-sm-6">

@@ -193,11 +193,11 @@
 
         <div class="col-md-3">
           <div class="form-group">
-            <label class="required"> Deposit :</label>
-            <input class="form-control" placeholder="Deposit" type="text" required="" name="deposit" formControlName="deposit"
+            <label> Deposit :</label>
+            <input class="form-control" placeholder="Deposit" type="text" name="deposit" formControlName="deposit"
               [ngClass]="{'is-invalid': submitted && f.deposit.errors }">
             <div *ngIf=" submitted && f.deposit.errors " class="invalid-feedback">
-              <div *ngIf="f.deposit.errors.required"> Deposit is required</div>
+              <!-- <div *ngIf="f.deposit.errors.required"> Deposit is required</div> -->
               <div *ngIf="f.deposit.errors.pattern">Invalid Deposit</div>
               <!-- <div *ngIf="f.rent_price.errors.min">Invalid Price</div> -->
             </div>

@@ -5,7 +5,6 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Routes, RouterModule, ActivatedRoute } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ModalDialogService } from 'ngx-modal-dialog';
 
 // model
 import { NgbModal, ModalDismissReasons, NgbActiveModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
@@ -55,31 +54,23 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
   public agents;
   closeResult: string;
   public title = 'Add Agent';
-  // public pattern: any;
   public pageNumber;
   public totalRecords;
 
   private subscription: Subscription;
-  message: any;
-
-  msgs: Message[] = [];
   hideSpinner: boolean;
 
   constructor(
     public renderer: Renderer,
     public service: CrudService,
     private dataShare: DataSharingService,
-    public dialog: MatDialog,
     public router: Router,
     private route: ActivatedRoute,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
-    // model
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private spinner: NgxSpinnerService,
-
-    // modalService: ModalDialogService,
     viewRef: ViewContainerRef
   ) {
     this.hideSpinner = true;
@@ -88,7 +79,6 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.AddEditForm = this.formBuilder.group({
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
-      // deviceType: ['', Validators.required],
       phone_number: ['', Validators.compose([Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^([0-9]){10}$/)])],
       email: ['', Validators.compose([Validators.required, Validators.email,
       Validators.pattern(pattern), this.uniqueEmailValidator])],
@@ -97,7 +87,6 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.formData = {
       first_name: String,
       last_name: String,
-      // deviceType: String,
       phone_number: Number,
       email: String
     };
@@ -114,18 +103,12 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
         return { 'pattern': true };
       } else {
         this.emailData = { 'email': control.value };
+        console.log('control.value => ', control.value);
         if (this.isEdit) {
           this.emailData = { 'email': control.value, 'user_id': this.userId };
         }
         console.log('emailData===>', this.emailData);
         return this.service.post('admin/checkemail', this.emailData).subscribe(res => {
-          // return (res['status'] === 'success') ? {'unique': true} : null;
-          // console.log('response of validation APi', res['status']);
-          // if (res['status'] === 'success') {
-          //   console.log('if==>');
-          // } else {
-          //   console.log('else==>');
-          // }
           if (res['status'] === 'success') {
             this.f.email.setErrors({ 'unique': true });
             return;
@@ -176,7 +159,7 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
         }, err => {
           err = err.error;
           this.isLoading = false;
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: err['error'] });
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
           this.closePopup();
         });
       }

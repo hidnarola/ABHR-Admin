@@ -34,6 +34,10 @@ export class AddEditCarComponent implements OnInit {
   public brandlist;
   public modelList;
   isLoading: boolean;
+  selectDate = new Date();
+  // today = new Date();
+  // month = this.today.getMonth();
+  // year = this.today.getFullYear();
 
   constructor(
     private route: ActivatedRoute,
@@ -42,7 +46,6 @@ export class AddEditCarComponent implements OnInit {
     private messageService: MessageService,
     public router: Router,
   ) {
-
     // const company = JSON.parse(localStorage.getItem('companyId'));
     this.companyId = localStorage.getItem('companyId');
     // this.companyName = company.name;
@@ -87,6 +90,7 @@ export class AddEditCarComponent implements OnInit {
       });
       console.log(' AddEditCarForm=> ', this.AddEditCarForm);
     }
+
     this.service.get('app/car/brandlist').subscribe(res => {
       this.brandlist = res['data'].brand;
     });
@@ -98,7 +102,8 @@ export class AddEditCarComponent implements OnInit {
       car_brand_id: ['', Validators.required],
       car_model_id: ['', Validators.required],
       rent_price: ['', [Validators.required, Validators.pattern('[0-9]*')]],
-      deposit: ['', Validators.compose([Validators.required, Validators.pattern('[1-9][0-9]*')])],
+      // deposit: ['', Validators.compose([Validators.required, Validators.pattern('[1-9][0-9]*')])],
+      deposit: ['', Validators.pattern('[1-9][0-9]*')],
       no_of_person: ['', Validators.required],
       resident_criteria: ['', Validators.required],
       transmission: ['', Validators.required],
@@ -142,24 +147,12 @@ export class AddEditCarComponent implements OnInit {
     if ((isWhitespace2 = (control.value || '').trim().length === 1) || (isWhitespace2 = (control.value || '').trim().length === 0)) {
       return { 'required': true };
     } else {
-      // const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
-      // var result = pattern.test(control.value);
-      // if (!result) {
-      //   return { 'pattern': true };
-      // } else {
       this.licencePlateData = { 'licence_plate': control.value };
       if (this.isEdit) {
         this.licencePlateData = { 'licence_plate': control.value, 'car_id': this.carId };
       }
       console.log('licencePlateData===>', this.licencePlateData);
       return this.service.post('checkcarNumber', this.licencePlateData).subscribe(res => {
-        // return (res['status'] === 'success') ? {'unique': true} : null;
-        // console.log('response of validation APi', res['status']);
-        // if (res['status'] === 'success') {
-        //   console.log('if==>');
-        // } else {
-        //   console.log('else==>');
-        // }
         if (res['status'] === 'success') {
           this.f.licence_plate.setErrors({ 'uniqueName': true });
           return;
@@ -221,6 +214,7 @@ export class AddEditCarComponent implements OnInit {
     this.CarOldImage.splice(index, 1);
   }
   onSubmit() {
+    console.log('selectDate => ', this.selectDate);
     console.log('AddEditCarForm.value on submit => ', this.AddEditCarForm);
     this.submitted = true;
     console.log('this.CarImage.length => ', this.CarImage.length);
@@ -307,6 +301,17 @@ export class AddEditCarComponent implements OnInit {
       return;
     }
   }
-  ngOnInit() { }
+  ngOnInit() {
+    let today = new Date();
+    let month = today.getMonth();
+    let year = today.getFullYear();
+    console.log('today => ', today);
+    console.log('month => ', month);
+    console.log('year => ', year);
+  }
+  openCal(month: number) {
+    $('#myCal').click();
+    this.selectDate.setMonth(month);
+  }
 
 }

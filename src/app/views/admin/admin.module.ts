@@ -17,6 +17,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { TooltipModule } from 'primeng/tooltip';
 import { MenuModule } from 'primeng/menu';
 import { EditorModule } from 'primeng/editor';
+import { CheckboxModule } from 'primeng/checkbox';
 
 import { AdminComponent } from './admin.component';
 // Child components
@@ -34,21 +35,24 @@ import { StaffDetailComponent } from './staff/staff-detail/staff-detail.componen
 import { CarDetailsComponent } from './car-rental-companies/company-details/car-details/car-details.component';
 import { AddEditCarComponent } from '../admin/car-rental-companies/company-details/add-edit-car/add-edit-car.component';
 import { UserDetailsComponent } from './users/user-details/user-details.component';
-
-// shared component
-import { RentalsComponent } from '../../shared/components/rentals-for-car/rentals.component';
-import { AlertComponent } from '../../shared/components/alert/alert.component';
+import { CouponsComponent } from './coupons/coupons.component';
+import { DeliveredCarsComponent } from './operations/delivered-cars/delivered-cars.component';
+import { TakenAwayCarsComponent } from './operations/taken-away-cars/taken-away-cars.component';
 import { RentalHistoryComponent } from './users/rental-history/rental-history.component';
 import { AdminCarReportComponent } from './admin-reports/admin-car-report/admin-car-report.component';
 import { AdminTransactionDetailComponent } from './admin-transactions/admin-transaction-detail/admin-transaction-detail.component';
 import { AdminUsersReportComponent } from './admin-reports/admin-users-report/admin-users-report.component';
 import { AdminAccountSettingComponent } from './admin-account-setting/admin-account-setting.component';
 import { KeywordsComponent } from './keywords/keywords.component';
-// import { DataSharingService } from '../../shared/services/data-sharing.service';
-
+// shared component
+import { RentalsComponent } from '../../shared/components/rentals-for-car/rentals.component';
+import { AlertComponent } from '../../shared/components/alert/alert.component';
 import { Ng4GeoautocompleteModule } from 'ng4-geoautocomplete';
 import { AdminTermsComponent } from './admin-terms/admin-terms.component';
 import { QuillModule } from 'ngx-quill';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+
+import { CalendarModule } from 'primeng/calendar';
 
 const AdminRoutes: Routes = [
   {
@@ -244,6 +248,22 @@ const AdminRoutes: Routes = [
         },
       },
       {
+        path: 'operations/car-delivered',
+        component: DeliveredCarsComponent,
+        data: {
+          title: 'Manage Delivered  Cars',
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Delivered  Cars' }]
+        },
+      },
+      {
+        path: 'operations/car-taken-away',
+        component: TakenAwayCarsComponent,
+        data: {
+          title: 'Manage Taken Away Cars',
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Taken Away Cars' }]
+        },
+      },
+      {
         path: 'settings',
         component: SettingsComponent,
         data: {
@@ -277,7 +297,18 @@ const AdminRoutes: Routes = [
       urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Keywords' }]
     },
   },
+  {
+    path: 'coupons',
+    component: CouponsComponent,
+    data: {
+      title: 'Manage Coupons',
+      urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Coupons' }]
+    },
+  },
 ];
+
+const config: SocketIoConfig = { url: 'http://18.219.16.50:3000', options: {} };
+
 @NgModule({
   imports: [
     CommonModule,
@@ -298,7 +329,10 @@ const AdminRoutes: Routes = [
     MenuModule,
     QuillModule,
     EditorModule,
-    Ng4GeoautocompleteModule.forRoot()
+    CheckboxModule,
+    Ng4GeoautocompleteModule.forRoot(),
+    SocketIoModule.forRoot(config),
+    CalendarModule
   ],
   exports: [RouterModule],
   declarations: [
@@ -326,6 +360,9 @@ const AdminRoutes: Routes = [
     AdminAccountSettingComponent,
     KeywordsComponent,
     AdminTermsComponent,
+    CouponsComponent,
+    DeliveredCarsComponent,
+    TakenAwayCarsComponent,
   ],
   providers: [
     // DataSharingService,

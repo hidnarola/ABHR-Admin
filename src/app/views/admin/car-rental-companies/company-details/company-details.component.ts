@@ -214,10 +214,6 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
   // model
   open2(content, userDetails) {
     this.service_location = [];
-    // console.log('userDetails====>',userDetails);
-    // if( userDetails != 'undefined' && userDetails ){
-    // this.title = "Edit Company";
-    // this.isEdit = true;
     this.userSettings.inputPlaceholderText = userDetails.company_address.address;
     this.service_location = userDetails.service_location;
     this.company_address = userDetails.company_address;
@@ -226,7 +222,6 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
     this.AddEditForm.controls['email'].setValue(userDetails.email);
     this.AddEditForm.controls['site_url'].setValue(userDetails.site_url);
     this.AddEditForm.controls['phone_number'].setValue(userDetails.phone_number);
-    // }
     const options: NgbModalOptions = {
       keyboard: false,
       backdrop: 'static'

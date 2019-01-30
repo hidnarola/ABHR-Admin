@@ -3,7 +3,7 @@ import { NgbModal, ModalDismissReasons, NgbPanelChangeEvent, NgbCarouselConfig, 
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { Router, ActivatedRoute, RouterStateSnapshot } from '@angular/router';
 import { DataSharingService } from '../services/data-sharing.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { CrudService } from '../services/crud.service';
 import { MustMatch } from '../helpers/must-match.validator';
@@ -12,6 +12,7 @@ import { MustMatch } from '../helpers/must-match.validator';
   templateUrl: './navigation.component.html'
 })
 export class NavigationComponent implements AfterViewInit {
+  display: boolean = false;
   user;
   public CurrentAdmin;
   public company;
@@ -27,6 +28,7 @@ export class NavigationComponent implements AfterViewInit {
   submitted = false;
   public companyId;
   isLoading: boolean;
+  public passwordData: any;
 
   constructor(private modalService: NgbModal,
     private datashare: DataSharingService,
@@ -34,9 +36,10 @@ export class NavigationComponent implements AfterViewInit {
     private formBuilder: FormBuilder,
     private messageService: MessageService,
     private service: CrudService,
+    // private modalService2: NgbModal
   ) {
     this.changePassForm = this.formBuilder.group({
-      old_password: ['', Validators.required],
+      old_password: ['', Validators.compose([Validators.required, this.passwordMatchValidator])],
       new_password: ['', Validators.compose([Validators.required, Validators.minLength(6), Validators.maxLength(13)])],
       repeat_new_password: ['', Validators.required],
     },
@@ -54,10 +57,8 @@ export class NavigationComponent implements AfterViewInit {
     this.CurrentAdmin = array[1];
     this.datashare.currentAdminUser.subscribe((res) => {
       var user = JSON.parse(localStorage.getItem('admin'));
-      console.log('user type in nav bar===>', user);
       var company = JSON.parse(localStorage.getItem('company-admin'));
 
-      console.log('company => ', this.companyId);
       if (user != null && user !== undefined) {
         this.AdminName = user.first_name + ' ' + user.last_name;
         this.AdminEmail = user.email;
@@ -70,6 +71,7 @@ export class NavigationComponent implements AfterViewInit {
         this.AdminNumber = company.phone_number;
         this.AdminType = 'company_admin';
         this.companyId = company._id;
+        console.log('company => ', this.companyId);
       }
       if (company == null && company === undefined && user == null && user === undefined) {
         this.AdminName = 'Admin';
@@ -161,26 +163,64 @@ export class NavigationComponent implements AfterViewInit {
     }
   }
 
-  closePopup() {
-    const element = document.getElementById('closepopup');
-    element.click();
-  }
+  // closePopup() {
+  //   const element = document.getElementById('closepopup');
+  //   element.click();
+  // }
+
   get f() { return this.changePassForm.controls; }
-  open2(content, item) {
-    console.log('item====>', item);
-    if (item !== 'undefined' && item) {
-      this.changePassForm.controls['old_password'].setValue(item.old_password);
-      this.changePassForm.controls['new_password'].setValue(item.new_password);
-      this.changePassForm.controls['repeat_new_password'].setValue(item.repeat_new_password);
+
+  // open2(content, item) {
+  //   console.log('item====>', item);
+  //   if (item !== 'undefined' && item) {
+  //     this.changePassForm.controls['old_password'].setValue(item.old_password);
+  //     this.changePassForm.controls['new_password'].setValue(item.new_password);
+  //     this.changePassForm.controls['repeat_new_password'].setValue(item.repeat_new_password);
+  //   }
+  //   const options: NgbModalOptions = {
+  //     keyboard: false,
+  //     backdrop: 'static'
+  //   };
+  //   this.modalService.open(content, options).result.then((result) => {
+  //     this.closeResult = `Closed with: ${result}`;
+  //   }, (reason) => {
+  //     if (reason === 'Cross click' || reason === 0) {
+  //       this.changePassForm.controls['old_password'].setValue('');
+  //       this.changePassForm.controls['new_password'].setValue('');
+  //       this.changePassForm.controls['repeat_new_password'].setValue('');
+  //     }
+  //   });
+  //   this.submitted = false;
+  // }
+
+  public passwordMatchValidator = (control: FormControl) => {
+    let isWhitespace2;
+    if ((isWhitespace2 = (control.value || '').trim().length === 1) || (isWhitespace2 = (control.value || '').trim().length === 0)) {
+      return { 'required': true };
+    } else {
+      console.log('control.value => ', control.value);
+      this.passwordData = { 'password': control.value, 'company_id': this.companyId };
+      console.log('passwordData===>', this.passwordData);
+      return this.service.post('company/check_password', this.passwordData).subscribe(res => {
+        console.log('res pass check', res);
+        if (res['status'] === 'failed') {
+          this.f.old_password.setErrors({ 'matchPass': true });
+          return;
+        } else {
+          this.f.old_password.setErrors(null);
+        }
+      }
+      );
     }
-    const options: NgbModalOptions = {
-      keyboard: false,
-      backdrop: 'static'
-    };
-    this.modalService.open(content, options).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-    });
+  }
+
+  showDialog(item) {
+    console.log('item in primeng => ', item);
+    this.display = true;
+    this.changePassForm.controls['old_password'].setValue('');
+    this.changePassForm.controls['new_password'].setValue('');
+    this.changePassForm.controls['repeat_new_password'].setValue('');
+    this.submitted = false;
   }
 
   onSubmit() {
@@ -191,22 +231,20 @@ export class NavigationComponent implements AfterViewInit {
       this.formData.company_id = this.companyId;
       console.log('company => ', this.companyId);
       this.service.post('company/change_password', this.formData).subscribe(res => {
-        this.closePopup();
+        this.display = false;
+        // this.closePopup();
         this.submitted = false;
         this.isLoading = false;
         this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
-        console.log('if => ');
       }, err => {
         err = err.error;
         this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
-        this.closePopup();
+        this.display = false;
+        // this.closePopup();
         this.submitted = false;
         this.isLoading = false;
-        console.log(' err=> ');
       });
       this.submitted = false;
-      // this.isLoading = false;
-      console.log('else => ');
       this.changePassForm.controls['old_password'].setValue('');
       this.changePassForm.controls['new_password'].setValue('');
       this.changePassForm.controls['repeat_new_password'].setValue('');

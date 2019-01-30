@@ -1,3 +1,11 @@
 button.btn.btn-primary.custom-add-btn {
-    margin-top: 27px;
+    font-size: 13px;
+}
+
+label {
+    font-size: 13px;
+    letter-spacing: .08em;
+    color: #333;
+    text-transform: capitalize;
+    margin: 0 0 5px;
 }

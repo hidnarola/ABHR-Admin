@@ -28,9 +28,6 @@
               <div *ngIf="f.car_model_id.errors.required"> Car Model is required</div>
               <div *ngIf="f.car_model_id.errors.isExist"> Car Model is not available</div>
             </div>
-            <!-- <div class="err_msg">
-              <div *ngIf="f.car_model_id.errors.isExist"> Car Model is not available</div>
-            </div> -->
           </div>
         </div>
 
@@ -193,13 +190,12 @@
 
         <div class="col-md-3">
           <div class="form-group">
-            <label class="required"> Deposit :</label>
-            <input class="form-control" placeholder="Deposit" type="text" required="" name="deposit" formControlName="deposit"
+            <label> Deposit :</label>
+            <input class="form-control" placeholder="Deposit" type="text" name="deposit" formControlName="deposit"
               [ngClass]="{'is-invalid': submitted && f.deposit.errors }">
             <div *ngIf=" submitted && f.deposit.errors " class="invalid-feedback">
-              <div *ngIf="f.deposit.errors.required"> Deposit is required</div>
+              <!-- <div *ngIf="f.deposit.errors.required"> Deposit is required</div> -->
               <div *ngIf="f.deposit.errors.pattern">Invalid Deposit</div>
-              <!-- <div *ngIf="f.rent_price.errors.min">Invalid Price</div> -->
             </div>
           </div>
         </div>
@@ -249,6 +245,31 @@
           </div>
         </div>
 
+        <!-- <div class="col-md-12">
+          <div class="form-group">
+            <label class="required"> Car availablity :</label>
+            <div class="row">
+              <div class="col-md-2">
+                <p-calendar [(ngModel)]="selectDate" id="myCal" [ngModelOptions]="{standalone: true}" selectionMode="multiple"
+                  [touchUI]="true">
+                </p-calendar>
+              </div>
+              <div class="col-md-2"><button type="button">Jan</button></div>
+              <div class="col-md-2"><button type="button" (click)="openCal(1)">Feb</button></div>
+              <div class="col-md-2">Mar</div>
+              <div class="col-md-2"></div>
+              <div class="col-md-2"></div>
+            </div>
+            <div class="row">
+              <div class="col-md-2"></div>
+              <div class="col-md-2"></div>
+              <div class="col-md-2"></div>
+              <div class="col-md-2"></div>
+              <div class="col-md-2"></div>
+              <div class="col-md-2"></div>
+            </div>
+          </div>
+        </div> -->
 
 
         <div class="col-md-8">

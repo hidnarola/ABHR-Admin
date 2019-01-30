@@ -1,16 +1,26 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { NgbProgressbarConfig } from '@ng-bootstrap/ng-bootstrap';
+import { CrudService } from '../../shared/services/crud.service';
 
 @Component({
     selector: 'app-companies',
     templateUrl: './companies.component.html',
     styleUrls: ['./companies.component.css']
 })
-export class CompaniesComponent implements AfterViewInit {
-    subtitle:string;	
-	constructor() {
-		this.subtitle = "This is some text within a card block."
-	}
+export class CompaniesComponent implements AfterViewInit, OnInit {
+    subtitle: string;
+    public company;
+    public companyId;
+    totalCars;
+    totalRentals;
+    constructor(
+        private service: CrudService,
+    ) {
+        this.company = JSON.parse(localStorage.getItem('company-admin'));
+        this.companyId = this.company._id;
+        console.log('companyId => ', this.companyId);
+        this.subtitle = "This is some text within a card block."
+    }
     // This is for the dashboar line chart
     // lineChart
     public lineChartData: Array<any> = [
@@ -42,42 +52,42 @@ export class CompaniesComponent implements AfterViewInit {
     ];
     public lineChartOptions: any = {
         scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true
-            },
-            gridLines: {
-              color: "rgba(120, 130, 140, 0.13)"
-            }  
-          }],
-          xAxes: [{
-            gridLines: {
-              color: "rgba(120, 130, 140, 0.13)"
-            },
-          }]
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                },
+                gridLines: {
+                    color: "rgba(120, 130, 140, 0.13)"
+                }
+            }],
+            xAxes: [{
+                gridLines: {
+                    color: "rgba(120, 130, 140, 0.13)"
+                },
+            }]
         },
         responsive: true,
         maintainAspectRatio: false
     };
     public lineChartOptions2: any = {
         scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true
-            },
-            gridLines: {
-              color: "rgba(120, 130, 140, 0.13)"
-            }  
-          }],
-          xAxes: [{
-            gridLines: {
-              color: "rgba(120, 130, 140, 0.13)"
-            },
-          }]
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                },
+                gridLines: {
+                    color: "rgba(120, 130, 140, 0.13)"
+                }
+            }],
+            xAxes: [{
+                gridLines: {
+                    color: "rgba(120, 130, 140, 0.13)"
+                },
+            }]
         },
         responsive: true,
         maintainAspectRatio: false,
-        elements : { line : { tension : 0 } }
+        elements: { line: { tension: 0 } }
     };
     public lineChartColors: Array<any> = [
         {
@@ -98,13 +108,13 @@ export class CompaniesComponent implements AfterViewInit {
             pointHoverBackgroundColor: '#fff',
             pointHoverBorderColor: 'rgba(38,218,210,0.5)'
         }
-        
+
     ];
     public lineChartLegend: boolean = true;
     public lineChartLegend2: boolean = false;
     public lineChartType: string = 'line';
-   
-	ngAfterViewInit(){
+
+    ngAfterViewInit() {
         // (<any>$('#spark8')).sparkline([ 4, 5, 0, 10, 9, 12, 4, 9], {
         //     type: 'bar',
         //     width: '100%',
@@ -156,5 +166,11 @@ export class CompaniesComponent implements AfterViewInit {
         });
     }
 
+    ngOnInit() {
+        this.service.post('company/dashboard/no_of_cars', { 'company_id': this.companyId }).subscribe(res => {
+            console.log('res => ', res);
+            this.totalCars = res['data'];
+        });
+    }
 
 }
