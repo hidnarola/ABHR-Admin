@@ -260,6 +260,7 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!this.AddEditForm.invalid) {
       this.isLoading = true;
       this.formData = this.AddEditForm.value;
+      this.formData.idCompanyAdded = this.idCompanyAdded;
       console.log('this.formData => ', this.formData);
       console.log('idCompanyAdded => ', this.idCompanyAdded);
       console.log('/* => ', this.AddEditForm.value);
@@ -288,7 +289,9 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
         }, err => {
           err = err.error;
           this.isLoading = false;
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: err['error'] });
+          console.log('err => ', err);
+          this.isLoading = false;
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
           this.closePopup();
         });
       }

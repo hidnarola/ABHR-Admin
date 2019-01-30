@@ -30,6 +30,8 @@ export class StaffDetailComponent implements OnInit {
   public userId;
   public userDetails;
   closeResult: string;
+  isLoading: Boolean;
+
 
   private subscription: Subscription;
   message: any;
@@ -77,6 +79,7 @@ export class StaffDetailComponent implements OnInit {
   }
   onSubmit() {
     this.submitted = true;
+    this.isLoading = true;
     if (!this.AddEditForm.invalid) {
       console.log('in valid', this.userId);
       this.formData = this.AddEditForm.value;
@@ -90,6 +93,7 @@ export class StaffDetailComponent implements OnInit {
         this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
       }, err => {
         err = err.error;
+        this.isLoading = false;
         this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
         // this.closePopup();
       });

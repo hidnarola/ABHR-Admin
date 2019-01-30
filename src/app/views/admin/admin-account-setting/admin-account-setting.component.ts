@@ -62,25 +62,27 @@ export class AdminAccountSettingComponent implements OnInit {
       this.isLoading = true;
       this.formData = this.SettingForm.value;
       console.log('formadata==>', this.formData);
-        this.formData.user_id = this.Id;
-        console.log('userId', this.Id);
-        this.service.put('admin/update', this.formData).subscribe(res => {
-          localStorage.setItem('admin', JSON.stringify(res['result'].data));
-          this.adminU = {
-            first_name: res['result'].data.first_name,
-            last_name: res['result'].data.last_name,
-            phone_number: res['result'].data.phone_number,
-            email: res['result'].data.email
-          };
-          this.datashare.changeAdminUser(this.adminU);
-          this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
-          this.router.navigate(['/admin/dashboard']);
-        }, err => {
-          err = err.error;
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
-        });
+      this.formData.user_id = this.Id;
+      console.log('userId', this.Id);
+      this.service.put('admin/update', this.formData).subscribe(res => {
+        this.isLoading = false;
+        localStorage.setItem('admin', JSON.stringify(res['result'].data));
+        this.adminU = {
+          first_name: res['result'].data.first_name,
+          last_name: res['result'].data.last_name,
+          phone_number: res['result'].data.phone_number,
+          email: res['result'].data.email
+        };
+        this.datashare.changeAdminUser(this.adminU);
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
+        this.router.navigate(['/admin/dashboard']);
+      }, err => {
+        err = err.error;
+        this.isLoading = false;
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
+      });
+    }
   }
-}
   ngOnInit() {
   }
 

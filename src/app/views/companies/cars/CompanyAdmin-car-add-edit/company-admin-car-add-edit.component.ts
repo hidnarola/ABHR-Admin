@@ -222,7 +222,7 @@ export class CarAddEditComponent implements OnInit {
     formData.append('car_brand_id', this.f.car_brand_id.value);
     formData.append('car_model_id', this.f.car_model_id.value);
     formData.append('rent_price', this.f.rent_price.value);
-    formData.append('deposit', this.f.deposit.value);
+    formData.append('deposit', this.f.deposit.value ? this.f.deposit.value : 0);
     formData.append('no_of_person', this.f.no_of_person.value);
     formData.append('resident_criteria', this.f.resident_criteria.value);
     formData.append('transmission', this.f.transmission.value);
@@ -271,6 +271,7 @@ export class CarAddEditComponent implements OnInit {
           this.router.navigate(['/company/car']);
         }, err => {
           err = err.error;
+          this.isLoading = false;
           this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
         }
         );
@@ -286,7 +287,9 @@ export class CarAddEditComponent implements OnInit {
           this.router.navigate(['/company/car']);
         }, err => {
           err = err.error;
+          this.isLoading = false;
           console.log('err => ', err);
+          this.isLoading = false;
           this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
         }
         );

@@ -48,8 +48,11 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
 
 
   ngOnInit() {
-
+    this.ReportData();
+  }
+  ReportData() {
     try {
+      this.spinner.show();
       this.dtOptions = {
         pagingType: 'full_numbers',
         pageLength: 10,
@@ -65,7 +68,7 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
           dataTablesParameters['columns'][3]['isNumber'] = true;
           dataTablesParameters['columns'][4]['isNumber'] = true;
           console.log(dataTablesParameters);
-          this.spinner.show();
+          // this.spinner.show();
           setTimeout(() => {
             // if (filterBy) { dataTablesParameters['filtered_by'] = filterBy; }
             if (this.newDate !== '') {
@@ -126,11 +129,10 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
       };
     } catch (error) {
       console.log('error => ', error);
-      this.spinner.hide();
+      // this.spinner.hide();
     }
-    this.spinner.hide();
+    // this.spinner.hide();
   }
-
   render(): void {
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       // Destroy the table first

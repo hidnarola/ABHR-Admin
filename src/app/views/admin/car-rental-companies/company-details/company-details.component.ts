@@ -45,6 +45,7 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
   public isEdit;
   closeResult: string;
   public title = 'Add Company';
+  isLoading = true;
 
   @ViewChild(DataTableDirective)
   dtElementcar: DataTableDirective;
@@ -175,6 +176,7 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
   }
   onSubmit() {
     this.submitted = true;
+    this.isLoading = true;
     if (!this.AddEditForm.invalid) {
       // console.log('in valid', this.userId);
       const formData: FormData = new FormData();
@@ -185,6 +187,7 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
       this.formData.service_location = this.service_location;
       console.log('form data in company view page', this.formData);
       this.service.put('admin/company/update', this.formData).subscribe(res => {
+        this.isLoading = false;
         console.log('response after edit===>', res);
 
         console.log('this.userDetails==>', this.userDetails);
@@ -193,6 +196,7 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
         this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
       }, err => {
         err = err.error;
+        this.isLoading = false;
         this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
         this.closePopup();
       });

@@ -100,8 +100,8 @@ export const COMPANY_ROUTES: RouteInfo[] = [
     //     path: '/company/keywords', title: 'Keywords', icon: 'fa fa-language', class: '',
     //     label: '', labelClass: '', extralink: false, submenu: []
     // },
-    // {
-    //     path: '/company/cancellation_charge', title: 'Cancellation Charge', icon: 'fa fa-money', class: '',
-    //     label: '', labelClass: '', extralink: false, submenu: []
-    // },
+    {
+        path: '/company/cancellation_charge', title: 'Cancellation Charge', icon: 'fa fa-money', class: '',
+        label: '', labelClass: '', extralink: false, submenu: []
+    },
 ];

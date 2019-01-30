@@ -366,22 +366,26 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
         this.formData.company_id = this.userId;
         this.title = 'Edit Company';
         this.service.put('admin/company/update', this.formData).subscribe(res => {
+          this.isLoading = true;
           this.render();
           this.closePopup();
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
         }, err => {
           err = err.error;
+          this.isLoading = false;
           this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
           this.closePopup();
         });
       } else {
         this.title = 'Add Company';
         this.service.post('admin/company/add', this.formData).subscribe(res => {
+          this.isLoading = true;
           this.render();
           this.closePopup();
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
         }, err => {
           err = err.error;
+          this.isLoading = false;
           this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
           this.closePopup();
         });

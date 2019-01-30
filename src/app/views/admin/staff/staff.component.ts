@@ -72,8 +72,8 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
     this.AddEditForm = this.formBuilder.group({
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
-      phone_number: ['',  Validators.compose([Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]{10}')])],
-      email: ['',  Validators.compose([Validators.required, Validators.email, Validators.pattern(pattern), this.uniqueEmailValidator])]
+      phone_number: ['', Validators.compose([Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]{10}')])],
+      email: ['', Validators.compose([Validators.required, Validators.email, Validators.pattern(pattern), this.uniqueEmailValidator])]
     });
 
     this.formData = {
@@ -87,7 +87,7 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public uniqueEmailValidator = (control: FormControl) => {
     let isWhitespace;
-    if ( isWhitespace = (control.value || '').trim().length === 0) {
+    if (isWhitespace = (control.value || '').trim().length === 0) {
       return { 'required': true };
     } else {
       const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
@@ -95,9 +95,9 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
       if (!result) {
         return { 'pattern': true };
       } else {
-        this.emailData = {'email' : control.value};
+        this.emailData = { 'email': control.value };
         if (this.isEdit) {
-          this.emailData = { 'email' : control.value, 'user_id': this.userId};
+          this.emailData = { 'email': control.value, 'user_id': this.userId };
         }
         console.log('emailData===>', this.emailData);
         return this.service.post('admin/checkemail', this.emailData).subscribe(res => {
@@ -109,7 +109,7 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
           //   console.log('else==>');
           // }
           if (res['status'] === 'success') {
-            this.f.email.setErrors({'unique': true});
+            this.f.email.setErrors({ 'unique': true });
             return;
           } else {
             this.f.email.setErrors(null);
@@ -137,11 +137,13 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
         this.title = 'Edit Staff';
         console.log('userId in staff', this.userId);
         this.service.put('admin/staff/update', this.formData).subscribe(res => {
+          this.isLoading = false;
           this.render();
           this.closePopup();
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
         }, err => {
           err = err.error;
+          this.isLoading = false;
           this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
           this.closePopup();
         });
@@ -149,12 +151,14 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
         this.title = 'Add Staff';
         console.log('formdata in add==>', this.formData);
         this.service.post('admin/staff/add', this.formData).subscribe(res => {
+          this.isLoading = false;
           console.log('staff adddata==>', res);
           this.render();
           this.closePopup();
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
         }, err => {
           err = err.error;
+          this.isLoading = false;
           this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
           this.closePopup();
         });

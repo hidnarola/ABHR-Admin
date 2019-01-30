@@ -49,7 +49,7 @@
                     <div class="align-self-center">
                         <h4 class="font-medium m-b-0">
                             <!-- <i class="ti-angle-down text-danger"></i>  -->
-                            {{totalCars}}
+                            {{totalCars ? totalCars : '0'}}
                         </h4>
                     </div>
                     <div class="ml-auto">
@@ -65,7 +65,7 @@
                     <div class="align-self-center">
                         <h4 class="font-medium m-b-0">
                             <!-- <i class="ti-angle-up text-success"></i>  -->
-                            5</h4>
+                            {{totalRentals ? totalRentals : '0'}} </h4>
                     </div>
                     <div class="ml-auto">
                         <div id="spark10"></div>

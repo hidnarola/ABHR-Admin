@@ -36,7 +36,7 @@ const KeywordsRoutes: Routes = [];
   exports: [RouterModule]
 })
 
-export class KeywordsComponent implements OnInit, AfterViewInit, OnDestroy  {
+export class KeywordsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild(DataTableDirective)
   dtElement: DataTableDirective;
@@ -110,22 +110,26 @@ export class KeywordsComponent implements OnInit, AfterViewInit, OnDestroy  {
         this.title = 'Edit Keywords';
         console.log('Id', this.Id);
         this.service.put('admin/keyword/edit', this.formData).subscribe(res => {
+          this.isLoading = false;
           this.render();
           this.closePopup();
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
         }, err => {
           err = err.error;
+          this.isLoading = false;
           this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
           this.closePopup();
         });
       } else {
         this.title = 'Add Keywords';
         this.service.post('admin/keyword/save', this.formData).subscribe(res => {
+          this.isLoading = false;
           this.render();
           this.closePopup();
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
         }, err => {
           err = err.error;
+          this.isLoading = false;
           this.messageService.add({ severity: 'error', summary: 'Error', detail: err['error'] });
           this.closePopup();
         });

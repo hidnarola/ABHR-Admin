@@ -65,6 +65,7 @@ export class AdminTermsComponent implements OnInit, AfterViewInit {
       this.router.navigate(['/admin/dashboard']);
     }, err => {
       err = err.error;
+      this.isLoading = false;
       console.log('err => ', err);
       this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
     });

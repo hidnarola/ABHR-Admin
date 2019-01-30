@@ -197,9 +197,7 @@
             <input class="form-control" placeholder="Deposit" type="text" name="deposit" formControlName="deposit"
               [ngClass]="{'is-invalid': submitted && f.deposit.errors }">
             <div *ngIf=" submitted && f.deposit.errors " class="invalid-feedback">
-              <!-- <div *ngIf="f.deposit.errors.required"> Deposit is required</div> -->
               <div *ngIf="f.deposit.errors.pattern">Invalid Deposit</div>
-              <!-- <div *ngIf="f.rent_price.errors.min">Invalid Price</div> -->
             </div>
           </div>
         </div>
@@ -289,7 +287,7 @@
           <button type="button" *ngIf="isLoading" class="btn waves-effect loading-btn waves-light btn-primary" type="button">
             <i class="fa fa-spinner fa-spin"></i>Loading
           </button>
-          <a class="btn waves-effect waves-light custom-btn btn-danger" [routerLink]="['/admin/car-rental-companies/view/' + companyId]">Cancel</a>
+          <a class="btn waves-effect waves-light custom-btn btn-danger" [routerLink]="['/company/car' ]">Cancel</a>
         </div>
 
       </div>

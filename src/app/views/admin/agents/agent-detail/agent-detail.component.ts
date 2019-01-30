@@ -50,6 +50,7 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   closeResult: string;
   public pageNumber;
   public totalRecords;
+  isLoading: boolean;
 
   constructor(
     public renderer: Renderer,
@@ -92,12 +93,14 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   onSubmit() {
     this.submitted = true;
+    this.isLoading = true;
     if (!this.AddEditForm.invalid) {
       console.log('in valid', this.userId);
       this.formData = this.AddEditForm.value;
       this.formData.user_id = this.userId;
       console.log(this.formData);
       this.service.put('admin/agents/update', this.formData).subscribe(res => {
+        this.isLoading = false;
         console.log('response after edit===>', res);
         console.log('this.agentDetails==>', this.agentDetails);
         this.agentDetails = this.formData;
@@ -105,6 +108,7 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
         this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
       }, err => {
         err = err.error;
+        this.isLoading = false;
         this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
         this.closePopup();
       });

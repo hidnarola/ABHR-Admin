@@ -171,6 +171,10 @@ export class CompaniesComponent implements AfterViewInit, OnInit {
             console.log('res => ', res);
             this.totalCars = res['data'];
         });
+        this.service.post('company/dashboard/no_of_rentals', { 'company_id': this.companyId }).subscribe(res => {
+            console.log('res => ', res);
+            this.totalRentals = res['data'];
+        });
     }
 
 }
