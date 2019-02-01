@@ -68,9 +68,7 @@ export class CarAddEditComponent implements OnInit {
         this.AddEditCarForm.controls['transmission'].setValue(this.carDetails.transmission);
         this.AddEditCarForm.controls['milage'].setValue(this.carDetails.milage);
         this.AddEditCarForm.controls['car_class'].setValue(this.carDetails.car_class);
-        // this.AddEditCarForm.controls['car_gallery'].setValue(this.carDetails.car_gallery);
         this.carDetails.car_gallery.forEach(file => {
-          // console.log('car_gallery => ', environment.imgUrl + 'car/' + file.name);
           this.CarOldImage.push(file);
         });
         console.log('this.carDetails.car_gallery => ', this.carDetails.car_gallery);
@@ -94,7 +92,6 @@ export class CarAddEditComponent implements OnInit {
       car_brand_id: ['', Validators.required],
       car_model_id: ['', Validators.required],
       rent_price: ['', [Validators.required, Validators.pattern('[0-9]*')]],
-      // deposit: ['', Validators.compose([Validators.required, Validators.pattern('[1-9][0-9]*')])],
       deposit: ['', Validators.pattern('[1-9][0-9]*')],
       no_of_person: ['', Validators.required],
       resident_criteria: ['', Validators.required],
@@ -139,24 +136,12 @@ export class CarAddEditComponent implements OnInit {
     if ((isWhitespace2 = (control.value || '').trim().length === 1) || (isWhitespace2 = (control.value || '').trim().length === 0)) {
       return { 'required': true };
     } else {
-      // const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
-      // var result = pattern.test(control.value);
-      // if (!result) {
-      //   return { 'pattern': true };
-      // } else {
       this.licencePlateData = { 'licence_plate': control.value };
       if (this.isEdit) {
         this.licencePlateData = { 'licence_plate': control.value, 'car_id': this.carId };
       }
       console.log('licencePlateData===>', this.licencePlateData);
       return this.service.post('checkcarNumber', this.licencePlateData).subscribe(res => {
-        // return (res['status'] === 'success') ? {'unique': true} : null;
-        // console.log('response of validation APi', res['status']);
-        // if (res['status'] === 'success') {
-        //   console.log('if==>');
-        // } else {
-        //   console.log('else==>');
-        // }
         if (res['status'] === 'success') {
           this.f.licence_plate.setErrors({ 'uniqueName': true });
           return;
@@ -164,7 +149,6 @@ export class CarAddEditComponent implements OnInit {
           this.f.licence_plate.setErrors(null);
         }
       });
-      // }
     }
   }
 
@@ -174,13 +158,11 @@ export class CarAddEditComponent implements OnInit {
   get f() { return this.AddEditCarForm.controls; }
 
   model(id) {
-    // let formdata = [e.brand_ids];
     this.service.post('app/car/modelList', { brand_ids: [id] }).subscribe(res => {
       if ((res['data'] !== undefined) && (res['data'] != null) && res['data']) {
         this.modelList = res['data'].model;
       } else {
         this.AddEditCarForm.controls['car_model_id'].setErrors({ 'isExist': true });
-        // this.modelList = [{ _id: null, model_name: 'No models are available' }];
         this.modelList = [];
       }
     });
@@ -237,7 +219,6 @@ export class CarAddEditComponent implements OnInit {
     if (!this.AddEditCarForm.invalid) {
       console.log('this.AddEditCarForm.value => ', this.AddEditCarForm.value);
       console.log('this.CarImageRAW => ', this.CarImageRAW);
-      // formData.append('car_rental_company_id', this.companyId);
       const headers = new HttpHeaders();
       // this is the important step. You need to set content type as null
       headers.set('Content-Type', null);
@@ -249,19 +230,12 @@ export class CarAddEditComponent implements OnInit {
         }
         if (this.CarImageRAW.length > 0) {
           formData.append('is_change_photo', 'true');
-          // this.AddEditCarForm.controls['is_change_photo'].setValue(true);
         } else {
-          // this.AddEditCarForm.controls['is_change_photo'].setValue(false);
           formData.append('is_change_photo', 'false');
         }
-        // this.AddEditCarForm.controls['old_images'].setValue(this.CarOldImage);
-        // for (let i = 0; i < this.CarOldImage.length; i++) {
-        //   formData.append('old_images', this.CarOldImage[i]);
-        // }
         formData.append('old_images', JSON.stringify(this.CarOldImage));
         console.log('this.CarOldImage => ', this.CarOldImage);
         console.log('this.CarImageNew => ', this.CarImageRAW);
-        // this.formData = this.AddEditCarForm.value;
         this.isLoading = true;
         console.log('AddEditCarForm.value => ', this.AddEditCarForm.value);
         this.service.post('admin/company/car/edit', formData, headers).subscribe(res => {
@@ -280,6 +254,7 @@ export class CarAddEditComponent implements OnInit {
           formData.append('car_gallery', this.CarImageRAW[i]);
         }
         this.isLoading = true;
+        console.log('formData => ', formData);
         this.service.post('admin/company/car/add', formData, headers).subscribe(res => {
           console.log('res', res);
           this.isLoading = false;

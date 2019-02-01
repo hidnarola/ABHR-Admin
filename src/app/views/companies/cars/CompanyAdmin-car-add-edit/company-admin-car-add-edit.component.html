@@ -82,9 +82,6 @@
         </div>
 
 
-
-
-
         <div class="col-md-3">
           <div class="form-group">
             <label class="required">Licence plate number :</label>
@@ -186,7 +183,6 @@
             <div *ngIf=" submitted && f.rent_price.errors " class="invalid-feedback">
               <div *ngIf="f.rent_price.errors.required"> Rent Price is required</div>
               <div *ngIf="f.rent_price.errors.pattern">Invalid Price</div>
-              <!-- <div *ngIf="f.rent_price.errors.min">Invalid Price</div> -->
             </div>
           </div>
         </div>

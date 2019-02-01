@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -8,6 +8,9 @@ import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../../../../environments/environment';
+// import { CalendarMonthViewDay } from 'angular-calendar';
+// import { DayViewHour, CalendarEvent } from 'calendar-utils';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-add-edit-car',
@@ -15,6 +18,7 @@ import { environment } from '../../../../../../environments/environment';
   styleUrls: ['./add-edit-car.component.css']
 })
 export class AddEditCarComponent implements OnInit {
+  @ViewChild('availibility') datePicker;
 
   public licencePlateData: any;
   CarImage: any = [];
@@ -34,10 +38,9 @@ export class AddEditCarComponent implements OnInit {
   public brandlist;
   public modelList;
   isLoading: boolean;
-  selectDate = new Date();
-  // today = new Date();
-  // month = this.today.getMonth();
-  // year = this.today.getFullYear();
+  selectDate: Array<Date>;
+  public finalDates: any = {};
+  public availablityError: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -46,13 +49,9 @@ export class AddEditCarComponent implements OnInit {
     private messageService: MessageService,
     public router: Router,
   ) {
-    // const company = JSON.parse(localStorage.getItem('companyId'));
     this.companyId = localStorage.getItem('companyId');
-    // this.companyName = company.name;
-
     this.route.params.subscribe(params => { this.carId = params.id; });
     console.log('carId==>', this.carId);
-
     if (this.carId !== undefined && this.carId !== '' && this.carId != null) {
       this.service.post('admin/company/car/details/', { car_id: this.carId }).subscribe(resp => {
         this.carDetails = resp['data'].carDetail;
@@ -102,7 +101,6 @@ export class AddEditCarComponent implements OnInit {
       car_brand_id: ['', Validators.required],
       car_model_id: ['', Validators.required],
       rent_price: ['', [Validators.required, Validators.pattern('[0-9]*')]],
-      // deposit: ['', Validators.compose([Validators.required, Validators.pattern('[1-9][0-9]*')])],
       deposit: ['', Validators.pattern('[1-9][0-9]*')],
       no_of_person: ['', Validators.required],
       resident_criteria: ['', Validators.required],
@@ -119,7 +117,8 @@ export class AddEditCarComponent implements OnInit {
       is_AC: [false],
       is_luggage_carrier: [false],
       licence_plate: ['', Validators.compose([Validators.required, this.uniqueCarNumberValidator])],
-      car_color: ['', Validators.required]
+      car_color: ['', Validators.required],
+      // selectDate: ['', Validators.required]
     });
     console.log('this.companyId => ', this.companyId);
     this.formData = {
@@ -139,6 +138,7 @@ export class AddEditCarComponent implements OnInit {
       licence_plate: String,
       car_color: String,
       deposit: Number,
+      // selectDate: Array
     };
   }
 
@@ -213,11 +213,38 @@ export class AddEditCarComponent implements OnInit {
   deleteOldImage(index) {
     this.CarOldImage.splice(index, 1);
   }
+
+  handleCloseCalendar = () => {
+    this.datePicker.overlayVisible = false;
+  }
+
   onSubmit() {
-    console.log('selectDate => ', this.selectDate);
-    console.log('AddEditCarForm.value on submit => ', this.AddEditCarForm);
+    console.log('this.selectDate => ', this.selectDate);
+    if (this.selectDate !== undefined) {
+      this.availablityError = false;
+      console.log(' 0 => ');
+      this.selectDate.forEach(element => {
+        console.log('here => ');
+        var month = (moment(element).month() + 1);
+        if (typeof this.finalDates[month] !== 'undefined') {
+          const existArray = this.finalDates[month];
+          existArray.push(moment(element));
+          this.finalDates[month] = existArray;
+          console.log('1 => ');
+        } else {
+          this.finalDates[month] = [moment(element)];
+          console.log('2 => ');
+        }
+      });
+    } else {
+      console.log('3 => ');
+      this.availablityError = true;
+    }
+
+    console.log(' this.finalDates[month]===>', JSON.stringify(this.finalDates));
+    // console.log('AddEditCarForm.value on submit => ', this.AddEditCarForm);
     this.submitted = true;
-    console.log('this.CarImage.length => ', this.CarImage.length);
+    // console.log('this.CarImage.length => ', this.CarImage.length);
     if (this.CarImage.length > 2 || (Number(this.CarOldImage.length) + Number(this.CarImage.length)) > 2) {
       this.f.car_gallery.setErrors(null);
     } else {
@@ -241,10 +268,11 @@ export class AddEditCarComponent implements OnInit {
     formData.append('is_luggage_carrier', this.f.is_luggage_carrier.value);
     formData.append('licence_plate', this.f.licence_plate.value);
     formData.append('car_color', this.f.car_color.value);
+    formData.append('is_available', JSON.stringify(this.finalDates));
+    console.log('finalDates  after append=> ', this.finalDates);
     if (!this.AddEditCarForm.invalid) {
       console.log('this.AddEditCarForm.value => ', this.AddEditCarForm.value);
       console.log('this.CarImageRAW => ', this.CarImageRAW);
-      // formData.append('car_rental_company_id', this.companyId);
       const headers = new HttpHeaders();
       // this is the important step. You need to set content type as null
       headers.set('Content-Type', null);
@@ -256,36 +284,31 @@ export class AddEditCarComponent implements OnInit {
         }
         if (this.CarImageRAW.length > 0) {
           formData.append('is_change_photo', 'true');
-          // this.AddEditCarForm.controls['is_change_photo'].setValue(true);
         } else {
-          // this.AddEditCarForm.controls['is_change_photo'].setValue(false);
           formData.append('is_change_photo', 'false');
         }
-        // this.AddEditCarForm.controls['old_images'].setValue(this.CarOldImage);
-        // for (let i = 0; i < this.CarOldImage.length; i++) {
-        //   formData.append('old_images', this.CarOldImage[i]);
-        // }
         formData.append('old_images', JSON.stringify(this.CarOldImage));
         console.log('this.CarOldImage => ', this.CarOldImage);
         console.log('this.CarImageNew => ', this.CarImageRAW);
-        // this.formData = this.AddEditCarForm.value;
         this.isLoading = true;
         console.log('AddEditCarForm.value => ', this.AddEditCarForm.value);
-        this.service.post('admin/company/car/edit', formData, headers).subscribe(res => {
-          this.isLoading = false;
-          this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
-          this.router.navigate(['/admin/car-rental-companies/view/' + localStorage.getItem('companyId')]);
-        }, err => {
-          err = err.error;
-          this.isLoading = false;
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
-        }
-        );
+        // this.service.post('admin/company/car/edit', formData, headers).subscribe(res => {
+        //   this.isLoading = false;
+        //   this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
+        //   this.router.navigate(['/admin/car-rental-companies/view/' + localStorage.getItem('companyId')]);
+        // }, err => {
+        //   err = err.error;
+        //   this.isLoading = false;
+        //   this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
+        // }
+        // );
       } else {
         for (let i = 0; i < this.CarImageRAW.length; i++) {
           formData.append('car_gallery', this.CarImageRAW[i]);
         }
         this.isLoading = true;
+        console.log('this.formData => ', formData);
+        console.log('formData => ', JSON.stringify(formData));
         this.service.post('admin/company/car/add', formData, headers).subscribe(res => {
           console.log('res', res);
           this.isLoading = false;
@@ -303,17 +326,9 @@ export class AddEditCarComponent implements OnInit {
       return;
     }
   }
-  ngOnInit() {
-    let today = new Date();
-    let month = today.getMonth();
-    let year = today.getFullYear();
-    console.log('today => ', today);
-    console.log('month => ', month);
-    console.log('year => ', year);
-  }
-  openCal(month: number) {
-    $('#myCal').click();
-    this.selectDate.setMonth(month);
-  }
 
+  checkSelect() {
+    this.availablityError = false;
+  }
+  ngOnInit() { }
 }

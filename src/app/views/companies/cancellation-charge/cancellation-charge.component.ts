@@ -56,48 +56,51 @@ export class CancellationChargeComponent implements OnInit {
 
   onSubmit() {
     this.isLoading = true;
+    var checkduplicate = [];
     this.submitArray.forEach(element => {
       if (element.hours === '' || element.hours === 0 || element.hours === null ||
         element.rate === '' || element.rate === 0 || element.rate === null) {
         this.submitted = false;
-        this.Errmsg = 'Please fill all feilds First';
       } else {
-        // var checkhour = element.hours;
-        // this.submitArray.forEach(ele => {
-        //   if (ele.hours !== '' || ele.hours !== 0 || ele.hours !== null) {
-        //     if (checkhour === ele.hours) {
-        //       this.submitted = false;
-        //       this.Errmsg = 'Please remove duplicate hours';
-        //       console.log('in if=======================');
-        //       return true;
-        //     } else {
-        //       console.log('in else=======================');
-        //       this.submitted = true;
-        //     }
-        //   }
-        // });
+        checkduplicate.push(element.hours);
         this.submitted = true;
         this.serviceobj.company_id = this.companyId;
-        console.log('this.serviceobj.company_id  => ', this.serviceobj.company_id);
         this.serviceobj.cancellation_policy_criteria = this.submitArray;
       }
     });
+    console.log('checkduplicate===>', checkduplicate);
+
     if (this.submitted) {
-      console.log(' this.serviceobj=> ', this.serviceobj);
-      this.service.put('company/terms_and_condition/update', this.serviceobj).subscribe(res => {
+      var check = this.checkCommon(checkduplicate);
+      if (check) {
         this.isLoading = false;
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
-        this.router.navigate(['/company/dashboard']);
-      }, err => {
-        err = err.error;
-        this.isLoading = false;
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
-      });
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please remove duplicate feilds first' });
+      } else {
+        this.service.put('company/terms_and_condition/update', this.serviceobj).subscribe(res => {
+          this.isLoading = false;
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
+          this.router.navigate(['/company/dashboard']);
+        }, err => {
+          err = err.error;
+          this.isLoading = false;
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
+        });
+      }
     } else {
       this.isLoading = false;
-      // console.log(' 1=> ');
-      this.messageService.add({ severity: 'error', summary: 'Error', detail: this.Errmsg });
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please fill all feilds first' });
     }
+  }
+
+  checkCommon(a) {
+    for (var i = 0; i <= a.length; i++) {
+      for (var j = i; j <= a.length; j++) {
+        if (i != j && a[i] == a[j]) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   addNext() {

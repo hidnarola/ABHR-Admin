@@ -51,6 +51,8 @@ import { Ng4GeoautocompleteModule } from 'ng4-geoautocomplete';
 import { AdminTermsComponent } from './admin-terms/admin-terms.component';
 import { QuillModule } from 'ngx-quill';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+// import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 import { CalendarModule } from 'primeng/calendar';
 
@@ -332,7 +334,11 @@ const config: SocketIoConfig = { url: 'http://18.219.16.50:3000', options: {} };
     CheckboxModule,
     Ng4GeoautocompleteModule.forRoot(),
     SocketIoModule.forRoot(config),
-    CalendarModule
+    CalendarModule,
+    // CalendarModule.forRoot({
+    //   provide: DateAdapter,
+    //   useFactory: adapterFactory
+    // }),
   ],
   exports: [RouterModule],
   declarations: [

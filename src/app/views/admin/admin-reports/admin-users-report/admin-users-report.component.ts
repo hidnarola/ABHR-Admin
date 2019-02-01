@@ -28,6 +28,8 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
   isCols: boolean;
   public pageNumber;
   public totalRecords;
+  selectFromDate: Array<Date>;
+  selectToDate: Array<Date>;
 
   constructor(
     public renderer: Renderer,

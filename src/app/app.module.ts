@@ -39,6 +39,8 @@ import { DataSharingService } from './shared/services/data-sharing.service';
 import { TokenInterceptor } from './shared/interface/token-interceptor';
 import { NavigationModule } from './shared/header-navigation/navigation.module';
 import { DialogModule } from 'primeng/dialog';
+import { DateAdapter, CalendarModule } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -73,6 +75,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ToastModule,
     // CalendarModule,
     DialogModule,
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory
+    }),
     NavigationModule
   ],
   providers: [
