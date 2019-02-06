@@ -38,6 +38,8 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
   public exportParam: any;
   public exportData: any;
   public ExcelArray = [];
+  isExcel: boolean;
+  isPDF: boolean;
 
   constructor(
     public renderer: Renderer,
@@ -182,6 +184,8 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
     console.log('here in export fun => ');
     this.service.post('admin/user/export_report_list', this.exportParam).subscribe(async (res: any) => {
       this.exportData = await res['result']['data'];
+      this.isExcel = false;
+      this.isPDF = false;
       console.log('this.exportData => ', this.exportData);
       this.exportData.forEach(item => {
         let obj = {
@@ -201,15 +205,16 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
   }
 
   exportAsXLSX(): void {
+    this.isExcel = true;
     this.ExportRecords();
     this.excelService.exportAsExcelFile(this.ExcelArray, 'sample');
   }
 
-  public captureScreen() {
+  captureScreen() {
+    this.isPDF = true;
     this.ExportRecords();
     var pdfdata = document.getElementById('contentToConvert');
     html2canvas(pdfdata).then(canvas => {
-      console.log('canvas => ', canvas);
       // Few necessary setting options  
       var imgWidth = 208;
       var pageHeight = 500;
@@ -220,7 +225,7 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
       let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF  
       var position = 0;
       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)
-      pdf.save('MYPdf.pdf'); // Generated PDF   
+      pdf.save('Users-report.pdf'); // Generated PDF   
     });
   }
 

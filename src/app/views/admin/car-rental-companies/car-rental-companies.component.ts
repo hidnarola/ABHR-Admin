@@ -172,7 +172,7 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
       ajax: (dataTablesParameters: any, callback) => {
         this.pageNumber = dataTablesParameters.length;
         setTimeout(() => {
-          dataTablesParameters['columns'][5]['isBoolean'] = true;
+          dataTablesParameters['columns'][4]['isBoolean'] = true;
           this.service.post('admin/company/list', dataTablesParameters).subscribe(res => {
             this.users = res['result']['data'];
             this.totalRecords = res['result']['recordsTotal'];
@@ -403,41 +403,46 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
     console.log('this.placeData => ', this.placeData);
   }
   autoCompleteCallback1(selectedData: any) {
-    this.placeData = selectedData;
-    console.log('this.placeData selectedData => ', this.placeData);
-    if (typeof this.placeData === 'undefined') {
-      this.addressError = true;
-      console.log(' check here  auto complete 1=> ');
-    } else {
-      if (this.placeData.response === false) {
+    if (selectedData.response) {
+      this.placeData = selectedData;
+      console.log('this.placeData selectedData => ', this.placeData);
+      if (typeof this.placeData === 'undefined') {
         this.addressError = true;
-        console.log(' check here 2=> ');
-      } else if (this.placeData.response === true) {
-        this.addressError = false;
+        console.log(' check here  auto complete 1=> ');
+      } else {
+        if (this.placeData.response === false) {
+          this.addressError = true;
+          console.log(' check here 2=> ');
+        } else if (this.placeData.response === true) {
+          this.addressError = false;
+        }
+        console.log(' check here auto complete 2=> ');
       }
-      console.log(' check here auto complete 2=> ');
-    }
-    this.service_location = [];
-    var lng = selectedData.data.geometry.location.lng;
-    var lat = selectedData.data.geometry.location.lat;
-    this.company_address.address = selectedData.data.formatted_address;
-    this.service_location.push(lng);
-    this.service_location.push(lat);
-    for (var i = 0; i < selectedData.data.address_components.length; i++) {
-      var addressType = selectedData.data.address_components[i].types[0];
-      var addressType = selectedData.data.address_components[i].types[0];
-      if (addressType == 'country') {
-        var country = selectedData.data.address_components[i].long_name;
-        this.company_address.country = country;
+      this.service_location = [];
+      var lng = selectedData.data.geometry.location.lng;
+      var lat = selectedData.data.geometry.location.lat;
+      this.company_address.address = selectedData.data.formatted_address;
+      this.service_location.push(lng);
+      this.service_location.push(lat);
+      for (var i = 0; i < selectedData.data.address_components.length; i++) {
+        var addressType = selectedData.data.address_components[i].types[0];
+        var addressType = selectedData.data.address_components[i].types[0];
+        if (addressType == 'country') {
+          var country = selectedData.data.address_components[i].long_name;
+          this.company_address.country = country;
+        }
+        if (addressType == 'administrative_area_level_1') {
+          var state = selectedData.data.address_components[i].long_name;
+          this.company_address.state = state;
+        }
+        if (addressType == 'locality') {
+          var city = selectedData.data.address_components[i].long_name;
+          this.company_address.city = city;
+        }
       }
-      if (addressType == 'administrative_area_level_1') {
-        var state = selectedData.data.address_components[i].long_name;
-        this.company_address.state = state;
-      }
-      if (addressType == 'locality') {
-        var city = selectedData.data.address_components[i].long_name;
-        this.company_address.city = city;
-      }
+    } else {
+      console.log('reason => ', selectedData.reason);
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Current Location not Found' });
     }
   }
 

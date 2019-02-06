@@ -144,8 +144,9 @@ export class AddEditCarComponent implements OnInit {
       new_images: [],
       old_images: [],
       is_change_photo: [false],
-      driving_eligibility_criteria: ['', [Validators.required, Validators.min(18), Validators.max(120),
-      Validators.pattern('[0-9]*')]],
+      driving_eligibility_criteria: ['', Validators.required],
+      // driving_eligibility_criteria: ['', [Validators.required, Validators.min(18), Validators.max(120),
+      // Validators.pattern('[0-9]*')]],
       is_navigation: [false],
       is_AC: [false],
       is_luggage_carrier: [false],
@@ -166,7 +167,7 @@ export class AddEditCarComponent implements OnInit {
       is_navigation: Boolean,
       is_AC: Boolean,
       is_luggage_carrier: Boolean,
-      driving_eligibility_criteria: Number,
+      driving_eligibility_criteria: String,
       licence_plate: String,
       car_color: String,
       deposit: Number
@@ -232,9 +233,35 @@ export class AddEditCarComponent implements OnInit {
   }
 
   handleFileInput(event) {
+    let isValid = false;
     const files = event.target.files;
     console.log('files => ', files);
+    console.log('files type => ', event.target.files[0].type);
+    console.log('files type2 => ', files[0].type);
     if (files) {
+      for (const file of files) {
+        if (file.type === 'image/jpeg' || file.type === 'image/png') {
+          isValid = true;
+        } else {
+          isValid = false;
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Invalid Image Format' });
+          return 0;
+        }
+      }
+    }
+    // if (files) {
+    //   // this.CarImageRAW = files;
+    //   for (const file of files) {
+    //     this.CarImageRAW.push(file);
+    //     // this.CarImageRAW = files;
+    //     const reader = new FileReader();
+    //     reader.onload = (e: any) => {
+    //       this.CarImage.push(e.target.result);
+    //     };
+    //     reader.readAsDataURL(file);
+    //   }
+    // }
+    if (isValid) {
       // this.CarImageRAW = files;
       for (const file of files) {
         this.CarImageRAW.push(file);
@@ -245,6 +272,8 @@ export class AddEditCarComponent implements OnInit {
         };
         reader.readAsDataURL(file);
       }
+    } else {
+
     }
   }
   deleteImage(index) {
@@ -365,8 +394,10 @@ export class AddEditCarComponent implements OnInit {
         );
       }
     } else {
+      console.log('err => ');
       return;
     }
+    console.log('err2 => ');
   }
 
   checkSelect() {

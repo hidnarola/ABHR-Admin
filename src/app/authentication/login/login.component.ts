@@ -39,24 +39,21 @@ export class LoginComponent implements OnInit, AfterViewInit {
         this.loginForm = this.formBuilder.group({
             password: ['', Validators.required],
             email: ['', [Validators.required, Validators.email, Validators.pattern(pattern)]],
-        })
+        });
     }
     get f() { return this.loginForm.controls; }
 
     ngAfterViewInit() { }
 
     onSubmit() {
-        console.log('here');
         this.submitted = true;
-
         if (!this.loginForm.invalid) {
             if (this.CurrentAdmin === 'admin') {
                 this.service.post('admin/login', this.loginForm.value).subscribe(res => {
                     this.submitted = false;
-                    console.log('result==>', res);
                     localStorage.setItem('admin', JSON.stringify(res['result']));
                     localStorage.setItem('token', res['token']);
-                    console.log('token', res['result']);
+                    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Login Successfully' });
                     this.router.navigate(['/admin/dashboard']);
                 }, err => {
                     err = err.error;
@@ -66,15 +63,18 @@ export class LoginComponent implements OnInit, AfterViewInit {
                 this.service.post('company/login', this.loginForm.value).subscribe((res) => {
                     console.log('value', this.loginForm.value)
                     this.submitted = false;
-                    console.log('result==>', res);
                     localStorage.setItem('company-admin', JSON.stringify(res['result']));
                     localStorage.setItem('token', res['token']);
+                    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Login Successfully' });
                     this.router.navigate(['/company/dashboard']);
                 }, err => {
                     err = err.error;
                     this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
                 });
             }
+            this.submitted = false;
+            this.loginForm.controls['password'].setValue('');
+            this.loginForm.controls['email'].setValue('');
         }
     }
 

@@ -65,6 +65,7 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {
     this.route.params.subscribe(params => {
       this.userId = params.id;
+      console.log('this.userId => ', this.userId);
     });
     // addform validation
     const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
@@ -196,8 +197,13 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   AgentDetails() {
     this.service.get('admin/agents/details/' + this.userId).subscribe(res => {
       console.log('userdetails==>', res);
-      this.agentDetails = res['user'];
-      console.log('agentdetails==>', this.agentDetails);
+      if (res['user'] !== null) {
+        this.agentDetails = res['user'];
+      } else {
+        this.router.navigate(['/admin/agents']);
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No Record Found' });
+      }
+
     });
   }
 

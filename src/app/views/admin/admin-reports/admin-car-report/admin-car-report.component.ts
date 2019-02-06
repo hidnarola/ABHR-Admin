@@ -19,17 +19,13 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
   @ViewChild(DataTableDirective)
   dtElement: DataTableDirective;
   dtOptions: DataTables.Settings = {};
-  // dtOptions: any = {};
   dtTrigger: Subject<any> = new Subject();
-
   public reports;
-  // Data table parameters
   dtparams: any;
   DDfilter = '';
   isCols: boolean;
   fromDate: NgbDateStruct;
   toDate: NgbDateStruct;
-  // public pageNumber = 10;
   public pageNumber;
   public newDate;
   public model: NgbDateStruct;
@@ -40,6 +36,8 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
   public exportParam: any;
   public exportData: any;
   public ExcelArray = [];
+  isExcel: boolean;
+  isPDF: boolean;
 
   constructor(
     public renderer: Renderer,
@@ -90,7 +88,6 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
           console.log(dataTablesParameters);
           this.exportParam = dataTablesParameters;
           console.log(this.exportParam);
-          // this.spinner.show();
           setTimeout(() => {
             if (this.rangeDates) {
               if (this.rangeDates[1]) {
@@ -155,17 +152,10 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
             name: 'to_time',
           },
         ],
-        // dom: 'Bfrtip',
-        // buttons: [
-        //   'excel',
-        //   'copy'
-        // ]
       };
     } catch (error) {
       console.log('error => ', error);
-      // this.spinner.hide();
     }
-    // this.spinner.hide();
   }
   render(): void {
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
@@ -199,20 +189,9 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
     console.log('here in export fun => ');
     this.service.post('admin/cars/export_report_list', this.exportParam).subscribe(async (res: any) => {
       this.exportData = await res['result']['data'];
+      this.isExcel = false;
+      this.isPDF = false;
       console.log('this.exportData => ', this.exportData);
-      // this.exportData.map(function (item) {
-      //   let obj = {
-      //     'Brand': item.car_brand,
-      //     'Model': item.car_modal,
-      //     'Company_Name': item.company_name,
-      //     'Total_Rent': item.booking_rent,
-      //     'Status': item.trip_status,
-      //     'From_Date': moment(item.from_time).format('LL'),
-      //     'To_Date': moment(item.to_time).format('LL'),
-      //   };
-      //   this.ExcelArray.push(obj);
-      // });
-
       this.exportData.forEach(item => {
         let obj = {
           'Brand': item.car_brand,
@@ -231,11 +210,15 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   exportAsXLSX(): void {
+    this.isExcel = true;
+    console.log(' this.isExcel  => ', this.isExcel);
     this.ExportRecords();
     this.excelService.exportAsExcelFile(this.ExcelArray, 'sample');
+
   }
 
   public captureScreen() {
+    this.isPDF = true;
     this.ExportRecords();
     var pdfdata = document.getElementById('contentToConvert');
     html2canvas(pdfdata).then(canvas => {
@@ -250,7 +233,7 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
       let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF  
       var position = 0;
       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)
-      pdf.save('MYPdf.pdf'); // Generated PDF   
+      pdf.save('Car-Report.pdf'); // Generated PDF   
     });
   }
 

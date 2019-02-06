@@ -5,7 +5,7 @@
       <div class="card-body">
         <div class="row pb-2 headding-btn-wrap">
           <div class="col-lg-8 col-md-8">
-            <h4> Details of {{agentDetails?.first_name}} {{agentDetails?.last_name}}</h4>
+            <h4> Details of {{agentDetails?.first_name | titlecase}} {{agentDetails?.last_name | titlecase}}</h4>
           </div>
           <div class="col-lg-4 col-md-4 text-right">
             <button type="button" class="btn btn-primary custom-add-btn" (click)="open2(content, agentDetails)">

@@ -39,6 +39,8 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
   public exportParam: any;
   public exportData: any;
   public ExcelArray = [];
+  isExcel: boolean;
+  isPDF: boolean;
 
   constructor(
     public renderer: Renderer,
@@ -186,20 +188,9 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
     console.log('here in export fun => ');
     this.service.post('company/users/export_report_list', this.exportParam).subscribe(async (res: any) => {
       this.exportData = await res['result']['data'];
+      this.isExcel = false;
+      this.isPDF = false;
       console.log('this.exportData => ', this.exportData);
-      // this.exportData.map(function (item) {
-      //   let obj = {
-      //     'Brand': item.car_brand,
-      //     'Model': item.car_modal,
-      //     'Company_Name': item.company_name,
-      //     'Total_Rent': item.booking_rent,
-      //     'Status': item.trip_status,
-      //     'From_Date': moment(item.from_time).format('LL'),
-      //     'To_Date': moment(item.to_time).format('LL'),
-      //   };
-      //   this.ExcelArray.push(obj);
-      // });
-
       this.exportData.forEach(item => {
         let obj = {
           'First_Name': item.first_name,
@@ -218,15 +209,16 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   exportAsXLSX(): void {
+    this.isExcel = true;
     this.ExportRecords();
     this.excelService.exportAsExcelFile(this.ExcelArray, 'sample');
   }
 
   public captureScreen() {
+    this.isPDF = true;
     this.ExportRecords();
     var pdfdata = document.getElementById('contentToConvert');
     html2canvas(pdfdata).then(canvas => {
-      console.log('canvas => ', canvas);
       // Few necessary setting options  
       var imgWidth = 208;
       var pageHeight = 500;
@@ -237,7 +229,7 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
       let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF  
       var position = 0;
       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)
-      pdf.save('MYPdf.pdf'); // Generated PDF   
+      pdf.save('Users-report.pdf'); // Generated PDF   
     });
   }
 }

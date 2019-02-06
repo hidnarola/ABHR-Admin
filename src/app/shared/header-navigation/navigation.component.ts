@@ -156,10 +156,13 @@ export class NavigationComponent implements AfterViewInit {
     localStorage.clear();
     if (this.CurrentAdmin === 'admin') {
       this.router.navigate(['/admin/login']);
+      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Logout Successfully' });
     } else if (this.CurrentAdmin === 'company') {
       this.router.navigate(['/company/login']);
+      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Logout Successfully' });
     } else {
       this.router.navigate(['/admin/login']);
+      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Logout Successfully' });
     }
   }
 

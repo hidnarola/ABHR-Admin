@@ -205,16 +205,9 @@ body .card_one_data .license_image {height: auto;width: auto;margin-right: 10px;
 .mini-sidebar .sidebar-nav ul#sidebarnav > li > ul {top: 100%;}
 body .page-wrapper {overflow: visible;}
 .tooltip_msg {text-transform: capitalize;}
-/* table #contentToConvert {
-    display: none !important;
-} */
-/* 
-table#contentToConvert {
-    display: none;
-} */
-/* table#contentToConvert {
-    visibility: hidden;
-} */
+select {
+    cursor: pointer;
+}
 
 /***media start here  **/
 

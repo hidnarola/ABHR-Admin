@@ -39,6 +39,8 @@ export class TransactionReportComponent implements OnInit, AfterViewInit, OnDest
   public exportParam: any;
   public exportData: any;
   public ExcelArray = [];
+  isExcel: boolean;
+  isPDF: boolean;
 
   constructor(
     public renderer: Renderer,
@@ -177,6 +179,8 @@ export class TransactionReportComponent implements OnInit, AfterViewInit, OnDest
     console.log('here in export fun => ');
     this.service.post('admin/transaction/export_report_list', this.exportParam).subscribe(async (res: any) => {
       this.exportData = await res['result']['data'];
+      this.isExcel = false;
+      this.isPDF = false;
       console.log('this.exportData => ', this.exportData);
       this.exportData.forEach(item => {
         let obj = {
@@ -196,11 +200,13 @@ export class TransactionReportComponent implements OnInit, AfterViewInit, OnDest
   }
 
   exportAsXLSX(): void {
+    this.isExcel = true;
     this.ExportRecords();
     this.excelService.exportAsExcelFile(this.ExcelArray, 'sample');
   }
 
   public captureScreen() {
+    this.isPDF = true;
     this.ExportRecords();
     var pdfdata = document.getElementById('contentToConvert');
     html2canvas(pdfdata).then(canvas => {
@@ -215,7 +221,7 @@ export class TransactionReportComponent implements OnInit, AfterViewInit, OnDest
       let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF  
       var position = 0;
       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)
-      pdf.save('MYPdf.pdf'); // Generated PDF   
+      pdf.save('Transaction-report.pdf'); // Generated PDF   
     });
   }
 

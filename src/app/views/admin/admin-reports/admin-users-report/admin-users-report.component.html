@@ -16,11 +16,17 @@
               </p-footer>
             </p-calendar>
 
-            <button (click)="exportAsXLSX()" class="btn btn-primary custom-add-btn m-r-10">
+            <button (click)="exportAsXLSX()" *ngIf="!isExcel" class="btn btn-primary custom-add-btn m-r-10">
               Excel
             </button>
-            <button type="button" value="CPTURE" (click)="captureScreen()" class="btn btn-primary custom-add-btn">
+            <button type="button" *ngIf="isExcel" class="btn btn-primary custom-add-btn  loading-btn">
+              <i class="fa fa-spinner fa-spin"></i>Loading
+            </button>
+            <button type="button" value="CPTURE" *ngIf="!isPDF" (click)="captureScreen()" class="btn btn-primary custom-add-btn">
               PDF
+            </button>
+            <button type="button" *ngIf="isPDF" class="btn btn-primary custom-add-btn  loading-btn">
+              <i class="fa fa-spinner fa-spin"></i>Loading
             </button>
 
             <!-- <label>From</label>

@@ -19,7 +19,7 @@ import { NgbModal, ModalDismissReasons, NgbActiveModal, NgbModalOptions } from '
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 
 // alert
-import { MessageService } from 'primeng/api';
+import { MessageService, ConfirmationService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -69,7 +69,8 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
     public router: Router,
     private formBuilder: FormBuilder,
     private messageService: MessageService,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private confirmationService: ConfirmationService
   ) {
     if (this.route.snapshot.paramMap.has('id') && this.route.snapshot.paramMap.get('id') !== ':id') {
       this.route.params.subscribe(params => {
@@ -80,7 +81,7 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
       this.userId = localStorage.getItem('companyId');
       this.router.navigate(['/admin/car-rental-companies/view/' + this.userId]);
     }
-    console.log('userid in admin comapny', this.userId);
+    console.log('company id in admin comapny', this.userId);
     // addform validation
     const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
     this.AddEditForm = this.formBuilder.group({
@@ -371,4 +372,27 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   test(address) { }
+
+  // dlt popup
+  delete(userId) {
+    console.log('userId==>', userId);
+    this.confirmationService.confirm({
+      message: 'Are you sure want to delete this record?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.service.put('admin/company/car/delete', { car_id: userId }).subscribe(res => {
+          this.render();
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
+        }, err => {
+          err = err.error;
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
+        });
+      },
+      reject: () => {
+      }
+    });
+  }
+  // dlt pop up ends here
+
 }

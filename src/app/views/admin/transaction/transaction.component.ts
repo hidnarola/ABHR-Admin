@@ -128,11 +128,6 @@ export class TransactionComponent implements OnInit, AfterViewInit, OnDestroy {
 
   render(): void {
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      // this.dtOptions = {
-      //   language: {
-      //     processing: '<i class= "fa fa-refresh loader fa-spin"></i>'
-      //   }
-      // };
       // Destroy the table first
       dtInstance.destroy();
       // Call the dtTrigger to rerender again
