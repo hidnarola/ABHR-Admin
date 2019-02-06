@@ -43,3 +43,16 @@
   border-color: #1976d2;
   transition: .3s
 }
+
+.cal-day-selected,
+      .cal-day-selected:hover {
+        background-color: deeppink !important;
+}
+
+.error-msg {
+  display: block;
+  width: 100%;
+  margin-top: .25rem;
+  font-size: 80%;
+  color: #dc3545;
+}

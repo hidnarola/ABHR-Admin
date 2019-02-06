@@ -70,7 +70,8 @@
                   <span> {{ user.count }} </span>
                 </td>
                 <td>
-                  <span pTooltip="{{user.app_user_status}}" tooltipPosition="bottom" class="label label-{{user.app_user_status!=='rented'?'danger':'success'}}">
+                  <span tooltipStyleClass="tooltip_msg" pTooltip="{{user.app_user_status}}" tooltipPosition="bottom"
+                    class="label label-{{user.app_user_status!=='rented'?'danger':'success'}}">
                     <i class="fa fa-circle"></i></span>
                 </td>
                 <td>

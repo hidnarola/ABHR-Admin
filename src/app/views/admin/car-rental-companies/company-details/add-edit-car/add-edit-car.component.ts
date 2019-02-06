@@ -22,6 +22,7 @@ export class AddEditCarComponent implements OnInit {
 
   public licencePlateData: any;
   CarImage: any = [];
+  yearRange = '2019:2020';
   CarOldImage: any = [];
   CarImageRAW: any = [];
   imgUrl = environment.imgUrl;
@@ -38,9 +39,26 @@ export class AddEditCarComponent implements OnInit {
   public brandlist;
   public modelList;
   isLoading: boolean;
-  selectDate: Array<Date>;
+  public selectDate: Array<Date>;
   public finalDates: any = {};
   public availablityError: boolean = false;
+  public selectedMonth;
+  public selectedYear;
+  public checked: Boolean = false;
+  public availabilitySelectAllArr = [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ];
 
   constructor(
     private route: ActivatedRoute,
@@ -51,11 +69,28 @@ export class AddEditCarComponent implements OnInit {
   ) {
     this.companyId = localStorage.getItem('companyId');
     this.route.params.subscribe(params => { this.carId = params.id; });
+    this.selectedMonth = new Date().getMonth();
+    this.selectedYear = new Date().getFullYear();
+    console.log('this.selectedYear => ', this.selectedYear);
     console.log('carId==>', this.carId);
     if (this.carId !== undefined && this.carId !== '' && this.carId != null) {
       this.service.post('admin/company/car/details/', { car_id: this.carId }).subscribe(resp => {
         this.carDetails = resp['data'].carDetail;
-        console.log('this.carDetails => ', this.carDetails);
+        if (this.carDetails.is_available !== undefined) {
+          var DateArray = this.carDetails.is_available;
+          const _selectDate = [];
+          DateArray.forEach(element => {
+            if (element.availability.length !== 0) {
+              element.availability.forEach(ele => {
+                let Dateobj = new Date(ele);
+                _selectDate.push(Dateobj);
+              });
+            }
+          });
+          if (_selectDate && _selectDate.length > 0) {
+            this.selectDate = _selectDate;
+          }
+        }
         this.isEdit = true;
         this.service.post('app/car/modelList', { brand_ids: [this.carDetails.car_brand_id] }).subscribe(res => {
           if ((res['data'] !== undefined) && (res['data'] != null) && res['data']) {
@@ -73,9 +108,7 @@ export class AddEditCarComponent implements OnInit {
         this.AddEditCarForm.controls['transmission'].setValue(this.carDetails.transmission);
         this.AddEditCarForm.controls['milage'].setValue(this.carDetails.milage);
         this.AddEditCarForm.controls['car_class'].setValue(this.carDetails.car_class);
-        // this.AddEditCarForm.controls['car_gallery'].setValue(this.carDetails.car_gallery);
         this.carDetails.car_gallery.forEach(file => {
-          // console.log('car_gallery => ', environment.imgUrl + 'car/' + file.name);
           this.CarOldImage.push(file);
         });
         console.log('this.carDetails.car_gallery => ', this.carDetails.car_gallery);
@@ -118,7 +151,6 @@ export class AddEditCarComponent implements OnInit {
       is_luggage_carrier: [false],
       licence_plate: ['', Validators.compose([Validators.required, this.uniqueCarNumberValidator])],
       car_color: ['', Validators.required],
-      // selectDate: ['', Validators.required]
     });
     console.log('this.companyId => ', this.companyId);
     this.formData = {
@@ -137,9 +169,18 @@ export class AddEditCarComponent implements OnInit {
       driving_eligibility_criteria: Number,
       licence_plate: String,
       car_color: String,
-      deposit: Number,
-      // selectDate: Array
+      deposit: Number
     };
+  }
+
+  getDaysInMonth(m, y) {
+    var date = new Date(y, m, 1);
+    const _selectDate = this.selectDate && this.selectDate.length ? this.selectDate : [];
+    while (date.getMonth() === m) {
+      _selectDate.push(new Date(date));
+      date.setDate(date.getDate() + 1);
+    }
+    this.selectDate = _selectDate;
   }
 
   public uniqueCarNumberValidator = (control: FormControl) => {
@@ -217,10 +258,17 @@ export class AddEditCarComponent implements OnInit {
   handleCloseCalendar = () => {
     this.datePicker.overlayVisible = false;
   }
+  handleClearCalendar = () => {
+
+    this.selectDate = null;
+    console.log('this.selectDate  => ', this.selectDate);
+    this.datePicker.overlayVisible = false;
+    this.availabilitySelectAllArr = [false, false, false, false, false, false, false, false, false, false, false, false];
+  }
 
   onSubmit() {
     console.log('this.selectDate => ', this.selectDate);
-    if (this.selectDate !== undefined) {
+    if (this.selectDate !== undefined && this.selectDate !== null) {
       this.availablityError = false;
       console.log(' 0 => ');
       this.selectDate.forEach(element => {
@@ -230,21 +278,15 @@ export class AddEditCarComponent implements OnInit {
           const existArray = this.finalDates[month];
           existArray.push(moment(element));
           this.finalDates[month] = existArray;
-          console.log('1 => ');
         } else {
           this.finalDates[month] = [moment(element)];
-          console.log('2 => ');
         }
       });
     } else {
-      console.log('3 => ');
       this.availablityError = true;
     }
 
-    console.log(' this.finalDates[month]===>', JSON.stringify(this.finalDates));
-    // console.log('AddEditCarForm.value on submit => ', this.AddEditCarForm);
     this.submitted = true;
-    // console.log('this.CarImage.length => ', this.CarImage.length);
     if (this.CarImage.length > 2 || (Number(this.CarOldImage.length) + Number(this.CarImage.length)) > 2) {
       this.f.car_gallery.setErrors(null);
     } else {
@@ -270,7 +312,7 @@ export class AddEditCarComponent implements OnInit {
     formData.append('car_color', this.f.car_color.value);
     formData.append('is_available', JSON.stringify(this.finalDates));
     console.log('finalDates  after append=> ', this.finalDates);
-    if (!this.AddEditCarForm.invalid) {
+    if (!this.AddEditCarForm.invalid && !this.availablityError) {
       console.log('this.AddEditCarForm.value => ', this.AddEditCarForm.value);
       console.log('this.CarImageRAW => ', this.CarImageRAW);
       const headers = new HttpHeaders();
@@ -292,16 +334,16 @@ export class AddEditCarComponent implements OnInit {
         console.log('this.CarImageNew => ', this.CarImageRAW);
         this.isLoading = true;
         console.log('AddEditCarForm.value => ', this.AddEditCarForm.value);
-        // this.service.post('admin/company/car/edit', formData, headers).subscribe(res => {
-        //   this.isLoading = false;
-        //   this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
-        //   this.router.navigate(['/admin/car-rental-companies/view/' + localStorage.getItem('companyId')]);
-        // }, err => {
-        //   err = err.error;
-        //   this.isLoading = false;
-        //   this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
-        // }
-        // );
+        this.service.post('admin/company/car/edit', formData, headers).subscribe(res => {
+          this.isLoading = false;
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
+          this.router.navigate(['/admin/car-rental-companies/view/' + localStorage.getItem('companyId')]);
+        }, err => {
+          err = err.error;
+          this.isLoading = false;
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
+        }
+        );
       } else {
         for (let i = 0; i < this.CarImageRAW.length; i++) {
           formData.append('car_gallery', this.CarImageRAW[i]);
@@ -329,6 +371,50 @@ export class AddEditCarComponent implements OnInit {
 
   checkSelect() {
     this.availablityError = false;
+    console.log(' => ');
+  }
+
+  checkMonth(event) {
+    this.selectedMonth = (event.month - 1);
+    this.selectedYear = event.year;
+  }
+
+  selectAllDates() {
+    if (this.availabilitySelectAllArr[this.selectedMonth] === true) {
+      this.getDaysInMonth(this.selectedMonth, this.selectedYear);
+    } else {
+      this.unselectAllDates();
+    }
+  }
+
+  unselectAllDates() {
+    // let currentMonth = this.selectedMonth;
+    const remainingDates = [];
+    this.selectDate.forEach((date) => {
+      if (date.getMonth() !== this.selectedMonth) {
+        remainingDates.push(new Date(date));
+      }
+    });
+
+    // for (const date of this.selectDate) {
+    //   if (date.getMonth() !== this.selectedMonth) {
+    //     remainingDates.push(new Date(date));
+    //   }
+    // }
+
+    setTimeout(() => {
+      if (remainingDates.length > 0) {
+        this.selectDate = remainingDates;
+        this.selectedMonth = this.selectDate[0].getMonth();
+        console.log('remaining dates month===>', remainingDates[0].getMonth());
+        console.log('remaining dates chkbtn===>', this.availabilitySelectAllArr[this.selectedMonth[0].getMonth()]);
+      } else {
+        this.selectDate = null;
+      }
+    }, 0);
+
+
+
   }
   ngOnInit() { }
 }

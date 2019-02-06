@@ -55,6 +55,10 @@ import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 import { CalendarModule } from 'primeng/calendar';
+import { TransactionComponent } from './transaction/transaction.component';
+import { TransactionDetailComponent } from './transaction/transaction-detail/transaction-detail.component';
+import { TransactionReportComponent } from './admin-reports/transaction-report/transaction-report.component';
+import { DropdownModule } from 'primeng/dropdown';
 
 const AdminRoutes: Routes = [
   {
@@ -202,6 +206,25 @@ const AdminRoutes: Routes = [
         },
       },
       {
+        path: 'transactions',
+        component: TransactionComponent,
+        data: {
+          title: 'Manage Transactions',
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Transactions' }]
+        },
+      },
+      {
+        path: 'transactions/view/:id',
+        component: TransactionDetailComponent,
+        data: {
+          title: 'View Transactions',
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, {
+            title: 'Transactions',
+            url: '/admin/transactions'
+          }, { title: 'Transactions Detail' }]
+        },
+      },
+      {
         path: 'reports',
         component: AdminReportsComponent,
         data: {
@@ -226,19 +249,11 @@ const AdminRoutes: Routes = [
         },
       },
       {
-        path: 'reports/transactions',
-        component: AdminTransactionsComponent,
+        path: 'reports/transaction-reports',
+        component: TransactionReportComponent,
         data: {
           title: 'Transaction Reports',
           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Transaction Reports' }]
-        },
-      },
-      {
-        path: 'reports/transactions/view/:id',
-        component: AdminTransactionDetailComponent,
-        data: {
-          title: 'View Transaction Report',
-          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Transaction Report Detail' }]
         },
       },
       {
@@ -335,6 +350,7 @@ const config: SocketIoConfig = { url: 'http://18.219.16.50:3000', options: {} };
     Ng4GeoautocompleteModule.forRoot(),
     SocketIoModule.forRoot(config),
     CalendarModule,
+    DropdownModule,
     // CalendarModule.forRoot({
     //   provide: DateAdapter,
     //   useFactory: adapterFactory
@@ -369,6 +385,9 @@ const config: SocketIoConfig = { url: 'http://18.219.16.50:3000', options: {} };
     CouponsComponent,
     DeliveredCarsComponent,
     TakenAwayCarsComponent,
+    TransactionComponent,
+    TransactionDetailComponent,
+    TransactionReportComponent,
   ],
   providers: [
     // DataSharingService,

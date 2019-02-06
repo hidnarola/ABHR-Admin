@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -8,6 +8,7 @@ import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-company-admin-car-add-edit',
@@ -15,6 +16,7 @@ import { environment } from '../../../../../environments/environment';
   styleUrls: ['./company-admin-car-add-edit.component.css']
 })
 export class CarAddEditComponent implements OnInit {
+  @ViewChild('availibility') datePicker;
   public licencePlateData: any;
   CarImage: any = [];
   CarOldImage: any = [];
@@ -33,6 +35,27 @@ export class CarAddEditComponent implements OnInit {
   public brandlist;
   public modelList;
   isLoading: boolean;
+  public selectDate: Array<Date>;
+  public finalDates: any = {};
+  public availablityError: boolean = false;
+  public selectedMonth;
+  public selectedYear;
+  public checked: Boolean = false;
+  public availabilitySelectAllArr = [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ];
+  yearRange = '2019:2020';
 
   constructor(
     private route: ActivatedRoute,
@@ -48,9 +71,27 @@ export class CarAddEditComponent implements OnInit {
     this.route.params.subscribe(params => { this.carId = params.id; });
     console.log('carId==>', this.carId);
 
+    this.selectedMonth = new Date().getMonth();
+    this.selectedYear = new Date().getFullYear();
+
     if (this.carId !== undefined && this.carId !== '' && this.carId != null) {
       this.service.post('admin/company/car/details/', { car_id: this.carId }).subscribe(resp => {
         this.carDetails = resp['data'].carDetail;
+        if (this.carDetails.is_available !== undefined) {
+          var DateArray = this.carDetails.is_available;
+          const _selectDate = [];
+          DateArray.forEach(element => {
+            if (element.availability.length !== 0) {
+              element.availability.forEach(ele => {
+                let Dateobj = new Date(ele);
+                _selectDate.push(Dateobj);
+              });
+            }
+          });
+          if (_selectDate && _selectDate.length > 0) {
+            this.selectDate = _selectDate;
+          }
+        }
         this.isEdit = true;
         this.service.post('app/car/modelList', { brand_ids: [this.carDetails.car_brand_id] }).subscribe(res => {
           if ((res['data'] !== undefined) && (res['data'] != null) && res['data']) {
@@ -130,7 +171,15 @@ export class CarAddEditComponent implements OnInit {
       deposit: Number,
     };
   }
-
+  getDaysInMonth(m, y) {
+    var date = new Date(y, m, 1);
+    const _selectDate = this.selectDate && this.selectDate.length ? this.selectDate : [];
+    while (date.getMonth() === m) {
+      _selectDate.push(new Date(date));
+      date.setDate(date.getDate() + 1);
+    }
+    this.selectDate = _selectDate;
+  }
   public uniqueCarNumberValidator = (control: FormControl) => {
     let isWhitespace2;
     if ((isWhitespace2 = (control.value || '').trim().length === 1) || (isWhitespace2 = (control.value || '').trim().length === 0)) {
@@ -190,7 +239,34 @@ export class CarAddEditComponent implements OnInit {
   deleteOldImage(index) {
     this.CarOldImage.splice(index, 1);
   }
+  handleCloseCalendar = () => {
+    this.datePicker.overlayVisible = false;
+  }
+  handleClearCalendar = () => {
+
+    this.selectDate = null;
+    console.log('this.selectDate  => ', this.selectDate);
+    this.datePicker.overlayVisible = false;
+    this.availabilitySelectAllArr = [false, false, false, false, false, false, false, false, false, false, false, false];
+  }
   onSubmit() {
+    if (this.selectDate !== undefined && this.selectDate !== null) {
+      this.availablityError = false;
+      console.log(' 0 => ');
+      this.selectDate.forEach(element => {
+        console.log('here => ');
+        var month = (moment(element).month() + 1);
+        if (typeof this.finalDates[month] !== 'undefined') {
+          const existArray = this.finalDates[month];
+          existArray.push(moment(element));
+          this.finalDates[month] = existArray;
+        } else {
+          this.finalDates[month] = [moment(element)];
+        }
+      });
+    } else {
+      this.availablityError = true;
+    }
     this.submitted = true;
     console.log('this.CarImage.length => ', this.CarImage.length);
     if (this.CarImage.length > 2 || (Number(this.CarOldImage.length) + Number(this.CarImage.length)) > 2) {
@@ -216,7 +292,8 @@ export class CarAddEditComponent implements OnInit {
     formData.append('is_luggage_carrier', this.f.is_luggage_carrier.value);
     formData.append('licence_plate', this.f.licence_plate.value);
     formData.append('car_color', this.f.car_color.value);
-    if (!this.AddEditCarForm.invalid) {
+    formData.append('is_available', JSON.stringify(this.finalDates));
+    if (!this.AddEditCarForm.invalid && !this.availablityError) {
       console.log('this.AddEditCarForm.value => ', this.AddEditCarForm.value);
       console.log('this.CarImageRAW => ', this.CarImageRAW);
       const headers = new HttpHeaders();
@@ -273,6 +350,42 @@ export class CarAddEditComponent implements OnInit {
       return;
     }
   }
+  checkSelect() {
+    this.availablityError = false;
+  }
+
+  checkMonth(event) {
+    this.selectedMonth = (event.month - 1);
+    this.selectedYear = event.year;
+  }
+
+  selectAllDates() {
+    if (this.availabilitySelectAllArr[this.selectedMonth] === true) {
+      this.getDaysInMonth(this.selectedMonth, this.selectedYear);
+    } else {
+      this.unselectAllDates();
+    }
+  }
+
+  unselectAllDates() {
+    const remainingDates = [];
+    this.selectDate.forEach((date) => {
+      if (date.getMonth() !== this.selectedMonth) {
+        remainingDates.push(new Date(date));
+      }
+    });
+    setTimeout(() => {
+      if (remainingDates.length > 0) {
+        this.selectDate = remainingDates;
+        this.selectedMonth = this.selectDate[0].getMonth();
+        console.log('remaining dates month===>', remainingDates[0].getMonth());
+        console.log('remaining dates chkbtn===>', this.availabilitySelectAllArr[this.selectedMonth[0].getMonth()]);
+      } else {
+        this.selectDate = null;
+      }
+    }, 0);
+  }
+
   ngOnInit() { }
 
 }

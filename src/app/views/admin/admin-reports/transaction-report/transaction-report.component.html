@@ -2,10 +2,8 @@
   <div class="card-body">
     <div class="row">
       <div class="col-lg-6 col-md-6">
-        <h4 class="table-header">List of Car Reports </h4>
+        <h4 class="table-header">List of Transaction Reports </h4>
       </div>
-
-      <!-- <div class="col-lg-2"></div> -->
       <div class="col-lg-6 col-md-6 justify-content-end" *ngIf="isCols">
         <form class="form-inline form_filter" style="justify-content: flex-end;" (keydown.enter)="$event.preventDefault()">
           <div class="form-group" style="margin-left:0;">
@@ -24,7 +22,18 @@
             <button type="button" value="CPTURE" (click)="captureScreen()" class="btn btn-primary custom-add-btn">
               PDF
             </button>
-            <!-- <input /> -->
+
+            <!-- <label>From</label>
+            <p-calendar #availibility [(ngModel)]="selectFromDate" [ngModelOptions]="{standalone: true}" placeholder="mm-dd-yyyy"
+              [showIcon]="true">
+            </p-calendar>
+            <label>To</label>
+            <p-calendar #availibility [(ngModel)]="selectToDate" [ngModelOptions]="{standalone: true}" placeholder="mm-dd-yyyy"
+              [showIcon]="true">
+            </p-calendar>
+            <button><i class="fa fa-search"></i></button> -->
+
+
 
             <!-- <div class="input-group">
               <input class="form-control" placeholder="yyyy-mm-dd" (ngModelChange)="DatePicker($event)" name="dp"
@@ -35,28 +44,24 @@
                 </button>
               </div>
             </div> -->
+
+
+
+
           </div>
         </form>
-        <!-- <div class="dropdown">
-          <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Export
-            <span class="caret"></span></button>
-          <div class="dropdown-menu">
-            <a class="dropdown-item" href="#">XLSX</a>
-            <a class="dropdown-item" href="#">PDF</a>
-          </div>
-        </div> -->
         <!-- <button type="button" class="btn btn-primary custom-add-btn m-r-10">
-            <i class="fa fa-external-link" aria-hidden="true"></i> Export
-          </button> -->
+          <i class="fa fa-external-link" aria-hidden="true"></i> Export
+        </button> -->
         <!-- <button type="button" class="btn btn-primary custom-add-btn" (click)="open2(content, '')">
-            <i class="mdi mdi-account-plus" aria-hidden="true"></i> Add
-          </button> -->
+          <i class="mdi mdi-account-plus" aria-hidden="true"></i> Add
+        </button> -->
       </div>
     </div>
     <div *ngIf="!isCols">
       <div class="p-grid p-dir-col">
         <div class="p-col">
-          <div class="box">No Record found for Car Reports</div>
+          <div class="box">No Record found for Transaction Reports</div>
         </div>
       </div>
     </div>
@@ -66,25 +71,25 @@
           <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table" id="contentToConvert">
             <thead>
               <tr>
-                <th>Car Brand</th>
-                <th>Car Modal</th>
+                <th>First Name</th>
+                <th>Last Name</th>
                 <th>Compnay Name</th>
                 <th>Status</th>
-                <th>Total Rent</th>
+                <th>Transaction Amount</th>
                 <th>From Date</th>
                 <th>To Date</th>
               </tr>
             </thead>
-            <tbody *ngIf="reports?.length !== 0 && isCols">
+            <tbody *ngIf="reports?.length != 0 && isCols">
               <tr *ngFor="let item of reports; let i = index">
                 <td>
                   <span>
-                    {{ item.car_brand }}
+                    {{ item.first_name }}
                   </span>
                 </td>
                 <td>
                   <span>
-                    {{ item.car_modal }}
+                    {{ item.last_name}}
                   </span>
                 </td>
                 <td>
@@ -94,12 +99,12 @@
                 </td>
                 <td>
                   <span>
-                    {{ item.trip_status}}
+                    {{ item.status}}
                   </span>
                 </td>
                 <td>
                   <span>
-                    {{ item.booking_rent}}
+                    {{ item.Transaction_amount}}
                   </span>
                 </td>
                 <td>
@@ -114,7 +119,7 @@
                 </td>
               </tr>
             </tbody>
-            <tbody *ngIf="reports?.length === 0">
+            <tbody *ngIf="reports?.length == 0">
               <tr>
                 <td colspan="8" class="no-data-available">No record found!</td>
               </tr>
@@ -125,57 +130,3 @@
     </div>
   </div>
 </div>
-
-
-<!-- <table id="contentToConvert" class="display_none">
-  <thead>
-    <tr>
-      <th>Car Brand</th>
-      <th>Car Modal</th>
-      <th>Compnay Name</th>
-      <th>Status</th>
-      <th>Total Rent</th>
-      <th>From Date</th>
-      <th>To Date</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let item of ExcelArray; let i = index">
-      <td>
-        <span>
-          {{ item.Brand }}
-        </span>
-      </td>
-      <td>
-        <span>
-          {{ item.Model }}
-        </span>
-      </td>
-      <td>
-        <span>
-          {{ item.Company_Name }}
-        </span>
-      </td>
-      <td>
-        <span>
-          {{ item.Status}}
-        </span>
-      </td>
-      <td>
-        <span>
-          {{ item.Total_Rent}}
-        </span>
-      </td>
-      <td>
-        <span>
-          {{ item.From_Date | date:"MM/dd/yy"}}
-        </span>
-      </td>
-      <td>
-        <span>
-          {{ item.To_Date | date:"MM/dd/yy"}}
-        </span>
-      </td>
-    </tr>
-  </tbody>
-</table> -->

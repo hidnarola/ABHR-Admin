@@ -51,6 +51,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
         ajax: (dataTablesParameters: any, callback) => {
           this.pageNumber = dataTablesParameters.length;
           this.dtparams = dataTablesParameters;
+          dataTablesParameters['columns'][4]['isNumber'] = true;
           setTimeout(() => {
             // if (filterBy) { dataTablesParameters['filtered_by'] = filterBy; }
             if (this.DDfilter !== '') {

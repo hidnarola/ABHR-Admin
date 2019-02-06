@@ -1,20 +1,21 @@
-import { Component, OnInit, Renderer, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, Renderer } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { CrudService } from '../../../../shared/services/crud.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import { ExcelService } from '../../../../shared/services/excel.service';
 import * as jspdf from 'jspdf';
 import html2canvas from 'html2canvas';
 
 @Component({
-  selector: 'app-user-report',
-  templateUrl: './user-report.component.html',
-  styleUrls: ['./user-report.component.css']
+  selector: 'app-transaction-report',
+  templateUrl: './transaction-report.component.html',
+  styleUrls: ['./transaction-report.component.css']
 })
-export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
+export class TransactionReportComponent implements OnInit, AfterViewInit, OnDestroy {
+
   @ViewChild('filter_report') datePicker;
   @ViewChild(DataTableDirective)
   dtElement: DataTableDirective;
@@ -29,7 +30,6 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
   toDate: NgbDateStruct;
   public newDate;
   public model: NgbDateStruct;
-  public companyId;
   isCols: boolean;
   public pageNumber;
   public totalRecords;
@@ -45,20 +45,7 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
     public service: CrudService,
     private spinner: NgxSpinnerService,
     private excelService: ExcelService
-  ) {
-    const company = JSON.parse(localStorage.getItem('company-admin'));
-    this.companyId = company._id;
-    console.log('companyid in car reports==>', this.companyId);
-  }
-
-  DatePicker(date: NgbDateStruct) {
-    console.log('check => ', date);
-    this.newDate = date.year + '-' + date.month + '-' + date.day;
-    console.log('newDate => ', this.newDate);
-    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      dtInstance.draw();
-    });
-  }
+  ) { }
 
   FilterRange() {
     console.log('rangeDates in filter function => ', this.rangeDates);
@@ -66,7 +53,6 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
       dtInstance.draw();
     });
   }
-
   ngOnInit() {
     this.ReportData();
     setTimeout(() => {
@@ -77,7 +63,6 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
   ReportData() {
     try {
       this.spinner.show();
-
       this.dtOptions = {
         pagingType: 'full_numbers',
         pageLength: 10,
@@ -86,13 +71,12 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
         serverSide: true,
         ordering: true,
         order: [[0, 'desc']],
-        language: { 'processing': '<i class="fa fa-spin fa-spinner"></i>' },
+        language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
+
         ajax: (dataTablesParameters: any, callback) => {
           this.pageNumber = dataTablesParameters.length;
-          dataTablesParameters['company_id'] = this.companyId;
           this.dtparams = dataTablesParameters;
           dataTablesParameters['columns'][4]['isNumber'] = true;
-          dataTablesParameters['columns'][5]['isNumber'] = true;
           setTimeout(() => {
             if (this.rangeDates) {
               if (this.rangeDates[1]) {
@@ -101,8 +85,9 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.datePicker.overlayVisible = false;
               }
             }
-            this.service.post('company/users/report_list', dataTablesParameters).subscribe(res => {
+            this.service.post('company/transaction/report_list', dataTablesParameters).subscribe(res => {
               this.reports = res['result']['data'];
+              console.log(' transaction report => ', this.reports);
               this.totalRecords = res['result']['recordsTotal'];
               // this.reports = [];
               if (this.reports.length > 0) {
@@ -114,7 +99,6 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
               } else {
                 $('.dataTables_paginate').css('display', 'none');
               }
-              console.log('response in reports', res);
               this.spinner.hide();
               callback({
                 recordsTotal: res['result']['recordsTotal'],
@@ -134,12 +118,16 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
             name: 'last_name',
           },
           {
-            data: 'Status',
-            name: 'trip_status',
+            data: 'Compnay Name',
+            name: 'company_name',
           },
           {
-            data: 'Total Rent',
-            name: 'booking_rent',
+            data: 'Status',
+            name: 'status',
+          },
+          {
+            data: 'Transaction Amount',
+            name: 'Transaction_amount',
           },
           {
             data: 'From Date',
@@ -171,6 +159,7 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.dtTrigger.next();
   }
+
   handleFilterCalendar = () => {
     this.datePicker.overlayVisible = false;
     console.log('this.rangeDates  => ', this.rangeDates);
@@ -184,29 +173,16 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   ExportRecords() {
     console.log('here in export fun => ');
-    this.service.post('company/users/export_report_list', this.exportParam).subscribe(async (res: any) => {
+    this.service.post('company/transaction/export_report_list', this.exportParam).subscribe(async (res: any) => {
       this.exportData = await res['result']['data'];
       console.log('this.exportData => ', this.exportData);
-      // this.exportData.map(function (item) {
-      //   let obj = {
-      //     'Brand': item.car_brand,
-      //     'Model': item.car_modal,
-      //     'Company_Name': item.company_name,
-      //     'Total_Rent': item.booking_rent,
-      //     'Status': item.trip_status,
-      //     'From_Date': moment(item.from_time).format('LL'),
-      //     'To_Date': moment(item.to_time).format('LL'),
-      //   };
-      //   this.ExcelArray.push(obj);
-      // });
-
       this.exportData.forEach(item => {
         let obj = {
           'First_Name': item.first_name,
           'Last_Name': item.last_name,
           'Company_Name': item.company_name,
           'Status': item.trip_status,
-          'Total Rent': item.booking_rent,
+          'Transaction Amount': item.Transaction_amount,
           'From_Date': moment(item.from_time).format('LL'),
           'To_Date': moment(item.to_time).format('LL'),
         };

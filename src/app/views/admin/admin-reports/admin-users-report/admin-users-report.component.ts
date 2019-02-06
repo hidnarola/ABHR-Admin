@@ -4,6 +4,10 @@ import { Subject } from 'rxjs';
 import { CrudService } from '../../../../shared/services/crud.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import * as moment from 'moment';
+import { ExcelService } from '../../../../shared/services/excel.service';
+import * as jspdf from 'jspdf';
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-admin-users-report',
@@ -11,7 +15,7 @@ import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./admin-users-report.component.css']
 })
 export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestroy {
-
+  @ViewChild('filter_report') datePicker;
   @ViewChild(DataTableDirective)
   dtElement: DataTableDirective;
   dtOptions: DataTables.Settings = {};
@@ -28,13 +32,18 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
   isCols: boolean;
   public pageNumber;
   public totalRecords;
-  selectFromDate: Array<Date>;
+  // selectFromDate: Array<Date>;
   selectToDate: Array<Date>;
+  rangeDates: Date[];
+  public exportParam: any;
+  public exportData: any;
+  public ExcelArray = [];
 
   constructor(
     public renderer: Renderer,
     public service: CrudService,
     private spinner: NgxSpinnerService,
+    private excelService: ExcelService
   ) { }
 
   DatePicker(date: NgbDateStruct) {
@@ -45,14 +54,22 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
       dtInstance.draw();
     });
   }
+  FilterRange() {
+    console.log('rangeDates in filter function => ', this.rangeDates);
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.draw();
+    });
+  }
   ngOnInit() {
     this.ReportData();
+    setTimeout(() => {
+      this.ExportRecords();
+    }, 500);
   }
 
   ReportData() {
     try {
       this.spinner.show();
-
       this.dtOptions = {
         pagingType: 'full_numbers',
         pageLength: 10,
@@ -66,16 +83,18 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
         ajax: (dataTablesParameters: any, callback) => {
           this.pageNumber = dataTablesParameters.length;
           this.dtparams = dataTablesParameters;
-          dataTablesParameters['columns'][5]['isNumber'] = true;
-          dataTablesParameters['columns'][6]['isNumber'] = true;
+          dataTablesParameters['columns'][4]['isNumber'] = true;
           setTimeout(() => {
-            // if (filterBy) { dataTablesParameters['filtered_by'] = filterBy; }
-            if (this.newDate !== '') {
-              dataTablesParameters['date'] = this.newDate;
+            if (this.rangeDates) {
+              if (this.rangeDates[1]) {
+                dataTablesParameters['selectFromDate'] = moment(this.rangeDates[0]).format('L');
+                dataTablesParameters['selectToDate'] = moment(this.rangeDates[1]).format('L');
+                this.datePicker.overlayVisible = false;
+              }
             }
             this.service.post('admin/user/report_list', dataTablesParameters).subscribe(res => {
-              console.log('dataTablesParameters in user report => ', dataTablesParameters);
               this.reports = res['result']['data'];
+              console.log(' user report => ', this.reports);
               this.totalRecords = res['result']['recordsTotal'];
               // this.reports = [];
               if (this.reports.length > 0) {
@@ -98,18 +117,6 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
         },
         columns: [
           {
-            data: 'Car Brand',
-            name: 'car_brand',
-          },
-          {
-            data: 'Car Modal',
-            name: 'car_modal',
-          },
-          {
-            data: 'Compnay Name',
-            name: 'company_name',
-          },
-          {
             data: 'First Name',
             name: 'first_name',
           },
@@ -118,12 +125,24 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
             name: 'last_name',
           },
           {
-            data: 'No Of Rented',
-            name: 'no_of_rented',
+            data: 'Compnay Name',
+            name: 'company_name',
+          },
+          {
+            data: 'Status',
+            name: 'trip_status',
           },
           {
             data: 'Total Rent',
-            name: 'totalrent',
+            name: 'booking_rent',
+          },
+          {
+            data: 'From Date',
+            name: 'from_time',
+          },
+          {
+            data: 'To Date',
+            name: 'to_time',
           },
         ]
       };
@@ -146,6 +165,63 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
   }
   ngAfterViewInit(): void {
     this.dtTrigger.next();
+  }
+
+  handleFilterCalendar = () => {
+    this.datePicker.overlayVisible = false;
+    console.log('this.rangeDates  => ', this.rangeDates);
+  }
+  handleClearCalendar = () => {
+    this.rangeDates = null;
+    console.log('this.rangeDates  => ', this.rangeDates);
+    this.datePicker.overlayVisible = false;
+    this.render();
+    this.spinner.show();
+  }
+  ExportRecords() {
+    console.log('here in export fun => ');
+    this.service.post('admin/user/export_report_list', this.exportParam).subscribe(async (res: any) => {
+      this.exportData = await res['result']['data'];
+      console.log('this.exportData => ', this.exportData);
+      this.exportData.forEach(item => {
+        let obj = {
+          'First_Name': item.first_name,
+          'Last_Name': item.last_name,
+          'Company_Name': item.company_name,
+          'Status': item.trip_status,
+          'Total Rent': item.booking_rent,
+          'From_Date': moment(item.from_time).format('LL'),
+          'To_Date': moment(item.to_time).format('LL'),
+        };
+        this.ExcelArray.push(obj);
+      });
+
+      console.log('excel data====>', this.ExcelArray);
+    });
+  }
+
+  exportAsXLSX(): void {
+    this.ExportRecords();
+    this.excelService.exportAsExcelFile(this.ExcelArray, 'sample');
+  }
+
+  public captureScreen() {
+    this.ExportRecords();
+    var pdfdata = document.getElementById('contentToConvert');
+    html2canvas(pdfdata).then(canvas => {
+      console.log('canvas => ', canvas);
+      // Few necessary setting options  
+      var imgWidth = 208;
+      var pageHeight = 500;
+      var imgHeight = canvas.height * imgWidth / canvas.width;
+      var heightLeft = imgHeight;
+
+      const contentDataURL = canvas.toDataURL('image/png')
+      let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF  
+      var position = 0;
+      pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)
+      pdf.save('MYPdf.pdf'); // Generated PDF   
+    });
   }
 
 }

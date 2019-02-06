@@ -4,6 +4,10 @@ import { Subject } from 'rxjs';
 import { CrudService } from '../../../../shared/services/crud.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import * as moment from 'moment';
+import { ExcelService } from '../../../../shared/services/excel.service';
+import * as jspdf from 'jspdf';
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-car-report',
@@ -11,7 +15,7 @@ import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./car-report.component.css']
 })
 export class CarReportComponent implements OnInit, AfterViewInit, OnDestroy {
-
+  @ViewChild('filter_report') datePicker;
   @ViewChild(DataTableDirective)
   dtElement: DataTableDirective;
   dtOptions: DataTables.Settings = {};
@@ -29,11 +33,18 @@ export class CarReportComponent implements OnInit, AfterViewInit, OnDestroy {
   isCols: boolean;
   public pageNumber;
   public totalRecords;
+  selectFromDate: Array<Date>;
+  selectToDate: Array<Date>;
+  rangeDates: Date[];
+  public exportParam: any;
+  public exportData: any;
+  public ExcelArray = [];
 
   constructor(
     public renderer: Renderer,
     public service: CrudService,
     private spinner: NgxSpinnerService,
+    private excelService: ExcelService
   ) {
     const company = JSON.parse(localStorage.getItem('company-admin'));
     this.companyId = company._id;
@@ -49,8 +60,18 @@ export class CarReportComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  FilterRange() {
+    console.log('rangeDates in filter function => ', this.rangeDates);
+    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+      dtInstance.draw();
+    });
+  }
+
   ngOnInit() {
     this.ReportData();
+    setTimeout(() => {
+      this.ExportRecords();
+    }, 500);
   }
 
   ReportData() {
@@ -76,9 +97,12 @@ export class CarReportComponent implements OnInit, AfterViewInit, OnDestroy {
           dataTablesParameters['columns'][2]['isNumber'] = true;
           dataTablesParameters['columns'][3]['isNumber'] = true;
           setTimeout(() => {
-            // if (filterBy) { dataTablesParameters['filtered_by'] = filterBy; }
-            if (this.newDate !== '') {
-              dataTablesParameters['date'] = this.newDate;
+            if (this.rangeDates) {
+              if (this.rangeDates[1]) {
+                dataTablesParameters['selectFromDate'] = moment(this.rangeDates[0]).format('L');
+                dataTablesParameters['selectToDate'] = moment(this.rangeDates[1]).format('L');
+                this.datePicker.overlayVisible = false;
+              }
             }
             this.service.post('company/car/report_list', dataTablesParameters).subscribe(res => {
               this.reports = res['result']['data'];
@@ -112,17 +136,21 @@ export class CarReportComponent implements OnInit, AfterViewInit, OnDestroy {
             data: 'Car Modal',
             name: 'car_modal',
           },
-          // {
-          //   data: 'Compnay Name',
-          //   name: 'company_name',
-          // },
           {
-            data: 'No Of Rented',
-            name: 'no_of_rented',
+            data: 'Status',
+            name: 'trip_status',
           },
           {
             data: 'Total Rent',
-            name: 'totalrent',
+            name: 'booking_rent',
+          },
+          {
+            data: 'From Date',
+            name: 'from_time',
+          },
+          {
+            data: 'To Date',
+            name: 'to_time',
           },
         ]
       };
@@ -145,6 +173,76 @@ export class CarReportComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   ngAfterViewInit(): void {
     this.dtTrigger.next();
+  }
+
+  handleFilterCalendar = () => {
+    this.datePicker.overlayVisible = false;
+    console.log('this.rangeDates  => ', this.rangeDates);
+  }
+  handleClearCalendar = () => {
+    this.rangeDates = null;
+    console.log('this.rangeDates  => ', this.rangeDates);
+    this.datePicker.overlayVisible = false;
+    this.render();
+    this.spinner.show();
+  }
+  ExportRecords() {
+    console.log('here in export fun => ');
+    this.service.post('company/cars/export_report_list', this.exportParam).subscribe(async (res: any) => {
+      this.exportData = await res['result']['data'];
+      console.log('this.exportData => ', this.exportData);
+      // this.exportData.map(function (item) {
+      //   let obj = {
+      //     'Brand': item.car_brand,
+      //     'Model': item.car_modal,
+      //     'Company_Name': item.company_name,
+      //     'Total_Rent': item.booking_rent,
+      //     'Status': item.trip_status,
+      //     'From_Date': moment(item.from_time).format('LL'),
+      //     'To_Date': moment(item.to_time).format('LL'),
+      //   };
+      //   this.ExcelArray.push(obj);
+      // });
+
+      this.exportData.forEach(item => {
+        let obj = {
+          'Brand': item.car_brand,
+          'Model': item.car_modal,
+          'Company_Name': item.company_name,
+          'Total_Rent': item.booking_rent,
+          'Status': item.trip_status,
+          'From_Date': moment(item.from_time).format('LL'),
+          'To_Date': moment(item.to_time).format('LL'),
+        };
+        this.ExcelArray.push(obj);
+      });
+
+      console.log('excel data====>', this.ExcelArray);
+    });
+  }
+
+  exportAsXLSX(): void {
+    this.ExportRecords();
+    this.excelService.exportAsExcelFile(this.ExcelArray, 'sample');
+  }
+
+  public captureScreen() {
+    this.ExportRecords();
+    var pdfdata = document.getElementById('contentToConvert');
+    html2canvas(pdfdata).then(canvas => {
+      console.log('canvas => ', canvas);
+      // Few necessary setting options  
+      var imgWidth = 208;
+      var pageHeight = 500;
+      var imgHeight = canvas.height * imgWidth / canvas.width;
+      var heightLeft = imgHeight;
+
+      const contentDataURL = canvas.toDataURL('image/png')
+      let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF  
+      var position = 0;
+      pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)
+      pdf.save('MYPdf.pdf'); // Generated PDF   
+    });
   }
 
 }

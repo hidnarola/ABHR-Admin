@@ -11,7 +11,7 @@
               <option [value]="data._id" *ngFor="let data of brandlist">{{data.brand_name}}</option>
             </select>
             <div *ngIf=" submitted && f.car_brand_id.errors " class="invalid-feedback">
-              <div *ngIf="f.car_brand_id.errors.required"> Car Brand Id is required</div>
+              <div *ngIf="f.car_brand_id.errors.required"> Car Brand is required</div>
             </div>
           </div>
         </div>
@@ -237,13 +237,20 @@
         </div>
 
         <div class="col-md-3">
-          <div class="form-group">
+          <div class="form-group form_calendar form_arrow_none">
             <label class="required"> Car availablity :</label>
             <p-calendar #availibility [(ngModel)]="selectDate" [ngModelOptions]="{standalone: true}" selectionMode="multiple"
-              (onSelect)="checkSelect()" placeholder="Select Availablity" [touchUI]="false" [showIcon]="true">
-              <p-header class="availibility-header" required="">
-                <button type="button" (click)="handleCloseCalendar()" class="pull-right" style="margin:20px"><i class="fa fa-close"></i></button>
+              [monthNavigator]="true" [showOtherMonths]="false" (onMonthChange)="checkMonth($event)" (onSelect)="checkSelect()"
+              placeholder="Select Availablity" [touchUI]="false" [showIcon]="true" [readonlyInput]="true" [yearRange]="yearRange">
+              <p-header class="availibility-header">
+                <p-checkbox styleClass="cal-chkbox" [(ngModel)]="availabilitySelectAllArr[selectedMonth]"
+                  [ngModelOptions]="{standalone: true}" binary="true" (onChange)="selectAllDates()"></p-checkbox>
+                Select Month
               </p-header>
+              <p-footer>
+                <button type="button" (click)="handleCloseCalendar()"> Submit </button>
+                <button type="button" class="pull-right" (click)="handleClearCalendar()">Clear</button>
+              </p-footer>
             </p-calendar>
             <div *ngIf="availablityError" class="error-msg">
               <div *ngIf="availablityError">Car availablity is required</div>

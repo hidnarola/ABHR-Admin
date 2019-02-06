@@ -176,6 +176,45 @@ body .card_one_data .license_image {height: auto;width: auto;margin-right: 10px;
 .error-msg>div:before{content:''; position:absolute; top:25px;left:auto; right:auto; width:1px; height:36px;}
 .error-msg>div:before{border-left:1px solid #ef5350; left:0;}
 .error-msg>div:after{border-right:1px solid #ef5350; right:0;}
+.ui-datepicker table td > a.ui-state-active {color: #ffffff !important;background-color: #007ad9 !important;}
+.card_one_data .cars-dtl-box-inr span {padding-left: 5px;display: block;} 
+
+.form_calendar p-calendar span > button {position: absolute;right: 0;top: 0;}
+.form_calendar p-calendar span > input {width: 100%;border: 1px solid #ced4da !important;padding: 7px 10px 8px 12px !important;font-size: 13px !important;letter-spacing: .08em !important;border-radius: 0 !important;color: #666 !important;}
+.form_calendar p-calendar > span {width: 100%;position: relative;}
+.form_calendar p-calendar > span .ui-datepicker:not(.ui-datepicker-inline) .ui-datepicker-next {top: 36px;}
+.form_calendar p-calendar > span .ui-datepicker:not(.ui-datepicker-inline) .ui-datepicker-prev {top: 36px;}
+.form_calendar p-calendar > span .ui-datepicker:not(.ui-datepicker-inline) .ui-datepicker-title {margin-top: 15px;}
+.form_calendar p-calendar > span .ui-datepicker:not(.ui-datepicker-inline) p-footer button {background: #1976d2;border: 0;color: #fff;padding: 4px 10px;border-radius: 4px;font-size: 13px;}
+.form_calendar p-calendar > span .ui-datepicker:not(.ui-datepicker-inline) .ui-datepicker-group {background: #fff;padding: 15px 15px 0px 15px; }
+.form_calendar p-calendar > span .ui-datepicker:not(.ui-datepicker-inline) {position: fixed !important;top: 50% !important;left: 50% !important;-webkit-transform: translate(-50% , -50%) !important;transform: initial !important;width: 100% !important;display: block !important;max-width: 500px !important;min-width: initial !important;transition: initial !important;bottom: auto !important;right: auto !important;margin-left: -235px !important;margin-top: -200px !important;background-color: #fff !important;border: 0;padding: 0;}
+.form_calendar p-calendar > span .ui-datepicker:not(.ui-datepicker-inline):After {position: fixed;left: 0;top: 0;background: rgba(0, 0, 0, 0.15);content: " ";width: 100%;height: 100%;z-index: -1;}
+.form_calendar p-calendar > span .ui-datepicker:not(.ui-datepicker-inline) p-footer {background: #fff;width: 100%;display: inline-block;padding: 0px 15px 15px 15px;}
+.form_calendar.form_arrow_none p-calendar > span .ui-datepicker:not(.ui-datepicker-inline) .ui-datepicker-prev,
+.form_calendar.form_arrow_none p-calendar > span .ui-datepicker:not(.ui-datepicker-inline) .ui-datepicker-next {display: none;}.form_calendar.form_arrow_none p-calendar > span .ui-datepicker:not(.ui-datepicker-inline) .ui-datepicker-title {float: right;margin: 4px 0 0 0;}
+
+.form_calendar .error-msg:after {top: 63px;}
+.form_calendar .error-msg>div:after {top: 27px;}
+.form_calendar .error-msg>div:before {top: 28px;}
+.form_calendar .error-msg:before {top: 27px;}
+.form_filter p-calendar > span > input {width: 100%;width: 100%;border: 1px solid #ced4da !important;padding: 7px 10px 8px 12px !important;font-size: 13px !important;letter-spacing: .08em !important;border-radius: 0 !important;color: #666 !important;}
+.form_filter p-calendar {position: relative;margin-left: 10px;}
+.form_filter p-calendar > span > button {position: absolute;right: 0;top: 0;}
+.form_filter p-calendar > span .ng-trigger p-footer button {background: #1976d2;border: 0;color: #fff;padding: 4px 10px;border-radius: 4px;font-size: 13px;}
+.img-rounded {max-height: 180px;}
+.mini-sidebar .sidebar-nav ul#sidebarnav > li > ul {top: 100%;}
+body .page-wrapper {overflow: visible;}
+.tooltip_msg {text-transform: capitalize;}
+/* table #contentToConvert {
+    display: none !important;
+} */
+/* 
+table#contentToConvert {
+    display: none;
+} */
+/* table#contentToConvert {
+    visibility: hidden;
+} */
 
 /***media start here  **/
 

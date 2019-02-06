@@ -1,5 +1,5 @@
 <!--details-->
-<div class="card">
+<div class="card card_one_data">
   <div class="card-body">
     <div class="row pb-2 headding-btn-wrap">
       <div class="col-lg-8 col-md-8">
@@ -13,15 +13,21 @@
     </div>
     <div class="row">
       <div class="agents-dtl-box" *ngIf="userDetails">
-        <div class="agents-dtl-box-inr"><b>Company Name : </b> <span>{{userDetails.name}}</span> </div>
-        <div class="agents-dtl-box-inr"><b>Description : </b> <span>{{userDetails.description}}</span> </div>
-        <div class="agents-dtl-box-inr"><b>Email : </b> <span>{{ userDetails.email }}</span> </div>
-        <div class="agents-dtl-box-inr"><b>Site URL : </b> <span>{{ userDetails.site_url }}</span> </div>
-        <div class="agents-dtl-box-inr"><b>Address : </b> <span>{{ userDetails.company_address.address }}</span> </div>
-        <div class="agents-dtl-box-inr"><b>City : </b> <span>{{ userDetails.company_address.city }}</span> </div>
-        <div class="agents-dtl-box-inr"><b>Country : </b> <span>{{ userDetails.company_address.country }}</span> </div>
-        <div class="agents-dtl-box-inr"><b>State : </b> <span>{{ userDetails.company_address.state }}</span> </div>
-        <div class="agents-dtl-box-inr"><b>Phone Number : </b> <span>{{ userDetails.phone_number ?
+        <div class="agents-dtl-box-inr cars-dtl-box-inr"><b>Company Name : </b> <span>{{userDetails.name}}</span> </div>
+        <div class="agents-dtl-box-inr cars-dtl-box-inr"><b>Description : </b> <span>{{userDetails.description}}</span>
+        </div>
+        <div class="agents-dtl-box-inr cars-dtl-box-inr"><b>Email : </b> <span>{{ userDetails.email }}</span> </div>
+        <div class="agents-dtl-box-inr cars-dtl-box-inr"><b>Site URL : </b> <span>{{ userDetails.site_url }}</span>
+        </div>
+        <div class="agents-dtl-box-inr cars-dtl-box-inr"><b>Address : </b> <span>{{ userDetails.company_address.address
+            }}</span> </div>
+        <div class="agents-dtl-box-inr cars-dtl-box-inr"><b>City : </b> <span>{{ userDetails.company_address.city }}</span>
+        </div>
+        <div class="agents-dtl-box-inr cars-dtl-box-inr"><b>Country : </b> <span>{{ userDetails.company_address.country
+            }}</span> </div>
+        <div class="agents-dtl-box-inr cars-dtl-box-inr"><b>State : </b> <span>{{ userDetails.company_address.state }}</span>
+        </div>
+        <div class="agents-dtl-box-inr cars-dtl-box-inr"><b>Phone Number : </b> <span>{{ userDetails.phone_number ?
             userDetails.phone_number : '-' }}</span> </div>
       </div>
     </div>

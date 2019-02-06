@@ -7,11 +7,11 @@ import { ToastModule } from 'primeng/toast';
 import { ChartistModule } from 'ng-chartist';
 import { ChartsModule } from 'ng2-charts';
 import { EditorModule } from 'primeng/editor';
+import { CalendarModule } from 'primeng/calendar';
 // child component
 import { Routes, RouterModule } from '@angular/router';
 import { CarsComponent } from './cars/cars.component';
 import { CompanyReportsComponent } from './company-reports/company-reports.component';
-import { CompanyTransactionsComponent } from './../companies/company-transactions/company-transactions.component';
 import { CompaniesComponent } from './companies.component';
 import { CarDetailsComponent } from './cars/CompanyAdmin_car-details/car-details.component';
 import { CarAddEditComponent } from './cars/CompanyAdmin-car-add-edit/company-admin-car-add-edit.component';
@@ -22,6 +22,10 @@ import { KeywordsComponent } from './keywords/keywords.component';
 import { CompanyTermsComponent } from './company-terms/company-terms.component';
 import { CancellationChargeComponent } from './cancellation-charge/cancellation-charge.component';
 import { ChangePassComponent } from './change-pass/change-pass.component';
+import { CompanyTransactionComponent } from './company-transaction/company-transaction.component';
+import { CheckboxModule } from 'primeng/checkbox';
+import { TransactionDetailComponent } from './company-transaction/transaction-detail/transaction-detail.component';
+import { TransactionReportComponent } from './company-reports/transaction-report/transaction-report.component';
 // shared component
 // import { RentalsComponent } from '../../shared/components/rentals-for-car/rentals.component';
 
@@ -81,6 +85,25 @@ const CompanyRoutes: Routes = [{
             }
         },
         {
+            path: 'transactions',
+            component: CompanyTransactionComponent,
+            data: {
+                title: 'Manage Transactions',
+                urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Transactions' }]
+            },
+        },
+        {
+            path: 'transactions/view/:id',
+            component: TransactionDetailComponent,
+            data: {
+                title: 'View Transactions',
+                urls: [{ title: 'Dashboard', url: '/company/dashboard' }, {
+                    title: 'Transactions',
+                    url: '/company/transactions'
+                }, { title: 'Transactions Detail' }]
+            },
+        },
+        {
             path: 'reports',
             component: CompanyReportsComponent,
             data: {
@@ -104,6 +127,15 @@ const CompanyRoutes: Routes = [{
                 title: 'Manage User Reports',
                 urls: [{ title: 'Dashboard', url: '/company/dashboard' },
                 { title: 'User Reports' }]
+            },
+        },
+        {
+            path: 'reports/transaction-reports',
+            component: TransactionReportComponent,
+            data: {
+                title: 'Manage Transaction Reports',
+                urls: [{ title: 'Dashboard', url: '/company/dashboard' },
+                { title: 'Transaction Reports' }]
             },
         },
         {
@@ -144,6 +176,8 @@ const CompanyRoutes: Routes = [{
         ChartsModule,
         ChartistModule,
         EditorModule,
+        CalendarModule,
+        CheckboxModule,
         RouterModule.forChild(CompanyRoutes)
     ],
     exports: [RouterModule],
@@ -151,7 +185,6 @@ const CompanyRoutes: Routes = [{
         CarsComponent,
         CarDetailsComponent,
         CarAddEditComponent,
-        CompanyTransactionsComponent,
         CompanyReportsComponent,
         CompaniesComponent,
         CompanyAccountSettingComponent,
@@ -161,6 +194,9 @@ const CompanyRoutes: Routes = [{
         CompanyTermsComponent,
         CancellationChargeComponent,
         ChangePassComponent,
+        CompanyTransactionComponent,
+        TransactionDetailComponent,
+        TransactionReportComponent,
         // RentalsComponent,
     ]
 })

@@ -73,7 +73,7 @@ export class RentalsComponent implements OnInit, OnDestroy, AfterViewInit {
         setTimeout(() => {
           dataTablesParameters.car_id = this.carId;
           this.service.post('admin/company/car/rental_list', dataTablesParameters).subscribe(res => {
-            console.log('res in rental', res);
+            console.log('res in rental -------', res);
             this.rentalData = res['result']['data'];
             this.totalRecords = res['result']['recordsTotal'];
             if (this.rentalData.length > 0) {

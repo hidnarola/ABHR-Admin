@@ -63,7 +63,6 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
   public totalRecords;
   constructor(
     public renderer: Renderer,
-    private dataShare: DataSharingService,
     private route: ActivatedRoute,
     private service: CrudService,
     private modalService: NgbModal,
@@ -173,24 +172,20 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
   closePopup() {
     const element = document.getElementById('closepopup');
     element.click();
+    this.isLoading = false;
   }
   onSubmit() {
     this.submitted = true;
     this.isLoading = true;
     if (!this.AddEditForm.invalid) {
-      // console.log('in valid', this.userId);
       const formData: FormData = new FormData();
       this.formData = this.AddEditForm.value;
-      // if (this.isEdit) {
       this.formData.company_id = this.userId;
       this.formData.company_address = this.company_address;
       this.formData.service_location = this.service_location;
       console.log('form data in company view page', this.formData);
       this.service.put('admin/company/update', this.formData).subscribe(res => {
         this.isLoading = false;
-        console.log('response after edit===>', res);
-
-        console.log('this.userDetails==>', this.userDetails);
         this.userDetails = this.formData;
         this.closePopup();
         this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
@@ -217,6 +212,7 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
 
   // model
   open2(content, userDetails) {
+    this.isLoading = false;
     this.service_location = [];
     this.userSettings.inputPlaceholderText = userDetails.company_address.address;
     this.service_location = userDetails.service_location;
@@ -344,15 +340,12 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
 
 
   ngOnInit() {
-    console.log('company ID===> ', this.userId);
     this.CarData();
     this.UserDetails();
   }
 
   autoCompleteCallback1(selectedData: any) {
-    console.log('here1====>', this.service_location);
     this.service_location = [];
-    console.log('selectedData => ', selectedData);
     var lng = selectedData.data.geometry.location.lng;
     var lat = selectedData.data.geometry.location.lat;
     this.company_address.address = selectedData.data.formatted_address;
@@ -361,7 +354,6 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
     console.log(this.service_location);
     for (var i = 0; i < selectedData.data.address_components.length; i++) {
       var addressType = selectedData.data.address_components[i].types[0];
-      console.log('addresstype====>', addressType);
       var addressType = selectedData.data.address_components[i].types[0];
       if (addressType == 'country') {
         var country = selectedData.data.address_components[i].long_name;
@@ -375,11 +367,8 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
         var city = selectedData.data.address_components[i].long_name;
         this.company_address.city = city;
       }
-      console.log(this.company_address);
     }
   }
 
-  test(address) {
-    console.log('address => ', address);
-  }
+  test(address) { }
 }

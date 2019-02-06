@@ -1,0 +1,29 @@
+<div class="card">
+  <div class="card-body">
+    <div class="cars-dtl-box" *ngIf="transactionDetails">
+      <h4 id="blue" class="mt-45"> Transaction Detail </h4>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="cars-dtl-box-inr">
+            <b>Transaction amount : </b><span>{{transactionDetails.Transaction_amount}}</span>
+          </div>
+          <div class="cars-dtl-box-inr">
+            <b>VAT : </b> <span>{{ transactionDetails.VAT}}</span>
+          </div>
+          <div class="cars-dtl-box-inr">
+            <b>booking number : </b> <span> {{ transactionDetails.booking_number }}</span>
+          </div>
+          <div class="cars-dtl-box-inr">
+            <b>coupon code :</b> <span> {{transactionDetails.coupon_code}} </span>
+          </div>
+          <div class="cars-dtl-box-inr">
+            <b>deposite amount : </b> <span>{{ transactionDetails.deposite_amount }}</span>
+          </div>
+          <div class="cars-dtl-box-inr">
+            <b>status : </b> <span>{{ transactionDetails.status }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -25,10 +25,10 @@ export const ROUTES: RouteInfo[] = [
     {
         path: '/admin/users', title: 'Users', icon: 'fa fa-users', class: '', label: '', labelClass: '', extralink: false, submenu: []
     },
-    // {
-    //     path: '/admin/transactions', title: 'Transactions', icon: 'fa fa-credit-card',
-    // class: '', label: '', labelClass: '', extralink: false, submenu: []
-    // },
+    {
+        path: '/admin/transactions', title: 'Transactions', icon: 'fa fa-credit-card',
+        class: '', label: '', labelClass: '', extralink: false, submenu: []
+    },
     {
         path: '/admin/reports', title: 'Reports', icon: 'fa fa-file-text-o', class: 'has-arrow',
         label: '', labelClass: '', extralink: false, submenu: [
@@ -36,12 +36,12 @@ export const ROUTES: RouteInfo[] = [
                 path: '/admin/reports/car-reports', title: 'Car Report', icon: '',
                 class: '', label: '', labelClass: '', extralink: false, submenu: []
             },
-            // {
-            //     path: '/admin/reports/transactions', title: 'Transaction Reports', icon: '',
-            //     class: '', label: '', labelClass: '', extralink: false, submenu: []
-            // },
             {
                 path: '/admin/reports/user-reports', title: 'User Report', icon: '',
+                class: '', label: '', labelClass: '', extralink: false, submenu: []
+            },
+            {
+                path: '/admin/reports/transaction-reports', title: 'Transaction Report', icon: '',
                 class: '', label: '', labelClass: '', extralink: false, submenu: []
             },
         ]
@@ -83,6 +83,10 @@ export const COMPANY_ROUTES: RouteInfo[] = [
         path: '/company/car', title: 'Cars', icon: 'fa fa-car', class: '', label: '', labelClass: '', extralink: false, submenu: []
     },
     {
+        path: '/company/transactions', title: 'Transactions', icon: 'fa fa-credit-card',
+        class: '', label: '', labelClass: '', extralink: false, submenu: []
+    },
+    {
         path: '/company/reports', title: 'Reports', icon: 'fa fa-file-text-o', class: 'has-arrow',
         label: '', labelClass: '', extralink: false, submenu: [
             {
@@ -91,6 +95,10 @@ export const COMPANY_ROUTES: RouteInfo[] = [
             },
             {
                 path: '/company/reports/user-reports', title: 'User Report', icon: '',
+                class: '', label: '', labelClass: '', extralink: false, submenu: []
+            },
+            {
+                path: '/company/reports/transaction-reports', title: 'Transaction Report', icon: '',
                 class: '', label: '', labelClass: '', extralink: false, submenu: []
             },
 
