@@ -104,8 +104,17 @@
                   </span>
                 </td>
                 <td>
-                  <span>
-                    {{ item.status}}
+                  <span *ngIf="item.status === 'inprogress'" class="badge badge-primary">
+                    {{ item.status }}
+                  </span>
+                  <span *ngIf="item.status === 'cancelled'" class="badge badge-warning">
+                    {{ item.status }}
+                  </span>
+                  <span *ngIf="item.status === 'successfull'" class="badge badge-success">
+                    {{ item.status }}
+                  </span>
+                  <span *ngIf="item.status === 'failed'" class="badge badge-danger">
+                    {{ item.status }}
                   </span>
                 </td>
                 <td>

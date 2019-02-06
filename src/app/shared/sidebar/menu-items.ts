@@ -46,28 +46,29 @@ export const ROUTES: RouteInfo[] = [
             },
         ]
     },
-    {
-        path: '/admin/coupons', title: 'Coupons', icon: 'mdi mdi-cards', class: '', label: '',
-        labelClass: '', extralink: false, submenu: []
-    },
+
     // {
     //     path: '/admin/keywords', title: 'Keywords', icon: 'fa fa-language', class: '',
     //     label: '', labelClass: '', extralink: false, submenu: []
     // },
-    // {
-    //     path: '/admin/operations', title: 'Operations', icon: 'mdi mdi-widgets',
-    //     class: 'has-arrow', label: '', labelClass: '', extralink: false, submenu: [
+    {
+        path: '/admin/operations', title: 'Operations', icon: 'mdi mdi-widgets',
+        class: 'has-arrow', label: '', labelClass: '', extralink: false, submenu: [
 
-    //         {
-    //             path: '/admin/operations/car-delivered', title: 'Delivered  Cars', icon: '',
-    //             class: '', label: '', labelClass: '', extralink: false, submenu: []
-    //         },
-    //         {
-    //             path: '/admin/operations/car-taken-away', title: 'Taken Away Cars', icon: '',
-    //             class: '', label: '', labelClass: '', extralink: false, submenu: []
-    //         },
-    //     ]
-    // },
+            {
+                path: '/admin/operations/car-delivered', title: 'Delivered  Cars', icon: '',
+                class: '', label: '', labelClass: '', extralink: false, submenu: []
+            },
+            {
+                path: '/admin/operations/car-taken-away', title: 'Taken Away Cars', icon: '',
+                class: '', label: '', labelClass: '', extralink: false, submenu: []
+            },
+        ]
+    },
+    {
+        path: '/admin/coupons', title: 'Coupons', icon: 'mdi mdi-cards', class: '', label: '',
+        labelClass: '', extralink: false, submenu: []
+    },
     // {
     //     path: '/admin/settings', title: 'Settings', icon: 'fa fa-gear', class: '',
     // label: '', labelClass: '', extralink: false, submenu: []

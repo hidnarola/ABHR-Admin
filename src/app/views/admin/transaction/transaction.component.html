@@ -53,7 +53,16 @@
                   </span>
                 </td>
                 <td>
-                  <span>
+                  <span *ngIf="item.status === 'inprogress'" class="badge badge-primary">
+                    {{ item.status }}
+                  </span>
+                  <span *ngIf="item.status === 'cancelled'" class="badge badge-warning">
+                    {{ item.status }}
+                  </span>
+                  <span *ngIf="item.status === 'successfull'" class="badge badge-success">
+                    {{ item.status }}
+                  </span>
+                  <span *ngIf="item.status === 'failed'" class="badge badge-danger">
                     {{ item.status }}
                   </span>
                 </td>
@@ -83,8 +92,12 @@
                   </span>
                 </td>
                 <td>
-                  <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="View" [routerLink]="['/admin/transactions/view/',item._id]"><i
-                      class="fa fa-eye text-default m-r-20"></i></a>
+                  <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="View" [routerLink]="['/admin/transactions/view/',item._id]">
+                    <i class="fa fa-eye text-default m-r-20"></i>
+                  </a>
+                  <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="Delete" (click)="cancel(item._id)">
+                    <i class="fa fa-ban text-default"></i>
+                  </a>
                 </td>
               </tr>
             </tbody>

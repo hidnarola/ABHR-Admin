@@ -3,7 +3,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { CrudService } from '../../../shared/services/crud.service';
 import { Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
+import { MessageService, ConfirmationService } from 'primeng/api';
 import { FormBuilder } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 
@@ -32,6 +32,7 @@ export class CompanyTransactionComponent implements OnInit, AfterViewInit, OnDes
     private messageService: MessageService,
     private formBuilder: FormBuilder,
     private spinner: NgxSpinnerService,
+    private confirmationService: ConfirmationService
   ) {
     const company = JSON.parse(localStorage.getItem('company-admin'));
     this.companyId = company._id;
@@ -153,6 +154,30 @@ export class CompanyTransactionComponent implements OnInit, AfterViewInit, OnDes
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
+  }
+
+  cancel(Id) {
+    console.log('userId==>', Id);
+    this.confirmationService.confirm({
+      message: 'Are you sure want to cancel this Transaction?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        var Obj = {
+          'transaction_id': Id,
+          'status': 'cancelled'
+        };
+        this.service.put('admin/transaction/edit', Obj).subscribe(res => {
+          this.render();
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
+        }, err => {
+          err = err.error;
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
+        });
+      },
+      reject: () => {
+      }
+    });
   }
 
 }

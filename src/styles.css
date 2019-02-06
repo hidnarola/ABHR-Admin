@@ -205,9 +205,7 @@ body .card_one_data .license_image {height: auto;width: auto;margin-right: 10px;
 .mini-sidebar .sidebar-nav ul#sidebarnav > li > ul {top: 100%;}
 body .page-wrapper {overflow: visible;}
 .tooltip_msg {text-transform: capitalize;}
-select {
-    cursor: pointer;
-}
+select {cursor: pointer;}
 
 /***media start here  **/
 
