@@ -24,7 +24,6 @@ import { AdminComponent } from './admin.component';
 import { AgentsComponent } from './agents/agents.component';
 import { StaffComponent } from './staff/staff.component';
 import { CarRentalCompaniesComponent } from './car-rental-companies/car-rental-companies.component';
-import { AdminTransactionsComponent } from './admin-transactions/admin-transactions.component';
 import { AdminReportsComponent } from './admin-reports/admin-reports.component';
 import { UsersComponent } from './users/users.component';
 import { OperationsComponent } from './operations/operations.component';
@@ -40,7 +39,6 @@ import { DeliveredCarsComponent } from './operations/delivered-cars/delivered-ca
 import { TakenAwayCarsComponent } from './operations/taken-away-cars/taken-away-cars.component';
 import { RentalHistoryComponent } from './users/rental-history/rental-history.component';
 import { AdminCarReportComponent } from './admin-reports/admin-car-report/admin-car-report.component';
-import { AdminTransactionDetailComponent } from './admin-transactions/admin-transaction-detail/admin-transaction-detail.component';
 import { AdminUsersReportComponent } from './admin-reports/admin-users-report/admin-users-report.component';
 import { AdminAccountSettingComponent } from './admin-account-setting/admin-account-setting.component';
 import { KeywordsComponent } from './keywords/keywords.component';
@@ -59,6 +57,8 @@ import { TransactionComponent } from './transaction/transaction.component';
 import { TransactionDetailComponent } from './transaction/transaction-detail/transaction-detail.component';
 import { TransactionReportComponent } from './admin-reports/transaction-report/transaction-report.component';
 import { DropdownModule } from 'primeng/dropdown';
+import { TakenAwayTrackingComponent } from './operations/taken-away-cars/taken-away-tracking/taken-away-tracking.component';
+import { DeliveredTrackingComponent } from './operations/delivered-cars/delivered-tracking/delivered-tracking.component';
 
 const AdminRoutes: Routes = [
   {
@@ -269,7 +269,18 @@ const AdminRoutes: Routes = [
         component: DeliveredCarsComponent,
         data: {
           title: 'Manage Delivered  Cars',
-          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Delivered  Cars' }]
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Delivered Cars' }]
+        },
+      },
+      {
+        path: 'operations/car-delivered/view/:id',
+        component: DeliveredTrackingComponent,
+        data: {
+          title: 'Track Delivered Cars',
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, {
+            title: 'Delivered Cars',
+            url: '/admin/operations/car-delivered'
+          }, { title: 'Track Delivered Cars' }]
         },
       },
       {
@@ -278,6 +289,17 @@ const AdminRoutes: Routes = [
         data: {
           title: 'Manage Taken Away Cars',
           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Taken Away Cars' }]
+        },
+      },
+      {
+        path: 'operations/car-taken-away/view/:id',
+        component: TakenAwayTrackingComponent,
+        data: {
+          title: 'Track Taken Away Cars',
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, {
+            title: 'Taken Away Cars',
+            url: '/admin/operations/car-taken-away'
+          }, { title: 'Track Taken Away Cars' }]
         },
       },
       {
@@ -362,7 +384,6 @@ const config: SocketIoConfig = { url: 'http://18.219.16.50:3000', options: {} };
     StaffComponent,
     CarRentalCompaniesComponent,
     AdminComponent,
-    AdminTransactionsComponent,
     AdminReportsComponent,
     UsersComponent,
     OperationsComponent,
@@ -377,7 +398,6 @@ const config: SocketIoConfig = { url: 'http://18.219.16.50:3000', options: {} };
     UserDetailsComponent,
     RentalHistoryComponent,
     AdminCarReportComponent,
-    AdminTransactionDetailComponent,
     AdminUsersReportComponent,
     AdminAccountSettingComponent,
     KeywordsComponent,
@@ -388,6 +408,8 @@ const config: SocketIoConfig = { url: 'http://18.219.16.50:3000', options: {} };
     TransactionComponent,
     TransactionDetailComponent,
     TransactionReportComponent,
+    TakenAwayTrackingComponent,
+    DeliveredTrackingComponent,
   ],
   providers: [
     // DataSharingService,

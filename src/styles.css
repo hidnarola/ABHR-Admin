@@ -86,7 +86,10 @@ table.dataTable thead td,
 table.dataTable tbody th { color:#5c5c5c; background: #e9e9eb;}
 table.dataTable thead th, 
 table.dataTable thead td {padding:.75rem !important; border: 0 !important; font-weight: 500 !important;}
-table.dataTable tbody td {border:0 !important; vertical-align:middle; padding:25px 10px !important; border-top: 1px solid #f3f1f1 !important;  color:#67757c;}
+.table table.table.dataTable thead th, 
+.table table.table.dataTable tbody td,
+.table table.table.dataTable tfoot th{ padding:10px !important; font-size: 14px;}
+.table table.table.dataTable tbody td {border:0 !important; vertical-align:middle;      border-top: 1px solid #f3f1f1 !important;  color:#67757c;}
 .table-striped tbody tr:nth-of-type(odd) {background: transparent !important;}
 .table-striped tbody tr:nth-of-type(even){background: #f2f4f8;}
 table.dataTable.no-footer {border-bottom: 0 !important;}
@@ -207,8 +210,10 @@ body .page-wrapper {overflow: visible;}
 .tooltip_msg {text-transform: capitalize;}
 select {cursor: pointer;}
 
-/***media start here  **/
 
+
+
+/***media start here  **/
 @media (min-width:768px){
     .topbar ul.dropdown-user {min-width: 300px !important;}
     .card_one_data .cars-dtl-box-inr b {position: absolute;left: 0;top: 0;margin: 0;height: 100%;padding: 0;display: flex;align-items: center;justify-content: flex-end;padding-right: 10px;}
