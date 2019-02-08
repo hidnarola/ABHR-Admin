@@ -88,7 +88,7 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
     // addform validation
     const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
     this.AddEditForm = this.formBuilder.group({
-      name: ['', Validators.compose([Validators.required, this.uniqueNameValidator])],
+      name: ['', Validators.compose([Validators.required, this.uniqueNameValidator, this.noWhitespaceValidator])],
       description: ['', Validators.required],
       site_url: ['', Validators.compose([Validators.required,
       Validators.pattern('^(https?:\/\/)?[0-9a-zA-Z]+\.[-_0-9a-zA-Z]+\.[0-9a-zA-Z]+$')])],
@@ -111,7 +111,11 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
       address: String
     };
   }
-
+  noWhitespaceValidator(control: FormControl) {
+    let isWhitespace = (control.value || '').trim().length === 0;
+    let isValid = !isWhitespace;
+    return isValid ? null : { 'required': true }
+  }
   public uniqueEmailValidator = (control: FormControl) => {
     let isWhitespace1;
     if (isWhitespace1 = (control.value || '').trim().length === 0) {
@@ -233,6 +237,7 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
       showSearchButton: false,
     };
     this.userSettings = Object.assign({}, this.userSettings);
+    console.log('this.userSettings in afterviewinit=> ', this.userSettings);
     // Very Important Line to add after modifying settings.
   }
 
@@ -244,6 +249,8 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
       this.isEdit = true;
       this.userId = item._id;
       this.userSettings.inputPlaceholderText = item.company_address.address;
+      var addressObj = { response: true, data: item.company_address.address };
+      this.placeData = addressObj;
       this.service_location = item.service_location;
       this.company_address = item.company_address;
       this.AddEditForm.controls['name'].setValue(item.name);
@@ -255,14 +262,8 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
       this.title = 'Add Company';
       this.userSettings.inputPlaceholderText = 'Enter Address';
       if (typeof this.placeData !== 'undefined') {
-        // this.addressError = true;
         this.placeData.response = false;
-        console.log(' check here add 1=> ');
       }
-      // } else {
-      //   this.placeData.response = false;
-      //   console.log(' check here add 3=> ');
-      // }
     }
     const options: NgbModalOptions = {
       keyboard: false,
@@ -288,7 +289,7 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
   // dlt popup
   delete(userId) {
     this.confirmationService.confirm({
-      message: 'Are you sure want to delete this record?',
+      message: 'Are you sure you want to delete this record?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
@@ -342,21 +343,19 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
   onSubmit() {
     this.submitted = true;
     console.log('on submit usersettings===>', typeof this.placeData);
-    console.log('placeData => ', this.placeData);
+    console.log('placeData on submit => ', this.placeData);
     if (typeof this.placeData === 'undefined') {
       this.addressError = true;
-      console.log(' check here 1=> ');
+      console.log(' check here on submit 1=> ');
     } else {
       if (this.placeData.response === false) {
         this.addressError = true;
-        console.log(' check here 2=> ');
+        console.log(' check here on submit 2=> ');
       } else if (this.placeData.response === true) {
         this.addressError = false;
       }
-      // this.addressError = true;
-      console.log(' check here 3=> ');
+      console.log(' check here on submit 3=> ');
     }
-
     if (!this.AddEditForm.invalid) {
       this.isLoading = true;
       this.formData = this.AddEditForm.value;
@@ -400,9 +399,10 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
 
   ngOnInit() {
     this.UsersListData();
-    console.log('this.placeData => ', this.placeData);
   }
+
   autoCompleteCallback1(selectedData: any) {
+    console.log(' selectedData in autocomplete => ', selectedData);
     if (selectedData.response) {
       this.placeData = selectedData;
       console.log('this.placeData selectedData => ', this.placeData);
@@ -427,29 +427,24 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
       for (var i = 0; i < selectedData.data.address_components.length; i++) {
         var addressType = selectedData.data.address_components[i].types[0];
         var addressType = selectedData.data.address_components[i].types[0];
-        if (addressType == 'country') {
+        if (addressType === 'country') {
           var country = selectedData.data.address_components[i].long_name;
           this.company_address.country = country;
         }
-        if (addressType == 'administrative_area_level_1') {
+        if (addressType === 'administrative_area_level_1') {
           var state = selectedData.data.address_components[i].long_name;
           this.company_address.state = state;
         }
-        if (addressType == 'locality') {
+        if (addressType === 'locality') {
           var city = selectedData.data.address_components[i].long_name;
           this.company_address.city = city;
         }
       }
     } else {
-      console.log('reason => ', selectedData.reason);
       this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Current Location not Found' });
     }
   }
 
-  test(address) {
-    console.log('address => ', address);
-  }
-  onChangeAddress() {
-    console.log('==> => ');
-  }
+  test(address) { }
+  onChangeAddress() { }
 }

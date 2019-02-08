@@ -32,7 +32,7 @@ export class AdminAccountSettingComponent implements OnInit {
     this.SettingForm = this.formBuilder.group({
       first_name: ['', Validators.required],
       last_name: ['', Validators.required],
-      phone_number: ['', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^([0-9]){10}$/)]],
+      phone_number: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^([0-9]){10}$/)]],
       email: ['', [Validators.required, Validators.email, Validators.pattern(pattern)]]
     });
     this.formData = {

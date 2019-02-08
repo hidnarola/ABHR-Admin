@@ -113,6 +113,7 @@
                 formControlName="first_name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.first_name.errors }">
               <div *ngIf=" submitted && f.first_name.errors " class="invalid-feedback">
                 <div *ngIf="f.first_name.errors.required"> First name is required</div>
+                <!-- <div *ngIf=" f.first_name.errors.pattern">Space is not allowed</div> -->
               </div>
             </div>
           </div>
@@ -133,7 +134,7 @@
                 name="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }">
               <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                 <div *ngIf=" f.email.errors.required ">Email is required</div>
-                <div *ngIf=" f.email.errors.pattern"> Email format is wrong </div>
+                <div *ngIf=" f.email.errors.pattern"> Email is wrong </div>
                 <div *ngIf="f.email.errors.unique">Email already exist</div>
               </div>
             </div>

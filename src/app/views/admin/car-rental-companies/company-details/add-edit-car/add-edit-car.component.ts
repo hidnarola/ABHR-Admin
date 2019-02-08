@@ -71,8 +71,6 @@ export class AddEditCarComponent implements OnInit {
     this.route.params.subscribe(params => { this.carId = params.id; });
     this.selectedMonth = new Date().getMonth();
     this.selectedYear = new Date().getFullYear();
-    console.log('this.selectedYear => ', this.selectedYear);
-    console.log('carId==>', this.carId);
     if (this.carId !== undefined && this.carId !== '' && this.carId != null) {
       this.service.post('admin/company/car/details/', { car_id: this.carId }).subscribe(resp => {
         this.carDetails = resp['data'].carDetail;
@@ -111,8 +109,6 @@ export class AddEditCarComponent implements OnInit {
         this.carDetails.car_gallery.forEach(file => {
           this.CarOldImage.push(file);
         });
-        console.log('this.carDetails.car_gallery => ', this.carDetails.car_gallery);
-        console.log('this.CarOldImage => ', this.CarOldImage);
         this.AddEditCarForm.controls['driving_eligibility_criteria'].setValue(this.carDetails.driving_eligibility_criteria);
         this.AddEditCarForm.controls['is_navigation'].setValue(this.carDetails.is_navigation);
         this.AddEditCarForm.controls['is_AC'].setValue(this.carDetails.is_AC);
@@ -120,7 +116,6 @@ export class AddEditCarComponent implements OnInit {
         this.AddEditCarForm.controls['licence_plate'].setValue(this.carDetails.licence_plate);
         this.AddEditCarForm.controls['car_color'].setValue(this.carDetails.car_color);
       });
-      console.log(' AddEditCarForm=> ', this.AddEditCarForm);
     }
 
     this.service.get('app/car/brandlist').subscribe(res => {
@@ -153,7 +148,6 @@ export class AddEditCarComponent implements OnInit {
       licence_plate: ['', Validators.compose([Validators.required, this.uniqueCarNumberValidator])],
       car_color: ['', Validators.required],
     });
-    console.log('this.companyId => ', this.companyId);
     this.formData = {
       car_brand_id: String,
       car_model_id: String,
@@ -193,7 +187,6 @@ export class AddEditCarComponent implements OnInit {
       if (this.isEdit) {
         this.licencePlateData = { 'licence_plate': control.value, 'car_id': this.carId };
       }
-      console.log('licencePlateData===>', this.licencePlateData);
       return this.service.post('checkcarNumber', this.licencePlateData).subscribe(res => {
         if (res['status'] === 'success') {
           this.f.licence_plate.setErrors({ 'uniqueName': true });
@@ -206,9 +199,7 @@ export class AddEditCarComponent implements OnInit {
     }
   }
 
-  modellist = (id) => {
-    console.log('id', id);
-  }
+  modellist = (id) => { }
   get f() { return this.AddEditCarForm.controls; }
 
   model(id) {
@@ -217,27 +208,20 @@ export class AddEditCarComponent implements OnInit {
       if ((res['data'] !== undefined) && (res['data'] != null) && res['data']) {
         this.modelList = res['data'].model;
         this.AddEditCarForm.controls['car_model_id'].setValue(this.modelList[0]._id);
-        console.log(this.modelList);
         this.AddEditCarForm.controls['car_model_id'].setErrors(null);
-        console.log('if => ');
       } else {
         this.AddEditCarForm.controls['car_model_id'].setErrors({ 'isExist': true });
         this.modelList = [];
-        console.log('else => ');
       }
     }, error => {
       this.modelList = [];
       this.AddEditCarForm.controls['car_model_id'].setErrors({ 'isExist': true });
-      console.log('error => ');
     });
   }
 
   handleFileInput(event) {
     let isValid = false;
     const files = event.target.files;
-    console.log('files => ', files);
-    console.log('files type => ', event.target.files[0].type);
-    console.log('files type2 => ', files[0].type);
     if (files) {
       for (const file of files) {
         if (file.type === 'image/jpeg' || file.type === 'image/png') {
@@ -249,23 +233,9 @@ export class AddEditCarComponent implements OnInit {
         }
       }
     }
-    // if (files) {
-    //   // this.CarImageRAW = files;
-    //   for (const file of files) {
-    //     this.CarImageRAW.push(file);
-    //     // this.CarImageRAW = files;
-    //     const reader = new FileReader();
-    //     reader.onload = (e: any) => {
-    //       this.CarImage.push(e.target.result);
-    //     };
-    //     reader.readAsDataURL(file);
-    //   }
-    // }
     if (isValid) {
-      // this.CarImageRAW = files;
       for (const file of files) {
         this.CarImageRAW.push(file);
-        // this.CarImageRAW = files;
         const reader = new FileReader();
         reader.onload = (e: any) => {
           this.CarImage.push(e.target.result);
@@ -290,18 +260,14 @@ export class AddEditCarComponent implements OnInit {
   handleClearCalendar = () => {
 
     this.selectDate = null;
-    console.log('this.selectDate  => ', this.selectDate);
     this.datePicker.overlayVisible = false;
     this.availabilitySelectAllArr = [false, false, false, false, false, false, false, false, false, false, false, false];
   }
 
   onSubmit() {
-    console.log('this.selectDate => ', this.selectDate);
     if (this.selectDate !== undefined && this.selectDate !== null) {
       this.availablityError = false;
-      console.log(' 0 => ');
       this.selectDate.forEach(element => {
-        console.log('here => ');
         var month = (moment(element).month() + 1);
         if (typeof this.finalDates[month] !== 'undefined') {
           const existArray = this.finalDates[month];
@@ -340,10 +306,7 @@ export class AddEditCarComponent implements OnInit {
     formData.append('licence_plate', this.f.licence_plate.value);
     formData.append('car_color', this.f.car_color.value);
     formData.append('is_available', JSON.stringify(this.finalDates));
-    console.log('finalDates  after append=> ', this.finalDates);
     if (!this.AddEditCarForm.invalid && !this.availablityError) {
-      console.log('this.AddEditCarForm.value => ', this.AddEditCarForm.value);
-      console.log('this.CarImageRAW => ', this.CarImageRAW);
       const headers = new HttpHeaders();
       // this is the important step. You need to set content type as null
       headers.set('Content-Type', null);
@@ -359,10 +322,7 @@ export class AddEditCarComponent implements OnInit {
           formData.append('is_change_photo', 'false');
         }
         formData.append('old_images', JSON.stringify(this.CarOldImage));
-        console.log('this.CarOldImage => ', this.CarOldImage);
-        console.log('this.CarImageNew => ', this.CarImageRAW);
         this.isLoading = true;
-        console.log('AddEditCarForm.value => ', this.AddEditCarForm.value);
         this.service.post('admin/company/car/edit', formData, headers).subscribe(res => {
           this.isLoading = false;
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
@@ -378,31 +338,24 @@ export class AddEditCarComponent implements OnInit {
           formData.append('car_gallery', this.CarImageRAW[i]);
         }
         this.isLoading = true;
-        console.log('this.formData => ', formData);
-        console.log('formData => ', JSON.stringify(formData));
         this.service.post('admin/company/car/add', formData, headers).subscribe(res => {
-          console.log('res', res);
           this.isLoading = false;
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
           this.router.navigate(['/admin/car-rental-companies/view/' + localStorage.getItem('companyId')]);
         }, err => {
           err = err.error;
           this.isLoading = false;
-          console.log('err => ', err);
           this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
         }
         );
       }
     } else {
-      console.log('err => ');
       return;
     }
-    console.log('err2 => ');
   }
 
   checkSelect() {
     this.availablityError = false;
-    console.log(' => ');
   }
 
   checkMonth(event) {
@@ -419,26 +372,16 @@ export class AddEditCarComponent implements OnInit {
   }
 
   unselectAllDates() {
-    // let currentMonth = this.selectedMonth;
     const remainingDates = [];
     this.selectDate.forEach((date) => {
       if (date.getMonth() !== this.selectedMonth) {
         remainingDates.push(new Date(date));
       }
     });
-
-    // for (const date of this.selectDate) {
-    //   if (date.getMonth() !== this.selectedMonth) {
-    //     remainingDates.push(new Date(date));
-    //   }
-    // }
-
     setTimeout(() => {
       if (remainingDates.length > 0) {
         this.selectDate = remainingDates;
         this.selectedMonth = this.selectDate[0].getMonth();
-        console.log('remaining dates month===>', remainingDates[0].getMonth());
-        console.log('remaining dates chkbtn===>', this.availabilitySelectAllArr[this.selectedMonth[0].getMonth()]);
       } else {
         this.selectDate = null;
       }

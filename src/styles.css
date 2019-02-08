@@ -83,6 +83,7 @@ h4.text-themecolor.m-b-0 {text-transform: capitalize;}
 .mt-20{ margin-top: 20px!important;}
 .mb-20{ margin-bottom: 20px!important;}
 .mb-15{ margin-bottom: 15px!important;}
+.mt-15{ margin-top: 15px!important;}
 table.dataTable{ margin:0 auto 25px !important;}
 table.dataTable thead th,
 table.dataTable thead td,
@@ -211,9 +212,13 @@ body .card_one_data .license_image {height: auto;width: auto;margin-right: 10px;
 .mini-sidebar .sidebar-nav ul#sidebarnav > li > ul {top: 100%;}
 body .page-wrapper {overflow: visible;}
 .tooltip_msg {text-transform: capitalize;}
-select {cursor: pointer;}
-
-
+select,
+label.custom-control-label,
+input.form-control.file_input  {cursor: pointer;}
+span.cancellation_policy {font-weight: 400; color: #1976d2; margin-right: 10px;}
+.inputswitchStyle {top: 7px;}
+a.navbar-brand {cursor: initial;}
+.cars-dtl-box-inr.transaction-dtl-box b {min-width: 210px;}
 
 /***media start here  **/
 @media (min-width:768px){

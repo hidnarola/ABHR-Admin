@@ -87,7 +87,7 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
         processing: true,
         serverSide: true,
         ordering: true,
-        order: [[0, 'desc']],
+        order: [[5, 'desc']],
         language: { 'processing': '<i class="fa fa-spin fa-spinner"></i>' },
         ajax: (dataTablesParameters: any, callback) => {
           this.pageNumber = dataTablesParameters.length;
@@ -149,7 +149,7 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
           },
           {
             data: 'To Date',
-            name: 'to_time',
+            name: (('to_time') && ('createdAt')),
           },
         ]
       };

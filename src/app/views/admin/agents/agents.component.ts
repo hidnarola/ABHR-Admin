@@ -77,10 +77,10 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
     // addform validation
     const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
     this.AddEditForm = this.formBuilder.group({
-      first_name: ['', Validators.required],
-      last_name: ['', Validators.required],
+      first_name: ['', Validators.compose([Validators.required, this.noWhitespaceValidator])],
+      last_name: ['', Validators.compose([Validators.required, this.noWhitespaceValidator])],
       phone_number: ['', Validators.compose([Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^([0-9]){10}$/)])],
-      email: ['', Validators.compose([Validators.required, Validators.email,
+      email: ['', Validators.compose([Validators.required, this.noWhitespaceValidator, Validators.email,
       Validators.pattern(pattern), this.uniqueEmailValidator])],
     });
 
@@ -90,6 +90,12 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
       phone_number: Number,
       email: String
     };
+  }
+
+  noWhitespaceValidator(control: FormControl) {
+    let isWhitespace = (control.value || '').trim().length === 0;
+    let isValid = !isWhitespace;
+    return isValid ? null : { 'required': true };
   }
 
   public uniqueEmailValidator = (control: FormControl) => {
@@ -316,7 +322,7 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
   delete(userId) {
     console.log('userId==>', userId);
     this.confirmationService.confirm({
-      message: 'Are you sure want to delete this record?',
+      message: 'Are you sure you want to delete this record?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {

@@ -219,7 +219,7 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
   delete(couponId) {
     console.log('couponId==>', couponId);
     this.confirmationService.confirm({
-      message: 'Are you sure want to delete this record?',
+      message: 'Are you sure you want to delete this record?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {

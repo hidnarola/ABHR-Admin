@@ -41,8 +41,7 @@ const CompanyRoutes: Routes = [{
             path: 'dashboard',
             component: CompaniesComponent,
             data: {
-                title: 'Dashboard',
-                urls: [{ title: 'Dashboard' }]
+                title: 'Dashboard'
             },
         },
         {

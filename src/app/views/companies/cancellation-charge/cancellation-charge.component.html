@@ -3,13 +3,13 @@
     <div class="Card-header">
       <h4>Edit Cancellation</h4>
     </div>
-    <div class="mb-15">
+    <div>
       <span class="cancellation_policy">Do you want to add Cancellation Policy?</span>
-      <p-inputSwitch [(ngModel)]="checked" (onChange)="checkCancellation()"></p-inputSwitch>
+      <p-inputSwitch [(ngModel)]="checked" (onChange)="checkCancellation()" [styleClass]="'inputswitchStyle'"></p-inputSwitch>
     </div>
 
 
-    <form (ngSubmit)="onSubmit()" #f="ngForm" (keydown.enter)="$event.preventDefault()" *ngIf="checked">
+    <form (ngSubmit)="onSubmit()" #f="ngForm" (keydown.enter)="$event.preventDefault()" *ngIf="checked" class="mt-15">
       <div class="row">
         <div class="col-md-4"><label class="required">Hours :</label></div>
         <div class="col-md-4"><label class="required">Rate :</label></div>

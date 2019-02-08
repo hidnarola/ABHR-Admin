@@ -14,7 +14,7 @@ import { DataSharingService } from '../../../../shared/services/data-sharing.ser
 import { NgbModal, ModalDismissReasons, NgbActiveModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
 // popup-forms
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 
 // alert
 import { MessageService } from 'primeng/api';
@@ -70,8 +70,8 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     // addform validation
     const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
     this.AddEditForm = this.formBuilder.group({
-      first_name: ['', Validators.required],
-      last_name: ['', Validators.required],
+      first_name: ['', Validators.compose([Validators.required, this.noWhitespaceValidator])],
+      last_name: ['', Validators.compose([Validators.required, this.noWhitespaceValidator])],
       phone_number: ['', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]{10}')]],
       email: ['', [Validators.required, Validators.email, Validators.pattern(pattern)]],
       // deviceType: [''],
@@ -85,6 +85,11 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     };
   }
 
+  noWhitespaceValidator(control: FormControl) {
+    let isWhitespace = (control.value || '').trim().length === 0;
+    let isValid = !isWhitespace;
+    return isValid ? null : { 'required': true }
+  }
 
   // add-edit-popup form validation
   get f() { return this.AddEditForm.controls; }
@@ -137,8 +142,10 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
       processing: true,
       serverSide: true,
       ordering: true,
-      order: [[0, 'desc']],
-      language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
+      order: [[4, 'desc']],
+      language: {
+        'processing': '',
+      },
       ajax: (dataTablesParameters: any, callback) => {
         this.pageNumber = dataTablesParameters.length;
         console.log('dataparametes==>', dataTablesParameters);
@@ -184,11 +191,11 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
         },
         {
           data: 'Start Of Rent',
-          name: 'from_time  | date:"MM/dd/yy" ',
+          name: 'from_time  | date:"MM/dd/yy"',
         },
         {
           data: 'End Of Rent',
-          name: 'to_time  | date:"MM/dd/yy"  ',
+          name: (('to_time') && ('createdAt')),
         }
       ]
     };

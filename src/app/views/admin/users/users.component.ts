@@ -45,7 +45,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
         processing: true,
         serverSide: true,
         ordering: true,
-        order: [[0, 'desc']],
+        order: [[3, 'desc']],
         language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
 
         ajax: (dataTablesParameters: any, callback) => {
@@ -53,12 +53,12 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
           this.dtparams = dataTablesParameters;
           dataTablesParameters['columns'][4]['isNumber'] = true;
           setTimeout(() => {
-            // if (filterBy) { dataTablesParameters['filtered_by'] = filterBy; }
             if (this.DDfilter !== '') {
               dataTablesParameters['filtered_by'] = this.DDfilter;
             }
             console.log('dtaparametes car==>', dataTablesParameters);
             this.service.post('admin/user/list', dataTablesParameters).subscribe(res => {
+              console.log('res => ', res['result']['data']);
               this.users = res['result']['data'];
               this.totalRecords = res['result']['recordsTotal'];
               // this.users = [];

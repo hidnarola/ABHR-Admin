@@ -79,7 +79,7 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
         processing: true,
         serverSide: true,
         ordering: true,
-        order: [[0, 'desc']],
+        order: [[6, 'desc']],
         language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
 
         ajax: (dataTablesParameters: any, callback) => {
@@ -144,7 +144,7 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
           },
           {
             data: 'To Date',
-            name: 'to_time',
+            name: (('to_time') && ('createdAt')),
           },
         ]
       };
@@ -181,12 +181,10 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
     this.spinner.show();
   }
   ExportRecords() {
-    console.log('here in export fun => ');
     this.service.post('admin/user/export_report_list', this.exportParam).subscribe(async (res: any) => {
       this.exportData = await res['result']['data'];
       this.isExcel = false;
       this.isPDF = false;
-      console.log('this.exportData => ', this.exportData);
       this.exportData.forEach(item => {
         let obj = {
           'First_Name': item.first_name,
@@ -199,8 +197,6 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
         };
         this.ExcelArray.push(obj);
       });
-
-      console.log('excel data====>', this.ExcelArray);
     });
   }
 
