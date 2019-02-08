@@ -120,7 +120,7 @@ export class CarsComponent implements OnInit, AfterViewInit {
         //   name: 'brandDetails.transmission',
         // },
         {
-          data: 'Year',
+          data: 'Release Year',
           name: 'modelDetails.release_year',
         },
         {

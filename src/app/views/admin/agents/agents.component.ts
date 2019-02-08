@@ -109,6 +109,7 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         console.log('emailData===>', this.emailData);
         return this.service.post('admin/checkemail', this.emailData).subscribe(res => {
+          console.log('res for emailData => ', res);
           if (res['status'] === 'success') {
             this.f.email.setErrors({ 'unique': true });
             return;

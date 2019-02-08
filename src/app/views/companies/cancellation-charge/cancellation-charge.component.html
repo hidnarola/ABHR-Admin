@@ -1,9 +1,15 @@
 <div class="card">
   <div class="card-body">
-    <div class="Card-header mb-20">
+    <div class="Card-header">
       <h4>Edit Cancellation</h4>
     </div>
-    <form (ngSubmit)="onSubmit()" #f="ngForm" (keydown.enter)="$event.preventDefault()">
+    <div class="mb-15">
+      <span class="cancellation_policy">Do you want to add Cancellation Policy?</span>
+      <p-inputSwitch [(ngModel)]="checked" (onChange)="checkCancellation()"></p-inputSwitch>
+    </div>
+
+
+    <form (ngSubmit)="onSubmit()" #f="ngForm" (keydown.enter)="$event.preventDefault()" *ngIf="checked">
       <div class="row">
         <div class="col-md-4"><label class="required">Hours :</label></div>
         <div class="col-md-4"><label class="required">Rate :</label></div>

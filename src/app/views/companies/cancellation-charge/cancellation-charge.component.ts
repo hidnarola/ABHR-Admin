@@ -25,6 +25,8 @@ export class CancellationChargeComponent implements OnInit {
   public serviceobj: any;
   public cancellationArray = [];
   public Errmsg;
+  checked: boolean = false;
+
   constructor(
     private formBuilder: FormBuilder,
     public service: CrudService,
@@ -38,19 +40,40 @@ export class CancellationChargeComponent implements OnInit {
     this.serviceobj = {
       company_id: String,
       cancellation_policy_criteria: Array
-    }
+    };
 
     this.service.get('company/terms_and_condition/' + this.companyId).subscribe(res => {
       console.log('res => ', res);
       this.cancellationData = res['data']['cancellation_policy_criteria'];
-      this.cancellationData.forEach(element => {
-        var obj = { 'hours': element.hours, 'rate': element.rate };
-        this.submitArray.push(obj);
-      });
+      // this.cancellationData = [];
+      console.log('this.cancellationData => ', this.cancellationData);
+      if (this.cancellationData.length !== 0) {
+        this.checked = true;
+        this.cancellationData.forEach(element => {
+          var obj = { 'hours': element.hours, 'rate': element.rate };
+          this.submitArray.push(obj);
+        });
+      } else {
+        this.checkCancellation();
+        // this.submitArray.push({ 'hours': '', 'rate': '' });
+      }
       console.log('res => ', this.submitArray);
     });
   }
 
+  checkCancellation() {
+    if (this.checked === false) {
+      this.submitArray = [];
+      this.serviceobj.company_id = this.companyId;
+      this.serviceobj.cancellation_policy_criteria = this.submitArray;
+      this.service.put('company/terms_and_condition/update', this.serviceobj).subscribe(res => {
+        console.log('res false => ', res);
+      });
+    } else {
+      this.submitArray.push({ 'hours': '', 'rate': '' });
+      console.log('on click function else => ');
+    }
+  }
   ngOnInit() {
   }
 
@@ -121,7 +144,6 @@ export class CancellationChargeComponent implements OnInit {
   }
 
   deleteThis(index) {
-    // (this.CancellationForm.controls['Cancellation'] as FormArray).removeAt(index);
     this.submitArray.splice(index, 1);
     console.log('this.CancellationForm.controls => ', this.cancellationData);
   }

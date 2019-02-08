@@ -133,7 +133,7 @@ export class CarAddEditComponent implements OnInit {
       car_brand_id: ['', Validators.required],
       car_model_id: ['', Validators.required],
       rent_price: ['', [Validators.required, Validators.pattern('[0-9]*')]],
-      deposit: ['', Validators.pattern('[1-9][0-9]*')],
+      deposit: ['', Validators.pattern('[0-9][0-9]*')],
       no_of_person: ['', Validators.required],
       resident_criteria: ['', Validators.required],
       transmission: ['', Validators.required],
@@ -143,8 +143,9 @@ export class CarAddEditComponent implements OnInit {
       new_images: [],
       old_images: [],
       is_change_photo: [false],
-      driving_eligibility_criteria: ['', [Validators.required, Validators.min(18), Validators.max(120),
-      Validators.pattern('[0-9]*')]],
+      driving_eligibility_criteria: ['', Validators.required],
+      // driving_eligibility_criteria: ['', [Validators.required, Validators.min(18), Validators.max(120),
+      // Validators.pattern('[0-9]*')]],
       is_navigation: [false],
       is_AC: [false],
       is_luggage_carrier: [false],
@@ -165,7 +166,7 @@ export class CarAddEditComponent implements OnInit {
       is_navigation: Boolean,
       is_AC: Boolean,
       is_luggage_carrier: Boolean,
-      driving_eligibility_criteria: Number,
+      driving_eligibility_criteria: String,
       licence_plate: String,
       car_color: String,
       deposit: Number,
@@ -210,10 +211,19 @@ export class CarAddEditComponent implements OnInit {
     this.service.post('app/car/modelList', { brand_ids: [id] }).subscribe(res => {
       if ((res['data'] !== undefined) && (res['data'] != null) && res['data']) {
         this.modelList = res['data'].model;
+        this.AddEditCarForm.controls['car_model_id'].setValue(this.modelList[0]._id);
+        console.log(this.modelList);
+        this.AddEditCarForm.controls['car_model_id'].setErrors(null);
+        console.log('if => ');
       } else {
         this.AddEditCarForm.controls['car_model_id'].setErrors({ 'isExist': true });
         this.modelList = [];
+        console.log('else => ');
       }
+    }, error => {
+      this.modelList = [];
+      this.AddEditCarForm.controls['car_model_id'].setErrors({ 'isExist': true });
+      console.log('error => ');
     });
   }
   handleFileInput(event) {

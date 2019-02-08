@@ -134,7 +134,7 @@ export class AddEditCarComponent implements OnInit {
       car_brand_id: ['', Validators.required],
       car_model_id: ['', Validators.required],
       rent_price: ['', [Validators.required, Validators.pattern('[0-9]*')]],
-      deposit: ['', Validators.pattern('[1-9][0-9]*')],
+      deposit: ['', Validators.pattern('[0-9][0-9]*')],
       no_of_person: ['', Validators.required],
       resident_criteria: ['', Validators.required],
       transmission: ['', Validators.required],

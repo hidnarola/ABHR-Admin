@@ -53,7 +53,7 @@ export class CompanyTransactionComponent implements OnInit, AfterViewInit, OnDes
       serverSide: true,
       responsive: true,
       ordering: true,
-      order: [[4, 'desc']],
+      order: [[9, 'desc']],
       language: {
         'processing': '',
       },

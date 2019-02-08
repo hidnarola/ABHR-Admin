@@ -5,22 +5,57 @@
       <div class="row">
         <div class="col-md-6">
           <div class="cars-dtl-box-inr">
-            <b>Transaction amount : </b><span>{{transactionDetails.Transaction_amount}}</span>
+            <b>booking number : </b><span>{{transactionDetails.booking_number}}</span>
           </div>
           <div class="cars-dtl-box-inr">
-            <b>VAT : </b> <span>{{ transactionDetails.VAT}}</span>
+            <b>from time : </b> <span>{{ transactionDetails.from_time | date:"MM/dd/yy"}}</span>
           </div>
           <div class="cars-dtl-box-inr">
-            <b>booking number : </b> <span> {{ transactionDetails.booking_number }}</span>
+            <b>to time : </b> <span> {{ transactionDetails.to_time | date:"MM/dd/yy" }}</span>
           </div>
           <div class="cars-dtl-box-inr">
-            <b>coupon code :</b> <span> {{transactionDetails.coupon_code}} </span>
+            <b>Transaction amount :</b> <span> {{transactionDetails.Transaction_amount}} </span>
           </div>
           <div class="cars-dtl-box-inr">
             <b>deposite amount : </b> <span>{{ transactionDetails.deposite_amount }}</span>
           </div>
           <div class="cars-dtl-box-inr">
-            <b>status : </b> <span>{{ transactionDetails.status }}</span>
+            <b>VAT : </b> <span>{{ transactionDetails.VAT ? transactionDetails.VAT : '-' }}</span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="cars-dtl-box-inr">
+            <b>status : </b>
+            <!-- <span>{{transactionDetails.status}}</span> -->
+            <span *ngIf="transactionDetails.status === 'inprogress'" class="badge badge-primary">
+              {{ transactionDetails.status }}
+            </span>
+            <span *ngIf="transactionDetails.status === 'cancelled'" class="badge badge-warning">
+              {{ transactionDetails.status }}
+            </span>
+            <span *ngIf="transactionDetails.status === 'successfull'" class="badge badge-success">
+              {{ transactionDetails.status }}
+            </span>
+            <span *ngIf="transactionDetails.status === 'failed'" class="badge badge-danger">
+              {{ transactionDetails.status }}
+            </span>
+          </div>
+          <div class="cars-dtl-box-inr">
+            <b>coupon code : </b> <span>{{ transactionDetails.coupon_code ? transactionDetails.coupon_code : '-'}}</span>
+          </div>
+          <div class="cars-dtl-box-inr">
+            <b>coupon rate : </b> <span> {{ transactionDetails.coupon_details ?
+              transactionDetails.coupon_details.discount_rate : '-'}}</span>
+          </div>
+          <div class="cars-dtl-box-inr">
+            <b>company name :</b> <span> {{transactionDetails.coupon_code ? transactionDetails.coupon_code : '-'}}
+            </span>
+          </div>
+          <div class="cars-dtl-box-inr">
+            <b>company phone number : </b> <span>{{ transactionDetails.car_compnay.phone_number }}</span>
+          </div>
+          <div class="cars-dtl-box-inr">
+            <b>company site url : </b> <span>{{ transactionDetails.car_compnay.site_url }}</span>
           </div>
         </div>
       </div>

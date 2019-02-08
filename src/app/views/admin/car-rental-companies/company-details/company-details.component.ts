@@ -201,13 +201,14 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   UserDetails() {
-    // this.spinner.show();
     this.service.get('admin/company/details/' + this.userId).subscribe(res => {
       console.log('userdetails RES==>', res['data']);
-      this.userDetails = res['data'];
-      // this.spinner.hide();
-      // }, error => {
-      // this.spinner.hide();
+      if (res['data'] !== null) {
+        this.userDetails = res['data'];
+      } else {
+        this.router.navigate(['/admin/car-rental-companies']);
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No Record Found' });
+      }
     });
   }
 
@@ -319,7 +320,7 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
         //   name: 'brandDetails.transmission',
         // },
         {
-          data: 'Year',
+          data: 'Release Year',
           name: 'modelDetails.release_year',
         },
         {

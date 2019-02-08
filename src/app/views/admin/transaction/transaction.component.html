@@ -68,17 +68,17 @@
                 </td>
                 <td>
                   <span>
-                    {{ item.coupon_code }}
+                    {{ item.coupon_code ? item.coupon_code : '-'}}
                   </span>
                 </td>
                 <td>
                   <span>
-                    {{ item.coupon_rate }}
+                    {{ item.coupon_rate ? item.coupon_rate : '-'}}
                   </span>
                 </td>
                 <td>
                   <span>
-                    {{ item.VAT }}
+                    {{ item.VAT ? item.VAT : '-' }}
                   </span>
                 </td>
                 <td>

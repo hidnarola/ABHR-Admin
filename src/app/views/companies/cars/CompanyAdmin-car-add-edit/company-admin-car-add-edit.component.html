@@ -2,6 +2,7 @@
   <div class="card-body">
     <form [formGroup]="AddEditCarForm" enctype="multipart/form-data" (ngSubmit)="onSubmit()" (keydown.enter)="$event.preventDefault()">
       <div class="row">
+
         <div class="col-md-3">
           <div class="form-group">
             <label class="required"> Car Brand :</label>
@@ -28,9 +29,6 @@
               <div *ngIf="f.car_model_id.errors.required"> Car Model is required</div>
               <div *ngIf="f.car_model_id.errors.isExist"> Car Model is not available</div>
             </div>
-            <!-- <div class="err_msg">
-              <div *ngIf="f.car_model_id.errors.isExist"> Car Model is not available</div>
-            </div> -->
           </div>
         </div>
 
@@ -212,12 +210,15 @@
         <div class="col-md-2">
           <div class="form-group">
             <label class="required"> Age :</label>
-            <input class="form-control" placeholder="Age" type="string" required="" name="driving_eligibility_criteria"
-              formControlName="driving_eligibility_criteria" [ngClass]="{'is-invalid': submitted && f.driving_eligibility_criteria.errors }">
+            <select class="custom-select col-12" id="inlineFormCustomSelect" name="driving_eligibility_criteria" class="form-control"
+              formControlName="driving_eligibility_criteria" [ngClass]="{ 'is-invalid': submitted && f.driving_eligibility_criteria.errors }">
+              <option value="" disabled selected>Choose...</option>
+              <option value="18+">18+</option>
+              <option value="21+">21+</option>
+              <option value="30+">30+</option>
+            </select>
             <div *ngIf=" submitted && f.driving_eligibility_criteria.errors " class="invalid-feedback">
               <div *ngIf="f.driving_eligibility_criteria.errors.required"> Age Of Driver is required</div>
-              <div *ngIf="f.driving_eligibility_criteria.errors.min || f.driving_eligibility_criteria.errors.pattern || f.driving_eligibility_criteria.errors.max">
-                Not Eligible for Driving</div>
             </div>
           </div>
         </div>
