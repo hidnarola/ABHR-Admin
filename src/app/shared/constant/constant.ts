@@ -4,6 +4,9 @@ export class Constant {
         { 'key': 1, 'value': 'Not Verified' },
         { 'key': 2, 'value': 'Verified' }
     ];
+    USER_TYPE_ADMIN = 'admin';
+    USER_TYPE_AGENT = 'agent';
+    USER_TYPE_USER = 'User';
 }
 export class Cancel {
     hours: number;

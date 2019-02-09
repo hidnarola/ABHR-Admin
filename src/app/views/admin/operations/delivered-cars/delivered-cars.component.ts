@@ -1,5 +1,5 @@
 import { Component, OnInit, Injectable, AfterViewInit, OnDestroy, ViewChild, Renderer } from '@angular/core';
-import { Socket } from 'ngx-socket-io';
+// import { Socket } from 'ngx-socket-io';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { CrudService } from '../../../../shared/services/crud.service';
@@ -30,7 +30,7 @@ export class DeliveredCarsComponent implements OnInit, AfterViewInit, OnDestroy 
   hideSpinner: boolean;
 
   constructor(
-    private socket: Socket,
+    // private socket: Socket,
     public renderer: Renderer,
     public service: CrudService,
     public router: Router,
@@ -44,8 +44,8 @@ export class DeliveredCarsComponent implements OnInit, AfterViewInit, OnDestroy 
 
   // socket here
   getMessage() {
-    console.log('this.socket => ', this.socket);
-    return this.socket;
+    // console.log('this.socket => ', this.socket);
+    // return this.socket;
   }
   // socket end here
 

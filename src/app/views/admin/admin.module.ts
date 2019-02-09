@@ -48,7 +48,7 @@ import { AlertComponent } from '../../shared/components/alert/alert.component';
 import { Ng4GeoautocompleteModule } from 'ng4-geoautocomplete';
 import { AdminTermsComponent } from './admin-terms/admin-terms.component';
 import { QuillModule } from 'ngx-quill';
-import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+// import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 // import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
@@ -59,7 +59,10 @@ import { TransactionReportComponent } from './admin-reports/transaction-report/t
 import { DropdownModule } from 'primeng/dropdown';
 import { TakenAwayTrackingComponent } from './operations/taken-away-cars/taken-away-tracking/taken-away-tracking.component';
 import { DeliveredTrackingComponent } from './operations/delivered-cars/delivered-tracking/delivered-tracking.component';
+// import { SocketClass } from '../../shared/classes/socket.class';
 
+import { AgmCoreModule } from '@agm/core';
+import { environment } from '../../../environments/environment';
 const AdminRoutes: Routes = [
   {
     path: '',
@@ -345,7 +348,7 @@ const AdminRoutes: Routes = [
   },
 ];
 
-const config: SocketIoConfig = { url: 'http://18.219.16.50:3000', options: {} };
+// const config: SocketIoConfig = { url: 'http://192.168.100.36:4000', options: {} };
 
 @NgModule({
   imports: [
@@ -369,13 +372,16 @@ const config: SocketIoConfig = { url: 'http://18.219.16.50:3000', options: {} };
     EditorModule,
     CheckboxModule,
     Ng4GeoautocompleteModule.forRoot(),
-    SocketIoModule.forRoot(config),
+    // SocketIoModule,
     CalendarModule,
     DropdownModule,
     // CalendarModule.forRoot({
     //   provide: DateAdapter,
     //   useFactory: adapterFactory
     // }),
+    AgmCoreModule.forRoot({
+      apiKey: environment.google_api_key,
+    })
   ],
   exports: [RouterModule],
   declarations: [
@@ -411,6 +417,7 @@ const config: SocketIoConfig = { url: 'http://18.219.16.50:3000', options: {} };
     DeliveredTrackingComponent,
   ],
   providers: [
+    // SocketClass
     // DataSharingService,
   ]
 })
