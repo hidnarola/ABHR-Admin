@@ -20,9 +20,31 @@ export class DeliveredTrackingComponent implements OnInit, AfterViewInit {
   // google maps zoom level
   zoom = 16;
 
-  // initial center position for the map
-  lat = 51.673858;
-  lng = 7.815982;
+  // initial center position for the map 21.1968399,72.7789305
+  lat = 21.1968399;
+  lng = 72.7789305;
+
+  public origin: any;
+  public destination: any;
+
+  public waypoints: any = [];
+  public renderOptions = {
+    draggable: false,
+    suppressMarkers: true,
+  };
+
+  public markerOptions = {
+    origin: {
+      icon: 'assets/images/icon/car-placeholder-30-green.png',
+      draggable: false,
+    },
+    destination: {
+      icon: 'assets/images/icon/car-placeholder-30-red.png',
+      label: '',
+      opacity: 0.8,
+      draggable: false,
+    },
+  };
   constructor(
     // private socket: SocketClass,
     private router: Router, private route: ActivatedRoute
@@ -31,7 +53,7 @@ export class DeliveredTrackingComponent implements OnInit, AfterViewInit {
   markers: Marker[] = [
   ];
   clickedMarker(label: string, index: number) {
-    console.log(`clicked the marker: ${label || index}`);
+    // console.log(`clicked the marker: ${label || index}`);
   }
 
   mapClicked($event: MouseEvent) {
@@ -51,27 +73,43 @@ export class DeliveredTrackingComponent implements OnInit, AfterViewInit {
     this.route.params.subscribe(param => {
       this.bookingId = param.id;
     });
-    this.msg = 'hi';
+    this.msg = 'Map';
     this.socket = io.connect(environment.socketUrl);
     this.joinGroup(this.bookingId, this.userId, 'user');
     // this.sendMessage('KP is here.');
-    console.log('message => ', this.getMessage());
+    this.getCurrentPosition();
+    this.getDirection();
+    this.setCurrentPosition();
   }
-  ngAfterViewInit(): void {
-    let _lng = this.lng;
-    setInterval(() => {
-      _lng = _lng + 0.0001;
-      console.log('_lng => ', _lng);
-      const marker = [{
-        lat: 51.673858,
-        lng: _lng,
-        label: '',
-        draggable: false
-      }];
-      this.lat = marker[0].lat;
-      this.lng = _lng;
-      this.markers = marker;
-    }, 2000);
+  ngAfterViewInit(): void { }
+
+  setCurrentPosition() {
+    const _lng = this.lng;
+    const _lat = this.lat;
+    // setInterval(() => {
+    // _lng = _lng + Math.random() / 10000;
+    // _lat = _lat - Math.random() / 10000;
+    const marker = [{
+      lat: _lat,
+      lng: _lng,
+      iconUrl: 'assets/images/icon/car-placeholder-30-blue.png',
+      draggable: false
+    }];
+    this.lat = _lat;
+    this.lng = _lng;
+    this.markers = marker;
+    // }, 2000);
+  }
+
+  public change(event: any) {
+    this.waypoints = event.request.waypoints;
+  }
+  getDirection() {
+    // 21.1968399,72.7789305   21.1205296,72.7409003   21.1298389,73.0863185
+    this.origin = { lat: 21.1968399, lng: 72.7789305 };
+    this.destination = { lat: 21.1298389, lng: 73.0863185 };
+    // this.origin = 'Taipei Main Station';
+    // this.destination = 'Taiwan Presidential Office';
   }
   leftGroup() {
     this.socket.emit('LeftGroup');
@@ -94,10 +132,11 @@ export class DeliveredTrackingComponent implements OnInit, AfterViewInit {
     this.socket.emit('JoinGroup', params);
   }
 
-  getMessage() {
-    return this.socket.on('receiveTrakingObject', (data: any) => {
+  getCurrentPosition() {
+    this.socket.on('recieveTrackingObjest', (data: any) => {
       console.log('data => ', data);
-      return data;
+      this.lat = data.Latitude;
+      this.lng = data.Longitude;
     });
   }
 
@@ -108,5 +147,6 @@ interface Marker {
   lat: number;
   lng: number;
   label?: string;
+  iconUrl?: string;
   draggable: boolean;
 }
