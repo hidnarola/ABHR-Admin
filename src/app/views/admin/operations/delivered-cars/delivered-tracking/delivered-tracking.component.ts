@@ -54,7 +54,7 @@ export class DeliveredTrackingComponent implements OnInit, AfterViewInit {
     this.msg = 'hi';
     this.socket = io.connect(environment.socketUrl);
     this.joinGroup(this.bookingId, this.userId, 'user');
-    // this.sendMessage('KP is here.');
+    // this.sendMessage();
     console.log('message => ', this.getMessage());
   }
   ngAfterViewInit(): void {
@@ -76,7 +76,7 @@ export class DeliveredTrackingComponent implements OnInit, AfterViewInit {
   leftGroup() {
     this.socket.emit('LeftGroup');
   }
-  sendMessage(msg: string) {
+  sendMessage() {
     this.socket.emit('sendTrakingObject', {
       'Longitude': 123.45,
       'Latitude': 22.22,

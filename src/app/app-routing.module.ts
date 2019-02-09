@@ -61,7 +61,7 @@ export const routes: Routes = [
     }];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes, { useHash: false }), NgbModule.forRoot()],
+    imports: [RouterModule.forRoot(routes), NgbModule.forRoot()],
     exports: [RouterModule]
 })
 export class AppRoutingModule { }
