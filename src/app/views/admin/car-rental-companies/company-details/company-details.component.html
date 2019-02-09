@@ -111,12 +111,18 @@
                   </span>
                 </td>
                 <td class="text-center">
-                  <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="View" [routerLink]="['/admin/car-rental-companies/car/view/',item._id]"><i
-                      class="fa fa-eye text-default m-r-20"></i></a>
-                  <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="Edit" [routerLink]="['/admin/car-rental-companies/car/edit/',item._id]"><i
-                      class="fa fa-pencil text-success m-r-20"></i></a>
-                  <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="Delete" (click)="delete(item._id)">
-                    <i class="fa fa-close text-danger"></i> </a>
+                  <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="View" [routerLink]="['/admin/car-rental-companies/car/view/',item._id]"
+                    pTooltip="View" tooltipPosition="bottom" class="m-r-20">
+                    <i class="fa fa-eye text-default"></i>
+                  </a>
+                  <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="Edit" [routerLink]="['/admin/car-rental-companies/car/edit/',item._id]"
+                    pTooltip="Edit" tooltipPosition="bottom" class="m-r-20">
+                    <i class="fa fa-pencil text-success"></i>
+                  </a>
+                  <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="Delete" (click)="delete(item._id)"
+                    pTooltip="Delete" tooltipPosition="bottom">
+                    <i class="fa fa-close text-danger"></i>
+                  </a>
                 </td>
               </tr>
             </tbody>

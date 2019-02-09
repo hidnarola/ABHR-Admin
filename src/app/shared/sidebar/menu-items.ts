@@ -10,7 +10,7 @@ export const ROUTES: RouteInfo[] = [
         label: '', labelClass: '', extralink: false, submenu: []
     },
     // {
-    //     path: '/admin/staff', title: 'Staffs', icon: 'mdi mdi-widgets', class: '', label: '', labelClass: '', 
+    //     path: '/admin/staff', title: 'Staffs', icon: 'mdi mdi-widgets', class: '', label: '', labelClass: '',
     // extralink: false, submenu: []
     // },
     {

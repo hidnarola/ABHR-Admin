@@ -76,8 +76,9 @@
                     {{ item.to_time | date:"MM/dd/yy" }}
                   </span>
                 </td>
-                <td>
-                  <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="View" [routerLink]="">
+                <td class="text-center">
+                  <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="View" [routerLink]=""
+                    pTooltip="View" tooltipPosition="bottom">
                     <i class="fa fa-eye text-default"></i>
                   </a>
                   <!-- <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="View" [routerLink]="['/admin/operations/car-delivered/view/',item._id]">

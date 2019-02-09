@@ -7,5 +7,5 @@ export interface RouteInfo {
     label: string;
     labelClass: string;
     extralink: boolean;
-    submenu : RouteInfo[];
+    submenu: RouteInfo[];
 }

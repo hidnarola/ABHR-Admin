@@ -220,6 +220,7 @@ span.cancellation_policy {font-weight: 400; color: #1976d2; margin-right: 10px;}
 a.navbar-brand {cursor: initial;}
 .cars-dtl-box-inr.transaction-dtl-box b {min-width: 210px;}
 
+
 /***media start here  **/
 @media (min-width:768px){
     .topbar ul.dropdown-user {min-width: 300px !important;}
