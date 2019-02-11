@@ -91,7 +91,7 @@ export class TransactionComponent implements OnInit, AfterViewInit, OnDestroy {
           name: 'booking_number',
         },
         {
-          data: 'Deposite Amount',
+          data: 'Deposit Amount',
           name: 'deposite_amount',
         },
         {

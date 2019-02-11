@@ -58,8 +58,11 @@
                   </span>
                 </td>
                 <td>
-                  <span>
-                    <p-inputSwitch [(ngModel)]="item.is_Active" (onChange)="handleChange($event, item._id)"></p-inputSwitch>
+                  <span *ngIf="item.is_Active === true">
+                    <p-inputSwitch [(ngModel)]="item.is_Active" pTooltip="Active" tooltipPosition="bottom" (onChange)="handleChange($event, item._id)"></p-inputSwitch>
+                  </span>
+                  <span *ngIf="item.is_Active === false">
+                    <p-inputSwitch [(ngModel)]="item.is_Active" pTooltip="Deactive" tooltipPosition="bottom" (onChange)="handleChange($event, item._id)"></p-inputSwitch>
                   </span>
                 </td>
                 <td class="text-center">

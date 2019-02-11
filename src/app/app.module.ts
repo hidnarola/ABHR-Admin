@@ -41,6 +41,7 @@ import { NavigationModule } from './shared/header-navigation/navigation.module';
 import { DialogModule } from 'primeng/dialog';
 import { DateAdapter, CalendarModule } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { TooltipModule } from 'primeng/tooltip';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -73,6 +74,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NgxSpinnerModule,
     ModalDialogModule,
     ToastModule,
+    TooltipModule,
     // CalendarModule,
     DialogModule,
     CalendarModule.forRoot({
@@ -94,9 +96,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     {
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
-    }, {
-      provide: LocationStrategy,
-      useClass: HashLocationStrategy
     }],
   bootstrap: [AppComponent]
 })

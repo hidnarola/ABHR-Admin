@@ -135,7 +135,7 @@ export class CarReportComponent implements OnInit, AfterViewInit, OnDestroy {
             name: 'car_brand',
           },
           {
-            data: 'Car Modal',
+            data: 'Car Model',
             name: 'car_modal',
           },
           {

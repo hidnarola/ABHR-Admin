@@ -13,3 +13,4 @@ select {
 .filter_group {
   margin-left: 37px;
 }
+button.not_allowed{cursor: not-allowed;}

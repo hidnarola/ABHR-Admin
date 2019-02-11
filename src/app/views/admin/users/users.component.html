@@ -81,7 +81,13 @@
                     <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
                       <button class="dropdown-item" [routerLink]="['/admin/users/view/' + user._id]">View
                         Details</button>
-                      <button class="dropdown-item" [routerLink]="['/admin/users/history/' + user._id]">Rental History</button>
+                      <!-- <button *ngIf="user.count !== 0" class="dropdown-item" [routerLink]="['/admin/users/history/' + user._id]">Rental
+                        History</button> -->
+                      <button *ngIf="user.count !== 0" class="dropdown-item" [routerLink]="['/admin/users/history/' + user._id]">Rental
+                        History</button>
+                      <button *ngIf="user.count === 0" class="dropdown-item not_allowed" [routerLink]="['/admin/users/history/' + user._id]"
+                        disabled>Rental
+                        History</button>
                     </div>
                   </div>
                 </td>

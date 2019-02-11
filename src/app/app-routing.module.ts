@@ -41,12 +41,10 @@ export const routes: Routes = [
             {
                 path: 'admin',
                 loadChildren: './authentication/authentication.module#AuthenticationModule',
-                // canActivate: [AuthGuard],
             },
             {
                 path: 'company',
                 loadChildren: './authentication/authentication.module#AuthenticationModule',
-                // canActivate: [AuthGuard],
             },
             {
                 path: 'reset-password',
