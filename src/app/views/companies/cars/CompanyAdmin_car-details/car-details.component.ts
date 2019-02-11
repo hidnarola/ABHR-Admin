@@ -87,6 +87,8 @@ export class CarDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
       language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
       ajax: (dataTablesParameters: any, callback) => {
         this.pageNumber = dataTablesParameters.length;
+        dataTablesParameters['columns'][0]['isNumber'] = true;
+        dataTablesParameters['columns'][2]['isNumber'] = true;
         console.log('dataparametes in rental==>', dataTablesParameters);
         setTimeout(() => {
           dataTablesParameters.car_id = this.carId;

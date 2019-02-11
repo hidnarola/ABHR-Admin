@@ -8,6 +8,7 @@ import { ChartistModule } from 'ng-chartist';
 import { ChartsModule } from 'ng2-charts';
 import { EditorModule } from 'primeng/editor';
 import { CalendarModule } from 'primeng/calendar';
+import { InputSwitchModule } from 'primeng/inputswitch';
 // child component
 import { Routes, RouterModule } from '@angular/router';
 import { CarsComponent } from './cars/cars.component';
@@ -40,8 +41,7 @@ const CompanyRoutes: Routes = [{
             path: 'dashboard',
             component: CompaniesComponent,
             data: {
-                title: 'Dashboard',
-                urls: [{ title: 'Dashboard' }]
+                title: 'Dashboard'
             },
         },
         {
@@ -178,6 +178,7 @@ const CompanyRoutes: Routes = [{
         EditorModule,
         CalendarModule,
         CheckboxModule,
+        InputSwitchModule,
         RouterModule.forChild(CompanyRoutes)
     ],
     exports: [RouterModule],

@@ -120,7 +120,7 @@ export class CarsComponent implements OnInit, AfterViewInit {
         //   name: 'brandDetails.transmission',
         // },
         {
-          data: 'Year',
+          data: 'Release Year',
           name: 'modelDetails.release_year',
         },
         {
@@ -148,7 +148,7 @@ export class CarsComponent implements OnInit, AfterViewInit {
   delete(userId) {
     console.log('userId==>', userId);
     this.confirmationService.confirm({
-      message: 'Are you sure want to delete this record?',
+      message: 'Are you sure you want to delete this record?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {

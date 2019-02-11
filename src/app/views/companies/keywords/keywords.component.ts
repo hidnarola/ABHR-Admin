@@ -252,7 +252,7 @@ export class KeywordsComponent implements OnInit, AfterViewInit, OnDestroy {
   delete(Id) {
     console.log('userId==>', Id);
     this.confirmationService.confirm({
-      message: 'Are you sure want to delete this record?',
+      message: 'Are you sure you want to delete this record?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {

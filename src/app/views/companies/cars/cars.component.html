@@ -31,7 +31,7 @@
                 <th>Car Model</th>
                 <!-- <th> Car Class </th>
                 <th> Transmission </th> -->
-                <th>Year</th>
+                <th>Release Year</th>
                 <th> Price </th>
                 <th>Available</th>
                 <th class="disabled">Actions</th>
@@ -75,9 +75,6 @@
                     {{ item.is_avialable?'Yes':'No' }}
                   </span>
                 </td>
-                <!-- <td>
-                  <button type="button" class="btn btn-primary" [routerLink]="['/company/car/view/',item._id]">View</button>
-                </td> -->
                 <td>
                   <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="View" [routerLink]="['/company/car/view/',item._id]"><i
                       class="fa fa-eye text-default m-r-20"></i></a>

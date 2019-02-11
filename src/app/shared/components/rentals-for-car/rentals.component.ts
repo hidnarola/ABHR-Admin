@@ -63,16 +63,19 @@ export class RentalsComponent implements OnInit, OnDestroy, AfterViewInit {
       pagingType: 'full_numbers',
       pageLength: 10,
       processing: true,
-      searching: false,
       serverSide: true,
       ordering: true,
-      language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
+      language: {
+        'processing': '',
+      },
       ajax: (dataTablesParameters: any, callback) => {
         this.pageNumber = dataTablesParameters.length;
         console.log('dataparametes in rental==>', dataTablesParameters);
+        dataTablesParameters['columns'][0]['isNumber'] = true;
+        dataTablesParameters['columns'][2]['isNumber'] = true;
         setTimeout(() => {
           dataTablesParameters.car_id = this.carId;
-          this.service.post('admin/company/car/rental_list', dataTablesParameters).subscribe(res => {
+          this.service.post('company/car/rented_list', dataTablesParameters).subscribe(res => {
             console.log('res in rental -------', res);
             this.rentalData = res['result']['data'];
             this.totalRecords = res['result']['recordsTotal'];

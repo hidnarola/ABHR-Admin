@@ -62,21 +62,17 @@
                     {{ item.phone_number ? item.phone_number : '-'}}
                   </span>
                 </td>
-                <td>
-                  <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="View" [routerLink]="['/admin/agents/view/',item._id]"><i
-                      class="fa fa-eye text-default m-r-20"></i></a>
-                  <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="Edit" (click)="open2(content, item)"><i
-                      class="fa fa-pencil text-success m-r-20"></i></a>
-                  <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="Delete" (click)="delete(item._id)">
+                <td class="text-center">
+                  <a href="javascript:void(0)" [routerLink]="['/admin/agents/view/',item._id]" pTooltip="View"
+                    tooltipPosition="bottom" class="m-r-20">
+                    <i class="fa fa-eye text-default"></i>
+                  </a>
+                  <a href="javascript:void(0)" (click)="open2(content, item)" pTooltip="Edit" tooltipPosition="bottom"
+                    class="m-r-20">
+                    <i class="fa fa-pencil text-success"></i>
+                  </a>
+                  <a href="javascript:void(0)" (click)="delete(item._id)" pTooltip="Delete" tooltipPosition="bottom">
                     <i class="fa fa-close text-danger"></i> </a>
-                  <!-- <div ngbDropdown class="d-inline-block">
-                    <button class="btn btn-primary" id="dropdownBasic1" ngbDropdownToggle></button>
-                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                      <button class="dropdown-item" [routerLink]="['/admin/agents/view/',item._id]">View</button>
-                      <button class="dropdown-item" (click)="open2(content, item)">Edit</button>
-                      <button class="dropdown-item" (click)="delete(item._id)">Delete</button>
-                    </div>
-                  </div> -->
                 </td>
               </tr>
             </tbody>
@@ -113,6 +109,7 @@
                 formControlName="first_name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.first_name.errors }">
               <div *ngIf=" submitted && f.first_name.errors " class="invalid-feedback">
                 <div *ngIf="f.first_name.errors.required"> First name is required</div>
+                <!-- <div *ngIf=" f.first_name.errors.pattern">Space is not allowed</div> -->
               </div>
             </div>
           </div>
@@ -133,7 +130,7 @@
                 name="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }">
               <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                 <div *ngIf=" f.email.errors.required ">Email is required</div>
-                <div *ngIf=" f.email.errors.pattern"> Email format is wrong </div>
+                <div *ngIf=" f.email.errors.pattern"> Email is wrong </div>
                 <div *ngIf="f.email.errors.unique">Email already exist</div>
               </div>
             </div>

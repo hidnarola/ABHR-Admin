@@ -77,7 +77,7 @@ export class TransactionReportComponent implements OnInit, AfterViewInit, OnDest
         processing: true,
         serverSide: true,
         ordering: true,
-        order: [[0, 'desc']],
+        order: [[6, 'desc']],
         language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
 
         ajax: (dataTablesParameters: any, callback) => {
@@ -143,7 +143,7 @@ export class TransactionReportComponent implements OnInit, AfterViewInit, OnDest
           },
           {
             data: 'To Date',
-            name: 'to_time',
+            name: (('to_time') && ('createdAt')),
           },
         ]
       };

@@ -62,22 +62,19 @@
                     <p-inputSwitch [(ngModel)]="item.is_Active" (onChange)="handleChange($event, item._id)"></p-inputSwitch>
                   </span>
                 </td>
-                <td>
-                  <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="View" [routerLink]="['/admin/car-rental-companies/view/',item._id]"
-                    title="View"><i class="fa fa-eye text-default m-r-20"></i></a>
-                  <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="Edit" (click)="open2(content, item)"
-                    title="Edit"><i class="fa fa-pencil text-success m-r-20"></i></a>
-                  <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="Delete" (click)="delete(item._id)"
-                    title="Delete">
-                    <i class="fa fa-close text-danger"></i> </a>
-                  <!-- <div ngbDropdown class="d-inline-block">
-                    <button class="btn btn-primary" id="dropdownBasic1" ngbDropdownToggle></button>
-                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                      <button class="dropdown-item" [routerLink]="['/admin/car-rental-companies/view/',item._id]">View</button>
-                      <button class="dropdown-item" (click)="open2(content, item)">Edit</button>
-                      <button class="dropdown-item" (click)="delete(item._id)">Delete</button>
-                    </div>
-                  </div> -->
+                <td class="text-center">
+                  <a href="javascript:void(0)" [routerLink]="['/admin/car-rental-companies/view/',item._id]" pTooltip="View"
+                    tooltipPosition="bottom" class="m-r-20">
+                    <i class="fa fa-eye text-default"></i>
+                  </a>
+                  <a href="javascript:void(0)" (click)="open2(content, item)" title="Edit" pTooltip="Edit"
+                    tooltipPosition="bottom" class="m-r-20">
+                    <i class="fa fa-pencil text-success"></i>
+                  </a>
+                  <a href="javascript:void(0)" (click)="delete(item._id)" title="Delete" pTooltip="Delete"
+                    tooltipPosition="bottom">
+                    <i class="fa fa-close text-danger"></i>
+                  </a>
                 </td>
               </tr>
             </tbody>
@@ -134,7 +131,7 @@
                   name="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }">
                 <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                   <div *ngIf=" f.email.errors.required ">Email is required</div>
-                  <div *ngIf=" f.email.errors.pattern"> Email format is wrong </div>
+                  <div *ngIf=" f.email.errors.pattern"> Email is wrong </div>
                   <div *ngIf="f.email.errors.unique">Email already exist</div>
                 </div>
               </div>

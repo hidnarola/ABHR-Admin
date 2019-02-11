@@ -67,7 +67,7 @@
                 <th>Car Model</th>
                 <!-- <th> Car Class </th>
                 <th> Transmission </th> -->
-                <th>Year</th>
+                <th>Release Year</th>
                 <th> Price </th>
                 <th>Available</th>
                 <th class="disabled text-center">Actions</th>
@@ -111,12 +111,18 @@
                   </span>
                 </td>
                 <td class="text-center">
-                  <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="View" [routerLink]="['/admin/car-rental-companies/car/view/',item._id]"><i
-                      class="fa fa-eye text-default m-r-20"></i></a>
-                  <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="Edit" [routerLink]="['/admin/car-rental-companies/car/edit/',item._id]"><i
-                      class="fa fa-pencil text-success m-r-20"></i></a>
-                  <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="Delete" (click)="delete(item._id)">
-                    <i class="fa fa-close text-danger"></i> </a>
+                  <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="View" [routerLink]="['/admin/car-rental-companies/car/view/',item._id]"
+                    pTooltip="View" tooltipPosition="bottom" class="m-r-20">
+                    <i class="fa fa-eye text-default"></i>
+                  </a>
+                  <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="Edit" [routerLink]="['/admin/car-rental-companies/car/edit/',item._id]"
+                    pTooltip="Edit" tooltipPosition="bottom" class="m-r-20">
+                    <i class="fa fa-pencil text-success"></i>
+                  </a>
+                  <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="Delete" (click)="delete(item._id)"
+                    pTooltip="Delete" tooltipPosition="bottom">
+                    <i class="fa fa-close text-danger"></i>
+                  </a>
                 </td>
               </tr>
             </tbody>
@@ -173,7 +179,7 @@
                 name="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }">
               <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                 <div *ngIf=" f.email.errors.required ">Email is required</div>
-                <div *ngIf=" f.email.errors.pattern"> Email format is wrong </div>
+                <div *ngIf=" f.email.errors.pattern"> Email is wrong </div>
                 <div *ngIf="f.email.errors.unique">Email already exist</div>
               </div>
             </div>
@@ -194,12 +200,7 @@
               <label class="required"> Address :</label>
               <ng4geo-autocomplete [userSettings]="userSettings" (componentCallback)="autoCompleteCallback1($event)"
                 (keyup)="test($event)">
-                <!-- [(ngModel)]="model.address" #address="ngModel" [ngModelOptions]="{standalone: true}"
-                          required -->
               </ng4geo-autocomplete>
-              <!-- <div *ngIf="submitted && address.invalid" [ngClass]="{ 'error-msg' : submitted && address.invalid}">
-                          <div *ngIf="address.errors.required">Address is required</div>
-                        </div> -->
             </div>
           </div>
           <div class="col-sm-6">
@@ -219,11 +220,6 @@
             </button>
             <a class="btn waves-effect waves-light custom-btn btn-danger" (click)="d('Cross click')">Cancel</a>
           </div>
-          <!-- <div class="col-sm-12 text-center">
-              <div class="form-group">
-                <button type="submit" class="btn waves-effect waves-light custom-btn btn-primary">Submit</button>
-              </div>
-            </div> -->
         </form>
       </div>
     </ng-template>

@@ -120,7 +120,7 @@
                 name="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }">
               <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                 <div *ngIf=" f.email.errors.required ">Email is required</div>
-                <div *ngIf=" f.email.errors.pattern"> Email format is wrong </div>
+                <div *ngIf=" f.email.errors.pattern"> Email is wrong </div>
                 <div *ngIf="f.email.errors.unique">Email already exist</div>
               </div>
             </div>

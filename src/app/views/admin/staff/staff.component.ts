@@ -283,7 +283,7 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
   delete(userId) {
     console.log('userId==>', userId);
     this.confirmationService.confirm({
-      message: 'Are you sure want to delete this record?',
+      message: 'Are you sure you want to delete this record?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {

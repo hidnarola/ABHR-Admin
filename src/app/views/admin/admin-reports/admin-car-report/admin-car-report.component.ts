@@ -79,7 +79,7 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
         processing: true,
         serverSide: true,
         ordering: true,
-        order: [[0, 'desc']],
+        order: [[6, 'desc']],
         language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
         ajax: (dataTablesParameters: any, callback) => {
           this.pageNumber = dataTablesParameters.length;
@@ -149,7 +149,7 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
           },
           {
             data: 'To Date',
-            name: 'to_time',
+            name: (('to_time') && ('createdAt')),
           },
         ],
       };
@@ -186,12 +186,10 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   ExportRecords() {
-    console.log('here in export fun => ');
     this.service.post('admin/cars/export_report_list', this.exportParam).subscribe(async (res: any) => {
       this.exportData = await res['result']['data'];
       this.isExcel = false;
       this.isPDF = false;
-      console.log('this.exportData => ', this.exportData);
       this.exportData.forEach(item => {
         let obj = {
           'Brand': item.car_brand,
@@ -204,14 +202,11 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
         };
         this.ExcelArray.push(obj);
       });
-
-      console.log('excel data====>', this.ExcelArray);
     });
   }
 
   exportAsXLSX(): void {
     this.isExcel = true;
-    console.log(' this.isExcel  => ', this.isExcel);
     this.ExportRecords();
     this.excelService.exportAsExcelFile(this.ExcelArray, 'sample');
 
@@ -222,13 +217,11 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
     this.ExportRecords();
     var pdfdata = document.getElementById('contentToConvert');
     html2canvas(pdfdata).then(canvas => {
-      console.log('canvas => ', canvas);
       // Few necessary setting options  
       var imgWidth = 208;
       var pageHeight = 500;
       var imgHeight = canvas.height * imgWidth / canvas.width;
       var heightLeft = imgHeight;
-
       const contentDataURL = canvas.toDataURL('image/png')
       let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF  
       var position = 0;

@@ -76,6 +76,7 @@ export class DeliveredTrackingComponent implements OnInit, AfterViewInit {
     this.msg = 'Map';
     this.socket = io.connect(environment.socketUrl);
     this.joinGroup(this.bookingId, this.userId, 'user');
+<<<<<<< HEAD
     // this.sendMessage('KP is here.');
     this.getCurrentPosition();
     this.getDirection();
@@ -103,6 +104,10 @@ export class DeliveredTrackingComponent implements OnInit, AfterViewInit {
 
   public change(event: any) {
     this.waypoints = event.request.waypoints;
+=======
+    // this.sendMessage();
+    console.log('message => ', this.getMessage());
+>>>>>>> d5945bebf7c5b2b390a1b2fb91aaa3359512e76f
   }
   getDirection() {
     // 21.1968399,72.7789305   21.1205296,72.7409003   21.1298389,73.0863185
@@ -114,7 +119,7 @@ export class DeliveredTrackingComponent implements OnInit, AfterViewInit {
   leftGroup() {
     this.socket.emit('LeftGroup');
   }
-  sendMessage(msg: string) {
+  sendMessage() {
     this.socket.emit('sendTrakingObject', {
       'Longitude': 123.45,
       'Latitude': 22.22,

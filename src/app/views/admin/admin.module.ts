@@ -75,8 +75,7 @@ const AdminRoutes: Routes = [
         path: 'dashboard',
         component: AdminComponent,
         data: {
-          title: 'Dashboard',
-          urls: [{ title: 'Dashboard', url: '/admin' }]
+          title: 'Dashboard'
         },
       },
       {
@@ -161,7 +160,7 @@ const AdminRoutes: Routes = [
                 url: '/admin/car-rental-companies'
               }, {
                 title: 'Company Detail',
-                url: '/admin/car-rental-companies/view/:_id'
+                url: '/admin/car-rental-companies/view/:id'
               },
               { title: 'Car Detail' }]
             },

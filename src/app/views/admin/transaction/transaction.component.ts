@@ -48,7 +48,7 @@ export class TransactionComponent implements OnInit, AfterViewInit, OnDestroy {
       serverSide: true,
       responsive: true,
       ordering: true,
-      order: [[4, 'desc']],
+      order: [[9, 'desc']],
       language: {
         'processing': '',
       },

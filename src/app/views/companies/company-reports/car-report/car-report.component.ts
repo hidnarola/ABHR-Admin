@@ -87,7 +87,7 @@ export class CarReportComponent implements OnInit, AfterViewInit, OnDestroy {
         processing: true,
         serverSide: true,
         ordering: true,
-        order: [[0, 'desc']],
+        order: [[5, 'desc']],
         language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
 
 
@@ -152,7 +152,7 @@ export class CarReportComponent implements OnInit, AfterViewInit, OnDestroy {
           },
           {
             data: 'To Date',
-            name: 'to_time',
+            name: (('to_time') && ('createdAt')),
           },
         ]
       };

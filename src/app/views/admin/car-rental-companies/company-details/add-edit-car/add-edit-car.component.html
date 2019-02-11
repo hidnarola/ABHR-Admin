@@ -2,6 +2,7 @@
   <div class="card-body">
     <form [formGroup]="AddEditCarForm" enctype="multipart/form-data" (ngSubmit)="onSubmit()" (keydown.enter)="$event.preventDefault()">
       <div class="row">
+
         <div class="col-md-3">
           <div class="form-group">
             <label class="required"> Car Brand :</label>
@@ -176,7 +177,6 @@
             <div *ngIf=" submitted && f.rent_price.errors " class="invalid-feedback">
               <div *ngIf="f.rent_price.errors.required"> Rent Price is required</div>
               <div *ngIf="f.rent_price.errors.pattern">Invalid Price</div>
-              <!-- <div *ngIf="f.rent_price.errors.min">Invalid Price</div> -->
             </div>
           </div>
         </div>
@@ -187,7 +187,6 @@
             <input class="form-control" placeholder="Deposit" type="text" name="deposit" formControlName="deposit"
               [ngClass]="{'is-invalid': submitted && f.deposit.errors }">
             <div *ngIf=" submitted && f.deposit.errors " class="invalid-feedback">
-              <!-- <div *ngIf="f.deposit.errors.required"> Deposit is required</div> -->
               <div *ngIf="f.deposit.errors.pattern">Invalid Deposit</div>
             </div>
           </div>
@@ -207,8 +206,6 @@
         <div class="col-md-2">
           <div class="form-group">
             <label class="required"> Age :</label>
-            <!-- <input class="form-control" placeholder="Age" type="string" required="" name="driving_eligibility_criteria"
-              formControlName="driving_eligibility_criteria" [ngClass]="{'is-invalid': submitted && f.driving_eligibility_criteria.errors }"> -->
             <select class="custom-select col-12" id="inlineFormCustomSelect" name="driving_eligibility_criteria" class="form-control"
               formControlName="driving_eligibility_criteria" [ngClass]="{ 'is-invalid': submitted && f.driving_eligibility_criteria.errors }">
               <option value="" disabled selected>Choose...</option>
@@ -218,8 +215,6 @@
             </select>
             <div *ngIf=" submitted && f.driving_eligibility_criteria.errors " class="invalid-feedback">
               <div *ngIf="f.driving_eligibility_criteria.errors.required"> Age Of Driver is required</div>
-              <!-- <div *ngIf="f.driving_eligibility_criteria.errors.min || f.driving_eligibility_criteria.errors.pattern || f.driving_eligibility_criteria.errors.max">
-                Not Eligible for Driving</div> -->
             </div>
           </div>
         </div>
@@ -268,8 +263,9 @@
         <div class="col-md-9">
           <div class="form-group">
             <label class="required"> Car Image :</label>
-            <input class="form-control" type="file" name="car_gallery" formControlName="car_gallery" (change)="handleFileInput($event)"
-              [ngClass]="{ 'is-invalid': submitted && f.car_gallery.errors }" accept="image/png, image/jpeg" multiple>
+            <input class="form-control file_input" type="file" name="car_gallery" formControlName="car_gallery"
+              (change)="handleFileInput($event)" [ngClass]="{ 'is-invalid': submitted && f.car_gallery.errors }" accept="image/png, image/jpeg"
+              multiple>
             <div *ngIf=" submitted && f.car_gallery.errors " class="invalid-feedback">
               <div *ngIf="f.car_gallery.errors.minImages">Add Minimum 3 images</div>
             </div>

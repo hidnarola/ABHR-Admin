@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 
 import { CrudService } from '../../../shared/services/crud.service';
 import { MessageService } from 'primeng/api';
@@ -30,10 +30,11 @@ export class AdminAccountSettingComponent implements OnInit {
   ) {
     const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
     this.SettingForm = this.formBuilder.group({
-      first_name: ['', Validators.required],
-      last_name: ['', Validators.required],
-      phone_number: ['', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^([0-9]){10}$/)]],
-      email: ['', [Validators.required, Validators.email, Validators.pattern(pattern)]]
+      first_name: ['', Validators.compose([Validators.required, this.noWhitespaceValidator])],
+      last_name: ['', Validators.compose([Validators.required, this.noWhitespaceValidator])],
+      phone_number: ['', Validators.compose([Validators.required, Validators.minLength(10),
+      Validators.maxLength(10), Validators.pattern(/^([0-9]){10}$/)])],
+      email: ['', Validators.compose([Validators.required, Validators.email, Validators.pattern(pattern)])]
     });
     this.formData = {
       first_name: String,
@@ -56,6 +57,11 @@ export class AdminAccountSettingComponent implements OnInit {
   }
   get f() { return this.SettingForm.controls; }
 
+  noWhitespaceValidator(control: FormControl) {
+    let isWhitespace = (control.value || '').trim().length === 0;
+    let isValid = !isWhitespace;
+    return isValid ? null : { 'required': true };
+  }
   onSubmit() {
     this.submitted = true;
     if (!this.SettingForm.invalid) {

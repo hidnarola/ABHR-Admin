@@ -45,7 +45,7 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
   public isEdit;
   closeResult: string;
   public title = 'Add Company';
-  isLoading = true;
+  isLoading: boolean;
 
   @ViewChild(DataTableDirective)
   dtElementcar: DataTableDirective;
@@ -72,7 +72,9 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
     private spinner: NgxSpinnerService,
     private confirmationService: ConfirmationService
   ) {
-    if (this.route.snapshot.paramMap.has('id') && this.route.snapshot.paramMap.get('id') !== ':id') {
+    console.log('this.route.snapshot.paramMap in detail page=> ', this.route.snapshot.paramMap);
+    if (this.route.snapshot.paramMap.has('id') && this.route.snapshot.paramMap.get('id') !== ':id' &&
+      this.route.snapshot.paramMap.get('id') !== ':_id') {
       this.route.params.subscribe(params => {
         this.userId = params.id;
         localStorage.setItem('companyId', this.userId);
@@ -81,11 +83,10 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
       this.userId = localStorage.getItem('companyId');
       this.router.navigate(['/admin/car-rental-companies/view/' + this.userId]);
     }
-    console.log('company id in admin comapny', this.userId);
     // addform validation
     const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
     this.AddEditForm = this.formBuilder.group({
-      name: ['', Validators.compose([Validators.required, this.uniqueNameValidator])],
+      name: ['', Validators.compose([Validators.required, this.uniqueNameValidator, this.noWhitespaceValidator])],
       description: ['', Validators.required],
       site_url: ['', Validators.compose([Validators.required,
       Validators.pattern('^(https?:\/\/)?[0-9a-zA-Z]+\.[-_0-9a-zA-Z]+\.[0-9a-zA-Z]+$')])],
@@ -107,6 +108,12 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
     };
   }
 
+  noWhitespaceValidator(control: FormControl) {
+    let isWhitespace = (control.value || '').trim().length === 0;
+    let isValid = !isWhitespace;
+    return isValid ? null : { 'required': true }
+  }
+
   public uniqueEmailValidator = (control: FormControl) => {
     let isWhitespace1;
     if (isWhitespace1 = (control.value || '').trim().length === 0) {
@@ -118,15 +125,7 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
         return { 'pattern': true };
       } else {
         this.emailData = { 'email': control.value, 'company_id': this.userId };
-        console.log('emailData===>', this.emailData);
         return this.service.post('admin/company/checkemail', this.emailData).subscribe(res => {
-          // return (res['status'] === 'success') ? {'unique': true} : null;
-          // console.log('response of validation APi', res['status']);
-          // if (res['status'] === 'success') {
-          //   console.log('if==>');
-          // } else {
-          //   console.log('else==>');
-          // }
           if (res['status'] === 'success') {
             this.f.email.setErrors({ 'unique': true });
             return;
@@ -143,21 +142,8 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
     if ((isWhitespace2 = (control.value || '').trim().length === 1) || (isWhitespace2 = (control.value || '').trim().length === 0)) {
       return { 'required': true };
     } else {
-      // const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
-      // var result = pattern.test(control.value);
-      // if (!result) {
-      //   return { 'pattern': true };
-      // } else {
       this.nameData = { 'name': control.value, 'company_id': this.userId };
-      console.log('nameData===>', this.nameData);
       return this.service.post('admin/company/checkname', this.nameData).subscribe(res => {
-        // return (res['status'] === 'success') ? {'unique': true} : null;
-        // console.log('response of validation APi', res['status']);
-        // if (res['status'] === 'success') {
-        //   console.log('if==>');
-        // } else {
-        //   console.log('else==>');
-        // }
         if (res['status'] === 'success') {
           this.f.name.setErrors({ 'uniqueName': true });
           return;
@@ -165,7 +151,6 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
           this.f.name.setErrors(null);
         }
       });
-      // }
     }
   }
   // add-edit-popup form validation
@@ -177,17 +162,16 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
   }
   onSubmit() {
     this.submitted = true;
-    this.isLoading = true;
     if (!this.AddEditForm.invalid) {
+      this.isLoading = true;
       const formData: FormData = new FormData();
       this.formData = this.AddEditForm.value;
       this.formData.company_id = this.userId;
       this.formData.company_address = this.company_address;
       this.formData.service_location = this.service_location;
-      console.log('form data in company view page', this.formData);
       this.service.put('admin/company/update', this.formData).subscribe(res => {
-        this.isLoading = false;
         this.userDetails = this.formData;
+        this.isLoading = true;
         this.closePopup();
         this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
       }, err => {
@@ -201,13 +185,13 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   UserDetails() {
-    // this.spinner.show();
     this.service.get('admin/company/details/' + this.userId).subscribe(res => {
-      console.log('userdetails RES==>', res['data']);
-      this.userDetails = res['data'];
-      // this.spinner.hide();
-      // }, error => {
-      // this.spinner.hide();
+      if (res['data'] !== null) {
+        this.userDetails = res['data'];
+      } else {
+        this.router.navigate(['/admin/car-rental-companies']);
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No Record Found' });
+      }
     });
   }
 
@@ -270,16 +254,12 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
       language: { 'processing': '<i class=\'fa fa-refresh loader fa-spin\'></i>' },
       ajax: (dataTablesParameters: any, callback) => {
         this.pageNumber = dataTablesParameters.length;
-        console.log('dataparametes car==>', dataTablesParameters);
         dataTablesParameters['columns'][2]['isNumber'] = true;
         dataTablesParameters['columns'][3]['isNumber'] = true;
         dataTablesParameters['columns'][4]['isBoolean'] = true;
         setTimeout(() => {
           dataTablesParameters.company_id = this.userId;
-          console.log('dtaparametes car==>', dataTablesParameters);
           this.service.post('admin/company/car_list', dataTablesParameters).subscribe(res => {
-            console.log('user id in car data table', this.userId);
-            console.log('car data in res==>', res);
             this.carData = res['result']['data'];
             this.totalRecords = res['result']['recordsTotal'];
             // this.carData = [];
@@ -319,7 +299,7 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
         //   name: 'brandDetails.transmission',
         // },
         {
-          data: 'Year',
+          data: 'Release Year',
           name: 'modelDetails.release_year',
         },
         {
@@ -352,19 +332,18 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
     this.company_address.address = selectedData.data.formatted_address;
     this.service_location.push(lng);
     this.service_location.push(lat);
-    console.log(this.service_location);
     for (var i = 0; i < selectedData.data.address_components.length; i++) {
       var addressType = selectedData.data.address_components[i].types[0];
       var addressType = selectedData.data.address_components[i].types[0];
-      if (addressType == 'country') {
+      if (addressType === 'country') {
         var country = selectedData.data.address_components[i].long_name;
         this.company_address.country = country;
       }
-      if (addressType == 'administrative_area_level_1') {
+      if (addressType === 'administrative_area_level_1') {
         var state = selectedData.data.address_components[i].long_name;
         this.company_address.state = state;
       }
-      if (addressType == 'locality') {
+      if (addressType === 'locality') {
         var city = selectedData.data.address_components[i].long_name;
         this.company_address.city = city;
       }
@@ -375,9 +354,8 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
 
   // dlt popup
   delete(userId) {
-    console.log('userId==>', userId);
     this.confirmationService.confirm({
-      message: 'Are you sure want to delete this record?',
+      message: 'Are you sure you want to delete this record?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {

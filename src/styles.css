@@ -57,7 +57,9 @@ body .ui-corner-top{ border-radius:0 !important;}
 .cars-dtl-box { display: block;width: 100%; margin:-45px 0 0 0; }
 .cars-dtl-box-inr {border: 1px #eee solid;margin: 0 0 5px;padding: 10px;display: block;}
 .cars-dtl-box-inr b{margin: -10px 20px -10px -10px;background: #f6f6f6;display: inline-block;vertical-align: top;padding: 13px 10px 12px;min-width: 170px;text-align: right;font-size: 13px;color: #666;text-transform: capitalize;letter-spacing: .05em;font-weight: 500;}
-.cars-dtl-box span {font-size: 13px; color: #333; font-weight: 400; letter-spacing: .04em;}
+.cars-dtl-box span {font-size: 13px; 
+    /* color: #333;  */
+    font-weight: 400; letter-spacing: .04em;}
 .ui-confirmdialog.ui-dialog .ui-dialog-content{ border:0 !important }
 body .ui-dialog .ui-dialog-footer {border: 0 !important; border-top: 1px solid #eee !important;}
 body .ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-icon {color: #fff !important;}
@@ -80,6 +82,8 @@ h4.text-themecolor.m-b-0 {text-transform: capitalize;}
 .mb-45{ margin-bottom: 45px!important;}
 .mt-20{ margin-top: 20px!important;}
 .mb-20{ margin-bottom: 20px!important;}
+.mb-15{ margin-bottom: 15px!important;}
+.mt-15{ margin-top: 15px!important;}
 table.dataTable{ margin:0 auto 25px !important;}
 table.dataTable thead th,
 table.dataTable thead td,
@@ -208,9 +212,13 @@ body .card_one_data .license_image {height: auto;width: auto;margin-right: 10px;
 .mini-sidebar .sidebar-nav ul#sidebarnav > li > ul {top: 100%;}
 body .page-wrapper {overflow: visible;}
 .tooltip_msg {text-transform: capitalize;}
-select {cursor: pointer;}
-
-
+select,
+label.custom-control-label,
+input.form-control.file_input  {cursor: pointer;}
+span.cancellation_policy {font-weight: 400; color: #1976d2; margin-right: 10px;}
+.inputswitchStyle {top: 7px;}
+a.navbar-brand {cursor: initial;}
+.cars-dtl-box-inr.transaction-dtl-box b {min-width: 210px;}
 
 
 /***media start here  **/

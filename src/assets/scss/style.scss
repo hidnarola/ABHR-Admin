@@ -52,7 +52,7 @@ File: scss
 // dark theme
 @import 'dark';
 
-.custom-autocomplete__input input{ height:auto !important; padding: 7px 10px 8px 12px !important;font-size: 13px !important; letter-spacing: .08em !important; border-radius: 0 !important; color: #666 !important; line-height:20px !important; }
+.custom-autocomplete__input input{ height:auto !important; padding: 7px 10px 8px 12px !important;font-size: 13px !important; letter-spacing: .08em !important; border-radius: 0 !important; color: #666 !important; line-height:20px !important; cursor: pointer;}
 .custom-autocomplete__input input:focus {background-color: #ffffff!important; border-color: #1976d2!important; outline: 0; box-shadow: 0 0 0 0.05rem rgba(25, 118, 210, 0.39)!important; }
 .custom-autocomplete__dropdown{top:calc(100% - 1px) !important;border: 1px solid #ced4da !important;}
 .custom-autocomplete__dropdown .currentlocation a {font-size: 12px !important; font-weight: normal !important;padding: 7px 10px 7px 13px !important;}
