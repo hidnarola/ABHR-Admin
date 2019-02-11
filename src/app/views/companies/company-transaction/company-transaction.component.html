@@ -25,13 +25,13 @@
               <tr>
                 <th>Company Name</th>
                 <th>Booking Number</th>
-                <th>Deposite Amount</th>
+                <th>Deposit Amount</th>
                 <th>Status</th>
                 <th>Coupon Code</th>
                 <th>Coupon Rate</th>
                 <th>VAT</th>
-                <th>From Time</th>
-                <th>To Time</th>
+                <th>From Date</th>
+                <th>To Date</th>
                 <th class="disabled text-center">Actions</th>
               </tr>
             </thead>
@@ -91,11 +91,18 @@
                     {{ item.to_time | date:"MM/dd/yy"}}
                   </span>
                 </td>
-                <td>
-                  <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="View" [routerLink]="['/company/transactions/view/',item._id]">
-                    <i class="fa fa-eye text-default m-r-20"></i>
+                <td class="text-center">
+                  <a href="javascript:void(0)" [routerLink]="['/company/transactions/view/',item._id]" pTooltip="View"
+                    tooltipPosition="bottom" class="m-r-20">
+                    <i class="fa fa-eye text-default"></i>
                   </a>
-                  <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="Delete" (click)="cancel(item._id)">
+                  <a *ngIf="(item.status === 'inprogress') || (item.status === 'successfull') || (item.status === 'failed')"
+                    href="javascript:void(0)" data-original-title="Delete" (click)="cancel(item._id)" pTooltip="Cancel Transaction"
+                    tooltipPosition="bottom">
+                    <i class="fa fa-ban text-default"></i>
+                  </a>
+                  <a *ngIf="item.status === 'cancelled'" href="javascript:void(0)" data-toggle="tooltip" class="not_allowed"
+                    data-original-title="Delete" (click)="cancel(item._id)" pTooltip="Not Allowed" tooltipPosition="bottom">
                     <i class="fa fa-ban text-default"></i>
                   </a>
                 </td>
@@ -103,7 +110,7 @@
             </tbody>
             <tbody *ngIf="transaction?.length == 0">
               <tr>
-                <td colspan="8" class="no-data-available">No record found!</td>
+                <td colspan="10" class="no-data-available">No record found!</td>
               </tr>
             </tbody>
           </table>

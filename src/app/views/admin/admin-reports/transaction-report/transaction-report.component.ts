@@ -121,7 +121,7 @@ export class TransactionReportComponent implements OnInit, AfterViewInit, OnDest
             name: 'last_name',
           },
           {
-            data: 'Compnay Name',
+            data: 'Company Name',
             name: 'company_name',
           },
           {

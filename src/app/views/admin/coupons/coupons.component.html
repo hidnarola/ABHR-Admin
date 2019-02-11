@@ -49,12 +49,12 @@
                     {{ item.companyDetails ? item.companyDetails.name : 'Admin' }}
                   </span>
                 </td>
-                <td class="
-                    text-center">
-                  <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="Edit" (click)="open2(content, item)">
-                    <i class="fa fa-pencil text-success m-r-20"></i>
+                <td class="text-center">
+                  <a href="javascript:void(0)" (click)="open2(content, item)" pTooltip="Edit" tooltipPosition="bottom"
+                    class="m-r-20">
+                    <i class="fa fa-pencil text-success"></i>
                   </a>
-                  <a href="javascript:void(0)" data-toggle="tooltip" data-original-title="Delete" (click)="delete(item._id)">
+                  <a href="javascript:void(0)" (click)="delete(item._id)" pTooltip="Delete" tooltipPosition="bottom">
                     <i class="fa fa-close text-danger"></i>
                   </a>
                 </td>

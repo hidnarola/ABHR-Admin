@@ -13,7 +13,6 @@
             <p-calendar #filter_report [(ngModel)]="rangeDates" [ngModelOptions]="{standalone: true}" placeholder="mm-dd-yyyy"
               class="m-r-10" [showIcon]="true" selectionMode="range" (onSelect)="FilterRange()">
               <p-footer>
-                <!-- <button type="button" (click)="handleFilterCalendar()"> Filter </button> -->
                 <button type="button" class="pull-right" (click)="handleClearCalendar()">Clear</button>
               </p-footer>
             </p-calendar>
@@ -29,33 +28,8 @@
             <button type="button" *ngIf="isPDF" class="btn btn-primary custom-add-btn  loading-btn">
               <i class="fa fa-spinner fa-spin"></i>Loading
             </button>
-            <!-- <input /> -->
-
-            <!-- <div class="input-group">
-              <input class="form-control" placeholder="yyyy-mm-dd" (ngModelChange)="DatePicker($event)" name="dp"
-                [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
-              <div class="input-group-append">
-                <button class="btn btn-outline-secondary datepicker_button" (click)="d.toggle()" type="button">
-                  <i class="ti-calendar"></i>
-                </button>
-              </div>
-            </div> -->
           </div>
         </form>
-        <!-- <div class="dropdown">
-          <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Export
-            <span class="caret"></span></button>
-          <div class="dropdown-menu">
-            <a class="dropdown-item" href="#">XLSX</a>
-            <a class="dropdown-item" href="#">PDF</a>
-          </div>
-        </div> -->
-        <!-- <button type="button" class="btn btn-primary custom-add-btn m-r-10">
-            <i class="fa fa-external-link" aria-hidden="true"></i> Export
-          </button> -->
-        <!-- <button type="button" class="btn btn-primary custom-add-btn" (click)="open2(content, '')">
-            <i class="mdi mdi-account-plus" aria-hidden="true"></i> Add
-          </button> -->
       </div>
     </div>
     <div *ngIf="!isCols">
@@ -72,8 +46,8 @@
             <thead>
               <tr>
                 <th>Car Brand</th>
-                <th>Car Modal</th>
-                <th>Compnay Name</th>
+                <th>Car Model</th>
+                <th>Company Name</th>
                 <th>Status</th>
                 <th>Total Rent</th>
                 <th>From Date</th>

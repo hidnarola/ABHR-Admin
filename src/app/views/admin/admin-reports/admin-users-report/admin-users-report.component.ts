@@ -127,7 +127,7 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
             name: 'last_name',
           },
           {
-            data: 'Compnay Name',
+            data: 'Company Name',
             name: 'company_name',
           },
           {

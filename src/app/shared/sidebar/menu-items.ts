@@ -33,15 +33,15 @@ export const ROUTES: RouteInfo[] = [
         path: '/admin/reports', title: 'Reports', icon: 'fa fa-file-text-o', class: 'has-arrow',
         label: '', labelClass: '', extralink: false, submenu: [
             {
-                path: '/admin/reports/car-reports', title: 'Car Report', icon: '',
+                path: '/admin/reports/car-reports', title: 'Car Reports', icon: '',
                 class: '', label: '', labelClass: '', extralink: false, submenu: []
             },
             {
-                path: '/admin/reports/user-reports', title: 'User Report', icon: '',
+                path: '/admin/reports/user-reports', title: 'User Reports', icon: '',
                 class: '', label: '', labelClass: '', extralink: false, submenu: []
             },
             {
-                path: '/admin/reports/transaction-reports', title: 'Transaction Report', icon: '',
+                path: '/admin/reports/transaction-reports', title: 'Transaction Reports', icon: '',
                 class: '', label: '', labelClass: '', extralink: false, submenu: []
             },
         ]
@@ -91,15 +91,15 @@ export const COMPANY_ROUTES: RouteInfo[] = [
         path: '/company/reports', title: 'Reports', icon: 'fa fa-file-text-o', class: 'has-arrow',
         label: '', labelClass: '', extralink: false, submenu: [
             {
-                path: '/company/reports/car-reports', title: 'Car Report', icon: '',
+                path: '/company/reports/car-reports', title: 'Car Reports', icon: '',
                 class: '', label: '', labelClass: '', extralink: false, submenu: []
             },
             {
-                path: '/company/reports/user-reports', title: 'User Report', icon: '',
+                path: '/company/reports/user-reports', title: 'User Reports', icon: '',
                 class: '', label: '', labelClass: '', extralink: false, submenu: []
             },
             {
-                path: '/company/reports/transaction-reports', title: 'Transaction Report', icon: '',
+                path: '/company/reports/transaction-reports', title: 'Transaction Reports', icon: '',
                 class: '', label: '', labelClass: '', extralink: false, submenu: []
             },
 

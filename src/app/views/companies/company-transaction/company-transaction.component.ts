@@ -97,7 +97,7 @@ export class CompanyTransactionComponent implements OnInit, AfterViewInit, OnDes
           name: 'booking_number',
         },
         {
-          data: 'Deposite Amount',
+          data: 'Deposit Amount',
           name: 'deposite_amount',
         },
         {

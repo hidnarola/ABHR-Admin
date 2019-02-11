@@ -87,7 +87,7 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
           dataTablesParameters['columns'][4]['isNumber'] = true;
           console.log(dataTablesParameters);
           this.exportParam = dataTablesParameters;
-          console.log(this.exportParam);
+          console.log('exportParam', this.exportParam);
           setTimeout(() => {
             if (this.rangeDates) {
               if (this.rangeDates[1]) {
@@ -128,11 +128,11 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
             name: 'car_brand',
           },
           {
-            data: 'Car Modal',
+            data: 'Car Model',
             name: 'car_modal',
           },
           {
-            data: 'Compnay Name',
+            data: 'Company Name',
             name: 'company_name',
           },
           {
@@ -188,6 +188,8 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
   ExportRecords() {
     this.service.post('admin/cars/export_report_list', this.exportParam).subscribe(async (res: any) => {
       this.exportData = await res['result']['data'];
+      var ExcelData = [];
+      console.log('this.exportData => ', this.exportData);
       this.isExcel = false;
       this.isPDF = false;
       this.exportData.forEach(item => {
@@ -200,16 +202,46 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
           'From_Date': moment(item.from_time).format('LL'),
           'To_Date': moment(item.to_time).format('LL'),
         };
-        this.ExcelArray.push(obj);
+        console.log('obj => ', obj);
+        console.log('ExcelArray before  => ', ExcelData);
+        ExcelData.push(obj);
+        this.ExcelArray = ExcelData;
+        console.log('ExcelData after => ', ExcelData);
+        console.log('ExcelArray after => ', this.ExcelArray);
       });
     });
   }
 
-  exportAsXLSX(): void {
+  exportAsXLSX() {
     this.isExcel = true;
-    this.ExportRecords();
-    this.excelService.exportAsExcelFile(this.ExcelArray, 'sample');
-
+    this.service.post('admin/cars/export_report_list', this.exportParam).subscribe(async (res: any) => {
+      this.exportData = await res['result']['data'];
+      var ExcelData = [];
+      console.log('this.exportData => ', this.exportData);
+      this.isExcel = false;
+      this.isPDF = false;
+      this.exportData.forEach(item => {
+        let obj = {
+          'Brand': item.car_brand,
+          'Model': item.car_modal,
+          'Company_Name': item.company_name,
+          'Total_Rent': item.booking_rent,
+          'Status': item.trip_status,
+          'From_Date': moment(item.from_time).format('LL'),
+          'To_Date': moment(item.to_time).format('LL'),
+        };
+        console.log('obj => ', obj);
+        console.log('ExcelArray before  => ', ExcelData);
+        ExcelData.push(obj);
+        this.ExcelArray = ExcelData;
+        console.log('ExcelData after => ', ExcelData);
+        console.log('ExcelArray after => ', this.ExcelArray);
+      });
+    });
+    // this.ExportRecords();
+    setTimeout(() => {
+      this.excelService.exportAsExcelFile(this.ExcelArray, 'sample');
+    }, 1000);
   }
 
   public captureScreen() {
