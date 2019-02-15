@@ -23,7 +23,7 @@ export class TransactionDetailComponent implements OnInit {
 
   TransactionDetails() {
     this.spinner.show();
-    this.service.post('admin/transaction/details/', { transaction_id: this.transactionId }).subscribe(res => {
+    this.service.post('admin/transaction/details/', { booking_id: this.transactionId }).subscribe(res => {
       console.log('transactionDetails RES==>', res['result']['data']);
       this.transactionDetails = res['result']['data'];
       this.spinner.hide();

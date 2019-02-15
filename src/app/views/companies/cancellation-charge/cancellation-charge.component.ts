@@ -33,6 +33,7 @@ export class CancellationChargeComponent implements OnInit {
     public router: Router,
     private messageService: MessageService,
   ) {
+
     this.company = JSON.parse(localStorage.getItem('company-admin'));
     this.companyId = this.company._id;
     this.cancellationData = [];
@@ -55,7 +56,6 @@ export class CancellationChargeComponent implements OnInit {
         });
       } else {
         this.checkCancellation();
-        // this.submitArray.push({ 'hours': '', 'rate': '' });
       }
       console.log('res => ', this.submitArray);
     });
@@ -118,7 +118,7 @@ export class CancellationChargeComponent implements OnInit {
   checkCommon(a) {
     for (var i = 0; i <= a.length; i++) {
       for (var j = i; j <= a.length; j++) {
-        if (i != j && a[i] == a[j]) {
+        if (i !== j && a[i] === a[j]) {
           return true;
         }
       }
@@ -143,6 +143,13 @@ export class CancellationChargeComponent implements OnInit {
     }
   }
 
+  checkNumber(event) {
+    var inputValue = !isNaN(parseFloat(event.target.value)) && isFinite(event.target.value);
+    console.log('inputValue => ', inputValue);
+    if (inputValue === false) {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Invalid Input' });
+    }
+  }
   deleteThis(index) {
     this.submitArray.splice(index, 1);
     console.log('this.CancellationForm.controls => ', this.cancellationData);

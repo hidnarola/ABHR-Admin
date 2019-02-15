@@ -1,5 +1,4 @@
 import { Component, OnInit, Injectable, AfterViewInit, OnDestroy, ViewChild, Renderer } from '@angular/core';
-// import { Socket } from 'ngx-socket-io';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { CrudService } from '../../../../shared/services/crud.service';
@@ -30,7 +29,6 @@ export class DeliveredCarsComponent implements OnInit, AfterViewInit, OnDestroy 
   hideSpinner: boolean;
 
   constructor(
-    // private socket: Socket,
     public renderer: Renderer,
     public service: CrudService,
     public router: Router,
@@ -41,13 +39,6 @@ export class DeliveredCarsComponent implements OnInit, AfterViewInit, OnDestroy 
     private formBuilder: FormBuilder,
     private spinner: NgxSpinnerService,
   ) { }
-
-  // socket here
-  getMessage() {
-    // console.log('this.socket => ', this.socket);
-    // return this.socket;
-  }
-  // socket end here
 
   render(): void {
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
@@ -77,7 +68,7 @@ export class DeliveredCarsComponent implements OnInit, AfterViewInit, OnDestroy 
       serverSide: true,
       responsive: true,
       ordering: true,
-      order: [[4, 'desc']],
+      order: [[7, 'desc']],
       language: {
         'processing': '',
       },
@@ -112,10 +103,10 @@ export class DeliveredCarsComponent implements OnInit, AfterViewInit, OnDestroy 
         }, 1000);
       },
       columns: [
-        {
-          data: 'Id',
-          name: '_id',
-        },
+        // {
+        //   data: 'Id',
+        //   name: '_id',
+        // },
         {
           data: 'Booking Number',
           name: 'booking_number',
@@ -137,11 +128,11 @@ export class DeliveredCarsComponent implements OnInit, AfterViewInit, OnDestroy 
           name: 'brand_name',
         },
         {
-          data: 'From Time',
+          data: 'From Date',
           name: 'from_time',
         },
         {
-          data: 'To Time',
+          data: 'To Date',
           name: 'to_time',
         },
         {

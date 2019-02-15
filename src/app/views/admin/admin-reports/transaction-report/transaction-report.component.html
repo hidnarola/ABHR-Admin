@@ -104,22 +104,22 @@
                   </span>
                 </td>
                 <td>
-                  <span *ngIf="item.status === 'inprogress'" class="badge badge-primary">
-                    {{ item.status }}
+                  <span *ngIf="item.transaction_status === 'inprogress'" class="badge badge-primary">
+                    {{ item.transaction_status }}
                   </span>
-                  <span *ngIf="item.status === 'cancelled'" class="badge badge-warning">
-                    {{ item.status }}
+                  <span *ngIf="item.transaction_status === 'cancelled'" class="badge badge-warning">
+                    {{ item.transaction_status }}
                   </span>
-                  <span *ngIf="item.status === 'successfull'" class="badge badge-success">
-                    {{ item.status }}
+                  <span *ngIf="item.transaction_status === 'successfull'" class="badge badge-success">
+                    {{ item.transaction_status }}
                   </span>
-                  <span *ngIf="item.status === 'failed'" class="badge badge-danger">
-                    {{ item.status }}
+                  <span *ngIf="item.transaction_status === 'failed'" class="badge badge-danger">
+                    {{ item.transaction_status }}
                   </span>
                 </td>
                 <td>
                   <span>
-                    {{ item.Transaction_amount}}
+                    {{ item.total_booking_amount}}
                   </span>
                 </td>
                 <td>

@@ -23,7 +23,6 @@
           <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table">
             <thead>
               <tr>
-                <th>Company Name</th>
                 <th>Booking Number</th>
                 <th>Deposit Amount</th>
                 <th>Status</th>
@@ -39,11 +38,6 @@
               <tr *ngFor="let item of transaction; let i = index">
                 <td>
                   <span>
-                    {{ item.company_name }}
-                  </span>
-                </td>
-                <td>
-                  <span>
                     {{ item.booking_number }}
                   </span>
                 </td>
@@ -53,17 +47,17 @@
                   </span>
                 </td>
                 <td>
-                  <span *ngIf="item.status === 'inprogress'" class="badge badge-primary">
-                    {{ item.status }}
+                  <span *ngIf="item.transaction_status === 'inprogress'" class="badge badge-primary">
+                    {{ item.transaction_status }}
                   </span>
-                  <span *ngIf="item.status === 'cancelled'" class="badge badge-warning">
-                    {{ item.status }}
+                  <span *ngIf="item.transaction_status === 'cancelled'" class="badge badge-warning">
+                    {{ item.transaction_status }}
                   </span>
-                  <span *ngIf="item.status === 'successfull'" class="badge badge-success">
-                    {{ item.status }}
+                  <span *ngIf="item.transaction_status === 'successfull'" class="badge badge-success">
+                    {{ item.transaction_status }}
                   </span>
-                  <span *ngIf="item.status === 'failed'" class="badge badge-danger">
-                    {{ item.status }}
+                  <span *ngIf="item.transaction_status === 'failed'" class="badge badge-danger">
+                    {{ item.transaction_status }}
                   </span>
                 </td>
                 <td>
@@ -78,7 +72,7 @@
                 </td>
                 <td>
                   <span>
-                    {{ item.VAT ? item.VAT : '-'}}
+                    {{ item.vat ? item.vat : '-'}}
                   </span>
                 </td>
                 <td>
@@ -96,15 +90,14 @@
                     tooltipPosition="bottom" class="m-r-20">
                     <i class="fa fa-eye text-default"></i>
                   </a>
-                  <a *ngIf="(item.status === 'inprogress') || (item.status === 'successfull') || (item.status === 'failed')"
-                    href="javascript:void(0)" data-original-title="Delete" (click)="cancel(item._id)" pTooltip="Cancel Transaction"
+                  <!-- <a *ngIf="(item.transaction_status === 'inprogress') || (item.transaction_status === 'successfull') || (item.transaction_status === 'failed')"
+                    href="javascript:void(0)" (click)="cancel(item._id)" pTooltip="Cancel Transaction" tooltipPosition="bottom">
+                    <i class="fa fa-ban text-default"></i>
+                  </a>
+                  <a *ngIf="item.transaction_status === 'cancelled'" href="javascript:void(0)" class="not_allowed" pTooltip="Not Allowed"
                     tooltipPosition="bottom">
                     <i class="fa fa-ban text-default"></i>
-                  </a>
-                  <a *ngIf="item.status === 'cancelled'" href="javascript:void(0)" data-toggle="tooltip" class="not_allowed"
-                    data-original-title="Delete" (click)="cancel(item._id)" pTooltip="Not Allowed" tooltipPosition="bottom">
-                    <i class="fa fa-ban text-default"></i>
-                  </a>
+                  </a> -->
                 </td>
               </tr>
             </tbody>

@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { FormBuilder } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-transaction',
@@ -54,6 +55,10 @@ export class TransactionComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       ajax: (dataTablesParameters: any, callback) => {
         this.pageNumber = dataTablesParameters.length;
+        dataTablesParameters['columns'][1]['isNumber'] = true;
+        dataTablesParameters['columns'][2]['isNumber'] = true;
+        dataTablesParameters['columns'][5]['isNumber'] = true;
+        dataTablesParameters['columns'][6]['isNumber'] = true;
         setTimeout(() => {
           console.log('dtaparametes==>', dataTablesParameters);
           this.service.post('admin/transaction/list', dataTablesParameters).subscribe(res => {
@@ -96,7 +101,7 @@ export class TransactionComponent implements OnInit, AfterViewInit, OnDestroy {
         },
         {
           data: 'Status',
-          name: 'status',
+          name: 'transaction_status',
         },
         {
           data: 'Coupon Code',
@@ -108,7 +113,7 @@ export class TransactionComponent implements OnInit, AfterViewInit, OnDestroy {
         },
         {
           data: 'VAT',
-          name: 'VAT',
+          name: 'vat',
         },
         {
           data: 'From Time',
@@ -146,17 +151,18 @@ export class TransactionComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   cancel(Id) {
+    var date = moment().format('YYYY-MM-DD');
     console.log('userId==>', Id);
     this.confirmationService.confirm({
-      message: 'Are you sure want to cancel this Transaction?',
+      message: 'Are you sure you want to cancel this Transaction?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         var Obj = {
-          'transaction_id': Id,
-          'status': 'cancelled'
+          'booking_number': Id,
+          'cancel_date': date
         };
-        this.service.put('admin/transaction/edit', Obj).subscribe(res => {
+        this.service.post('app/car/cancel-booking-v2', Obj).subscribe(res => {
           this.render();
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
         }, err => {

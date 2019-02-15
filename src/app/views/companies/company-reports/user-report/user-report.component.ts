@@ -95,6 +95,7 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
           this.dtparams = dataTablesParameters;
           dataTablesParameters['columns'][4]['isNumber'] = true;
           dataTablesParameters['columns'][5]['isNumber'] = true;
+          this.exportParam = dataTablesParameters;
           setTimeout(() => {
             if (this.rangeDates) {
               if (this.rangeDates[1]) {
@@ -185,9 +186,9 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
     this.spinner.show();
   }
   ExportRecords() {
-    console.log('here in export fun => ');
     this.service.post('company/users/export_report_list', this.exportParam).subscribe(async (res: any) => {
       this.exportData = await res['result']['data'];
+      var ExcelData = [];
       this.isExcel = false;
       this.isPDF = false;
       console.log('this.exportData => ', this.exportData);
@@ -201,17 +202,37 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
           'From_Date': moment(item.from_time).format('LL'),
           'To_Date': moment(item.to_time).format('LL'),
         };
-        this.ExcelArray.push(obj);
+        ExcelData.push(obj);
+        this.ExcelArray = ExcelData;
       });
-
-      console.log('excel data====>', this.ExcelArray);
     });
   }
 
   exportAsXLSX(): void {
     this.isExcel = true;
-    this.ExportRecords();
-    this.excelService.exportAsExcelFile(this.ExcelArray, 'sample');
+    this.service.post('company/users/export_report_list', this.exportParam).subscribe(async (res: any) => {
+      this.exportData = await res['result']['data'];
+      var ExcelData = [];
+      this.isExcel = false;
+      this.isPDF = false;
+      console.log('this.exportData => ', this.exportData);
+      this.exportData.forEach(item => {
+        let obj = {
+          'First_Name': item.first_name,
+          'Last_Name': item.last_name,
+          'Company_Name': item.company_name,
+          'Status': item.trip_status,
+          'Total Rent': item.booking_rent,
+          'From_Date': moment(item.from_time).format('LL'),
+          'To_Date': moment(item.to_time).format('LL'),
+        };
+        ExcelData.push(obj);
+        this.ExcelArray = ExcelData;
+      });
+    });
+    setTimeout(() => {
+      this.excelService.exportAsExcelFile(this.ExcelArray, 'sample');
+    }, 1000);
   }
 
   public captureScreen() {

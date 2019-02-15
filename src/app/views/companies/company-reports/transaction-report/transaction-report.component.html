@@ -11,7 +11,6 @@
             <p-calendar #filter_report [(ngModel)]="rangeDates" [ngModelOptions]="{standalone: true}" placeholder="mm-dd-yyyy"
               class="m-r-10" [showIcon]="true" selectionMode="range" (onSelect)="FilterRange()">
               <p-footer>
-                <!-- <button type="button" (click)="handleFilterCalendar()"> Filter </button> -->
                 <button type="button" class="pull-right" (click)="handleClearCalendar()">Clear</button>
               </p-footer>
             </p-calendar>
@@ -28,40 +27,8 @@
             <button type="button" *ngIf="isPDF" class="btn btn-primary custom-add-btn  loading-btn">
               <i class="fa fa-spinner fa-spin"></i>Loading
             </button>
-
-            <!-- <label>From</label>
-            <p-calendar #availibility [(ngModel)]="selectFromDate" [ngModelOptions]="{standalone: true}" placeholder="mm-dd-yyyy"
-              [showIcon]="true">
-            </p-calendar>
-            <label>To</label>
-            <p-calendar #availibility [(ngModel)]="selectToDate" [ngModelOptions]="{standalone: true}" placeholder="mm-dd-yyyy"
-              [showIcon]="true">
-            </p-calendar>
-            <button><i class="fa fa-search"></i></button> -->
-
-
-
-            <!-- <div class="input-group">
-              <input class="form-control" placeholder="yyyy-mm-dd" (ngModelChange)="DatePicker($event)" name="dp"
-                [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
-              <div class="input-group-append">
-                <button class="btn btn-outline-secondary datepicker_button" (click)="d.toggle()" type="button">
-                  <i class="ti-calendar"></i>
-                </button>
-              </div>
-            </div> -->
-
-
-
-
           </div>
         </form>
-        <!-- <button type="button" class="btn btn-primary custom-add-btn m-r-10">
-          <i class="fa fa-external-link" aria-hidden="true"></i> Export
-        </button> -->
-        <!-- <button type="button" class="btn btn-primary custom-add-btn" (click)="open2(content, '')">
-          <i class="mdi mdi-account-plus" aria-hidden="true"></i> Add
-        </button> -->
       </div>
     </div>
     <div *ngIf="!isCols">
@@ -79,7 +46,7 @@
               <tr>
                 <th>First Name</th>
                 <th>Last Name</th>
-                <th>Company Name</th>
+                <!-- <th>Company Name</th> -->
                 <th>Status</th>
                 <th>Transaction Amount</th>
                 <th>From Date</th>
@@ -98,28 +65,28 @@
                     {{ item.last_name}}
                   </span>
                 </td>
-                <td>
+                <!-- <td>
                   <span>
                     {{ item.company_name }}
                   </span>
-                </td>
+                </td> -->
                 <td>
-                  <span *ngIf="item.status === 'inprogress'" class="badge badge-primary">
-                    {{ item.status }}
+                  <span *ngIf="item.transaction_status === 'inprogress'" class="badge badge-primary">
+                    {{ item.transaction_status }}
                   </span>
-                  <span *ngIf="item.status === 'cancelled'" class="badge badge-warning">
-                    {{ item.status }}
+                  <span *ngIf="item.transaction_status === 'cancelled'" class="badge badge-warning">
+                    {{ item.transaction_status }}
                   </span>
-                  <span *ngIf="item.status === 'successfull'" class="badge badge-success">
-                    {{ item.status }}
+                  <span *ngIf="item.transaction_status === 'successfull'" class="badge badge-success">
+                    {{ item.transaction_status }}
                   </span>
-                  <span *ngIf="item.status === 'failed'" class="badge badge-danger">
-                    {{ item.status }}
+                  <span *ngIf="item.transaction_status === 'failed'" class="badge badge-danger">
+                    {{ item.transaction_status }}
                   </span>
                 </td>
                 <td>
                   <span>
-                    {{ item.Transaction_amount}}
+                    {{ item.total_booking_amount}}
                   </span>
                 </td>
                 <td>

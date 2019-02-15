@@ -44,7 +44,7 @@ export class DataSharingService {
   // }
 
 }
- export interface AdminUser {
+export interface AdminUser {
   first_name: string;
   last_name: string;
   email: string;

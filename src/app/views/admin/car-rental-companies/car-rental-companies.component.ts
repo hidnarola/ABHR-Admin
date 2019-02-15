@@ -60,7 +60,6 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
   private subscription: Subscription;
   checked: boolean;
   message: any;
-  msgs: Message[] = [];
   closeResult: string;
   isLoading: boolean;
   userSettings: any = {};
@@ -86,13 +85,13 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
     private cd: ChangeDetectorRef,
   ) {
     // addform validation
-    const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
+    const pattern = new RegExp('^\\ *([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})\\ *$');
     this.AddEditForm = this.formBuilder.group({
       name: ['', Validators.compose([Validators.required, this.uniqueNameValidator, this.noWhitespaceValidator])],
-      description: ['', Validators.required],
+      description: ['', Validators.compose([Validators.required, this.noWhitespaceValidator])],
       site_url: ['', Validators.compose([Validators.required,
       Validators.pattern('^(https?:\/\/)?[0-9a-zA-Z]+\.[-_0-9a-zA-Z]+\.[0-9a-zA-Z]+$')])],
-      phone_number: ['', Validators.compose([Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]{10}')])],
+      phone_number: ['', Validators.compose([Validators.pattern('\\ *[0-9]{10}\\ *')])],
       email: ['', Validators.compose([Validators.required, Validators.email, Validators.pattern(pattern), this.uniqueEmailValidator])],
     });
 
@@ -114,21 +113,49 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
   noWhitespaceValidator(control: FormControl) {
     let isWhitespace = (control.value || '').trim().length === 0;
     let isValid = !isWhitespace;
-    return isValid ? null : { 'required': true }
+    return isValid ? null : { 'required': true };
   }
+  // public uniqueEmailValidator = (control: FormControl) => {
+  //   let isWhitespace1;
+  //   console.log("(control.value || '').trim().length => ", (control.value || '').trim().length);
+  //   if (isWhitespace1 = (control.value || '').trim().length === 0) {
+  //     console.log('if => ');
+  //     return { 'required': true };
+  //   } else {
+  //     console.log('else => ');
+  //     const pattern = new RegExp('^\\ *([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})\\ *$');
+  //     let result = pattern.test(control.value);
+  //     if (!result) {
+  //       return { 'pattern': true };
+  //     } else {
+  //       this.emailData = { 'email': control.value ? control.value.trim() : '' };
+  //       if (this.isEdit) {
+  //         this.emailData = { 'email': control.value ? control.value.trim() : '', 'company_id': this.userId };
+  //       }
+  //       return this.service.post('admin/company/checkemail', this.emailData).subscribe(res => {
+  //         if (res['status'] === 'success') {
+  //           this.f.email.setErrors({ 'unique': true });
+  //           return;
+  //         } else {
+  //           this.f.email.setErrors(null);
+  //         }
+  //       });
+  //     }
+  //   }
+  // }
+
   public uniqueEmailValidator = (control: FormControl) => {
     let isWhitespace1;
-    if (isWhitespace1 = (control.value || '').trim().length === 0) {
-      return { 'required': true };
-    } else {
-      const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
+    if (isWhitespace1 = (control.value || '').trim().length !== 0) {
+      console.log('else => ');
+      const pattern = new RegExp('^\\ *([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})\\ *$');
       let result = pattern.test(control.value);
       if (!result) {
         return { 'pattern': true };
       } else {
-        this.emailData = { 'email': control.value };
+        this.emailData = { 'email': control.value ? control.value.trim() : '' };
         if (this.isEdit) {
-          this.emailData = { 'email': control.value, 'company_id': this.userId };
+          this.emailData = { 'email': control.value ? control.value.trim() : '', 'company_id': this.userId };
         }
         return this.service.post('admin/company/checkemail', this.emailData).subscribe(res => {
           if (res['status'] === 'success') {
@@ -342,8 +369,6 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
 
   onSubmit() {
     this.submitted = true;
-    console.log('on submit usersettings===>', typeof this.placeData);
-    console.log('placeData on submit => ', this.placeData);
     if (typeof this.placeData === 'undefined') {
       this.addressError = true;
       console.log(' check here on submit 1=> ');
@@ -359,6 +384,10 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
     if (!this.AddEditForm.invalid) {
       this.isLoading = true;
       this.formData = this.AddEditForm.value;
+      this.formData.email = this.formData.email.trim();
+      this.formData.name = this.formData.name.trim();
+      this.formData.description = this.formData.description.trim();
+      this.formData.phone_number = this.formData.phone_number.trim();
       this.formData.company_address = this.company_address;
       this.formData.service_location = this.service_location;
       if (this.isEdit) {

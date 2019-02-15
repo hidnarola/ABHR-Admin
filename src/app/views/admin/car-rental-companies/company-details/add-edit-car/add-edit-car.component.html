@@ -22,7 +22,7 @@
             <label class="required"> Car Model :</label>
             <select class="form-control" type="String" required="" id="inlineFormCustomSelect" name="car_model_id"
               required="" formControlName="car_model_id" [ngClass]="{'is-invalid': submitted && f.car_model_id.errors }">
-              <option value="" disabled selected>Choose Car Brand</option>
+              <option value="" disabled selected>Choose Car Model</option>
               <option [value]="data._id" *ngFor="let data of modelList">{{data.model_name}}</option>
             </select>
             <div *ngIf="submitted && f.car_model_id.errors" class="invalid-feedback">
@@ -49,7 +49,7 @@
 
         <div class="col-md-2">
           <div class="form-group">
-            <label class="required"> Milage :</label>
+            <label class="required"> Mileage :</label>
             <select class="custom-select col-12" type="String" id="inlineFormCustomSelect" name="milage" class="form-control"
               formControlName="milage" [ngClass]="{ 'is-invalid': submitted && f.milage.errors }">
               <option value="" disabled selected>Choose...</option>
@@ -57,7 +57,7 @@
               <option value="limited">Limited</option>
             </select>
             <div *ngIf=" submitted && f.milage.errors " class="invalid-feedback">
-              <div *ngIf="f.milage.errors.required"> Milage is required</div>
+              <div *ngIf="f.milage.errors.required"> Mileage is required</div>
             </div>
           </div>
         </div>
@@ -242,11 +242,13 @@
           <div class="form-group form_calendar form_arrow_none">
             <label class="required"> Car availablity :</label>
             <p-calendar #availibility [(ngModel)]="selectDate" [ngModelOptions]="{standalone: true}" selectionMode="multiple"
-              [monthNavigator]="true" [showOtherMonths]="false" (onMonthChange)="checkMonth($event)" (onSelect)="checkSelect()"
-              placeholder="Select Availablity" [touchUI]="false" [showIcon]="true" [readonlyInput]="true" [yearRange]="yearRange">
+              [monthNavigator]="true" [showOtherMonths]="false" (onMonthChange)="checkMonth($event)" (onSelect)="checkSelect($event)"
+              (ngModelChange)="onChange($event)" placeholder="Select Availablity" [touchUI]="false" [showIcon]="true"
+              [readonlyInput]="true" [yearRange]="yearRange">
               <p-header class="availibility-header">
                 <p-checkbox styleClass="cal-chkbox" [(ngModel)]="availabilitySelectAllArr[selectedMonth]"
-                  [ngModelOptions]="{standalone: true}" binary="true" (onChange)="selectAllDates()"></p-checkbox>
+                  [ngModelOptions]="{standalone: true}" binary="true" (onChange)="selectAllDates($event)">
+                </p-checkbox>
                 Select Month
               </p-header>
               <p-footer>
@@ -264,7 +266,7 @@
           <div class="form-group">
             <label class="required"> Car Image :</label>
             <input class="form-control file_input" type="file" name="car_gallery" formControlName="car_gallery"
-              (change)="handleFileInput($event)" [ngClass]="{ 'is-invalid': submitted && f.car_gallery.errors }" accept="image/png, image/jpeg"
+              (change)="handleFileInput($event)" [ngClass]="{'is-invalid': submitted && f.car_gallery.errors }" accept="image/png, image/jpeg"
               multiple>
             <div *ngIf=" submitted && f.car_gallery.errors " class="invalid-feedback">
               <div *ngIf="f.car_gallery.errors.minImages">Add Minimum 3 images</div>

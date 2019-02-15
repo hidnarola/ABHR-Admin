@@ -73,6 +73,16 @@ export const ROUTES: RouteInfo[] = [
     //     path: '/admin/settings', title: 'Settings', icon: 'fa fa-gear', class: '',
     // label: '', labelClass: '', extralink: false, submenu: []
     // },
+    {
+        path: '/admin/help', title: 'Help', icon: 'mdi mdi-widgets',
+        class: 'has-arrow', label: '', labelClass: '', extralink: false, submenu: [
+
+            {
+                path: '/admin/help/article-list', title: 'Article List', icon: '',
+                class: '', label: '', labelClass: '', extralink: false, submenu: []
+            }
+        ]
+    },
 ];
 
 export const COMPANY_ROUTES: RouteInfo[] = [

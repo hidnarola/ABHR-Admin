@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { FormBuilder } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-company-transaction',
@@ -53,12 +54,16 @@ export class CompanyTransactionComponent implements OnInit, AfterViewInit, OnDes
       serverSide: true,
       responsive: true,
       ordering: true,
-      order: [[9, 'desc']],
+      order: [[8, 'desc']],
       language: {
         'processing': '',
       },
       ajax: (dataTablesParameters: any, callback) => {
         this.pageNumber = dataTablesParameters.length;
+        dataTablesParameters['columns'][0]['isNumber'] = true;
+        dataTablesParameters['columns'][1]['isNumber'] = true;
+        dataTablesParameters['columns'][4]['isNumber'] = true;
+        dataTablesParameters['columns'][5]['isNumber'] = true;
         dataTablesParameters['company_id'] = this.companyId;
         setTimeout(() => {
           console.log('dtaparametes==>', dataTablesParameters);
@@ -89,10 +94,6 @@ export class CompanyTransactionComponent implements OnInit, AfterViewInit, OnDes
       },
       columns: [
         {
-          data: 'Company Name',
-          name: 'company_name',
-        },
-        {
           data: 'Booking Number',
           name: 'booking_number',
         },
@@ -102,7 +103,7 @@ export class CompanyTransactionComponent implements OnInit, AfterViewInit, OnDes
         },
         {
           data: 'Status',
-          name: 'status',
+          name: 'transaction_status',
         },
         {
           data: 'Coupon Code',
@@ -114,7 +115,7 @@ export class CompanyTransactionComponent implements OnInit, AfterViewInit, OnDes
         },
         {
           data: 'VAT',
-          name: 'VAT',
+          name: 'vat',
         },
         {
           data: 'From Time',
@@ -157,6 +158,7 @@ export class CompanyTransactionComponent implements OnInit, AfterViewInit, OnDes
   }
 
   cancel(Id) {
+    var date = moment().format('YYYY-MM-DD');
     console.log('userId==>', Id);
     this.confirmationService.confirm({
       message: 'Are you sure want to cancel this Transaction?',
@@ -164,8 +166,8 @@ export class CompanyTransactionComponent implements OnInit, AfterViewInit, OnDes
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         var Obj = {
-          'transaction_id': Id,
-          'status': 'cancelled'
+          'booking_number': Id,
+          'cancel_date': date
         };
         this.service.put('admin/transaction/edit', Obj).subscribe(res => {
           this.render();

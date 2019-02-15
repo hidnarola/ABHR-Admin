@@ -45,6 +45,7 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   AddEditForm: FormGroup;
   submitted = false;
   public formData: any;
+  public emailData: any;
   public isEdit;
   public rentalData;
   closeResult: string;
@@ -68,12 +69,12 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
       console.log('this.userId => ', this.userId);
     });
     // addform validation
-    const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
+    const pattern = new RegExp('^\\ *([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})\\ *$');
     this.AddEditForm = this.formBuilder.group({
       first_name: ['', Validators.compose([Validators.required, this.noWhitespaceValidator])],
       last_name: ['', Validators.compose([Validators.required, this.noWhitespaceValidator])],
-      phone_number: ['', [Validators.minLength(10), Validators.maxLength(10), Validators.pattern('[0-9]{10}')]],
-      email: ['', [Validators.required, Validators.email, Validators.pattern(pattern)]],
+      phone_number: ['', [Validators.pattern('\\ *[0-9]{10}\\ *')]],
+      email: ['', [Validators.required, Validators.email, Validators.pattern(pattern), this.uniqueEmailValidator]],
       // deviceType: [''],
     });
     this.formData = {
@@ -90,19 +91,51 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     let isValid = !isWhitespace;
     return isValid ? null : { 'required': true }
   }
-
+  public uniqueEmailValidator = (control: FormControl) => {
+    let isWhitespace;
+    if (isWhitespace = (control.value || '').trim().length !== 0) {
+      const pattern = new RegExp('^\\ *([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})\\ *$');
+      var result = pattern.test(control.value);
+      if (!result) {
+        return { 'pattern': true };
+      } else {
+        this.emailData = { 'email': control.value ? control.value.trim() : '' };
+        console.log('control.value => ', control.value);
+        if (this.isEdit) {
+          this.emailData = { 'email': control.value ? control.value.trim() : '', 'user_id': this.userId };
+        }
+        console.log('emailData===>', this.emailData);
+        return this.service.post('admin/checkemail', this.emailData).subscribe(res => {
+          console.log('res for emailData => ', res);
+          if (res['status'] === 'success') {
+            this.f.email.setErrors({ 'unique': true });
+            return;
+          } else {
+            this.f.email.setErrors(null);
+          }
+        });
+      }
+    }
+  }
   // add-edit-popup form validation
-  get f() { return this.AddEditForm.controls; }
+  get f() {
+    return this.AddEditForm.controls;
+  }
+
   closePopup() {
     const element = document.getElementById('closepopup');
     element.click();
   }
   onSubmit() {
     this.submitted = true;
-    this.isLoading = true;
     if (!this.AddEditForm.invalid) {
+      this.isLoading = true;
       console.log('in valid', this.userId);
       this.formData = this.AddEditForm.value;
+      this.formData.email = this.formData.email.trim();
+      this.formData.first_name = this.formData.first_name.trim();
+      this.formData.last_name = this.formData.last_name.trim();
+      this.formData.phone_number = this.formData.phone_number.trim();
       this.formData.user_id = this.userId;
       console.log(this.formData);
       this.service.put('admin/agents/update', this.formData).subscribe(res => {
@@ -118,6 +151,7 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
         this.closePopup();
       });
+      this.submitted = false;
     }
   }
 
@@ -152,6 +186,7 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
         dataTablesParameters['columns'][0]['isNumber'] = true;
         dataTablesParameters['columns'][2]['isNumber'] = true;
         setTimeout(() => {
+          dataTablesParameters.agent_id = this.userId;
           this.service.post('admin/agents/rental_list', dataTablesParameters).subscribe(res => {
             console.log('rentals res in agents', res);
             this.rentalData = res['result']['data'];
@@ -183,7 +218,7 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
         },
         {
           data: 'Client Name',
-          name: 'userId.first_name',
+          name: 'name',
         },
         {
           data: 'Price',
@@ -191,7 +226,7 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
         },
         {
           data: 'Start Of Rent',
-          name: 'from_time  | date:"MM/dd/yy"',
+          name: 'from_time',
         },
         {
           data: 'End Of Rent',
@@ -220,6 +255,7 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // model
   open2(content, agentDetails) {
+    this.isLoading = false;
     console.log('agentDetails====>', agentDetails);
     if (agentDetails !== 'undefined' && agentDetails) {
       this.isEdit = true;
@@ -239,6 +275,7 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
     });
+    this.submitted = false;
   }
 
   // add-edit popup ends here

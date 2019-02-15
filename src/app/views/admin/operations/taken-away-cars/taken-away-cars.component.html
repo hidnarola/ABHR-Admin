@@ -13,7 +13,7 @@
     <div *ngIf="!isCols">
       <div class="p-grid p-dir-col">
         <div class="p-col">
-          <div class="box">No record found Taken Away Cars</div>
+          <div class="box">No record found for Taken Away Cars</div>
         </div>
       </div>
     </div>
@@ -23,24 +23,24 @@
           <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table">
             <thead>
               <tr>
-                <th>Id</th>
+                <!-- <th>Id</th> -->
                 <th>Booking Number</th>
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Model Name</th>
-                <th>brand Name</th>
-                <th>From Time</th>
-                <th>To Time</th>
+                <th>Brand Name</th>
+                <th>From Date</th>
+                <th>To Date</th>
                 <th class="disabled text-center">Actions</th>
               </tr>
             </thead>
             <tbody *ngIf="carData?.length != 0 && isCols">
               <tr *ngFor="let item of carData; let i = index">
-                <td>
+                <!-- <td>
                   <span>
                     {{ item._id }}
                   </span>
-                </td>
+                </td>-->
                 <td>
                   <span>
                     {{ item.booking_number }}

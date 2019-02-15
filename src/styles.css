@@ -204,7 +204,7 @@ body .card_one_data .license_image {height: auto;width: auto;margin-right: 10px;
 .form_calendar .error-msg>div:after {top: 27px;}
 .form_calendar .error-msg>div:before {top: 28px;}
 .form_calendar .error-msg:before {top: 27px;}
-.form_filter p-calendar > span > input {width: 100%;width: 100%;border: 1px solid #ced4da !important;padding: 7px 10px 8px 12px !important;font-size: 13px !important;letter-spacing: .08em !important;border-radius: 0 !important;color: #666 !important;}
+.form_filter p-calendar > span > input {width: 100%;width: 100%;border: 1px solid #ced4da !important;padding: 7px 10px 8px 12px !important;font-size: 13px !important;letter-spacing: .08em !important;border-radius: 0 !important;color: #666 !important;    padding-right: 45px !important;width: 245px;}
 .form_filter p-calendar {position: relative;margin-left: 10px;}
 .form_filter p-calendar > span > button {position: absolute;right: 0;top: 0;}
 .form_filter p-calendar > span .ng-trigger p-footer button {background: #1976d2;border: 0;color: #fff;padding: 4px 10px;border-radius: 4px;font-size: 13px;}

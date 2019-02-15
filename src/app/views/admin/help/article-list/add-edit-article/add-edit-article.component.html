@@ -1,0 +1,53 @@
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body card_cstm">
+                <form [formGroup]="form" (ngSubmit)="onSubmit()" (keydown.enter)="$event.preventDefault()">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label class="required"> Topic :</label>
+                            </div>
+                            <div class="col-md-10">
+                                <input class="form-control" placeholder="Enter Topic" type="text" required="" name="topic"
+                                    formControlName="topic" [ngClass]="{'is-invalid': submitted && f.topic.errors }">
+                                <div *ngIf=" submitted && f.topic.errors " class="invalid-feedback">
+                                    <div *ngIf="f.topic.errors.required"> Topic is required</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="terms-detail-box">
+                                    <label class="required">Description : </label>
+                                </div>
+                            </div>
+                            <div class="col-md-10">
+                                <p-editor formControlName="description" name="description" type="text" [style]="{'height':'300px'}"
+                                    [required]="true">
+                                </p-editor>
+                                <div *ngIf="descriptionError" class="description-err-msg">
+                                    <div *ngIf="descriptionError">
+                                        Description is required
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 offset-md-6 text-right">
+                            <button type="submit" *ngIf="!isLoading" class="btn waves-effect waves-light custom-btn btn-primary">Submit</button>
+                            <button type="button" *ngIf="isLoading" class="btn waves-effect loading-btn waves-light btn-primary"
+                                type="button">
+                                <i class="fa fa-spinner fa-spin"></i>Loading
+                            </button>
+                            <a class="btn waves-effect waves-light custom-btn btn-danger" [routerLink]="['/admin/help/article-list']">Cancel</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

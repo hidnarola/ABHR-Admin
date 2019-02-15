@@ -1,18 +1,20 @@
 import { Component, AfterViewInit } from '@angular/core';
-import { NgbModal, ModalDismissReasons, NgbPanelChangeEvent, NgbCarouselConfig, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
-import { Router, ActivatedRoute, RouterStateSnapshot } from '@angular/router';
+import { Router } from '@angular/router';
 import { DataSharingService } from '../services/data-sharing.service';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { CrudService } from '../services/crud.service';
 import { MustMatch } from '../helpers/must-match.validator';
+import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 @Component({
   selector: 'app-navigation',
   templateUrl: './navigation.component.html'
 })
 export class NavigationComponent implements AfterViewInit {
   display: boolean = false;
+  displayVAT: boolean = false;
   user;
   public CurrentAdmin;
   public company;
@@ -21,23 +23,37 @@ export class NavigationComponent implements AfterViewInit {
   public AdminType;
   public AdminEmail;
   public AdminNumber;
+  public VATData;
   public config: PerfectScrollbarConfigInterface = {};
   changePassForm: FormGroup;
+  // VATForm: FormGroup;
   closeResult: string;
   public formData: any;
+  // public VATformData: any;
   submitted = false;
   public companyId;
   isLoading: boolean;
   public passwordData: any;
+  public numberMask = createNumberMask({
+    prefix: '',
+    suffix: '%',
+    includeThousandsSeparator: false,
+    allowDecimal: true,
+    integerLimit: 2,
+    decimalLimit: 1,
+    requireDecimal: false,
+    allowNegative: false,
+    allowLeadingZeroes: false
+  });
 
-  constructor(private modalService: NgbModal,
+  constructor(
     private datashare: DataSharingService,
     private router: Router,
     private formBuilder: FormBuilder,
     private messageService: MessageService,
     private service: CrudService,
-    // private modalService2: NgbModal
   ) {
+    // change pass form
     this.changePassForm = this.formBuilder.group({
       old_password: ['', Validators.compose([Validators.required, this.passwordMatchValidator])],
       new_password: ['', Validators.compose([Validators.required, Validators.minLength(6), Validators.maxLength(13)])],
@@ -78,6 +94,10 @@ export class NavigationComponent implements AfterViewInit {
         this.AdminEmail = 'dse@narola.email';
         this.AdminNumber = '9654788458';
       }
+    });
+
+    this.service.get('admin/vat').subscribe(res => {
+      this.VATData = res['result'].rate + '%';
     });
   }
 
@@ -165,36 +185,8 @@ export class NavigationComponent implements AfterViewInit {
       this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Logout Successfully' });
     }
   }
-
-  // closePopup() {
-  //   const element = document.getElementById('closepopup');
-  //   element.click();
-  // }
-
   get f() { return this.changePassForm.controls; }
-
-  // open2(content, item) {
-  //   console.log('item====>', item);
-  //   if (item !== 'undefined' && item) {
-  //     this.changePassForm.controls['old_password'].setValue(item.old_password);
-  //     this.changePassForm.controls['new_password'].setValue(item.new_password);
-  //     this.changePassForm.controls['repeat_new_password'].setValue(item.repeat_new_password);
-  //   }
-  //   const options: NgbModalOptions = {
-  //     keyboard: false,
-  //     backdrop: 'static'
-  //   };
-  //   this.modalService.open(content, options).result.then((result) => {
-  //     this.closeResult = `Closed with: ${result}`;
-  //   }, (reason) => {
-  //     if (reason === 'Cross click' || reason === 0) {
-  //       this.changePassForm.controls['old_password'].setValue('');
-  //       this.changePassForm.controls['new_password'].setValue('');
-  //       this.changePassForm.controls['repeat_new_password'].setValue('');
-  //     }
-  //   });
-  //   this.submitted = false;
-  // }
+  // get fVAT() { return this.VATForm.controls; }
 
   public passwordMatchValidator = (control: FormControl) => {
     let isWhitespace2;
@@ -217,8 +209,7 @@ export class NavigationComponent implements AfterViewInit {
     }
   }
 
-  showDialog(item) {
-    console.log('item in primeng => ', item);
+  showDialog() {
     this.display = true;
     this.changePassForm.controls['old_password'].setValue('');
     this.changePassForm.controls['new_password'].setValue('');
@@ -226,16 +217,17 @@ export class NavigationComponent implements AfterViewInit {
     this.submitted = false;
   }
 
+  showVATDialog() {
+    this.displayVAT = true;
+  }
   onSubmit() {
     this.submitted = true;
     if (!this.changePassForm.invalid) {
       this.isLoading = true;
       this.formData = this.changePassForm.value;
       this.formData.company_id = this.companyId;
-      console.log('company => ', this.companyId);
       this.service.post('company/change_password', this.formData).subscribe(res => {
         this.display = false;
-        // this.closePopup();
         this.submitted = false;
         this.isLoading = false;
         this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
@@ -252,6 +244,35 @@ export class NavigationComponent implements AfterViewInit {
       this.changePassForm.controls['new_password'].setValue('');
       this.changePassForm.controls['repeat_new_password'].setValue('');
     }
+  }
+
+  onVATSubmit() {
+    this.submitted = true;
+    this.isLoading = false;
+    console.log('VATForm.form===>', this.VATData);
+    console.log('type of VATForm.form===>', typeof this.VATData);
+    if (typeof this.VATData === 'string') {
+      var rate = parseInt(this.VATData.split('%')[0]);
+    } else if (typeof this.VATData === 'number') {
+      var rate = this.VATData;
+    }
+    var obj = {
+      'rate': rate
+    };
+    console.log('obj => ', obj);
+    this.service.put('admin/vat/update', obj).subscribe(res => {
+      this.displayVAT = false;
+      this.submitted = false;
+      this.isLoading = false;
+      this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
+    }, err => {
+      err = err.error;
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
+      this.display = false;
+      this.submitted = false;
+      this.isLoading = false;
+    });
+
   }
 
 }

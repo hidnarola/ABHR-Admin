@@ -87,7 +87,6 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
           dataTablesParameters['columns'][4]['isNumber'] = true;
           console.log(dataTablesParameters);
           this.exportParam = dataTablesParameters;
-          console.log('exportParam', this.exportParam);
           setTimeout(() => {
             if (this.rangeDates) {
               if (this.rangeDates[1]) {
@@ -202,12 +201,8 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
           'From_Date': moment(item.from_time).format('LL'),
           'To_Date': moment(item.to_time).format('LL'),
         };
-        console.log('obj => ', obj);
-        console.log('ExcelArray before  => ', ExcelData);
         ExcelData.push(obj);
         this.ExcelArray = ExcelData;
-        console.log('ExcelData after => ', ExcelData);
-        console.log('ExcelArray after => ', this.ExcelArray);
       });
     });
   }

@@ -63,6 +63,10 @@ import { DeliveredTrackingComponent } from './operations/delivered-cars/delivere
 
 import { AgmCoreModule } from '@agm/core';
 import { environment } from '../../../environments/environment';
+import { HelpComponent } from './help/help.component';
+import { ArticleListComponent } from './help/article-list/article-list.component';
+import { AddEditArticleComponent } from './help/article-list/add-edit-article/add-edit-article.component';
+import { ArticleDetailComponent } from './help/article-list/article-detail/article-detail.component';
 const AdminRoutes: Routes = [
   {
     path: '',
@@ -346,9 +350,54 @@ const AdminRoutes: Routes = [
       urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Coupons' }]
     },
   },
+  {
+    path: 'help/article-list',
+    component: ArticleListComponent,
+    data: {
+      title: 'Manage Articles',
+      urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Articles' }]
+    },
+  },
+  {
+    path: 'help/article-list/edit/:id',
+    component: AddEditArticleComponent,
+    data: {
+      title: 'Edit Article',
+      urls: [{ title: 'Dashboard', url: '/admin/dashboard' },
+      {
+        title: 'Articles',
+        url: '/admin/help/article-list'
+      },
+      { title: 'Edit Article' }]
+    },
+  },
+  {
+    path: 'help/article-list/view/:id',
+    component: ArticleDetailComponent,
+    data: {
+      title: 'View Article',
+      urls: [{ title: 'Dashboard', url: '/admin/dashboard' },
+      {
+        title: 'Articles',
+        url: '/admin/help/article-list'
+      },
+      { title: 'View Article' }]
+    },
+  },
+  {
+    path: 'help/article-list/add',
+    component: AddEditArticleComponent,
+    data: {
+      title: 'Add Article',
+      urls: [{ title: 'Admin Dashboard', url: '/admin/dashboard' },
+      {
+        title: 'Articles',
+        url: '/admin/help/article-list'
+      },
+      { title: 'Add Article' }]
+    },
+  },
 ];
-
-// const config: SocketIoConfig = { url: 'http://192.168.100.36:4000', options: {} };
 
 @NgModule({
   imports: [
@@ -372,13 +421,8 @@ const AdminRoutes: Routes = [
     EditorModule,
     CheckboxModule,
     Ng4GeoautocompleteModule.forRoot(),
-    // SocketIoModule,
     CalendarModule,
     DropdownModule,
-    // CalendarModule.forRoot({
-    //   provide: DateAdapter,
-    //   useFactory: adapterFactory
-    // }),
     AgmCoreModule.forRoot({
       apiKey: environment.google_api_key,
     })
@@ -415,6 +459,10 @@ const AdminRoutes: Routes = [
     TransactionReportComponent,
     TakenAwayTrackingComponent,
     DeliveredTrackingComponent,
+    HelpComponent,
+    ArticleListComponent,
+    AddEditArticleComponent,
+    ArticleDetailComponent,
   ],
   providers: [
     // SocketClass

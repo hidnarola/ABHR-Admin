@@ -1,19 +1,22 @@
-import { Component, OnInit, Renderer, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, Injectable, AfterViewInit, OnDestroy, ViewChild, Renderer } from '@angular/core';
+import { DataTableDirective } from 'angular-datatables';
+import { Subject } from 'rxjs';
 import { CrudService } from '../../../../shared/services/crud.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Subject } from 'rxjs';
-import { DataTableDirective } from 'angular-datatables';
 
 @Component({
-  selector: 'app-taken-away-cars',
-  templateUrl: './taken-away-cars.component.html',
-  styleUrls: ['./taken-away-cars.component.css']
+  selector: 'app-article-list',
+  templateUrl: './article-list.component.html',
+  styleUrls: ['./article-list.component.css']
 })
-export class TakenAwayCarsComponent implements OnInit, AfterViewInit, OnDestroy {
+
+@Injectable()
+export class ArticleListComponent implements OnInit, AfterViewInit, OnDestroy {
+
   @ViewChild(DataTableDirective)
   dtElement: DataTableDirective;
   dtOptions: DataTables.Settings = {};
@@ -22,7 +25,7 @@ export class TakenAwayCarsComponent implements OnInit, AfterViewInit, OnDestroy 
   isCols: boolean;
   public pageNumber;
   public totalRecords;
-  public carData;
+  public articleData;
   hideSpinner: boolean;
 
   constructor(
@@ -36,6 +39,7 @@ export class TakenAwayCarsComponent implements OnInit, AfterViewInit, OnDestroy 
     private formBuilder: FormBuilder,
     private spinner: NgxSpinnerService,
   ) { }
+
 
   render(): void {
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
@@ -52,10 +56,10 @@ export class TakenAwayCarsComponent implements OnInit, AfterViewInit, OnDestroy 
 
 
   ngOnInit() {
-    this.carDataListData();
+    this.articleListData();
   }
 
-  carDataListData() {
+  articleListData() {
     console.log('this.hideSpinner => ', this.hideSpinner);
     this.spinner.show();
     this.dtOptions = {
@@ -65,7 +69,7 @@ export class TakenAwayCarsComponent implements OnInit, AfterViewInit, OnDestroy 
       serverSide: true,
       responsive: true,
       ordering: true,
-      order: [[7, 'desc']],
+      order: [[2, 'desc']],
       language: {
         'processing': '',
       },
@@ -74,12 +78,12 @@ export class TakenAwayCarsComponent implements OnInit, AfterViewInit, OnDestroy 
         dataTablesParameters['columns'][1]['isNumber'] = true;
         setTimeout(() => {
           console.log('dtaparametes==>', dataTablesParameters);
-          this.service.post('admin/tracking/returning', dataTablesParameters).subscribe(res => {
-            this.carData = res['result']['data'];
-            // this.carData = [];
+          this.service.post('admin/help/list', dataTablesParameters).subscribe(res => {
+            this.articleData = res['result']['data'];
+            // this.articleData = [];
             this.totalRecords = res['result']['recordsTotal'];
             console.log('res => ', res);
-            if (this.carData.length > 0) {
+            if (this.articleData.length > 0) {
               this.isCols = true;
               $('.dataTables_wrapper').css('display', 'block');
             }
@@ -100,43 +104,22 @@ export class TakenAwayCarsComponent implements OnInit, AfterViewInit, OnDestroy 
         }, 1000);
       },
       columns: [
-        // {
-        //   data: 'Id',
-        //   name: '_id',
-        // },
         {
-          data: 'Booking Number',
-          name: 'booking_number',
+          data: 'Topic',
+          name: 'topic',
         },
         {
-          data: 'First Name',
-          name: 'agent_first_name',
+          data: 'Description',
+          name: 'description',
         },
         {
-          data: 'Last Name',
-          name: 'agent_last_name',
-        },
-        {
-          data: 'Model Name',
-          name: 'model_name',
-        },
-        {
-          data: 'Brand Name',
-          name: 'brand_name',
-        },
-        {
-          data: 'From Date',
-          name: 'from_time',
-        },
-        {
-          data: 'To Date',
-          name: 'to_time',
+          data: 'CreatedAt',
+          name: 'createdAt',
         },
         {
           data: 'Actions',
-          name: 'createdAt',
           orderable: false
-        },
+        }
       ]
     };
   }
@@ -146,4 +129,27 @@ export class TakenAwayCarsComponent implements OnInit, AfterViewInit, OnDestroy 
     this.dtTrigger.next();
     this.hideSpinner = false;
   }
+
+  // dlt popup
+  delete(userId) {
+    console.log('userId==>', userId);
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete this record?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.service.put('admin/help/delete', { article_id: userId }).subscribe(res => {
+          this.render();
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
+        }, err => {
+          err = err.error;
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
+        });
+      },
+      reject: () => {
+      }
+    });
+  }
+  // dlt pop up ends here
+
 }

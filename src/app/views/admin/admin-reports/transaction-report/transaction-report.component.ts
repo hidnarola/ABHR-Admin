@@ -80,6 +80,7 @@ export class TransactionReportComponent implements OnInit, AfterViewInit, OnDest
           this.pageNumber = dataTablesParameters.length;
           this.dtparams = dataTablesParameters;
           dataTablesParameters['columns'][4]['isNumber'] = true;
+          this.exportParam = dataTablesParameters;
           setTimeout(() => {
             if (this.rangeDates) {
               if (this.rangeDates[1]) {
@@ -88,8 +89,8 @@ export class TransactionReportComponent implements OnInit, AfterViewInit, OnDest
                 this.datePicker.overlayVisible = false;
               }
             }
-            this.service.post('admin/transaction/report_list', dataTablesParameters).subscribe(res => {
-              this.reports = res['result']['data'];
+            this.service.post('admin/transaction/report_list', dataTablesParameters).subscribe(async (res: any) => {
+              this.reports = await res['result']['data'];
               console.log(' transaction report => ', this.reports);
               this.totalRecords = res['result']['recordsTotal'];
               // this.reports = [];
@@ -126,11 +127,11 @@ export class TransactionReportComponent implements OnInit, AfterViewInit, OnDest
           },
           {
             data: 'Status',
-            name: 'status',
+            name: 'transaction_status',
           },
           {
             data: 'Transaction Amount',
-            name: 'Transaction_amount',
+            name: 'total_booking_amount',
           },
           {
             data: 'From Date',
@@ -179,6 +180,7 @@ export class TransactionReportComponent implements OnInit, AfterViewInit, OnDest
     console.log('here in export fun => ');
     this.service.post('admin/transaction/export_report_list', this.exportParam).subscribe(async (res: any) => {
       this.exportData = await res['result']['data'];
+      var ExcelData = [];
       this.isExcel = false;
       this.isPDF = false;
       console.log('this.exportData => ', this.exportData);
@@ -187,22 +189,45 @@ export class TransactionReportComponent implements OnInit, AfterViewInit, OnDest
           'First_Name': item.first_name,
           'Last_Name': item.last_name,
           'Company_Name': item.company_name,
-          'Status': item.trip_status,
-          'Transaction Amount': item.Transaction_amount,
+          'Status': item.transaction_status,
+          'Transaction Amount': item.total_booking_amount,
           'From_Date': moment(item.from_time).format('LL'),
           'To_Date': moment(item.to_time).format('LL'),
         };
-        this.ExcelArray.push(obj);
+        ExcelData.push(obj);
+        this.ExcelArray = ExcelData;
       });
-
-      console.log('excel data====>', this.ExcelArray);
     });
   }
 
-  exportAsXLSX(): void {
+  exportAsXLSX() {
     this.isExcel = true;
-    this.ExportRecords();
-    this.excelService.exportAsExcelFile(this.ExcelArray, 'sample');
+    console.log('this.exportParam => ', this.exportParam);
+    this.service.post('admin/transaction/export_report_list', this.exportParam).subscribe(async (res: any) => {
+      console.log('res in export => ', res);
+      this.exportData = await res['result']['data'];
+      var ExcelData = [];
+      this.isExcel = false;
+      this.isPDF = false;
+      console.log('this.exportData => ', this.exportData);
+      this.exportData.forEach(item => {
+        let obj = {
+          'First_Name': item.first_name,
+          'Last_Name': item.last_name,
+          'Company_Name': item.company_name,
+          'Status': item.transaction_status,
+          'Transaction Amount': item.total_booking_amount,
+          'From_Date': moment(item.from_time).format('LL'),
+          'To_Date': moment(item.to_time).format('LL'),
+        };
+        ExcelData.push(obj);
+        this.ExcelArray = ExcelData;
+        console.log('this.ExcelArray => ', this.ExcelArray);
+      });
+    });
+    setTimeout(() => {
+      this.excelService.exportAsExcelFile(this.ExcelArray, 'sample');
+    }, 1000);
   }
 
   public captureScreen() {

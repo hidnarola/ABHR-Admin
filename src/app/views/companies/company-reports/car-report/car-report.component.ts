@@ -98,6 +98,7 @@ export class CarReportComponent implements OnInit, AfterViewInit, OnDestroy {
           console.log('check here => ', dataTablesParameters['company_id']);
           dataTablesParameters['columns'][2]['isNumber'] = true;
           dataTablesParameters['columns'][3]['isNumber'] = true;
+          this.exportParam = dataTablesParameters;
           setTimeout(() => {
             if (this.rangeDates) {
               if (this.rangeDates[1]) {
@@ -192,6 +193,7 @@ export class CarReportComponent implements OnInit, AfterViewInit, OnDestroy {
     console.log('here in export fun => ');
     this.service.post('company/car/export_report_list', this.exportParam).subscribe(async (res: any) => {
       this.exportData = await res['result']['data'];
+      var ExcelData = [];
       this.isExcel = false;
       this.isPDF = false;
       console.log('this.exportData => ', this.exportData);
@@ -205,17 +207,37 @@ export class CarReportComponent implements OnInit, AfterViewInit, OnDestroy {
           'From_Date': moment(item.from_time).format('LL'),
           'To_Date': moment(item.to_time).format('LL'),
         };
-        this.ExcelArray.push(obj);
+        ExcelData.push(obj);
+        this.ExcelArray = ExcelData;
       });
-
-      console.log('excel data====>', this.ExcelArray);
     });
   }
 
-  exportAsXLSX(): void {
+  exportAsXLSX() {
     this.isExcel = true;
-    this.ExportRecords();
-    this.excelService.exportAsExcelFile(this.ExcelArray, 'sample');
+    this.service.post('company/car/export_report_list', this.exportParam).subscribe(async (res: any) => {
+      this.exportData = await res['result']['data'];
+      var ExcelData = [];
+      this.isExcel = false;
+      this.isPDF = false;
+      console.log('this.exportData => ', this.exportData);
+      this.exportData.forEach(item => {
+        let obj = {
+          'Brand': item.car_brand,
+          'Model': item.car_modal,
+          'Company_Name': item.company_name,
+          'Total_Rent': item.booking_rent,
+          'Status': item.trip_status,
+          'From_Date': moment(item.from_time).format('LL'),
+          'To_Date': moment(item.to_time).format('LL'),
+        };
+        ExcelData.push(obj);
+        this.ExcelArray = ExcelData;
+      });
+    });
+    setTimeout(() => {
+      this.excelService.exportAsExcelFile(this.ExcelArray, 'sample');
+    }, 1000);
   }
 
   public captureScreen() {

@@ -22,7 +22,7 @@
             <label class="required"> Car Model :</label>
             <select class="form-control" type="String" required="" id="inlineFormCustomSelect" name="car_model_id"
               required="" formControlName="car_model_id" [ngClass]="{'is-invalid': submitted && f.car_model_id.errors }">
-              <option value="" disabled selected>Choose Car Brand</option>
+              <option value="" disabled selected>Choose Car Model</option>
               <option [value]="data._id" *ngFor="let data of modelList">{{data.model_name}}</option>
             </select>
             <div *ngIf="submitted && f.car_model_id.errors" class="invalid-feedback">
@@ -49,7 +49,7 @@
 
         <div class="col-md-2">
           <div class="form-group">
-            <label class="required"> Milage :</label>
+            <label class="required"> Mileage :</label>
             <select class="custom-select col-12" type="String" id="inlineFormCustomSelect" name="milage" class="form-control"
               formControlName="milage" [ngClass]="{ 'is-invalid': submitted && f.milage.errors }">
               <option value="" disabled selected>Choose...</option>
@@ -57,7 +57,7 @@
               <option value="limited">Limited</option>
             </select>
             <div *ngIf=" submitted && f.milage.errors " class="invalid-feedback">
-              <div *ngIf="f.milage.errors.required"> Milage is required</div>
+              <div *ngIf="f.milage.errors.required"> Mileage is required</div>
             </div>
           </div>
         </div>

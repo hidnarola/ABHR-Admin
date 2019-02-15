@@ -86,6 +86,7 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
           this.pageNumber = dataTablesParameters.length;
           this.dtparams = dataTablesParameters;
           dataTablesParameters['columns'][4]['isNumber'] = true;
+          this.exportParam = dataTablesParameters;
           setTimeout(() => {
             if (this.rangeDates) {
               if (this.rangeDates[1]) {
@@ -183,6 +184,7 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
   ExportRecords() {
     this.service.post('admin/user/export_report_list', this.exportParam).subscribe(async (res: any) => {
       this.exportData = await res['result']['data'];
+      var ExcelData = [];
       this.isExcel = false;
       this.isPDF = false;
       this.exportData.forEach(item => {
@@ -195,15 +197,36 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
           'From_Date': moment(item.from_time).format('LL'),
           'To_Date': moment(item.to_time).format('LL'),
         };
-        this.ExcelArray.push(obj);
+        ExcelData.push(obj);
+        this.ExcelArray = ExcelData;
       });
     });
   }
 
-  exportAsXLSX(): void {
+  exportAsXLSX() {
     this.isExcel = true;
-    this.ExportRecords();
-    this.excelService.exportAsExcelFile(this.ExcelArray, 'sample');
+    this.service.post('admin/user/export_report_list', this.exportParam).subscribe(async (res: any) => {
+      this.exportData = await res['result']['data'];
+      var ExcelData = [];
+      this.isExcel = false;
+      this.isPDF = false;
+      this.exportData.forEach(item => {
+        let obj = {
+          'First_Name': item.first_name,
+          'Last_Name': item.last_name,
+          'Company_Name': item.company_name,
+          'Status': item.trip_status,
+          'Total Rent': item.booking_rent,
+          'From_Date': moment(item.from_time).format('LL'),
+          'To_Date': moment(item.to_time).format('LL'),
+        };
+        ExcelData.push(obj);
+        this.ExcelArray = ExcelData;
+      });
+    });
+    setTimeout(() => {
+      this.excelService.exportAsExcelFile(this.ExcelArray, 'sample');
+    }, 1000);
   }
 
   captureScreen() {

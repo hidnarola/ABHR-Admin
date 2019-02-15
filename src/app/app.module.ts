@@ -42,7 +42,7 @@ import { DialogModule } from 'primeng/dialog';
 import { DateAdapter, CalendarModule } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { TooltipModule } from 'primeng/tooltip';
-
+import { TextMaskModule } from 'angular2-text-mask';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
   wheelSpeed: 2,
@@ -75,8 +75,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ModalDialogModule,
     ToastModule,
     TooltipModule,
-    // CalendarModule,
     DialogModule,
+    TextMaskModule,
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory

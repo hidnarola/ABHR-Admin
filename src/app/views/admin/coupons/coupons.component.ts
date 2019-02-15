@@ -58,7 +58,6 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
       discount_rate: Number,
       company_id: String,
       idCompanyAdded: Boolean,
-
     };
   }
 
@@ -67,7 +66,8 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.idCompanyAdded === true) {
       this.AddEditForm = this.formBuilder.group({
         coupon_code: ['', Validators.required],
-        discount_rate: ['', Validators.compose([Validators.required, Validators.max(100), Validators.pattern('[0-9]*')])],
+        // discount_rate: ['', Validators.compose([Validators.required, Validators.max(100), Validators.pattern('[0-9]*')])],
+        discount_rate: ['', Validators.compose([Validators.required, Validators.max(100), Validators.pattern('^[0-9][0-9]*(\.[0-9]+)?$')])],
         idCompanyAdded: [],
         company_id: ['', Validators.required],
       });
@@ -75,7 +75,8 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       this.AddEditForm = this.formBuilder.group({
         coupon_code: ['', Validators.required],
-        discount_rate: ['', Validators.compose([Validators.required, Validators.max(100), Validators.pattern('[0-9]*')])],
+        // discount_rate: ['', Validators.compose([Validators.required, Validators.max(100), Validators.pattern('[0-9]*')])],
+        discount_rate: ['', Validators.compose([Validators.required, Validators.max(100), Validators.pattern('^[0-9][0-9]*(\.[0-9]+)?$')])],
         idCompanyAdded: [],
       });
       console.log('else => ');

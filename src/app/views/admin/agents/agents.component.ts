@@ -1,13 +1,12 @@
 import { Component, OnInit, Renderer, ViewChild, AfterViewInit, ViewContainerRef, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Routes, RouterModule, ActivatedRoute } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 
 // model
-import { NgbModal, ModalDismissReasons, NgbActiveModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 
 // service
 import { DataSharingService } from '../../../shared/services/data-sharing.service';
@@ -18,7 +17,7 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl } from '@angular/forms';
 
 // primng
-import { ConfirmationService, Message } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 
@@ -71,15 +70,14 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private spinner: NgxSpinnerService,
-    viewRef: ViewContainerRef
   ) {
     this.hideSpinner = true;
     // addform validation
-    const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
+    const pattern = new RegExp('^\\ *([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})\\ *$');
     this.AddEditForm = this.formBuilder.group({
       first_name: ['', Validators.compose([Validators.required, this.noWhitespaceValidator])],
       last_name: ['', Validators.compose([Validators.required, this.noWhitespaceValidator])],
-      phone_number: ['', Validators.compose([Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^([0-9]){10}$/)])],
+      phone_number: ['', Validators.compose([Validators.pattern('\\ *[0-9]{10}\\ *')])],
       email: ['', Validators.compose([Validators.required, this.noWhitespaceValidator, Validators.email,
       Validators.pattern(pattern), this.uniqueEmailValidator])],
     });
@@ -100,18 +98,16 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public uniqueEmailValidator = (control: FormControl) => {
     let isWhitespace;
-    if (isWhitespace = (control.value || '').trim().length === 0) {
-      return { 'required': true };
-    } else {
-      const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
+    if (isWhitespace = (control.value || '').trim().length !== 0) {
+      const pattern = new RegExp('^\\ *([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})\\ *$');
       var result = pattern.test(control.value);
       if (!result) {
         return { 'pattern': true };
       } else {
-        this.emailData = { 'email': control.value };
+        this.emailData = { 'email': control.value ? control.value.trim() : '' };
         console.log('control.value => ', control.value);
         if (this.isEdit) {
-          this.emailData = { 'email': control.value, 'user_id': this.userId };
+          this.emailData = { 'email': control.value ? control.value.trim() : '', 'user_id': this.userId };
         }
         console.log('emailData===>', this.emailData);
         return this.service.post('admin/checkemail', this.emailData).subscribe(res => {
@@ -140,6 +136,10 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.AddEditForm.invalid) {
       this.isLoading = true;
       this.formData = this.AddEditForm.value;
+      this.formData.email = this.formData.email.trim();
+      this.formData.first_name = this.formData.first_name.trim();
+      this.formData.last_name = this.formData.last_name.trim();
+      this.formData.phone_number = this.formData.phone_number.trim();
       console.log('formadata==>', this.formData);
       if (this.isEdit) {
         this.formData.user_id = this.userId;

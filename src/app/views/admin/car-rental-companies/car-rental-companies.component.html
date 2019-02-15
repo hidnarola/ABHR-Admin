@@ -6,9 +6,6 @@
         <h4 class="table-header">List of Car Rental Companies </h4>
       </div>
       <div class="col-lg-6 text-right">
-        <!-- <button type="button" class="btn btn-primary custom-add-btn m-r-10">
-            <i class="fa fa-external-link" aria-hidden="true"></i> Export
-          </button> -->
         <button type="button" class="btn btn-primary custom-add-btn" (click)="open2(content, '')">
           <i class="mdi mdi-account-plus" aria-hidden="true"></i> Add
         </button>
@@ -133,8 +130,8 @@
                 <input class="form-control" type="text" required="" placeholder="Enter Email" formControlName="email"
                   name="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }">
                 <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
-                  <div *ngIf=" f.email.errors.required ">Email is required</div>
-                  <div *ngIf=" f.email.errors.pattern"> Email is wrong </div>
+                  <div *ngIf="f.email.errors.required">Email is required</div>
+                  <div *ngIf="f.email.errors.pattern"> Email is wrong </div>
                   <div *ngIf="f.email.errors.unique">Email already exist</div>
                 </div>
               </div>
