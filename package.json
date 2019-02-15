@@ -27,6 +27,7 @@
     "@angular/router": "^6.0.3",
     "@ng-bootstrap/ng-bootstrap": "^2.0.0",
     "@swimlane/ngx-datatable": "^13.0.0",
+    "agm-direction": "^0.7.6",
     "angular-calendar": "^0.26.4",
     "angular-datatables": "^7.0.0",
     "angular2-text-mask": "^9.0.0",

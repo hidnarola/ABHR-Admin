@@ -127,13 +127,13 @@
             <div class="col-sm-6 ">
               <div class="form-group">
                 <label class="required">Email :</label>
-                <input class="form-control" type="text" required="" placeholder="Enter Email" formControlName="email"
-                  name="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }">
+                <input class="form-control" type="text" placeholder="Enter Email" formControlName="email" name="email"
+                  [ngClass]="{ 'is-invalid': submitted && f.email.errors }">
                 <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                   <div *ngIf="f.email.errors.required">Email is required</div>
                   <div *ngIf="f.email.errors.pattern"> Email is wrong </div>
                   <div *ngIf="f.email.errors.unique">Email already exist</div>
-                </div>
+                </div>{{f.email.errors | json}}
               </div>
             </div>
             <div class="col-sm-6 ">

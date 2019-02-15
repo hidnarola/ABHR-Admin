@@ -115,34 +115,6 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
     let isValid = !isWhitespace;
     return isValid ? null : { 'required': true };
   }
-  // public uniqueEmailValidator = (control: FormControl) => {
-  //   let isWhitespace1;
-  //   console.log("(control.value || '').trim().length => ", (control.value || '').trim().length);
-  //   if (isWhitespace1 = (control.value || '').trim().length === 0) {
-  //     console.log('if => ');
-  //     return { 'required': true };
-  //   } else {
-  //     console.log('else => ');
-  //     const pattern = new RegExp('^\\ *([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})\\ *$');
-  //     let result = pattern.test(control.value);
-  //     if (!result) {
-  //       return { 'pattern': true };
-  //     } else {
-  //       this.emailData = { 'email': control.value ? control.value.trim() : '' };
-  //       if (this.isEdit) {
-  //         this.emailData = { 'email': control.value ? control.value.trim() : '', 'company_id': this.userId };
-  //       }
-  //       return this.service.post('admin/company/checkemail', this.emailData).subscribe(res => {
-  //         if (res['status'] === 'success') {
-  //           this.f.email.setErrors({ 'unique': true });
-  //           return;
-  //         } else {
-  //           this.f.email.setErrors(null);
-  //         }
-  //       });
-  //     }
-  //   }
-  // }
 
   public uniqueEmailValidator = (control: FormControl) => {
     let isWhitespace1;

@@ -62,6 +62,7 @@ import { DeliveredTrackingComponent } from './operations/delivered-cars/delivere
 // import { SocketClass } from '../../shared/classes/socket.class';
 
 import { AgmCoreModule } from '@agm/core';
+import { AgmDirectionModule } from 'agm-direction';
 import { environment } from '../../../environments/environment';
 import { HelpComponent } from './help/help.component';
 import { ArticleListComponent } from './help/article-list/article-list.component';
@@ -425,7 +426,8 @@ const AdminRoutes: Routes = [
     DropdownModule,
     AgmCoreModule.forRoot({
       apiKey: environment.google_api_key,
-    })
+    }),
+    AgmDirectionModule
   ],
   exports: [RouterModule],
   declarations: [

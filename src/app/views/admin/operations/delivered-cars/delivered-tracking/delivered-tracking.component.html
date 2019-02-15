@@ -1,13 +1,16 @@
-<h3>{{msg | json}}</h3>
-
-<button type="button" class="btn btn-primary" (click)="leftGroup()">Left Group</button>
-<button type="button" class="btn btn-primary" (click)="sendMessage()">Send MSG</button>
+<h3>{{msg}}</h3>
+<button type="button" (click)="sendMessage()">Current Location</button>
+<!-- <button type="button" class="btn btn-primary" (click)="leftGroup()">Left Group</button>
+<button type="button" class="btn btn-primary" (click)="sendMessage()">Send MSG</button> -->
 
 <agm-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [disableDefaultUI]="false" [zoomControl]="false" (mapClick)="mapClicked($event)">
 
   <agm-marker *ngFor="let m of markers; let i = index" (markerClick)="clickedMarker(m.label, i)" [latitude]="m.lat"
-    [longitude]="m.lng" [label]="m.label" [markerDraggable]="m.draggable" (dragEnd)="markerDragEnd(m, $event)">
-
+    [longitude]="m.lng" [label]="m.label" [markerDraggable]="m.draggable" (dragEnd)="markerDragEnd(m, $event)"
+    [iconUrl]="m.iconUrl">
+    <agm-direction [origin]="origin" [destination]="destination" [waypoints]="waypoints" [renderOptions]="renderOptions"
+      (onChange)="change($event)" [renderOptions]="renderOptions" [markerOptions]="markerOptions">
+    </agm-direction>
     <!-- <agm-info-window>
       <strong>InfoWindow content</strong>
     </agm-info-window> -->
