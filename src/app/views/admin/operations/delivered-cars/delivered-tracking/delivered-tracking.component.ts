@@ -11,7 +11,7 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./delivered-tracking.component.css']
 })
 export class DeliveredTrackingComponent implements OnInit, AfterViewInit {
-
+  x = 0.000010;
   msg: any;
   bookingId: any;
   userId: any;
@@ -20,9 +20,9 @@ export class DeliveredTrackingComponent implements OnInit, AfterViewInit {
   // google maps zoom level
   zoom = 16;
 
-  // initial center position for the map 21.1968399,72.7789305
-  lat = 21.1968399;
-  lng = 72.7789305;
+  // initial center position for the map 21.203406,72.810435
+  lat = 21.203406;
+  lng = 72.810435;
 
   public origin: any;
   public destination: any;
@@ -76,10 +76,9 @@ export class DeliveredTrackingComponent implements OnInit, AfterViewInit {
     this.msg = 'Map';
     this.socket = io.connect(environment.socketUrl);
     this.joinGroup(this.bookingId, this.userId, 'user');
-<<<<<<< HEAD
+    this.getMessage();
     // this.sendMessage('KP is here.');
     this.getCurrentPosition();
-    this.getDirection();
     this.setCurrentPosition();
   }
   ngAfterViewInit(): void { }
@@ -96,36 +95,38 @@ export class DeliveredTrackingComponent implements OnInit, AfterViewInit {
       iconUrl: 'assets/images/icon/car-placeholder-30-blue.png',
       draggable: false
     }];
-    this.lat = _lat;
-    this.lng = _lng;
+    // this.lat = _lat;
+    // this.lng = _lng;
     this.markers = marker;
     // }, 2000);
   }
 
   public change(event: any) {
     this.waypoints = event.request.waypoints;
-=======
+
     // this.sendMessage();
-    console.log('message => ', this.getMessage());
->>>>>>> d5945bebf7c5b2b390a1b2fb91aaa3359512e76f
+    // console.log('message => ', this.getMessage());
+
   }
-  getDirection() {
+  getDirection(origin, destination) {
     // 21.1968399,72.7789305   21.1205296,72.7409003   21.1298389,73.0863185
-    this.origin = { lat: 21.1968399, lng: 72.7789305 };
-    this.destination = { lat: 21.1298389, lng: 73.0863185 };
-    // this.origin = 'Taipei Main Station';
-    // this.destination = 'Taiwan Presidential Office';
+    // 21.195531,72.7906113 21.2050025,72.8384902
+    this.origin = { lat: origin.latitude, lng: origin.longitude };
+    this.destination = { lat: destination.latitude, lng: destination.longitude };
+    // this.origin = 'Narola Infotech';
+    // this.destination = 'Railway Station';
   }
   leftGroup() {
     this.socket.emit('LeftGroup');
   }
   sendMessage() {
     this.socket.emit('sendTrakingObject', {
-      'Longitude': 123.45,
-      'Latitude': 22.22,
-      'booking_id': '5c34874db8914204105b7c54',
-      'agent_id': '5c34874db8914204105b7c54'
+      'Latitude': 21.203406 + this.x,
+      'Longitude': 72.7906113 + this.x,
+      'booking_id': '5c5e648a0176bd60fad21fe0',
+      'agent_id': '5c5d0d8aba8ed64fe579dc9d'
     });
+    this.x += 0.0010;
   }
 
   joinGroup = (bid, uid, type) => {
@@ -137,11 +138,20 @@ export class DeliveredTrackingComponent implements OnInit, AfterViewInit {
     this.socket.emit('JoinGroup', params);
   }
 
+  getMessage() {
+    // console.log('im getMSG   => ', 1);
+    this.socket.on('Joined', (data: any) => {
+      // this.socket.on('test', (data: any) => {
+      console.log('Joined data => ', data);
+      this.getDirection(data.destination_location, data.source_location);
+    });
+  }
   getCurrentPosition() {
-    this.socket.on('recieveTrackingObjest', (data: any) => {
-      console.log('data => ', data);
+    this.socket.on('recieveTrackingObject', (data: any) => {
+      console.log('Current Location data => ', data);
       this.lat = data.Latitude;
       this.lng = data.Longitude;
+      this.setCurrentPosition();
     });
   }
 

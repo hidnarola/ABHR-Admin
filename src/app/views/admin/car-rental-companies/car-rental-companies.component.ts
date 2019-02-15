@@ -117,9 +117,9 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
     return isValid ? null : { 'required': true }
   }
   public uniqueEmailValidator = (control: FormControl) => {
-    let isWhitespace1;
-    if (isWhitespace1 = (control.value || '').trim().length === 0) {
-      return { 'required': true };
+    let isWhitespace1 = (control.value || '').trim().length === 0;
+    if (isWhitespace1 && control.value.length > 0) {
+      return { 'pattern': true };
     } else {
       const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
       let result = pattern.test(control.value);
