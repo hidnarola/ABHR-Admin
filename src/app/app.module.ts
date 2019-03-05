@@ -21,6 +21,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SpinnerComponent } from './shared/spinner.component';
 
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 // NGX Modules
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ModalDialogModule } from 'ngx-modal-dialog';
@@ -43,11 +44,16 @@ import { DateAdapter, CalendarModule } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { TooltipModule } from 'primeng/tooltip';
 import { TextMaskModule } from 'angular2-text-mask';
+import { CompanyAdminStatusResolve } from './shared/Resolve/company-admin-status';
+// import { ConfirmResetComponent } from './confirm-reset/confirm-reset.component';
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
   wheelSpeed: 2,
   wheelPropagation: true,
 };
+const APP_RESOLVER = [
+  CompanyAdminStatusResolve
+];
 
 @NgModule({
   declarations: [
@@ -58,6 +64,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NavigationComponent,
     BreadcrumbComponent,
     SidebarComponent,
+    // ConfirmResetComponent,
   ],
   imports: [
     CommonModule,
@@ -81,12 +88,14 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
       provide: DateAdapter,
       useFactory: adapterFactory
     }),
-    NavigationModule
+    NavigationModule,
+    NgIdleKeepaliveModule.forRoot(),
   ],
   providers: [
     Constant,
     MessageService,
     DataSharingService,
+    ...APP_RESOLVER,
     ConfirmationService,
     {
       provide: HTTP_INTERCEPTORS,

@@ -50,11 +50,16 @@ export class RentalsComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   ngOnInit() {
+    this.isCols = true;
     this.RentalData();
   }
 
   ngAfterViewInit(): void {
     this.dtTrigger.next();
+    let table: any = $('.custom-datatable').DataTable();
+    table.columns().iterator('column', function (ctx, idx) {
+      $(table.column(idx).header()).append('<span class="sort-icon"/>');
+    });
   }
 
   RentalData() {
@@ -67,6 +72,14 @@ export class RentalsComponent implements OnInit, OnDestroy, AfterViewInit {
       ordering: true,
       language: {
         'processing': '',
+      },
+      responsive: true,
+      destroy: true,
+      // scrollX: true,
+      // scrollCollapse: true,
+      autoWidth: false,
+      initComplete: function (settings, json) {
+        $('.custom-datatable').wrap('<div style="overflow:auto; width:100%;position:relative;"></div>');
       },
       ajax: (dataTablesParameters: any, callback) => {
         this.pageNumber = dataTablesParameters.length;
@@ -82,6 +95,12 @@ export class RentalsComponent implements OnInit, OnDestroy, AfterViewInit {
             if (this.rentalData.length > 0) {
               this.isCols = true;
               $('.dataTables_wrapper').css('display', 'block');
+            } else {
+              if (dataTablesParameters['search']['value'] !== '' && dataTablesParameters['search']['value'] !== null) {
+                this.isCols = true;
+              } else {
+                this.isCols = false;
+              }
             }
             if (this.totalRecords > this.pageNumber) {
               $('.dataTables_paginate').css('display', 'block');

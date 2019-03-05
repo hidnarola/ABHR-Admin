@@ -12,12 +12,15 @@ export class DataSharingService {
   private loadingSource = new BehaviorSubject(null);
   private adminUser = new BehaviorSubject(this.adminU);
   // private companyUser = new BehaviorSubject(this.companyU);
+  private companyStatus = new BehaviorSubject(null);
 
   currentIsLogin = this.isLoginSource.asObservable();
   currentPage = this.isPageSource.asObservable();
   currentloading = this.loadingSource.asObservable();
   currentAdminUser = this.adminUser.asObservable();
   // currentCompanyUser = this.companyUser.asObservable();
+  currentCompanyStatus = this.companyStatus.asObservable();
+
 
   constructor() { }
 
@@ -42,6 +45,12 @@ export class DataSharingService {
   //   console.log('in datadshar===>', value);
   //   this.companyUser.next(value);
   // }
+
+  checkCompanyStatus(status: Boolean) {
+    console.log('in datadshar===>', status);
+    this.companyStatus.next(status);
+  }
+
 
 }
 export interface AdminUser {

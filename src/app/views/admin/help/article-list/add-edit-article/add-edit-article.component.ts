@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { CrudService } from '../../../../../shared/services/crud.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
@@ -25,6 +25,7 @@ export class AddEditArticleComponent implements OnInit {
   public descriptionError: boolean = false;
   public AdminId;
   public UserType;
+  public Detail;
 
   constructor(
     private formbuilder: FormBuilder,
@@ -38,25 +39,35 @@ export class AddEditArticleComponent implements OnInit {
     this.UserType = AdminUser.type;
     this.route.params.subscribe(params => {
       this.Id = params.id;
-      console.log('this.Id => ', this.Id);
-      if (this.Id !== undefined && this.Id !== '' && this.Id != null) {
-        this.isEdit = true;
-      } else {
-        this.isEdit = false;
-      }
     });
 
     this.form = this.formbuilder.group({
-      topic: ['', Validators.required],
-      description: ['', Validators.required]
+      topic: ['', Validators.compose([Validators.required, this.noWhitespaceValidator])],
+      description: ['', Validators.compose([Validators.required, this.noWhitespaceValidator])]
     });
     this.formData = {
       topic: String,
       description: String,
     };
-    console.log('form data', this.formData);
+
+    if (this.Id !== undefined && this.Id !== '' && this.Id != null) {
+      this.service.post('admin/help/details/', { article_id: this.Id }).subscribe(res => {
+        this.Detail = res['data'];
+        this.isEdit = true;
+        this.form.controls['topic'].setValue(this.Detail.topic);
+        this.form.controls['description'].setValue(this.Detail.description);
+      });
+    } else {
+      this.isEdit = false;
+    }
   }
   get f() { return this.form.controls; }
+
+  noWhitespaceValidator(control: FormControl) {
+    let isWhitespace = (control.value || '').trim().length === 0;
+    let isValid = !isWhitespace;
+    return isValid ? null : { 'required': true };
+  }
 
   ngOnInit() { }
 
@@ -67,10 +78,11 @@ export class AddEditArticleComponent implements OnInit {
       this.descriptionError = false;
     }
     this.submitted = true;
-    console.log('this.form.valid => ', this.form.valid);
     if (this.form.valid) {
       this.isLoading = true;
       this.formData = this.form.value;
+      this.formData.topic = this.formData.topic.trim();
+      this.formData.description = this.formData.description.trim();
       if (this.isEdit) {
         this.formData.article_id = this.Id;
         this.isLoading = true;
@@ -86,7 +98,6 @@ export class AddEditArticleComponent implements OnInit {
       } else {
         this.formData.userId = this.AdminId;
         this.formData.userType = this.UserType;
-        console.log('this.formData => ', this.formData);
         this.isLoading = true;
         this.service.post('admin/help/add', this.formData).subscribe(res => {
           this.isLoading = false;

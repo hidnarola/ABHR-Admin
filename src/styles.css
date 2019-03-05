@@ -68,12 +68,12 @@ body .ui-dialog .ui-dialog-footer{ text-align:center !important; }
 .modal-title{ color:#fff; }
 .dropdown-menu{ font-size:13px !important;}
 input#checkbox-signup { margin-right: 5px;}
-div#DataTables_Table_0_paginate {text-transform: capitalize; font-size: 13px;}
+div#DataTables_Table_0_paginate {text-transform: capitalize; font-size: 13px;margin-top: 10px;}
 .ui-confirmdialog.ui-dialog .ui-dialog-content {padding: 2em 2em !important;}
 h4.table-header {color: #5c5c5c;text-transform: capitalize;font-weight: 400;margin-bottom: 30px;}
 li.breadcrumb-item {font-weight: 400;}
 .ui-confirmdialog-icon{ color: red}
-#blue{ color: #5c5c5c;text-transform: capitalize;font-weight: 400;margin-bottom: 48px;}
+#blue{ color: #5c5c5c;text-transform: capitalize;font-weight: 400;margin-bottom: 20px;}
 .ui-toast-top-right {top: 60px !important;}
 h4.text-themecolor.m-b-0 {text-transform: capitalize;}
 .no-data-available {text-align: center;}
@@ -84,6 +84,7 @@ h4.text-themecolor.m-b-0 {text-transform: capitalize;}
 .mb-20{ margin-bottom: 20px!important;}
 .mb-15{ margin-bottom: 15px!important;}
 .mt-15{ margin-top: 15px!important;}
+.mb-25{ margin-bottom: 25px!important;}
 table.dataTable{ margin:0 auto 25px !important;}
 table.dataTable thead th,
 table.dataTable thead td,
@@ -115,7 +116,7 @@ table.dataTable thead .sorting_desc{background-image:url(/assets/images/sorting_
 .dropdown-menu{ min-width:100px !important;}
 .table-responsive {overflow-x: initial !important;}
 body table.dataTable thead .disabled{ background-image:none !important}
-.blue .topbar .navbar-header {padding: 5px 0px;margin-bottom: -1px; margin-top: -1px;}
+.blue .topbar .navbar-header{padding:5px 0px 5px 6px;margin-bottom: -1px; margin-top:-1px;  text-align:left !important;}
 .blue .topbar .navbar-header .navbar-brand img{width: 180px;}
 /* .black-overlay{ background-color:rgb(25, 118, 210,.7) !important;} */
 /* .la-ball-spin-clockwise.la-3x{ width:70px !important; height:70px !important;} */
@@ -219,7 +220,36 @@ span.cancellation_policy {font-weight: 400; color: #1976d2; margin-right: 10px;}
 .inputswitchStyle {top: 7px;}
 a.navbar-brand {cursor: initial;}
 .cars-dtl-box-inr.transaction-dtl-box b {min-width: 210px;}
-
+button.not_allowed,
+a.not_allowed{cursor: not-allowed !important;opacity: 0.5;}
+.description-err-msg {position: absolute;bottom: -20px;width: 100%;margin-top: 0.25rem;font-size: 80%;color: #ef5350;}
+p.p_head {margin-bottom: 10px;font-weight: bold;font-size: 20px;}
+.row.row_view {padding: 15px;margin: 0;background: #f4f4f4;}
+.mb-0{margin-bottom: 0px !important}
+i.fa.fa-ban.text-default {color: red;transform: rotate(90deg);}
+.keyup-input-errMsg {font-size: 80%;color: #ef5350;}
+.row_grey_one label:after {content: " ";position: absolute;right: -15px;top: -1px;width: 15px;height: calc(100% + 2px);background: #f4f4f4;z-index: -1;border-top: 1px solid #ced4da;border-bottom: 1px solid #ced4da;}
+.row_grey_one label {width: 100%;background: #f4f4f4;text-align: left;height: 38px;padding-top: 7px;position: relative;z-index: 9;border-top: 1px solid #ced4da;border-bottom: 1px solid #ced4da;border-left: 1px solid #ced4da;padding: 5px 0 0 15px;}
+.row_grey_one > div:first-child {padding-right: 0;}
+.cars-dtl-box-inr.card_dtl_new .ui-datepicker.ui-datepicker-inline .ui-datepicker-header .ui-datepicker-prev,
+.cars-dtl-box-inr.card_dtl_new .ui-datepicker.ui-datepicker-inline .ui-datepicker-header .ui-datepicker-next {display: none;}
+.cars-dtl-box-inr.card_dtl_new {display: flex;}
+.cars-dtl-box-inr.card_dtl_new  span {width: 100%;}
+.cars-dtl-box-inr.card_dtl_new .ui-datepicker {border: initial;}
+.dataTables_scrollBody thead tr[role="row"]{ visibility: collapse !important; }
+th.disabled {cursor: default !important;}
+.card-body .dataTables_wrapper.no-footer .dataTables_scrollBody {border-bottom: 0px solid #111111;}
+.datable_custom .dataTables_scrollHeadInner table.table.custom-datatable.no-footer.dataTable {margin-bottom: 0 !important;}
+.datable_custom table.dataTable thead .sorting_desc span.sort-icon {background-image: url(/assets/images/sorting_desc.png) !important;}
+.datable_custom table.dataTable thead .sorting_asc span.sort-icon {background-image: url(/assets/images/sorting_asc.png) !important;}
+.datable_custom span.sort-icon {    background-image: url(/assets/images/sorting.png) !important;width: 20px;height: 20px;display: inline-block;vertical-align: top;margin-left: 5px;}
+.datable_custom table.table.custom-datatable.no-footer.dataTable thead tr th {    background-image: none !important;}
+.datable_custom.datable_last_none .dataTables_scrollBody table thead tr th:last-child span.sort-icon {display: none;}
+span.form_calendar.form_arrow_none.cal_button .ui-button-icon-only .ui-button-icon-left {left: 30% !important;}
+button.cal-close {margin: 0px !important;background: #1976d2!important;border: 0px !important;color: white;}
+.col-xs-12.text-center.confirm-pass-text {background-color: #1976d2;color: white;border: 1px solid #1976d2;border-radius: 4px;margin-top: 10px;padding: 10px 20px;}
+p-editor strong {font-weight: bold;}
+h5.transaction-dtl-h5 {padding-top: 20px;}
 
 /***media start here  **/
 @media (min-width:768px){
@@ -241,11 +271,15 @@ a.navbar-brand {cursor: initial;}
 @media(max-width:1199px){
     .terms-detail-box2,
     .terms-detail-box{ max-height:242px;}
+    .terms-detail-box.terms_100 {max-height: 100%;}
 }
 
 @media (min-width:768px) and (max-width:991px){
     .card_cstm .form-group .terms-detail-box {padding: 10px;box-sizing: border-box;margin: 0;border: 1px solid #c8c8c8;    border-bottom: 0;}
     .card_cstm .row > div {flex: 0 0 100%;max-width: 100%;}
+    .row_grey_one label:after {opacity: 0;}
+    .row_grey_one > div:first-child {padding-right: 15px;}
+    .row_grey_one label {border-bottom: 0px solid #ced4da;border-right: 1px solid #ced4da;    text-align: left;padding: 7px 10px 8px 12px;}
 }
 
 @media(max-width:767px){
@@ -266,6 +300,9 @@ a.navbar-brand {cursor: initial;}
     body .card_one_data .right_top_image {position: relative;top: 0;right: 0;height: 50px;}
     .m_zero {margin: 10px 0 0 0 !important;}
     #blue.h4_user_img img {height: 40px;position: absolute;}
+    .row_grey_one label:after {opacity: 0;}
+    .row_grey_one > div:first-child {padding-right: 15px;}
+    .row_grey_one label {border-bottom: 0px solid #ced4da;border-right: 1px solid #ced4da;    text-align: left;padding: 7px 10px 8px 12px;}
     
 }
 

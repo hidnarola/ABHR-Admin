@@ -73,59 +73,89 @@
                             formControlName="first_name" [ngClass]="{ 'is-invalid': submitted && f.first_name.errors }">
                         <div *ngIf=" submitted && f.first_name.errors " class="invalid-feedback">
                             <div *ngIf="f.first_name.errors.required"> First name is required</div>
+                            <div *ngIf="f.first_name.errors.pattern"> First name is wrong</div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="required"> Last Name :</label>
-                        <input class="form-control" placeholder="Enter Lastname " type="text" formControlName="last_name"
-                            name="last_name" [ngClass]="{ 'is-invalid': submitted && f.last_name.errors }">
+                        <input class="form-control" placeholder="Enter Lastname " type="text"
+                            formControlName="last_name" name="last_name"
+                            [ngClass]="{ 'is-invalid': submitted && f.last_name.errors }">
                         <div *ngIf=" submitted && f.last_name.errors " class="invalid-feedback">
                             <div *ngIf="f.last_name.errors.required"> Last name is required</div>
+                            <div *ngIf="f.last_name.errors.pattern"> Last name is wrong</div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="required"> Email :</label>
-                        <input class="form-control" placeholder="Enter Email " type="text" formControlName="email" name="email"
-                            [ngClass]="{ 'is-invalid': submitted && f.email.errors }">
+                        <input class="form-control" placeholder="Enter Email " type="text" formControlName="email"
+                            name="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }">
                         <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                             <div *ngIf=" f.email.errors.required ">Email is required</div>
                             <div *ngIf=" f.email.errors.pattern"> Email is wrong </div>
-                            <div *ngIf="f.email.errors.unique">Email already exist</div>
+                            <div *ngIf="f.email.errors.unique">{{errMsg}}</div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="required"> Phone Number :</label>
                         <input class="form-control" placeholder="Enter Phone Number " type="string" name="phone_number"
-                            formControlName="phone_number" [ngClass]="{ 'is-invalid': submitted && f.phone_number.errors }">
+                            formControlName="phone_number" (keyup)="keyup2($event)"
+                            (keypress)="restrictAlphabets($event)"
+                            [ngClass]="{ 'is-invalid':(submitted && f.phone_number.errors) || numberErr2}">
                         <div *ngIf=" submitted && f.phone_number.errors " class="invalid-feedback">
                             <div *ngIf=" f.phone_number.errors.required ">Phone number is required</div>
                             <div *ngIf="f.phone_number.errors.pattern">Phone number is wrong</div>
+                        </div>
+
+                        <div *ngIf="numberErr2" class="keyup-input-errMsg">
+                            Phone number is wrong
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label class="required">Support Email :</label>
-                        <input class="form-control" placeholder="Enter Support Email " type="text" formControlName="support_email"
-                            name="support_email" [ngClass]="{ 'is-invalid': submitted && f.support_email.errors }">
+                        <input class="form-control" placeholder="Enter Support Email " type="text"
+                            formControlName="support_email" name="support_email"
+                            [ngClass]="{ 'is-invalid': submitted && f.support_email.errors }">
                         <div *ngIf="submitted && f.support_email.errors" class="invalid-feedback">
                             <div *ngIf=" f.support_email.errors.required ">Support Email is required</div>
                             <div *ngIf=" f.support_email.errors.pattern"> Support Email is wrong </div>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label class="required"> Support Phone Number :</label>
-                        <input class="form-control" placeholder="Enter Phone Number " type="string" name="support_phone_number"
-                            formControlName="support_phone_number" [ngClass]="{ 'is-invalid': submitted && f.support_phone_number.errors }">
-                        <div *ngIf=" submitted && f.support_phone_number.errors " class="invalid-feedback">
+                        <input class="form-control" placeholder="Enter Phone Number " type="string"
+                            name="support_phone_number" id="support_number_errMsg"
+                            formControlName="support_phone_number" (keyup)="keyup($event)"
+                            [ngClass]="{ 'is-invalid': submitted && f.support_phone_number.errors }">
+                        <div *ngIf=" submitted && f.support_phone_number.errors" class="invalid-feedback">
                             <div *ngIf=" f.support_phone_number.errors.required ">Phone number is required</div>
                             <div *ngIf="f.support_phone_number.errors.pattern">Phone number is wrong</div>
+                        </div>
+                        <div *ngIf="numberErr" class="keyup-input-errMsg">
+                            Phone number is wrong
+                        </div>
+                    </div> -->
+                    <div class="form-group">
+                        <label class="required"> Support Phone Number :</label>
+                        <input class="form-control" placeholder="Enter Phone Number " type="string"
+                            name="support_phone_number" formControlName="support_phone_number" (keyup)="keyup($event)"
+                            (keypress)="restrictAlphabets($event)"
+                            [ngClass]="{ 'is-invalid': (submitted && f.support_phone_number.errors) || numberErr }">
+                        <div *ngIf=" submitted && f.support_phone_number.errors" class="invalid-feedback">
+                            <div *ngIf=" f.support_phone_number.errors.required ">Phone number is required</div>
+                            <div *ngIf="f.support_phone_number.errors.pattern">Phone number is wrong</div>
+                        </div>
+                        <div *ngIf="numberErr" class="keyup-input-errMsg">
+                            Phone number is wrong
                         </div>
                     </div>
                     <div class="form-group">
                         <label> Support Site URL :</label>
-                        <input class="form-control" placeholder="Enter Support URL " type="text" formControlName="support_site_url"
-                            name="support_site_url" [ngClass]="{ 'is-invalid': submitted && f.support_site_url.errors }">
+                        <input class="form-control" placeholder="Enter Support URL " type="text"
+                            formControlName="support_site_url" name="support_site_url"
+                            [ngClass]="{ 'is-invalid': submitted && f.support_site_url.errors }">
                         <div *ngIf="submitted && f.support_site_url.errors" class="invalid-feedback">
                             <div *ngIf=" f.support_site_url.errors.pattern"> URL is wrong </div>
                         </div>
@@ -133,12 +163,14 @@
                 </div>
 
                 <div class="col-sm-12">
-                    <button type="submit" *ngIf="!isLoading" class="btn waves-effect waves-light custom-btn btn-primary">Submit</button>
+                    <button type="submit" *ngIf="!isLoading"
+                        class="btn waves-effect waves-light custom-btn btn-primary">Submit</button>
                     <button type="button" *ngIf="isLoading" class="btn waves-effect loading-btn waves-light btn-primary"
                         type="button">
                         <i class="fa fa-spinner fa-spin"></i>Loading
                     </button>
-                    <a class="btn waves-effect waves-light custom-btn btn-danger" [routerLink]="['/admin/dashboard']">Cancel</a>
+                    <a class="btn waves-effect waves-light custom-btn btn-danger"
+                        [routerLink]="['/admin/dashboard']">Cancel</a>
                 </div>
             </div>
         </form>

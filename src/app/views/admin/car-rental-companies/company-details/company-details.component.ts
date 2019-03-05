@@ -46,6 +46,7 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
   closeResult: string;
   public title = 'Add Company';
   isLoading: boolean;
+  public numberErr: boolean = false;
 
   @ViewChild(DataTableDirective)
   dtElementcar: DataTableDirective;
@@ -72,7 +73,6 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
     private spinner: NgxSpinnerService,
     private confirmationService: ConfirmationService
   ) {
-    console.log('this.route.snapshot.paramMap in detail page=> ', this.route.snapshot.paramMap);
     if (this.route.snapshot.paramMap.has('id') && this.route.snapshot.paramMap.get('id') !== ':id' &&
       this.route.snapshot.paramMap.get('id') !== ':_id') {
       this.route.params.subscribe(params => {
@@ -90,7 +90,7 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
       description: ['', Validators.compose([Validators.required, this.noWhitespaceValidator])],
       site_url: ['', Validators.compose([Validators.required,
       Validators.pattern('^(https?:\/\/)?[0-9a-zA-Z]+\.[-_0-9a-zA-Z]+\.[0-9a-zA-Z]+$')])],
-      phone_number: ['', Validators.compose([Validators.pattern('\\ *[0-9]{10}\\ *')])],
+      phone_number: ['', Validators.compose([Validators.pattern('^[0-9]{10,20}$')])],
       email: ['', Validators.compose([Validators.required, Validators.email, Validators.pattern(pattern), this.uniqueEmailValidator])],
     });
     this.formData = {
@@ -151,6 +151,7 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
       });
     }
   }
+
   // add-edit-popup form validation
   get f() { return this.AddEditForm.controls; }
   closePopup() {
@@ -160,6 +161,7 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
   }
   onSubmit() {
     this.submitted = true;
+    this.numberErr = false;
     if (!this.AddEditForm.invalid) {
       this.isLoading = true;
       this.formData = this.AddEditForm.value;
@@ -217,6 +219,7 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
     }, (reason) => {
     });
     this.submitted = false;
+    this.numberErr = false;
   }
 
   // add-edit popup ends here
@@ -242,6 +245,15 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
     };
     this.userSettings = Object.assign({}, this.userSettings);
     // Very Important Line to add after modifying settings.
+    let table: any = $('.custom-datatable').DataTable();
+    table.columns().iterator('column', function (ctx, idx) {
+      if (idx !== 5) {
+        $(table.column(idx).header()).append('<span class="sort-icon"/>');
+      }
+      // if (idx !== 4) {
+      //   $(table.column(idx).header()).append('<span class="sort-icon"/>');
+      // }
+    });
   }
 
   CarData() {
@@ -253,7 +265,16 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
       serverSide: true,
       ordering: true,
       order: [[5, 'desc']],
-      language: { 'processing': '<i class=\'fa fa-refresh loader fa-spin\'></i>' },
+      // order: [[4, 'desc']],
+      language: { 'processing': '' },
+      responsive: true,
+      destroy: true,
+      // scrollX: true,
+      // scrollCollapse: true,
+      autoWidth: false,
+      initComplete: function (settings, json) {
+        $('.custom-datatable').wrap('<div style="overflow:auto; width:100%;position:relative;"></div>');
+      },
       ajax: (dataTablesParameters: any, callback) => {
         this.pageNumber = dataTablesParameters.length;
         dataTablesParameters['columns'][2]['isNumber'] = true;
@@ -268,6 +289,12 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
             if (this.carData.length > 0) {
               this.isCols = true;
               $('.dataTables_wrapper').css('display', 'block');
+            } else {
+              if (dataTablesParameters['search']['value'] !== '' && dataTablesParameters['search']['value'] !== null) {
+                this.isCols = true;
+              } else {
+                this.isCols = false;
+              }
             }
             if (this.totalRecords > this.pageNumber) {
               $('.dataTables_paginate').css('display', 'block');
@@ -286,11 +313,11 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
       columns: [
         {
           data: 'Car Brand',
-          name: 'brandDetails.brand_name',
+          name: 'brand_name',
         },
         {
           data: 'Car Model',
-          name: 'modelDetails.model_name',
+          name: 'model_name',
         },
         // {
         //   data: 'Car Class',
@@ -301,8 +328,8 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
         //   name: 'brandDetails.transmission',
         // },
         {
-          data: 'Release Year',
-          name: 'modelDetails.release_year',
+          data: 'Purchased Year',
+          name: 'age_of_car',
         },
         {
           data: 'Price',
@@ -310,7 +337,7 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
         },
         {
           data: 'Available',
-          name: 'is_avialable',
+          name: 'is_available',
         },
         {
           data: 'Actions',
@@ -323,6 +350,7 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
 
 
   ngOnInit() {
+    this.isCols = true;
     this.CarData();
     this.UserDetails();
   }
@@ -352,8 +380,6 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
     }
   }
 
-  test(address) { }
-
   // dlt popup
   delete(userId) {
     this.confirmationService.confirm({
@@ -374,5 +400,30 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
     });
   }
   // dlt pop up ends here
+
+  restrictAlphabets(e) {
+    var x = e.which || e.keycode;
+    if ((x >= 48 && x <= 57) || x === 8 ||
+      (x >= 35 && x <= 40) || x === 46) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  keyup(event) {
+    if (this.AddEditForm.controls.phone_number.status === 'INVALID') {
+      if (this.AddEditForm.controls.phone_number.value.length < 21) {
+        this.numberErr = false;
+      } else {
+        this.numberErr = true;
+      }
+    } else {
+      this.numberErr = false;
+    }
+    if (this.submitted === true) {
+      this.numberErr = false;
+    }
+  }
 
 }

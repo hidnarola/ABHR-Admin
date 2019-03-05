@@ -8,6 +8,7 @@ import * as moment from 'moment';
 import { ExcelService } from '../../../../shared/services/excel.service';
 import * as jspdf from 'jspdf';
 import html2canvas from 'html2canvas';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-admin-users-report',
@@ -45,24 +46,24 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
     public renderer: Renderer,
     public service: CrudService,
     private spinner: NgxSpinnerService,
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService,
     private excelService: ExcelService
   ) { }
 
   DatePicker(date: NgbDateStruct) {
-    console.log('check => ', date);
     this.newDate = date.year + '-' + date.month + '-' + date.day;
-    console.log('newDate => ', this.newDate);
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.draw();
     });
   }
   FilterRange() {
-    console.log('rangeDates in filter function => ', this.rangeDates);
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.draw();
     });
   }
   ngOnInit() {
+    this.isCols = true;
     this.ReportData();
     setTimeout(() => {
       this.ExportRecords();
@@ -80,8 +81,14 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
         serverSide: true,
         ordering: true,
         order: [[6, 'desc']],
-        language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
-
+        language: { 'processing': '' },
+        responsive: true,
+        // scrollX: true,
+        // scrollCollapse: true,
+        autoWidth: false,
+        initComplete: function (settings, json) {
+          $('.custom-datatable').wrap('<div style="overflow:auto; width:100%;position:relative;"></div>');
+        },
         ajax: (dataTablesParameters: any, callback) => {
           this.pageNumber = dataTablesParameters.length;
           this.dtparams = dataTablesParameters;
@@ -97,12 +104,22 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
             }
             this.service.post('admin/user/report_list', dataTablesParameters).subscribe(res => {
               this.reports = res['result']['data'];
-              console.log(' user report => ', this.reports);
-              this.totalRecords = res['result']['recordsTotal'];
               // this.reports = [];
+              this.totalRecords = res['result']['recordsTotal'];
               if (this.reports.length > 0) {
                 this.isCols = true;
                 $('.dataTables_wrapper').css('display', 'block');
+              } else {
+                if (dataTablesParameters['search']['value'] !== '' && dataTablesParameters['search']['value'] !== null ||
+                  ((dataTablesParameters['selectFromDate'] && dataTablesParameters['selectToDate']) !== '') &&
+                  ((dataTablesParameters['selectFromDate'] && dataTablesParameters['selectToDate']) !== null)) {
+                  this.isCols = true;
+                } else if (this.rangeDates) {
+                  this.isCols = true;
+                } else {
+                  this.isCols = false;
+                }
+                // this.isCols = false;
               }
               if (this.totalRecords > this.pageNumber) {
                 $('.dataTables_paginate').css('display', 'block');
@@ -132,12 +149,20 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
             name: 'company_name',
           },
           {
+            data: 'Car Brand',
+            name: 'car_brand',
+          },
+          {
+            data: 'Car Model',
+            name: 'car_modal',
+          },
+          {
             data: 'Status',
             name: 'trip_status',
           },
           {
-            data: 'Total Rent',
-            name: 'booking_rent',
+            data: 'Total Amount',
+            name: 'total_booking_amount',
           },
           {
             data: 'From Date',
@@ -147,11 +172,12 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
             data: 'To Date',
             name: (('to_time') && ('createdAt')),
           },
+          {
+            data: 'Actions'
+          }
         ]
       };
-    } catch (error) {
-      console.log('error => ', error);
-    }
+    } catch (error) { }
 
   }
   render(): void {
@@ -168,15 +194,19 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
   }
   ngAfterViewInit(): void {
     this.dtTrigger.next();
+    let table: any = $('.custom-datatable').DataTable();
+    table.columns().iterator('column', function (ctx, idx) {
+      if (idx !== 9) {
+        $(table.column(idx).header()).append('<span class="sort-icon"/>');
+      }
+    });
   }
 
   handleFilterCalendar = () => {
     this.datePicker.overlayVisible = false;
-    console.log('this.rangeDates  => ', this.rangeDates);
   }
   handleClearCalendar = () => {
     this.rangeDates = null;
-    console.log('this.rangeDates  => ', this.rangeDates);
     this.datePicker.overlayVisible = false;
     this.render();
     this.spinner.show();
@@ -189,13 +219,13 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
       this.isPDF = false;
       this.exportData.forEach(item => {
         let obj = {
-          'First_Name': item.first_name,
-          'Last_Name': item.last_name,
-          'Company_Name': item.company_name,
+          'First Name': item.first_name,
+          'Last Name': item.last_name,
+          'Company Name': item.company_name,
           'Status': item.trip_status,
           'Total Rent': item.booking_rent,
-          'From_Date': moment(item.from_time).format('LL'),
-          'To_Date': moment(item.to_time).format('LL'),
+          'From Date': moment(item.from_time).format('LL'),
+          'To Date': moment(item.to_time).format('LL'),
         };
         ExcelData.push(obj);
         this.ExcelArray = ExcelData;
@@ -212,20 +242,20 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
       this.isPDF = false;
       this.exportData.forEach(item => {
         let obj = {
-          'First_Name': item.first_name,
-          'Last_Name': item.last_name,
-          'Company_Name': item.company_name,
+          'First Name': item.first_name,
+          'Last Name': item.last_name,
+          'Company Name': item.company_name,
           'Status': item.trip_status,
           'Total Rent': item.booking_rent,
-          'From_Date': moment(item.from_time).format('LL'),
-          'To_Date': moment(item.to_time).format('LL'),
+          'From Date': moment(item.from_time).format('LL'),
+          'To Date': moment(item.to_time).format('LL'),
         };
         ExcelData.push(obj);
         this.ExcelArray = ExcelData;
       });
     });
     setTimeout(() => {
-      this.excelService.exportAsExcelFile(this.ExcelArray, 'sample');
+      this.excelService.exportAsExcelFile(this.ExcelArray, 'Users-Report');
     }, 1000);
   }
 
@@ -233,6 +263,7 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
     this.isPDF = true;
     this.ExportRecords();
     var pdfdata = document.getElementById('contentToConvert');
+    // var pdfdata = $('#contentToConvert_wrapper').children(".dataTables_scroll")[0];
     html2canvas(pdfdata).then(canvas => {
       // Few necessary setting options  
       var imgWidth = 208;
@@ -244,7 +275,31 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
       let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF  
       var position = 0;
       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)
-      pdf.save('Users-report.pdf'); // Generated PDF   
+      pdf.save('Users-Report.pdf'); // Generated PDF   
+    });
+  }
+
+  cancel(Id) {
+    var date = moment().format('YYYY-MM-DD');
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to cancel this Car?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        var Obj = {
+          'booking_number': Id,
+          'cancel_date': date
+        };
+        this.service.post('app/car/cancel-booking-v2', Obj).subscribe(res => {
+          this.render();
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
+        }, err => {
+          err = err.error;
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
+        });
+      },
+      reject: () => {
+      }
     });
   }
 

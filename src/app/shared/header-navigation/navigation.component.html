@@ -79,8 +79,9 @@
             <ul class="navbar-nav mr-auto mt-md-0">
                 <!-- This is  -->
 
-                <li class="nav-item m-l-10"> <a class="nav-link sidebartoggler text-muted waves-effect waves-dark" href="javascript:void(0)"
-                        pTooltip="Toggle Menu" tooltipPosition="bottom"><i class="ti-menu"></i></a> </li>
+                <li class="nav-item m-l-10"> <a class="nav-link sidebartoggler text-muted waves-effect waves-dark"
+                        href="javascript:void(0)" pTooltip="Toggle Menu" tooltipPosition="bottom"><i
+                            class="ti-menu"></i></a> </li>
                 <!-- ============================================================== -->
                 <!-- Comment -->
                 <!-- ============================================================== -->
@@ -150,9 +151,10 @@
                 <!-- Profile -->
                 <!-- ============================================================== -->
                 <li class="nav-item dropdown" ngbDropdown placement="bottom-right">
-                    <a ngbDropdownToggle class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="javascript:void(0)"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="assets/images/users/1.jpg"
-                            alt="user" class="profile-pic" pTooltip="Profile" tooltipPosition="bottom" /></a>
+                    <a ngbDropdownToggle class="nav-link dropdown-toggle text-muted waves-effect waves-dark"
+                        href="javascript:void(0)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img
+                            src="assets/images/users/1.jpg" alt="user" class="profile-pic" pTooltip="Profile"
+                            tooltipPosition="bottom" /></a>
                     <div class="dropdown-menu animated slideInDown" ngbDropdownMenu>
                         <ul class="dropdown-user">
                             <li>
@@ -173,8 +175,8 @@
                                 </a>
                             </li>
                             <li *ngIf="AdminType === 'company_admin'">
-                                <a [routerLink]="['/company/terms_and_conditions']">
-                                    <i class="fa fa-check-square-o"></i> Terms & Conditions
+                                <a [routerLink]="['/company/terms_and_insurance']">
+                                    <i class="fa fa-check-square-o"></i> Terms & Insurance
                                 </a>
                             </li>
                             <li role="separator" class="divider"></li>
@@ -238,24 +240,28 @@
 
 
 
-<p-dialog header="Change VAT" [(visible)]="displayVAT" width="300px" modal="true" blockScroll="false" closeOnEscape="false">
-    <form name="VATForm" #VATForm="ngForm" class="form-horizontal form-material row" (keydown.enter)="$event.preventDefault()"
-        (ngSubmit)="VATForm.form.valid && onVATSubmit()">
+<p-dialog header="Change VAT" [(visible)]="displayVAT" width="300px" modal="true" blockScroll="false"
+    closeOnEscape="false">
+    <form name="VATForm" #VATForm="ngForm" class="form-horizontal form-material row"
+        (keydown.enter)="$event.preventDefault()" (ngSubmit)="VATForm.form.valid && onVATSubmit()">
         <div class="col-sm-12">
             <div class="form-group">
                 <label class="required" for="rate">VAT Rate </label>
-                <input class="form-control" type="text" [textMask]="{mask: numberMask}" required="" name="rate" id="rate"
-                    [(ngModel)]="VATData" pattern="^[0-9][0-9]*(\.[0-9]+)?%$" placeholder="Enter VAT Rate" class="form-control"
-                    #rate="ngModel" [ngClass]="{ 'is-invalid': VATForm.submitted && rate.invalid }">
+                <input class="form-control" type="text" [textMask]="{mask: numberMask}" required="" name="rate"
+                    id="rate" [(ngModel)]="VATData" pattern="^[0-9][0-9]*(\.[0-9]+)?%$" placeholder="Enter VAT Rate"
+                    class="form-control" #rate="ngModel"
+                    [ngClass]="{ 'is-invalid': VATForm.submitted && rate.invalid }">
                 <div *ngIf="VATForm.submitted && rate.invalid" class="invalid-feedback">
                     <div *ngIf="rate.errors.required">Rate is required</div>
-                    <div *ngIf="rate.errors.pattern">Rate is not valid.</div>
+                    <div *ngIf="rate.errors.pattern">Rate is not valid</div>
                 </div>
             </div>
         </div>
         <div class="col-sm-12">
-            <button type="submit" *ngIf="!isLoading" class="btn waves-effect waves-light custom-btn btn-primary">Submit</button>
-            <button type="button" *ngIf="isLoading" class="btn waves-effect loading-btn waves-light btn-primary" type="button">
+            <button type="submit" *ngIf="!isLoading"
+                class="btn waves-effect waves-light custom-btn btn-primary">Submit</button>
+            <button type="button" *ngIf="isLoading" class="btn waves-effect loading-btn waves-light btn-primary"
+                type="button">
                 <i class="fa fa-spinner fa-spin"></i>Loading
             </button>
             <a class="btn waves-effect waves-light custom-btn btn-danger" (click)="displayVAT=false">Cancel</a>
@@ -265,14 +271,16 @@
 
 
 <!---company admin --- change password -->
-<p-dialog header="Change Password" [(visible)]="display" width="300px" modal="true" blockScroll="false" closeOnEscape="false">
+<p-dialog header="Change Password" [(visible)]="display" width="300px" modal="true" blockScroll="false"
+    closeOnEscape="false">
     <form [formGroup]="changePassForm" (ngSubmit)="onSubmit()" class="form-horizontal form-material row"
         (keydown.enter)="$event.preventDefault()">
         <div class="col-sm-12">
             <div class="form-group">
                 <label class="required">Old Password </label>
-                <input class="form-control" type="password" required="" name="old_password" placeholder="Enter Old Password"
-                    formControlName="old_password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.old_password.errors }">
+                <input class="form-control" type="password" required="" name="old_password"
+                    placeholder="Enter Old Password" formControlName="old_password" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.old_password.errors }">
                 <div *ngIf=" submitted && f.old_password.errors " class="invalid-feedback">
                     <div *ngIf="f.old_password.errors.required"> Old Password is required</div>
                     <div *ngIf="f.old_password.errors.matchPass">Old Password is Incorrect</div>
@@ -282,8 +290,9 @@
         <div class="col-sm-12">
             <div class="form-group">
                 <label class="required">New Password </label>
-                <input class="form-control" type="password" required="" name="new_password" placeholder="Enter New Password"
-                    formControlName="new_password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.new_password.errors }">
+                <input class="form-control" type="password" required="" name="new_password"
+                    placeholder="Enter New Password" formControlName="new_password" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.new_password.errors }">
                 <div *ngIf=" submitted && f.new_password.errors " class="invalid-feedback">
                     <div *ngIf="f.new_password.errors.required">New Password is required</div>
                     <div *ngIf="f.new_password.errors.minlength || f.new_password.errors.maxlength">New Password should
@@ -295,7 +304,8 @@
             <div class="form-group">
                 <label class="required">Repeat New Password </label>
                 <input class="form-control" type="password" required="" placeholder="Repeat New Password"
-                    formControlName="repeat_new_password" name="repeat_new_password" [ngClass]="{ 'is-invalid': submitted && f.repeat_new_password.errors }">
+                    formControlName="repeat_new_password" name="repeat_new_password"
+                    [ngClass]="{ 'is-invalid': submitted && f.repeat_new_password.errors }">
                 <div *ngIf="submitted && f.repeat_new_password.errors" class="invalid-feedback">
                     <div *ngIf=" f.repeat_new_password.errors.required ">Repeat New Password is required</div>
                     <div *ngIf="f.repeat_new_password.errors.mustMatch">Passwords must match</div>
@@ -303,8 +313,10 @@
             </div>
         </div>
         <div class="col-sm-12">
-            <button type="submit" *ngIf="!isLoading" class="btn waves-effect waves-light custom-btn btn-primary">Submit</button>
-            <button type="button" *ngIf="isLoading" class="btn waves-effect loading-btn waves-light btn-primary" type="button">
+            <button type="submit" *ngIf="!isLoading"
+                class="btn waves-effect waves-light custom-btn btn-primary">Submit</button>
+            <button type="button" *ngIf="isLoading" class="btn waves-effect loading-btn waves-light btn-primary"
+                type="button">
                 <i class="fa fa-spinner fa-spin"></i>Loading
             </button>
             <a class="btn waves-effect waves-light custom-btn btn-danger" (click)="display=false">Cancel</a>

@@ -25,6 +25,8 @@ export class CarDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
   isCols: boolean;
   public pageNumber;
   public totalRecords;
+  public SelectedDates: Array<Date>;
+  public today;
 
   constructor(
     private route: ActivatedRoute,
@@ -32,16 +34,37 @@ export class CarDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     private spinner: NgxSpinnerService,
     public renderer: Renderer,
   ) {
+    this.today = new Date();
     this.route.params.subscribe(params => { this.carId = params.id; });
-    console.log('carId==>', this.carId);
   }
 
   CarDetails() {
     this.spinner.show();
     this.service.post('admin/company/car/details/', { car_id: this.carId }).subscribe(res => {
-      console.log('cardetails RES==>', res);
       this.carDetails = res['data'].carDetail;
-      console.log('carDetails ==>', this.carDetails);
+      this.today = new Date();
+
+
+
+      if (this.carDetails.is_available !== undefined) {
+        var DateArray = this.carDetails.is_available;
+        const _selectDate = [];
+        DateArray.forEach(element => {
+          if (element.availability.length !== 0) {
+            element.availability.forEach(ele => {
+              let Dateobj = new Date(ele);
+              _selectDate.push(Dateobj);
+            });
+          }
+        });
+        if (_selectDate && _selectDate.length > 0) {
+          this.SelectedDates = _selectDate;
+        }
+      }
+
+
+
+
       let carCriteria = this.carDetails.resident_criteria;
       var CriteriaName = '';
       if (carCriteria === 0) {
@@ -52,7 +75,6 @@ export class CarDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         CriteriaName = 'Both';
       }
       this.carDetails.resident_criteria = CriteriaName;
-      console.log('criteria name', CriteriaName);
       localStorage.setItem('companyId', this.carDetails.car_rental_company_id);
       this.spinner.hide();
     }, error => {
@@ -71,11 +93,16 @@ export class CarDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     this.dtTrigger.unsubscribe();
   }
   ngOnInit() {
+    this.isCols = true;
     this.CarDetails();
     this.RentalData();
   }
   ngAfterViewInit(): void {
     this.dtTrigger.next();
+    let table: any = $('.custom-datatable').DataTable();
+    table.columns().iterator('column', function (ctx, idx) {
+      $(table.column(idx).header()).append('<span class="sort-icon"/>');
+    });
   }
   RentalData() {
     this.dtOptions = {
@@ -84,21 +111,34 @@ export class CarDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
       processing: true,
       serverSide: true,
       ordering: true,
-      language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
+      language: { 'processing': '' },
+      responsive: true,
+      destroy: true,
+      // scrollX: true,
+      // scrollCollapse: true,
+      autoWidth: false,
+      initComplete: function (settings, json) {
+        $('.custom-datatable').wrap('<div style="overflow:auto; width:100%;position:relative;"></div>');
+      },
       ajax: (dataTablesParameters: any, callback) => {
         this.pageNumber = dataTablesParameters.length;
         dataTablesParameters['columns'][0]['isNumber'] = true;
         dataTablesParameters['columns'][2]['isNumber'] = true;
-        console.log('dataparametes in rental==>', dataTablesParameters);
         setTimeout(() => {
           dataTablesParameters.car_id = this.carId;
           this.service.post('admin/company/car/rental_list', dataTablesParameters).subscribe(res => {
-            console.log('res in rental', res);
             this.rentalData = res['result']['data'];
             this.totalRecords = res['result']['recordsTotal'];
             if (this.rentalData.length > 0) {
               this.isCols = true;
               $('.dataTables_wrapper').css('display', 'block');
+            }
+            else {
+              if (dataTablesParameters['search']['value'] !== '' && dataTablesParameters['search']['value'] !== null) {
+                this.isCols = true;
+              } else {
+                this.isCols = false;
+              }
             }
             if (this.totalRecords > this.pageNumber) {
               $('.dataTables_paginate').css('display', 'block');

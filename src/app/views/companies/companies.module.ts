@@ -28,6 +28,9 @@ import { CompanyTransactionComponent } from './company-transaction/company-trans
 import { CheckboxModule } from 'primeng/checkbox';
 import { TransactionDetailComponent } from './company-transaction/transaction-detail/transaction-detail.component';
 import { TransactionReportComponent } from './company-reports/transaction-report/transaction-report.component';
+import { CompanyInvoiceComponent } from './company-transaction/company-invoice/company-invoice.component';
+import { Ng4GeoautocompleteModule } from 'ng4-geoautocomplete';
+import { CompanyAdminStatusResolve } from '../../shared/Resolve/company-admin-status';
 // shared component
 // import { RentalsComponent } from '../../shared/components/rentals-for-car/rentals.component';
 
@@ -44,6 +47,9 @@ const CompanyRoutes: Routes = [{
             data: {
                 title: 'Dashboard'
             },
+            resolve: {
+                company: CompanyAdminStatusResolve
+            }
         },
         {
             path: 'car',
@@ -52,6 +58,9 @@ const CompanyRoutes: Routes = [{
                 title: 'Manage Cars',
                 urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Cars' }]
             },
+            resolve: {
+                company: CompanyAdminStatusResolve
+            }
         },
         {
             path: 'car/view/:id',
@@ -60,6 +69,9 @@ const CompanyRoutes: Routes = [{
                 title: 'View Car',
                 urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Cars', url: '/company/car' }, { title: 'Car Detail' }]
             },
+            resolve: {
+                company: CompanyAdminStatusResolve
+            }
         },
         {
             path: 'car/edit/:id',
@@ -68,6 +80,9 @@ const CompanyRoutes: Routes = [{
                 title: 'Edit Car',
                 urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Cars', url: '/company/car' }, { title: 'Edit Company' }]
             },
+            resolve: {
+                company: CompanyAdminStatusResolve
+            }
         },
         {
             path: 'car/add',
@@ -76,6 +91,9 @@ const CompanyRoutes: Routes = [{
                 title: 'Add Car',
                 urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Cars', url: '/company/car' }, { title: 'Add Company' }]
             },
+            resolve: {
+                company: CompanyAdminStatusResolve
+            }
         },
         {
             path: 'account-setting',
@@ -83,6 +101,9 @@ const CompanyRoutes: Routes = [{
             data: {
                 title: 'Account Setting',
                 urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Account Settings' }]
+            },
+            resolve: {
+                company: CompanyAdminStatusResolve
             }
         },
         {
@@ -92,6 +113,9 @@ const CompanyRoutes: Routes = [{
                 title: 'Manage Transactions',
                 urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Transactions' }]
             },
+            resolve: {
+                company: CompanyAdminStatusResolve
+            }
         },
         {
             path: 'transactions/view/:id',
@@ -103,6 +127,23 @@ const CompanyRoutes: Routes = [{
                     url: '/company/transactions'
                 }, { title: 'Transactions Detail' }]
             },
+            resolve: {
+                company: CompanyAdminStatusResolve
+            }
+        },
+        {
+            path: 'transactions/invoice/:id',
+            component: CompanyInvoiceComponent,
+            data: {
+                title: 'View Transactions',
+                urls: [{ title: 'Dashboard', url: '/company/dashboard' }, {
+                    title: 'Transactions',
+                    url: '/company/transactions'
+                }, { title: 'Invoice Detail' }]
+            },
+            resolve: {
+                company: CompanyAdminStatusResolve
+            }
         },
         {
             path: 'reports',
@@ -111,6 +152,9 @@ const CompanyRoutes: Routes = [{
                 title: 'Manage Reports',
                 urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Reports' }]
             },
+            resolve: {
+                company: CompanyAdminStatusResolve
+            }
         },
         {
             path: 'reports/car-reports',
@@ -120,6 +164,9 @@ const CompanyRoutes: Routes = [{
                 urls: [{ title: 'Dashboard', url: '/company/dashboard' },
                 { title: 'Car Reports' }]
             },
+            resolve: {
+                company: CompanyAdminStatusResolve
+            }
         },
         {
             path: 'reports/user-reports',
@@ -129,6 +176,9 @@ const CompanyRoutes: Routes = [{
                 urls: [{ title: 'Dashboard', url: '/company/dashboard' },
                 { title: 'User Reports' }]
             },
+            resolve: {
+                company: CompanyAdminStatusResolve
+            }
         },
         {
             path: 'reports/transaction-reports',
@@ -138,13 +188,19 @@ const CompanyRoutes: Routes = [{
                 urls: [{ title: 'Dashboard', url: '/company/dashboard' },
                 { title: 'Transaction Reports' }]
             },
+            resolve: {
+                company: CompanyAdminStatusResolve
+            }
         },
         {
-            path: 'terms_and_conditions',
+            path: 'terms_and_insurance',
             component: CompanyTermsComponent,
             data: {
-                title: 'Terms & Conditions',
-                urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Terms & Conditions' }]
+                title: 'Terms & Insurance',
+                urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Terms & Insurance' }]
+            },
+            resolve: {
+                company: CompanyAdminStatusResolve
             }
         }
     ]
@@ -156,6 +212,9 @@ const CompanyRoutes: Routes = [{
         title: 'Manage Keywords',
         urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Keywords' }]
     },
+    resolve: {
+        company: CompanyAdminStatusResolve
+    }
 },
 {
     path: 'cancellation_charge',
@@ -164,6 +223,9 @@ const CompanyRoutes: Routes = [{
         title: 'Manage Cancellation Charge',
         urls: [{ title: 'Dashboard', url: '/company/dashboard' }, { title: 'Cancellation Charge' }]
     },
+    resolve: {
+        company: CompanyAdminStatusResolve
+    }
 },
 ];
 @NgModule({
@@ -181,6 +243,7 @@ const CompanyRoutes: Routes = [{
         CheckboxModule,
         InputSwitchModule,
         TooltipModule,
+        Ng4GeoautocompleteModule.forRoot(),
         RouterModule.forChild(CompanyRoutes)
     ],
     exports: [RouterModule],
@@ -200,6 +263,7 @@ const CompanyRoutes: Routes = [{
         CompanyTransactionComponent,
         TransactionDetailComponent,
         TransactionReportComponent,
+        CompanyInvoiceComponent,
         // RentalsComponent,
     ]
 })

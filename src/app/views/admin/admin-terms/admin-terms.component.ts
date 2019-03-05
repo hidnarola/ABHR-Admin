@@ -11,7 +11,10 @@ import { Router } from '@angular/router';
 })
 export class AdminTermsComponent implements OnInit, AfterViewInit {
   public termsData;
-  text: string;
+  about_usText: string;
+  copyrightText: string;
+  term_conditionText: string;
+  privacy_policyText: string;
   values = '';
   form: FormGroup;
   submitted = false;
@@ -36,7 +39,6 @@ export class AdminTermsComponent implements OnInit, AfterViewInit {
       term_condition: String,
       privacy_policy: String,
     };
-    console.log('form data', this.formData);
   }
 
   ngOnInit() {
@@ -48,8 +50,6 @@ export class AdminTermsComponent implements OnInit, AfterViewInit {
         this.form.controls['term_condition'].setValue(this.termsData.term_condition);
         this.form.controls['privacy_policy'].setValue(this.termsData.privacy_policy);
       }
-      console.log('termsData', this.termsData);
-      console.log('response in legal setting', res['data']);
     });
   }
 
@@ -59,16 +59,13 @@ export class AdminTermsComponent implements OnInit, AfterViewInit {
     this.submitted = true;
     this.isLoading = true;
     this.service.put('admin/legal_settings/update', this.form.value).subscribe(res => {
-      console.log('data after submit', res);
       this.isLoading = false;
       this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
       this.router.navigate(['/admin/dashboard']);
     }, err => {
       err = err.error;
       this.isLoading = false;
-      console.log('err => ', err);
       this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
     });
-    console.log('form value => ', this.form.value);
   }
 }

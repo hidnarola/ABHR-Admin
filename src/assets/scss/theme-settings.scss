@@ -42,7 +42,10 @@ When click on sidebar toggler and also for tablet
                 height: auto !important;
                 overflow: auto;
             }
-            
+            > li:hover > ul,
+            > li:hover > ul.collapse {
+                display: block;
+            }
             > li > a.has-arrow:after {
                 display: none;
             }
@@ -94,22 +97,16 @@ When click on sidebar toggler and also for tablet
             width: 70px;
         }
         .sidebar-nav #sidebarnav > li:hover > a {
+            width: 290px;
             background: $sidebar-alt;
+            .hide-menu {
+                display: inline;
+            }
             .label {
                 display: none;
             }
         }
     }
-
-.mini-sidebar {
-	.sidebar-nav{
-		#sidebarnav li.active > a > span.hide-menu {display: inline;}
-		#sidebarnav li.active > a {width: 290px;background: #f2f6f8;}
-		#sidebarnav li.active > ul {display: block;overflow-x: hidden !important;}
-	}
-	.scroll-sidebar {overflow: visible !important;}
-}
-
 }
 
 @media(max-width:767px) {
@@ -137,6 +134,3 @@ This is for the Logo in center
         }
     }
 }
-
-
-

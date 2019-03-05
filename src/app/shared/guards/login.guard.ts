@@ -13,8 +13,9 @@ export class LoginGuard implements CanActivate {
   public adminUserType;
   public CompanyDetail;
   public companyUserType;
+  public siteURL;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     const url: string = state.url;
     return this.checkLogin(url);
@@ -24,12 +25,17 @@ export class LoginGuard implements CanActivate {
     const array = url.split('/');
     this.CurrentAdmin = array[1];
     let islogin = false;
-    let loginUserAdmin = localStorage.getItem('admin');
-    let loginUserCompany = localStorage.getItem('company-admin');
+    let loginUserAdmin = JSON.parse(localStorage.getItem('admin'));
+    if (this.userType !== null && this.userType !== undefined) {
+      this.userType = loginUserAdmin.type;
+    }
+    let loginUserCompany = JSON.parse(localStorage.getItem('company-admin'));
+    if (this.siteURL !== null && this.siteURL !== undefined) {
+      this.siteURL = loginUserCompany.site_url;
+    }
     const token = localStorage.getItem('token');
     if (this.CurrentAdmin === 'admin') {
       try {
-        loginUserAdmin = JSON.parse(loginUserAdmin);
         if (loginUserAdmin['_id'] && token) {
           islogin = true;
         } else {
@@ -42,9 +48,9 @@ export class LoginGuard implements CanActivate {
         this.router.navigate(['/admin/dashboard']);
         return false;
       }
-     } else if (this.CurrentAdmin === 'company') {
+    } else if (this.CurrentAdmin === 'company') {
+
       try {
-        loginUserCompany = JSON.parse(loginUserCompany);
         if (loginUserCompany['_id'] && token) {
           islogin = true;
         } else {
@@ -57,17 +63,12 @@ export class LoginGuard implements CanActivate {
         this.router.navigate(['/company/dashboard']);
         return false;
       }
-     } else if (this.CurrentAdmin === 'reset-password') {
-      loginUserAdmin = JSON.parse(loginUserAdmin);
-      this.AdminDetail = loginUserAdmin;
-      this.adminUserType = this.AdminDetail.type;
-      console.log(typeof this.adminUserType);
-      loginUserCompany = localStorage.getItem('company-admin');
-      const loginUserCompanyType = JSON.parse(loginUserCompany);
-      console.log(loginUserCompanyType);
-      if (this.adminUserType === 'admin' && this.adminUserType) {
+    } else if ((this.CurrentAdmin === 'reset-password') || (this.CurrentAdmin === 'confirm-reset-password')) {
+      if (loginUserAdmin !== null && loginUserAdmin !== undefined) {
+        this.userType = loginUserAdmin.type;
+      }
+      if (this.userType === 'admin') {
         try {
-          loginUserAdmin = JSON.parse(loginUserAdmin);
           if (loginUserAdmin['_id'] && token) {
             islogin = true;
           } else {
@@ -80,9 +81,8 @@ export class LoginGuard implements CanActivate {
           this.router.navigate(['/admin/dashboard']);
         }
         return false;
-      } else if (!(this.adminUserType ) || (this.adminUserType === undefined) ||  (this.adminUserType === null)) {
+      } else if (!(this.siteURL) || (this.siteURL === undefined) || (this.siteURL === null)) {
         try {
-          loginUserCompany = JSON.parse(loginUserCompany);
           if (loginUserCompany['_id'] && token) {
             islogin = true;
           } else {
@@ -95,9 +95,9 @@ export class LoginGuard implements CanActivate {
           this.router.navigate(['/company/dashboard']);
           // return false;
         }
-      }
-     }
-     return true;
-     }
+      } else { }
+    } else { }
+    return true;
   }
+}
 

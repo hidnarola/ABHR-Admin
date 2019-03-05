@@ -52,11 +52,11 @@ export class TakenAwayCarsComponent implements OnInit, AfterViewInit, OnDestroy 
 
 
   ngOnInit() {
+    this.isCols = true;
     this.carDataListData();
   }
 
   carDataListData() {
-    console.log('this.hideSpinner => ', this.hideSpinner);
     this.spinner.show();
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -69,22 +69,31 @@ export class TakenAwayCarsComponent implements OnInit, AfterViewInit, OnDestroy 
       language: {
         'processing': '',
       },
+      destroy: true,
+      // scrollX: true,
+      // scrollCollapse: true,
+      autoWidth: false,
+      initComplete: function (settings, json) {
+        $('.custom-datatable').wrap('<div style="overflow:auto; width:100%;position:relative;"></div>');
+      },
       ajax: (dataTablesParameters: any, callback) => {
         this.pageNumber = dataTablesParameters.length;
-        dataTablesParameters['columns'][1]['isNumber'] = true;
+        dataTablesParameters['columns'][0]['isNumber'] = true;
         setTimeout(() => {
-          console.log('dtaparametes==>', dataTablesParameters);
           this.service.post('admin/tracking/returning', dataTablesParameters).subscribe(res => {
             this.carData = res['result']['data'];
             // this.carData = [];
             this.totalRecords = res['result']['recordsTotal'];
-            console.log('res => ', res);
             if (this.carData.length > 0) {
               this.isCols = true;
               $('.dataTables_wrapper').css('display', 'block');
+            } else {
+              if (dataTablesParameters['search']['value'] !== '' && dataTablesParameters['search']['value'] !== null) {
+                this.isCols = true;
+              } else {
+                this.isCols = false;
+              }
             }
-            console.log('total records===>', this.totalRecords);
-            console.log('page number', this.pageNumber);
             if (this.totalRecords > this.pageNumber) {
               $('.dataTables_paginate').css('display', 'block');
             } else {
@@ -100,10 +109,6 @@ export class TakenAwayCarsComponent implements OnInit, AfterViewInit, OnDestroy 
         }, 1000);
       },
       columns: [
-        // {
-        //   data: 'Id',
-        //   name: '_id',
-        // },
         {
           data: 'Booking Number',
           name: 'booking_number',
@@ -123,6 +128,10 @@ export class TakenAwayCarsComponent implements OnInit, AfterViewInit, OnDestroy 
         {
           data: 'Brand Name',
           name: 'brand_name',
+        },
+        {
+          data: 'Status',
+          name: 'trip_status',
         },
         {
           data: 'From Date',
@@ -145,5 +154,11 @@ export class TakenAwayCarsComponent implements OnInit, AfterViewInit, OnDestroy 
   ngAfterViewInit(): void {
     this.dtTrigger.next();
     this.hideSpinner = false;
+    let table: any = $('.custom-datatable').DataTable();
+    table.columns().iterator('column', function (ctx, idx) {
+      if (idx !== 8) {
+        $(table.column(idx).header()).append('<span class="sort-icon"/>');
+      }
+    });
   }
 }

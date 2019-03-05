@@ -16,9 +16,10 @@ export class CompaniesComponent implements AfterViewInit, OnInit {
     constructor(
         private service: CrudService,
     ) {
+        console.log(' company admin company component=> ');
         this.company = JSON.parse(localStorage.getItem('company-admin'));
+        console.log('this.company => ', this.company);
         this.companyId = this.company._id;
-        console.log('companyId => ', this.companyId);
         this.subtitle = "This is some text within a card block."
     }
     // This is for the dashboar line chart
@@ -168,11 +169,9 @@ export class CompaniesComponent implements AfterViewInit, OnInit {
 
     ngOnInit() {
         this.service.post('company/dashboard/no_of_cars', { 'company_id': this.companyId }).subscribe(res => {
-            console.log('res => ', res);
             this.totalCars = res['data'];
         });
         this.service.post('company/dashboard/no_of_rentals', { 'company_id': this.companyId }).subscribe(res => {
-            console.log('res => ', res);
             this.totalRentals = res['data'];
         });
     }

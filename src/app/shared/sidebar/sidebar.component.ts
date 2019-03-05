@@ -45,7 +45,7 @@ export class SidebarComponent implements OnInit {
         if (company != null && company !== undefined) {
             this.AdminType = company.name;
         }
-        if (company == null && company === undefined && user == null && user == undefined) {
+        if (company == null && company === undefined && user == null && user === undefined) {
             this.AdminType = 'Admin';
         }
         var urlSegment = this.router.url;
@@ -56,7 +56,7 @@ export class SidebarComponent implements OnInit {
     ngOnInit() {
         if (this.currentUser === 'admin') {
             this.sidebarnavItems = ROUTES.filter(sidebarnavItem => sidebarnavItem);
-            console.log('sidebarnavItems => ', this.sidebarnavItems);
+            // console.log('sidebarnavItems => ', this.sidebarnavItems);
             $(function () {
                 $('.sidebartoggler').on('click', function () {
                     if ($('#main-wrapper').hasClass('mini-sidebar')) {

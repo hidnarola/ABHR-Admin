@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { CrudService } from '../../../shared/services/crud.service';
 import { MessageService } from 'primeng/api';
@@ -10,7 +10,7 @@ import { DataSharingService, AdminUser } from '../../../shared/services/data-sha
   templateUrl: './company-account-setting.component.html',
   styleUrls: ['./company-account-setting.component.css']
 })
-export class CompanyAccountSettingComponent implements OnInit {
+export class CompanyAccountSettingComponent implements OnInit, AfterViewInit {
 
   public adminU: AdminUser;
   public SettingForm;
@@ -23,6 +23,13 @@ export class CompanyAccountSettingComponent implements OnInit {
   public emailData: any;
   public nameData: any;
   public companyId;
+  public errMsg;
+  public numberErr: boolean = false;
+  public company_address: any;
+  userSettings: any = {};
+  public placeData: any;
+  public service_location = []; // [<longitude>, <latitude>]
+  public addressError: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -33,30 +40,48 @@ export class CompanyAccountSettingComponent implements OnInit {
   ) {
     const company = JSON.parse(localStorage.getItem('company-admin'));
     this.companyId = company._id;
-    console.log('companyid==>', this.companyId);
 
     const pattern = new RegExp('^\\ *([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})\\ *$');
     this.SettingForm = this.formBuilder.group({
       name: ['', Validators.compose([Validators.required, this.uniqueNameValidator, this.noWhitespaceValidator])],
+      description: ['', Validators.compose([Validators.required, this.noWhitespaceValidator])],
       site_url: ['', Validators.compose([Validators.required,
       Validators.pattern('^(https?:\/\/)?[0-9a-zA-Z]+\.[-_0-9a-zA-Z]+\.[0-9a-zA-Z]+$')])],
-      phone_number: ['', Validators.compose([Validators.pattern('\\ *[0-9]{10}\\ *')])],
+      phone_number: ['', Validators.compose([Validators.pattern('^[0-9]{10,20}$')])],
       email: ['', Validators.compose([Validators.required, Validators.email, Validators.pattern(pattern), this.uniqueEmailValidator])]
     });
     this.formData = {
       name: String,
+      description: String,
       site_url: String,
       phone_number: String,
       email: String
     };
+    this.company_address = {
+      country: String,
+      state: String,
+      city: String,
+      address: String
+    };
+
     this.companyUser = JSON.parse(localStorage.getItem('company-admin'));
     this.Id = this.companyUser._id;
-    console.log('companyUserId', this.companyUser);
+
     if (this.Id !== undefined && this.Id !== '' && this.Id != null) {
       this.service.get('company/details/' + this.Id).subscribe(resp => {
         this.UserDetails = resp['data'].data;
-        console.log('resp => ', resp['data'].data);
+        this.userSettings.inputPlaceholderText = this.UserDetails.company_address.address;
+        let addressObj = { response: true, data: this.UserDetails.company_address.address };
+        this.userSettings = {
+          inputPlaceholderText: this.UserDetails.company_address.address,
+          showSearchButton: false,
+        };
+        this.userSettings = Object.assign({}, this.userSettings);
+        this.placeData = addressObj;
+        this.service_location = this.UserDetails.service_location;
+        this.company_address = this.UserDetails.company_address;
         this.SettingForm.controls['name'].setValue(this.UserDetails.name);
+        this.SettingForm.controls['description'].setValue(this.UserDetails.description);
         this.SettingForm.controls['site_url'].setValue(this.UserDetails.site_url);
         this.SettingForm.controls['phone_number'].setValue(this.UserDetails.phone_number);
         this.SettingForm.controls['email'].setValue(this.UserDetails.email);
@@ -71,7 +96,6 @@ export class CompanyAccountSettingComponent implements OnInit {
   public uniqueEmailValidator = (control: FormControl) => {
     let isWhitespace1;
     if (isWhitespace1 = (control.value || '').trim().length !== 0) {
-      console.log('else => ');
       const pattern = new RegExp('^\\ *([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})\\ *$');
       let result = pattern.test(control.value);
       if (!result) {
@@ -80,6 +104,7 @@ export class CompanyAccountSettingComponent implements OnInit {
         this.emailData = { 'email': control.value ? control.value.trim() : '', 'company_id': this.companyId };
         return this.service.post('admin/company/checkemail', this.emailData).subscribe(res => {
           if (res['status'] === 'success') {
+            this.errMsg = res['message'];
             this.f.email.setErrors({ 'unique': true });
             return;
           } else {
@@ -111,15 +136,25 @@ export class CompanyAccountSettingComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
+    this.numberErr = false;
+    if (typeof this.placeData === 'undefined') {
+      this.addressError = true;
+    } else {
+      if (this.placeData.response === false) {
+        this.addressError = true;
+      } else if (this.placeData.response === true) {
+        this.addressError = false;
+      }
+    }
     if (!this.SettingForm.invalid) {
-      this.isLoading = true;
+      // this.isLoading = true;
       this.formData = this.SettingForm.value;
       this.formData.email = this.formData.email.trim();
       this.formData.name = this.formData.name.trim();
       this.formData.phone_number = this.formData.phone_number.trim();
-      console.log('formadata==>', this.formData);
+      this.formData.company_address = this.company_address;
+      this.formData.service_location = this.service_location;
       this.formData.company_id = this.Id;
-      console.log('companyUserId', this.Id);
       this.service.put('company/update', this.formData).subscribe(res => {
         this.isLoading = false;
         localStorage.setItem('company-admin', JSON.stringify(res['result'].data));
@@ -140,7 +175,79 @@ export class CompanyAccountSettingComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
+  ngOnInit() { }
+
+  ngAfterViewInit() {
+    // this.userSettings = {
+    //   inputPlaceholderText: 'Enter Address',
+    //   showSearchButton: false,
+    // };
+    // this.userSettings = Object.assign({}, this.userSettings);
+    // Very Important Line to add after modifying settings.
+  }
+
+  autoCompleteCallback1(selectedData: any) {
+    if (selectedData.response) {
+      this.placeData = selectedData;
+      if (typeof this.placeData === 'undefined') {
+        this.addressError = true;
+      } else {
+        if (this.placeData.response === false) {
+          this.addressError = true;
+        } else if (this.placeData.response === true) {
+          this.addressError = false;
+        }
+      }
+      this.service_location = [];
+      var lng = selectedData.data.geometry.location.lng;
+      var lat = selectedData.data.geometry.location.lat;
+      this.company_address.address = selectedData.data.formatted_address;
+      this.service_location.push(lng);
+      this.service_location.push(lat);
+      for (var i = 0; i < selectedData.data.address_components.length; i++) {
+        var addressType = selectedData.data.address_components[i].types[0];
+        var addressType = selectedData.data.address_components[i].types[0];
+        if (addressType === 'country') {
+          var country = selectedData.data.address_components[i].long_name;
+          this.company_address.country = country;
+        }
+        if (addressType === 'administrative_area_level_1') {
+          var state = selectedData.data.address_components[i].long_name;
+          this.company_address.state = state;
+        }
+        if (addressType === 'locality') {
+          var city = selectedData.data.address_components[i].long_name;
+          this.company_address.city = city;
+        }
+      }
+    } else {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Current Location not Found' });
+    }
+  }
+
+  restrictAlphabets(e) {
+    var x = e.which || e.keycode;
+    if ((x >= 48 && x <= 57) || x === 8 ||
+      (x >= 35 && x <= 40) || x === 46) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  keyup(event) {
+    if (this.SettingForm.controls.phone_number.status === 'INVALID') {
+      if (this.SettingForm.controls.phone_number.value.length < 21) {
+        this.numberErr = false;
+      } else {
+        this.numberErr = true;
+      }
+    } else {
+      this.numberErr = false;
+    }
+    if (this.submitted === true) {
+      this.numberErr = false;
+    }
   }
 
 }

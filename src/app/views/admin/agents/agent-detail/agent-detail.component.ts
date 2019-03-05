@@ -52,6 +52,7 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   public pageNumber;
   public totalRecords;
   isLoading: boolean;
+  public numberErr: boolean = false;
 
   constructor(
     public renderer: Renderer,
@@ -66,14 +67,13 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {
     this.route.params.subscribe(params => {
       this.userId = params.id;
-      console.log('this.userId => ', this.userId);
     });
     // addform validation
     const pattern = new RegExp('^\\ *([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})\\ *$');
     this.AddEditForm = this.formBuilder.group({
       first_name: ['', Validators.compose([Validators.required, this.noWhitespaceValidator])],
       last_name: ['', Validators.compose([Validators.required, this.noWhitespaceValidator])],
-      phone_number: ['', [Validators.pattern('\\ *[0-9]{10}\\ *')]],
+      phone_number: ['', [Validators.pattern('^[0-9]{10,20}$')]],
       email: ['', [Validators.required, Validators.email, Validators.pattern(pattern), this.uniqueEmailValidator]],
       // deviceType: [''],
     });
@@ -100,13 +100,10 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
         return { 'pattern': true };
       } else {
         this.emailData = { 'email': control.value ? control.value.trim() : '' };
-        console.log('control.value => ', control.value);
         if (this.isEdit) {
           this.emailData = { 'email': control.value ? control.value.trim() : '', 'user_id': this.userId };
         }
-        console.log('emailData===>', this.emailData);
         return this.service.post('admin/checkemail', this.emailData).subscribe(res => {
-          console.log('res for emailData => ', res);
           if (res['status'] === 'success') {
             this.f.email.setErrors({ 'unique': true });
             return;
@@ -128,20 +125,17 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   onSubmit() {
     this.submitted = true;
+    this.numberErr = false;
     if (!this.AddEditForm.invalid) {
       this.isLoading = true;
-      console.log('in valid', this.userId);
       this.formData = this.AddEditForm.value;
       this.formData.email = this.formData.email.trim();
       this.formData.first_name = this.formData.first_name.trim();
       this.formData.last_name = this.formData.last_name.trim();
       this.formData.phone_number = this.formData.phone_number.trim();
       this.formData.user_id = this.userId;
-      console.log(this.formData);
       this.service.put('admin/agents/update', this.formData).subscribe(res => {
         this.isLoading = false;
-        console.log('response after edit===>', res);
-        console.log('this.agentDetails==>', this.agentDetails);
         this.agentDetails = this.formData;
         this.closePopup();
         this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
@@ -180,22 +174,33 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
       language: {
         'processing': '',
       },
+      responsive: true,
+      destroy: true,
+      // scrollX: true,
+      // scrollCollapse: true,
+      autoWidth: false,
+      initComplete: function (settings, json) {
+        $('.custom-datatable').wrap('<div style="overflow:auto; width:100%;position:relative;"></div>');
+      },
       ajax: (dataTablesParameters: any, callback) => {
         this.pageNumber = dataTablesParameters.length;
-        console.log('dataparametes==>', dataTablesParameters);
         dataTablesParameters['columns'][0]['isNumber'] = true;
         dataTablesParameters['columns'][2]['isNumber'] = true;
         setTimeout(() => {
           dataTablesParameters.agent_id = this.userId;
           this.service.post('admin/agents/rental_list', dataTablesParameters).subscribe(res => {
-            console.log('rentals res in agents', res);
             this.rentalData = res['result']['data'];
             this.totalRecords = res['result']['recordsTotal'];
-            console.log('this.totalRecords => ', this.totalRecords);
             // this.rentalData = [];
             if (this.rentalData.length > 0) {
               this.isCols = true;
               $('.dataTables_wrapper').css('display', 'block');
+            } else {
+              if (dataTablesParameters['search']['value'] !== '' && dataTablesParameters['search']['value'] !== null) {
+                this.isCols = true;
+              } else {
+                this.isCols = false;
+              }
             }
             if (this.totalRecords > this.pageNumber) {
               $('.dataTables_paginate').css('display', 'block');
@@ -238,7 +243,6 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
   AgentDetails() {
     this.service.get('admin/agents/details/' + this.userId).subscribe(res => {
-      console.log('userdetails==>', res);
       if (res['user'] !== null) {
         this.agentDetails = res['user'];
       } else {
@@ -251,12 +255,15 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.dtTrigger.next();
+    let table: any = $('.custom-datatable').DataTable();
+    table.columns().iterator('column', function (ctx, idx) {
+      $(table.column(idx).header()).append('<span class="sort-icon"/>');
+    });
   }
 
   // model
   open2(content, agentDetails) {
     this.isLoading = false;
-    console.log('agentDetails====>', agentDetails);
     if (agentDetails !== 'undefined' && agentDetails) {
       this.isEdit = true;
       this.AddEditForm.controls['first_name'].setValue(agentDetails.first_name);
@@ -264,8 +271,6 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
       this.AddEditForm.controls['email'].setValue(agentDetails.email);
       this.AddEditForm.controls['phone_number'].setValue(agentDetails.phone_number);
       // this.AddEditForm.controls['deviceType'].setValue(agentDetails.deviceType);
-      console.log('firstname', agentDetails.first_name);
-      console.log('lastname===>', agentDetails.last_name);
     }
     const options: NgbModalOptions = {
       keyboard: false,
@@ -276,13 +281,40 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     }, (reason) => {
     });
     this.submitted = false;
+    this.numberErr = false;
   }
 
   // add-edit popup ends here
 
   ngOnInit() {
+    this.isCols = true;
     this.RentalData();
     this.AgentDetails();
+  }
+
+  restrictAlphabets(e) {
+    var x = e.which || e.keycode;
+    if ((x >= 48 && x <= 57) || x === 8 ||
+      (x >= 35 && x <= 40) || x === 46) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  keyup(event) {
+    if (this.AddEditForm.controls.phone_number.status === 'INVALID') {
+      if (this.AddEditForm.controls.phone_number.value.length < 21) {
+        this.numberErr = false;
+      } else {
+        this.numberErr = true;
+      }
+    } else {
+      this.numberErr = false;
+    }
+    if (this.submitted === true) {
+      this.numberErr = false;
+    }
   }
 
 }

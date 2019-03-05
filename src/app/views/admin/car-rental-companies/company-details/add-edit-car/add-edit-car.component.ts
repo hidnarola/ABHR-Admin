@@ -42,8 +42,10 @@ export class AddEditCarComponent implements OnInit {
   public availablityError: boolean = false;
   public selectedMonth;
   public selectedYear;
+  public today;
   public checked: Boolean = false;
   public cnt;
+  public DateArray;
   public availabilitySelectAllArr = [
     false,
     false,
@@ -58,6 +60,9 @@ export class AddEditCarComponent implements OnInit {
     false,
     false
   ];
+  public numberErr: boolean = false;
+  public numberErr2: boolean = false;
+  public numberErr3: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -70,26 +75,46 @@ export class AddEditCarComponent implements OnInit {
     this.route.params.subscribe(params => { this.carId = params.id; });
     this.selectedMonth = new Date().getMonth();
     this.selectedYear = new Date().getFullYear();
+    this.today = new Date();
 
     if (this.carId !== undefined && this.carId !== '' && this.carId != null) {
       this.service.post('admin/company/car/details/', { car_id: this.carId }).subscribe(resp => {
         this.carDetails = resp['data'].carDetail;
         if (this.carDetails.is_available !== undefined) {
-          var DateArray = this.carDetails.is_available;
+          this.DateArray = this.carDetails.is_available;
+          console.log('this.DateArray => ', this.DateArray);
           const _selectDate = [];
-          DateArray.forEach(element => {
-            console.log('element => ', element);
-            console.log('element.month => ', element.month);
-            if (element.month < 10) {
-              var TotalDays = moment(this.selectedYear + '-' + '0' + element.month, 'YYYY-MM').daysInMonth();
-            } else if (element.month > 10) {
-              var TotalDays = moment(this.selectedYear + '-' + element.month, 'YYYY-MM').daysInMonth();
+          this.DateArray.forEach(element => {
+            const toDay = new Date();
+            const toDayMonth = (toDay.getMonth() + 1);
+            if (toDayMonth === element.month) {
+              var currentDay = parseInt(moment().format("DD"));
+              if (toDayMonth < 10) {
+                var MonthDays = moment(this.selectedYear + '-' + '0' + element.month, 'YYYY-MM').daysInMonth();
+                var TotalDays = (MonthDays - currentDay) + 1;
+              } else {
+                var MonthDays = moment(this.selectedYear + '-' + element.month, 'YYYY-MM').daysInMonth();
+                var TotalDays = (MonthDays - currentDay) + 1;
+              }
+            } else {
+              if (element.month < 10) {
+                var TotalDays = moment(this.selectedYear + '-' + '0' + element.month, 'YYYY-MM').daysInMonth();
+                console.log('TotalDays => ', TotalDays);
+              } else {
+                var TotalDays = moment(this.selectedYear + '-' + element.month, 'YYYY-MM').daysInMonth();
+              }
             }
+
+
+
             if (TotalDays === element.availability.length) {
-              var selectedMonth = (element.month - 1);
-              console.log('this.selectedMonth for checkbox=> ', selectedMonth);
-              this.availabilitySelectAllArr[selectedMonth] = true;
+              console.log('element.month => ', element.month);
+              // const selectedMonth = (element.month - 1);
+              this.selectedMonth = element.month;
+              console.log('this.selectedMonth for checkbox=> ', this.selectedMonth);
+              this.availabilitySelectAllArr[this.selectedMonth] = true;
             }
+
             if (element.availability.length !== 0) {
               element.availability.forEach(ele => {
                 let Dateobj = new Date(ele);
@@ -118,6 +143,7 @@ export class AddEditCarComponent implements OnInit {
         this.AddEditCarForm.controls['transmission'].setValue(this.carDetails.transmission);
         this.AddEditCarForm.controls['milage'].setValue(this.carDetails.milage);
         this.AddEditCarForm.controls['car_class'].setValue(this.carDetails.car_class);
+        this.AddEditCarForm.controls['age_of_car'].setValue(this.carDetails.age_of_car);
         this.carDetails.car_gallery.forEach(file => {
           this.CarOldImage.push(file);
         });
@@ -140,7 +166,7 @@ export class AddEditCarComponent implements OnInit {
       car_id: this.carId,
       car_brand_id: ['', Validators.required],
       car_model_id: ['', Validators.required],
-      rent_price: ['', [Validators.required, Validators.pattern('[0-9]*')]],
+      rent_price: ['', Validators.compose([Validators.required, Validators.pattern('[0-9]*')])],
       deposit: ['', Validators.pattern('[0-9][0-9]*')],
       no_of_person: ['', Validators.required],
       resident_criteria: ['', Validators.required],
@@ -157,6 +183,7 @@ export class AddEditCarComponent implements OnInit {
       is_luggage_carrier: [false],
       licence_plate: ['', Validators.compose([Validators.required, this.uniqueCarNumberValidator])],
       car_color: ['', Validators.required],
+      age_of_car: ['', Validators.compose([Validators.required, Validators.pattern('[0-9]{4}')])]
     });
     this.formData = {
       car_brand_id: String,
@@ -174,12 +201,21 @@ export class AddEditCarComponent implements OnInit {
       driving_eligibility_criteria: String,
       licence_plate: String,
       car_color: String,
-      deposit: Number
+      deposit: Number,
+      age_of_car: Number
     };
   }
 
   getDaysInMonth(m, y) {
-    const date = new Date(y, m, 1);
+    const toDay = new Date();
+    const toDayMonth = toDay.getMonth();
+    var cnt = 1;
+    console.log(' here getdaysin month=> ');
+    if (toDayMonth === this.selectedMonth) {
+      var currentDay = parseInt(moment().format("DD"));
+      cnt = currentDay;
+    }
+    const date = new Date(y, m, cnt);
     const _selectDate = (this.selectDate && this.selectDate.length > 0) ? this.selectDate : [];
     while (date.getMonth() === m) {
       const _selectDateStr = [];
@@ -195,18 +231,28 @@ export class AddEditCarComponent implements OnInit {
     this.selectDate = _selectDate;
   }
 
-  getDaysInSelectedMonth(selectedMonth, selectedYear) {
-    const date = new Date(selectedYear, selectedMonth, 1);
+  getDaysInSelectedMonth(selectedmonth, selectedYear) {
+    // if (!this.isEdit) {
+    const toDay = new Date();
+    const toDayMonth = toDay.getMonth();
+    const date = new Date(selectedYear, selectedmonth, 1);
     const _selectDate = (this.selectDate && this.selectDate.length > 0) ? this.selectDate : [];
-    this.cnt = 1;
+    console.log('selectedmonth in function=> ', selectedmonth);
+    if (toDayMonth === this.selectedMonth) {
+      var currentDay = parseInt(moment().format("DD"));
+      this.cnt = currentDay;
+    } else {
+      this.cnt = 0;
+    }
+    console.log(' here get says in selected month=> ');
     var TotalDays;
-    var month = selectedMonth + 1;
+    var month = selectedmonth + 1;
     if (month < 10) {
       TotalDays = moment(this.selectedYear + '-' + '0' + month, 'YYYY-MM').daysInMonth();
     } else if (month + 1 > 10) {
       TotalDays = moment(this.selectedYear + '-' + month, 'YYYY-MM').daysInMonth();
     }
-    while (date.getMonth() === selectedMonth) {
+    while (date.getMonth() === selectedmonth) {
       const _selectDateStr = [];
       const dateMom = moment(date).format('YYYY-MM-DD');
       _selectDate.map((dt) => {
@@ -221,10 +267,66 @@ export class AddEditCarComponent implements OnInit {
     console.log('cnt====>', this.cnt);
     console.log('totaldays====>', TotalDays);
     if (this.cnt === TotalDays) {
-      this.availabilitySelectAllArr[selectedMonth] = true;
+      this.availabilitySelectAllArr[selectedmonth] = true;
     } else {
-      this.availabilitySelectAllArr[selectedMonth] = false;
+      this.availabilitySelectAllArr[selectedmonth] = false;
     }
+    // } else {
+
+
+
+
+
+    //   const toDay = new Date();
+    //   const toDayMonth = toDay.getMonth();
+    //   const date = new Date(selectedYear, selectedmonth, 1);
+    //   const _selectDate = (this.selectDate && this.selectDate.length > 0) ? this.selectDate : [];
+    //   console.log('date.getMonth()=====>', date.getMonth());
+    //   console.log('selectedmonth in function=> ', selectedmonth);
+    //   console.log('this.selectedMonth => ', this.selectedMonth);
+    //   if (toDayMonth === this.selectedMonth) {
+    //     var currentDay = parseInt(moment().format("DD"));
+    //     this.cnt = currentDay;
+    //   } else {
+    //     console.log('not current month => ');
+    //     this.cnt = 0;
+    //   }
+
+    //   var TotalDays;
+    //   var month = selectedmonth + 1;
+    //   if (month < 10) {
+    //     TotalDays = moment(this.selectedYear + '-' + '0' + month, 'YYYY-MM').daysInMonth();
+    //   } else if (month + 1 > 10) {
+    //     TotalDays = moment(this.selectedYear + '-' + month, 'YYYY-MM').daysInMonth();
+    //   }
+
+    //   while (date.getMonth() === selectedmonth) {
+    //     console.log('in while');
+    //     const _selectDateStr = [];
+    //     const dateMom = moment(date).format('YYYY-MM-DD');
+    //     console.log('dateMon======>', dateMom);
+    //     _selectDate.map((dt) => {
+    //       _selectDateStr.push(moment(dt).format('YYYY-MM-DD'));
+    //     });
+    //     if (_selectDateStr.indexOf(dateMom) > 0) {
+    //       this.cnt++;
+    //       console.log('this.cnt(if) => ', this.cnt);
+    //     }
+    //     date.setDate(date.getDate() + 1);
+    //   }
+    //   console.log('cnt====>', this.cnt);
+    //   console.log('totaldays====>', TotalDays);
+    //   if (this.cnt === TotalDays) {
+    //     this.availabilitySelectAllArr[selectedmonth] = true;
+    //   } else {
+    //     this.availabilitySelectAllArr[selectedmonth] = false;
+    //   }
+
+
+
+
+    // }
+
   }
 
   public uniqueCarNumberValidator = (control: FormControl) => {
@@ -270,15 +372,23 @@ export class AddEditCarComponent implements OnInit {
   handleFileInput(event) {
     let isValid = false;
     const files = event.target.files;
+    console.log('files => ', files);
     if (files) {
       for (const file of files) {
         if (file.type === 'image/jpeg' || file.type === 'image/png') {
           isValid = true;
+          console.log('file1=> ', file);
+          if (file.size > 300000) {
+            console.log('file size > 300000 => ');
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please choose Image less then 300 kb' });
+            return 0;
+          }
         } else {
           isValid = false;
           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Invalid Image Format' });
           return 0;
         }
+
       }
     }
     if (isValid) {
@@ -290,8 +400,6 @@ export class AddEditCarComponent implements OnInit {
         };
         reader.readAsDataURL(file);
       }
-    } else {
-
     }
   }
   deleteImage(index) {
@@ -310,6 +418,10 @@ export class AddEditCarComponent implements OnInit {
     this.selectDate = null;
     this.datePicker.overlayVisible = false;
     this.availabilitySelectAllArr = [false, false, false, false, false, false, false, false, false, false, false, false];
+    console.log('this.submitted on clear button => ', this.submitted);
+    if (this.submitted === true) {
+      this.availablityError = true;
+    }
   }
 
   onSubmit() {
@@ -331,6 +443,9 @@ export class AddEditCarComponent implements OnInit {
     }
 
     this.submitted = true;
+    this.numberErr = false;
+    this.numberErr2 = false;
+    this.numberErr3 = false;
     if (this.CarImage.length > 2 || (Number(this.CarOldImage.length) + Number(this.CarImage.length)) > 2) {
       this.f.car_gallery.setErrors(null);
     } else {
@@ -348,6 +463,7 @@ export class AddEditCarComponent implements OnInit {
     formData.append('transmission', this.f.transmission.value);
     formData.append('milage', this.f.milage.value);
     formData.append('car_class', this.f.car_class.value);
+    formData.append('age_of_car', this.f.age_of_car.value);
     formData.append('driving_eligibility_criteria', this.f.driving_eligibility_criteria.value);
     formData.append('is_navigation', this.f.is_navigation.value);
     formData.append('is_AC', this.f.is_AC.value);
@@ -414,14 +530,60 @@ export class AddEditCarComponent implements OnInit {
 
   checkMonth(event) {
     this.selectedMonth = (event.month - 1);
-    console.log('this.cnt in check month => ', this.cnt);
-    console.log('this.selectedMonth => ', this.selectedMonth);
+    console.log('this.selectedMonth on month navigator => ', this.selectedMonth);
     this.selectedYear = event.year;
+
+
+    // if (this.isEdit) {
+    //   var availableMonth = this.selectedMonth + 1;
+    //   this.DateArray.forEach(element => {
+    //     console.log('element => ', element);
+    //     if (element.month === availableMonth) {
+    //       const toDay = new Date();
+    //       const toDayMonth = (toDay.getMonth() + 1);
+    //       console.log('toDayMonth => ', toDayMonth);
+    //       console.log('availableMonth => ', availableMonth);
+    //       if (toDayMonth === availableMonth) {
+    //         var currentDay = parseInt(moment().format("DD"));
+    //         if (toDayMonth < 10) {
+    //           var MonthDays = moment(this.selectedYear + '-' + '0' + element.month, 'YYYY-MM').daysInMonth();
+    //           var TotalDays = (MonthDays - currentDay) + 1;
+    //           console.log('TotalDays => ', TotalDays);
+    //         } else {
+    //           var MonthDays = moment(this.selectedYear + '-' + element.month, 'YYYY-MM').daysInMonth();
+    //           var TotalDays = (MonthDays - currentDay) + 1;
+    //         }
+    //       } else {
+    //         if (element.month < 10) {
+    //           var TotalDays = moment(this.selectedYear + '-' + '0' + element.month, 'YYYY-MM').daysInMonth();
+    //           console.log('TotalDays => ', TotalDays);
+    //         } else {
+    //           var TotalDays = moment(this.selectedYear + '-' + element.month, 'YYYY-MM').daysInMonth();
+    //         }
+    //       }
+    //       console.log('element.availability.length => ', element.availability.length);
+    //       if (TotalDays === element.availability.length) {
+    //         this.selectedMonth = availableMonth;
+    //         this.availabilitySelectAllArr[this.selectedMonth] = true;
+    //       }
+    //     } else {
+    //       this.selectedMonth = availableMonth;
+    //     }
+    //   });
+    // }
+
+
+
+
+
+
+
   }
 
   selectAllDates(event) {
     if (this.availabilitySelectAllArr[this.selectedMonth] === true) {
       this.getDaysInMonth(this.selectedMonth, this.selectedYear);
+      this.availablityError = false;
     } else {
       this.unselectAllDates();
     }
@@ -446,4 +608,65 @@ export class AddEditCarComponent implements OnInit {
 
   ngOnInit() { }
 
+  keyupRent(event) {
+    if (this.AddEditCarForm.controls.rent_price.value !== '' && this.AddEditCarForm.controls.rent_price.value !== null) {
+      if (this.AddEditCarForm.controls.rent_price.status === 'INVALID') {
+        this.numberErr = true;
+      } else {
+        this.numberErr = false;
+      }
+    } else {
+      this.numberErr = false;
+    }
+    if (this.submitted === true) {
+      this.numberErr = false;
+    }
+  }
+
+  restrictAlphabets(e) {
+    var x = e.which || e.keycode;
+    if ((x >= 48 && x <= 57) || x === 8 ||
+      (x >= 35 && x <= 40) || x === 46) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  keyupDeposit(event) {
+    if (this.AddEditCarForm.controls.deposit.value !== '' && this.AddEditCarForm.controls.deposit.value !== null) {
+      if (this.AddEditCarForm.controls.deposit.status === 'INVALID') {
+        this.numberErr2 = true;
+      } else {
+        this.numberErr2 = false;
+      }
+    } else {
+      this.numberErr2 = false;
+    }
+    if (this.submitted === true) {
+      this.numberErr2 = false;
+    }
+  }
+
+  keyupCarAge(event) {
+
+    console.log('this.AddEditCarForm => ', this.AddEditCarForm.controls.age_of_car.value.length);
+    if (this.AddEditCarForm.controls.age_of_car.value.length > 4) {
+      if (this.AddEditCarForm.controls.age_of_car.value !== '' && this.AddEditCarForm.controls.age_of_car.value !== null) {
+        if (this.AddEditCarForm.controls.age_of_car.status === 'INVALID') {
+          this.numberErr3 = true;
+        } else {
+          this.numberErr3 = false;
+        }
+      } else {
+        this.numberErr3 = false;
+      }
+    } else {
+      this.numberErr3 = false;
+    }
+
+    if (this.submitted === true) {
+      this.numberErr3 = false;
+    }
+  }
 }

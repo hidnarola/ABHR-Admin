@@ -56,11 +56,11 @@ export const ROUTES: RouteInfo[] = [
         class: 'has-arrow', label: '', labelClass: '', extralink: false, submenu: [
 
             {
-                path: '/admin/operations/car-delivered', title: 'Delivered  Cars', icon: '',
+                path: '/admin/operations/car-delivering', title: 'Delivering  Cars', icon: '',
                 class: '', label: '', labelClass: '', extralink: false, submenu: []
             },
             {
-                path: '/admin/operations/car-taken-away', title: 'Taken Away Cars', icon: '',
+                path: '/admin/operations/car-returning', title: 'Returning Cars', icon: '',
                 class: '', label: '', labelClass: '', extralink: false, submenu: []
             },
         ]
@@ -74,15 +74,28 @@ export const ROUTES: RouteInfo[] = [
     // label: '', labelClass: '', extralink: false, submenu: []
     // },
     {
-        path: '/admin/help', title: 'Help', icon: 'mdi mdi-widgets',
+        path: '/admin/feedback', title: 'Feedback', icon: 'mdi mdi-message-draw',
         class: 'has-arrow', label: '', labelClass: '', extralink: false, submenu: [
-
+            {
+                path: '/admin/feedback/category', title: 'Category', icon: '',
+                class: '', label: '', labelClass: '', extralink: false, submenu: []
+            },
+            {
+                path: '/admin/feedback/reported-cars', title: 'Reported Cars', icon: '',
+                class: '', label: '', labelClass: '', extralink: false, submenu: []
+            }
+        ]
+    },
+    {
+        path: '/admin/help', title: 'Help', icon: 'fa fa-question-circle',
+        class: 'has-arrow', label: '', labelClass: '', extralink: false, submenu: [
             {
                 path: '/admin/help/article-list', title: 'Article List', icon: '',
                 class: '', label: '', labelClass: '', extralink: false, submenu: []
             }
         ]
     },
+
 ];
 
 export const COMPANY_ROUTES: RouteInfo[] = [

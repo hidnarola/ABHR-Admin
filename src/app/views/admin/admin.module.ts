@@ -57,7 +57,7 @@ import { TransactionComponent } from './transaction/transaction.component';
 import { TransactionDetailComponent } from './transaction/transaction-detail/transaction-detail.component';
 import { TransactionReportComponent } from './admin-reports/transaction-report/transaction-report.component';
 import { DropdownModule } from 'primeng/dropdown';
-import { TakenAwayTrackingComponent } from './operations/taken-away-cars/taken-away-tracking/taken-away-tracking.component';
+import { TakenAwayTrackingComponent } from './operations/taken-away-cars/returning-tracking/taken-away-tracking.component';
 import { DeliveredTrackingComponent } from './operations/delivered-cars/delivered-tracking/delivered-tracking.component';
 // import { SocketClass } from '../../shared/classes/socket.class';
 
@@ -68,6 +68,12 @@ import { HelpComponent } from './help/help.component';
 import { ArticleListComponent } from './help/article-list/article-list.component';
 import { AddEditArticleComponent } from './help/article-list/add-edit-article/add-edit-article.component';
 import { ArticleDetailComponent } from './help/article-list/article-detail/article-detail.component';
+import { DeliveringTrackingComponent } from './operations/delivered-cars/delivering-tracking/delivering-tracking.component';
+import { ReturnedTrackingComponent } from './operations/taken-away-cars/returned-tracking/returned-tracking.component';
+import { AdminInvoiceComponent } from './transaction/admin-invoice/admin-invoice.component';
+import { FeedbackComponent } from './feedback/feedback.component';
+import { FeedbackCategoryComponent } from './feedback/feedback-category/feedback-category.component';
+import { ReportedCarsComponent } from './feedback/reported-cars/reported-cars.component';
 const AdminRoutes: Routes = [
   {
     path: '',
@@ -232,6 +238,17 @@ const AdminRoutes: Routes = [
         },
       },
       {
+        path: 'transactions/invoice/:id',
+        component: AdminInvoiceComponent,
+        data: {
+          title: 'View Tax Invoice',
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, {
+            title: 'Transactions',
+            url: '/admin/transactions'
+          }, { title: 'Invoice Detail' }]
+        },
+      },
+      {
         path: 'reports',
         component: AdminReportsComponent,
         data: {
@@ -272,41 +289,63 @@ const AdminRoutes: Routes = [
         },
       },
       {
-        path: 'operations/car-delivered',
+        path: 'operations/car-delivering',
         component: DeliveredCarsComponent,
         data: {
-          title: 'Manage Delivered  Cars',
-          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Delivered Cars' }]
+          title: 'Manage Delivering  Cars',
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Delivering Cars' }]
         },
       },
       {
-        path: 'operations/car-delivered/view/:id',
+        path: 'operations/car-delivering/view/:id',
+        component: DeliveredTrackingComponent,
+        data: {
+          title: 'Track Delivering Cars',
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, {
+            title: 'Delivering Cars',
+            url: '/admin/operations/car-delivering'
+          }, { title: 'Track Delivering Cars' }]
+        },
+      },
+      {
+        path: 'operations/car-delivering/delivered/view/:id',
         component: DeliveredTrackingComponent,
         data: {
           title: 'Track Delivered Cars',
           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, {
-            title: 'Delivered Cars',
-            url: '/admin/operations/car-delivered'
+            title: 'Delivering Cars',
+            url: '/admin/operations/car-delivering'
           }, { title: 'Track Delivered Cars' }]
         },
       },
       {
-        path: 'operations/car-taken-away',
+        path: 'operations/car-returning',
         component: TakenAwayCarsComponent,
         data: {
-          title: 'Manage Taken Away Cars',
-          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Taken Away Cars' }]
+          title: 'Manage Returning Cars',
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Returning Cars' }]
         },
       },
       {
-        path: 'operations/car-taken-away/view/:id',
+        path: 'operations/car-returning/view/:id',
         component: TakenAwayTrackingComponent,
         data: {
-          title: 'Track Taken Away Cars',
+          title: 'Track Returning Cars',
           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, {
-            title: 'Taken Away Cars',
-            url: '/admin/operations/car-taken-away'
-          }, { title: 'Track Taken Away Cars' }]
+            title: 'Returning Cars',
+            url: '/admin/operations/car-returning'
+          }, { title: 'Track Returning Cars' }]
+        },
+      },
+      {
+        path: 'operations/car-returning/returned/view/:id',
+        component: ReturnedTrackingComponent,
+        data: {
+          title: 'Track Returned Cars',
+          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, {
+            title: 'Returning Cars',
+            url: '/admin/operations/car-returning'
+          }, { title: 'Track Returning Cars' }]
         },
       },
       {
@@ -349,6 +388,22 @@ const AdminRoutes: Routes = [
     data: {
       title: 'Manage Coupons',
       urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Coupons' }]
+    },
+  },
+  {
+    path: 'feedback/category',
+    component: FeedbackCategoryComponent,
+    data: {
+      title: 'Manage Categories',
+      urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Categories' }]
+    },
+  },
+  {
+    path: 'feedback/reported-cars',
+    component: ReportedCarsComponent,
+    data: {
+      title: 'Manage Reported Cars',
+      urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Reported Cars' }]
     },
   },
   {
@@ -465,6 +520,12 @@ const AdminRoutes: Routes = [
     ArticleListComponent,
     AddEditArticleComponent,
     ArticleDetailComponent,
+    DeliveringTrackingComponent,
+    ReturnedTrackingComponent,
+    AdminInvoiceComponent,
+    FeedbackComponent,
+    FeedbackCategoryComponent,
+    ReportedCarsComponent,
   ],
   providers: [
     // SocketClass

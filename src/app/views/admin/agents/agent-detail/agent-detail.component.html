@@ -55,8 +55,8 @@
         </div>
         <div class="row">
           <div class="col-lg-12">
-            <div class="table table-responsive table-striped">
-              <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table">
+            <div class="table table-responsive table-striped datable_custom">
+              <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table custom-datatable">
                 <thead>
                   <tr>
                     <th>Contract No.</th>
@@ -127,7 +127,8 @@
             <div class="form-group">
               <label class="required">First name </label>
               <input class="form-control" type="text" required="" name="first_name" placeholder="Enter Firstname"
-                formControlName="first_name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.first_name.errors }">
+                formControlName="first_name" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.first_name.errors }">
               <div *ngIf=" submitted && f.first_name.errors " class="invalid-feedback">
                 <div *ngIf="f.first_name.errors.required"> Firstname is required</div>
               </div>
@@ -137,7 +138,8 @@
             <div class="form-group">
               <label class="required">Last name </label>
               <input class="form-control" type="text" required="" name="last_name" placeholder="Enter Lastname"
-                formControlName="last_name" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.last_name.errors }">
+                formControlName="last_name" class="form-control"
+                [ngClass]="{ 'is-invalid': submitted && f.last_name.errors }">
               <div *ngIf=" submitted && f.last_name.errors " class="invalid-feedback">
                 <div *ngIf="f.last_name.errors.required"> Lastname is required</div>
               </div>
@@ -159,9 +161,14 @@
             <div class="form-group">
               <label>Phone Number </label>
               <input class="form-control" type="string" name="phone_number" placeholder="Enter Phone Number"
-                formControlName="phone_number" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.phone_number.errors }">
+                formControlName="phone_number" class="form-control" (keyup)="keyup($event)"
+                (keypress)="restrictAlphabets($event)"
+                [ngClass]="{ 'is-invalid': (submitted && f.phone_number.errors) || numberErr }">
               <div *ngIf=" submitted && f.phone_number.errors " class="invalid-feedback">
                 <div *ngIf="f.phone_number.errors.pattern">Phone number is wrong</div>
+              </div>
+              <div *ngIf="numberErr" class="keyup-input-errMsg">
+                Phone number is wrong
               </div>
             </div>
           </div>
@@ -185,8 +192,10 @@
           </div>
         </div> -->
           <div class="col-sm-12">
-            <button type="submit" *ngIf="!isLoading" class="btn waves-effect waves-light custom-btn btn-primary">Submit</button>
-            <button type="button" *ngIf="isLoading" class="btn waves-effect loading-btn waves-light btn-primary" type="button">
+            <button type="submit" *ngIf="!isLoading"
+              class="btn waves-effect waves-light custom-btn btn-primary">Submit</button>
+            <button type="button" *ngIf="isLoading" class="btn waves-effect loading-btn waves-light btn-primary"
+              type="button">
               <i class="fa fa-spinner fa-spin"></i>Loading
             </button>
             <a class="btn waves-effect waves-light custom-btn btn-danger" (click)="d('Cross click')">Cancel</a>

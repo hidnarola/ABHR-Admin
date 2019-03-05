@@ -40,7 +40,6 @@ export class CrudService {
   }
 
   post(apiUrl, data, options?) {
-    console.log('data===>,', data);
     const _headers = {
       ...this.defaultHeaders,
       ...options

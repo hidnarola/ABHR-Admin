@@ -81,14 +81,10 @@ export class StaffDetailComponent implements OnInit {
     this.submitted = true;
     this.isLoading = true;
     if (!this.AddEditForm.invalid) {
-      console.log('in valid', this.userId);
       this.formData = this.AddEditForm.value;
       this.formData.user_id = this.userId;
-      console.log(this.formData);
       this.service.put('admin/staff/update', this.formData).subscribe(res => {
-        console.log('response after edit===>', res);
         this.userDetails = this.formData;
-        console.log('this.userDetails==>', this.userDetails);
         // this.closePopup();
         this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
       }, err => {
@@ -104,9 +100,7 @@ export class StaffDetailComponent implements OnInit {
   UserDetails() {
     this.spinner.show();
     this.service.get('admin/staff/details/' + this.userId).subscribe(res => {
-      console.log('userdetails==>', res);
       this.userDetails = res['user'];
-      console.log('userDetails==>', this.userDetails);
       this.spinner.hide();
     }, error => {
       this.spinner.hide();
@@ -115,7 +109,6 @@ export class StaffDetailComponent implements OnInit {
 
   // model
   open2(content, userDetails) {
-    console.log('userDetails====>', userDetails);
     if (userDetails !== 'undefined' && userDetails) {
       this.isEdit = true;
       this.AddEditForm.controls['first_name'].setValue(userDetails.first_name);
@@ -123,8 +116,6 @@ export class StaffDetailComponent implements OnInit {
       this.AddEditForm.controls['email'].setValue(userDetails.email);
       this.AddEditForm.controls['phone_number'].setValue(userDetails.phone_number);
       // this.AddEditForm.controls['deviceType'].setValue(userDetails.deviceType);
-      console.log('firstname', userDetails.first_name);
-      console.log('lastname===>', userDetails.last_name);
     }
     const options: NgbModalOptions = {
       keyboard: false,

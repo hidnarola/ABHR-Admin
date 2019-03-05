@@ -47,22 +47,20 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
   ) { }
 
   DatePicker(date: NgbDateStruct) {
-    console.log('check => ', date);
     this.newDate = date.year + '-' + date.month + '-' + date.day;
-    console.log('newDate in car report => ', this.newDate);
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.draw();
     });
   }
 
   FilterRange() {
-    console.log('rangeDates in filter function => ', this.rangeDates);
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.draw();
     });
   }
 
   ngOnInit() {
+    this.isCols = true;
     this.ReportData();
     setTimeout(() => {
       this.ExportRecords();
@@ -75,15 +73,23 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
       this.dtOptions = {
         pagingType: 'full_numbers',
         pageLength: 10,
-        destroy: true,
         processing: true,
         serverSide: true,
         ordering: true,
         order: [[6, 'desc']],
-        language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
+        language: { 'processing': '' },
+        responsive: true,
+        destroy: true,
+        // scrollX: true,
+        // scrollCollapse: true,
+        autoWidth: false,
+        initComplete: function (settings, json) {
+          $('.custom-datatable').wrap('<div style="overflow:auto; width:100%;position:relative;"></div>');
+        },
         ajax: (dataTablesParameters: any, callback) => {
           this.pageNumber = dataTablesParameters.length;
           this.dtparams = dataTablesParameters;
+          console.log('this.dtparams => ', this.dtparams);
           dataTablesParameters['columns'][4]['isNumber'] = true;
           console.log(dataTablesParameters);
           this.exportParam = dataTablesParameters;
@@ -99,13 +105,26 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
             this.service.post('admin/cars/report_list', dataTablesParameters).subscribe(async (res: any) => {
               console.log('response====>', res);
               this.reports = await res['result']['data'];
+              // this.reports = [];
               console.log('this.reports in cars => ', this.reports);
               this.totalRecords = res['result']['recordsTotal'];
-              // this.reports = [];
               this.spinner.hide();
               if (this.reports.length > 0) {
                 this.isCols = true;
                 $('.dataTables_wrapper').css('display', 'block');
+              } else {
+                if ((dataTablesParameters['search']['value'] !== '' && dataTablesParameters['search']['value'] !== null) ||
+                  ((dataTablesParameters['selectFromDate'] && dataTablesParameters['selectToDate']) !== '') &&
+                  ((dataTablesParameters['selectFromDate'] && dataTablesParameters['selectToDate']) !== null)) {
+                  this.isCols = true;
+                } else if (this.rangeDates) {
+                  this.isCols = true;
+                } else {
+                  console.log('filtered length 0 => ');
+                  this.isCols = false;
+                }
+                console.log('record length 0 => ');
+                // this.isCols = false;
               }
 
               if (this.totalRecords > this.pageNumber) {
@@ -170,6 +189,10 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
   }
   ngAfterViewInit(): void {
     this.dtTrigger.next();
+    let table: any = $('.custom-datatable').DataTable();
+    table.columns().iterator('column', function (ctx, idx) {
+      $(table.column(idx).header()).append('<span class="sort-icon"/>');
+    });
   }
 
   handleFilterCalendar = () => {
@@ -178,7 +201,6 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
   }
   handleClearCalendar = () => {
     this.rangeDates = null;
-    console.log('this.rangeDates  => ', this.rangeDates);
     this.datePicker.overlayVisible = false;
     this.render();
     this.spinner.show();
@@ -188,18 +210,17 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
     this.service.post('admin/cars/export_report_list', this.exportParam).subscribe(async (res: any) => {
       this.exportData = await res['result']['data'];
       var ExcelData = [];
-      console.log('this.exportData => ', this.exportData);
       this.isExcel = false;
       this.isPDF = false;
       this.exportData.forEach(item => {
         let obj = {
-          'Brand': item.car_brand,
-          'Model': item.car_modal,
-          'Company_Name': item.company_name,
-          'Total_Rent': item.booking_rent,
+          'Car Brand': item.car_brand,
+          'Car Model': item.car_modal,
+          'Company Name': item.company_name,
           'Status': item.trip_status,
-          'From_Date': moment(item.from_time).format('LL'),
-          'To_Date': moment(item.to_time).format('LL'),
+          'Total Rent': item.booking_rent,
+          'From Date': moment(item.from_time).format('LL'),
+          'To Date': moment(item.to_time).format('LL'),
         };
         ExcelData.push(obj);
         this.ExcelArray = ExcelData;
@@ -212,30 +233,25 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
     this.service.post('admin/cars/export_report_list', this.exportParam).subscribe(async (res: any) => {
       this.exportData = await res['result']['data'];
       var ExcelData = [];
-      console.log('this.exportData => ', this.exportData);
       this.isExcel = false;
       this.isPDF = false;
       this.exportData.forEach(item => {
         let obj = {
-          'Brand': item.car_brand,
-          'Model': item.car_modal,
-          'Company_Name': item.company_name,
-          'Total_Rent': item.booking_rent,
+          'Car Brand': item.car_brand,
+          'Car Model': item.car_modal,
+          'Company Name': item.company_name,
           'Status': item.trip_status,
-          'From_Date': moment(item.from_time).format('LL'),
-          'To_Date': moment(item.to_time).format('LL'),
+          'Total Rent': item.booking_rent,
+          'From Date': moment(item.from_time).format('LL'),
+          'To Date': moment(item.to_time).format('LL'),
         };
-        console.log('obj => ', obj);
-        console.log('ExcelArray before  => ', ExcelData);
         ExcelData.push(obj);
         this.ExcelArray = ExcelData;
-        console.log('ExcelData after => ', ExcelData);
-        console.log('ExcelArray after => ', this.ExcelArray);
       });
     });
     // this.ExportRecords();
     setTimeout(() => {
-      this.excelService.exportAsExcelFile(this.ExcelArray, 'sample');
+      this.excelService.exportAsExcelFile(this.ExcelArray, 'Car-Report');
     }, 1000);
   }
 
@@ -243,17 +259,18 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
     this.isPDF = true;
     this.ExportRecords();
     var pdfdata = document.getElementById('contentToConvert');
+    // var pdfdata = $('#ownerDocument').children(".dataTables_scroll")[0];
     html2canvas(pdfdata).then(canvas => {
-      // Few necessary setting options  
+      // Few necessary setting options
       var imgWidth = 208;
       var pageHeight = 500;
       var imgHeight = canvas.height * imgWidth / canvas.width;
       var heightLeft = imgHeight;
       const contentDataURL = canvas.toDataURL('image/png')
-      let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF  
+      let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF
       var position = 0;
-      pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)
-      pdf.save('Car-Report.pdf'); // Generated PDF   
+      pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+      pdf.save('Car-Report.pdf'); // Generated PDF
     });
   }
 

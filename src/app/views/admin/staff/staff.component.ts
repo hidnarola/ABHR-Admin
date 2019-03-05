@@ -99,15 +99,7 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
         if (this.isEdit) {
           this.emailData = { 'email': control.value, 'user_id': this.userId };
         }
-        console.log('emailData===>', this.emailData);
         return this.service.post('admin/checkemail', this.emailData).subscribe(res => {
-          // return (res['status'] === 'success') ? {'unique': true} : null;
-          // console.log('response of validation APi', res['status']);
-          // if (res['status'] === 'success') {
-          //   console.log('if==>');
-          // } else {
-          //   console.log('else==>');
-          // }
           if (res['status'] === 'success') {
             this.f.email.setErrors({ 'unique': true });
             return;
@@ -131,11 +123,9 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!this.AddEditForm.invalid) {
       this.isLoading = true;
       this.formData = this.AddEditForm.value;
-      console.log('formadata==>', this.formData);
       if (this.isEdit) {
         this.formData.user_id = this.userId;
         this.title = 'Edit Staff';
-        console.log('userId in staff', this.userId);
         this.service.put('admin/staff/update', this.formData).subscribe(res => {
           this.isLoading = false;
           this.render();
@@ -149,10 +139,8 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
         });
       } else {
         this.title = 'Add Staff';
-        console.log('formdata in add==>', this.formData);
         this.service.post('admin/staff/add', this.formData).subscribe(res => {
           this.isLoading = false;
-          console.log('staff adddata==>', res);
           this.render();
           this.closePopup();
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
@@ -199,13 +187,19 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
       serverSide: true,
       ordering: true,
       order: [[4, 'desc']],
-      language: { 'processing': '<i class=\'fa fa-refresh loader fa-spin\'></i>' },
+      language: { 'processing': '' },
+      responsive: true,
+      destroy: true,
+      // scrollX: true,
+      // scrollCollapse: true,
+      autoWidth: false,
+      initComplete: function (settings, json) {
+        $('.custom-datatable').wrap('<div style="overflow:auto; width:100%;position:relative;"></div>');
+      },
       ajax: (dataTablesParameters: any, callback) => {
         setTimeout(() => {
-          console.log('dtaparametes==>', dataTablesParameters);
           this.service.post('admin/staff/list', dataTablesParameters).subscribe(res => {
             this.users = res['result']['data'];
-            console.log(this.users);
             // this.dataShare.changeLoading(false);
             this.spinner.hide();
             callback({
@@ -245,10 +239,13 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.dtTrigger.next();
+    let table: any = $('.custom-datatable').DataTable();
+    table.columns().iterator('column', function (ctx, idx) {
+      $(table.column(idx).header()).append('<span class="sort-icon"/>');
+    });
   }
 
   open2(content, item) {
-    console.log('item==>', item);
     if (item !== 'undefined' && item !== '') {
       this.title = 'Edit Staff';
       this.isEdit = true;
@@ -281,7 +278,6 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // dlt popup
   delete(userId) {
-    console.log('userId==>', userId);
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete this record?',
       header: 'Confirmation',

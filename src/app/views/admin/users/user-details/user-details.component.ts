@@ -31,7 +31,6 @@ export class UserDetailsComponent implements OnInit {
   }
 
   getVerificationStatus(id) {
-    console.log(id);
     // if (parseInt(id, 2)) {
     try {
       return (_.find(this.CONST.VERIFICATION_STATUS, { 'key': id })).value;
@@ -44,13 +43,11 @@ export class UserDetailsComponent implements OnInit {
   getUserDetail(id) {
     this.spinner.show();
     this.service.get('admin/user/details/' + id).subscribe(res => {
-      console.log('res => ', res);
       this.userData = res['result'];
       this.userData.email_msg = this.getVerificationStatus(this.userData['email_verified']);
       this.userData.phone_msg = this.getVerificationStatus(this.userData['phone_number_verified']);
       this.userData.license_msg = this.getVerificationStatus(this.userData['driving_license_verification']);
       this.userData.id_msg = this.getVerificationStatus(this.userData['id_card_verification']);
-      console.log('carDetails ==>', this.userData);
       this.spinner.hide();
     }, error => {
       this.spinner.hide();

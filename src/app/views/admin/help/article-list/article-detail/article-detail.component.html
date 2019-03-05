@@ -1,17 +1,10 @@
 <div class="card">
   <div class="card-body">
-    <div class="row" *ngIf="Detail">
-      <div class="col-md-2">
-        <b>Topic : </b>
+    <div class="row row_view" *ngIf="Detail">
+      <div class="col-md-12">
+        <p class="p_head">{{Detail.topic}}</p>
       </div>
-      <div class="col-md-10">
-        {{Detail.topic}}
-      </div>
-      <div class="col-md-2">
-        <b>Description :</b>
-      </div>
-      <div class="col-md-10">
-        {{Detail.description}}
+      <div class="col-md-12" [innerHTML]="Detail.description">
       </div>
     </div>
   </div>

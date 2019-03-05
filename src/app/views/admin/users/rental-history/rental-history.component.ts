@@ -29,7 +29,6 @@ export class RentalHistoryComponent implements OnInit, OnDestroy, AfterViewInit 
     private spinner: NgxSpinnerService
   ) {
     this.route.params.subscribe(params => { this.userId = params.id; });
-    console.log('userId in rentals==>', this.userId);
   }
 
   render(): void {
@@ -48,6 +47,10 @@ export class RentalHistoryComponent implements OnInit, OnDestroy, AfterViewInit 
   }
   ngAfterViewInit(): void {
     this.dtTrigger.next();
+    let table: any = $('.custom-datatable').DataTable();
+    table.columns().iterator('column', function (ctx, idx) {
+      $(table.column(idx).header()).append('<span class="sort-icon"/>');
+    });
   }
   RentalData() {
     this.spinner.show();
@@ -58,20 +61,29 @@ export class RentalHistoryComponent implements OnInit, OnDestroy, AfterViewInit 
       serverSide: true,
       searching: false,
       ordering: true,
-      language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
+      language: { 'processing': '' },
+      responsive: true,
+      destroy: true,
+      // scrollX: true,
+      // scrollCollapse: true,
+      autoWidth: false,
+      initComplete: function (settings, json) {
+        $('.custom-datatable').wrap('<div style="overflow:auto; width:100%;position:relative;"></div>');
+      },
       ajax: (dataTablesParameters: any, callback) => {
-        console.log('dataparametes in rental==>', dataTablesParameters);
         this.pageNumber = dataTablesParameters.length;
         setTimeout(() => {
           dataTablesParameters.user_id = this.userId;
           this.service.post('admin/user/rented_list', dataTablesParameters).subscribe(res => {
-            console.log('res in rental', res);
             this.rentalData = res['result']['data'];
             this.totalRecords = res['result']['recordsTotal'];
             if (this.rentalData.length > 0) {
               this.isCols = true;
               $('.dataTables_wrapper').css('display', 'block');
             }
+            // else {
+            //   this.isCols = false;
+            // }
             if (this.totalRecords > this.pageNumber) {
               $('.dataTables_paginate').css('display', 'block');
             } else {

@@ -27,16 +27,20 @@
             <b>deposit : </b> <span>{{ carDetails.deposit ? carDetails.deposit : '-' }}</span>
           </div>
           <div class="cars-dtl-box-inr">
-            <b>driver's age : </b><span>{{carDetails.driving_eligibility_criteria}}</span>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="cars-dtl-box-inr">
             <b>No Of Persons : </b> <span>{{carDetails.no_of_person}}</span>
           </div>
           <div class="cars-dtl-box-inr">
             <b>milage : </b> <span>{{ carDetails.milage | titlecase }}</span>
           </div>
+          <div class="cars-dtl-box-inr">
+            <b>navigation : </b> <span>{{ carDetails.is_navigation?'Yes':'No' }}</span>
+          </div>
+          <div class="cars-dtl-box-inr">
+            <b>driver's age : </b><span>{{carDetails.driving_eligibility_criteria}}</span>
+          </div>
+        </div>
+        <div class="col-md-6">
+
           <div class="cars-dtl-box-inr">
             <b>car class : </b><span>{{carDetails.car_class | titlecase }}</span>
           </div>
@@ -44,17 +48,37 @@
             <b>car color : </b><span>{{carDetails.car_color| titlecase }}</span>
           </div>
           <div class="cars-dtl-box-inr">
-            <b>navigation : </b> <span>{{ carDetails.is_navigation?'Yes':'No' }}</span>
+            <b>Purchased Year : </b><span>{{carDetails.age_of_car }}</span>
           </div>
-          <div class="cars-dtl-box-inr">
-            <b>AC : </b><span>{{carDetails.is_AC?'Yes':'No' }}</span>
+
+          <div class="cars-dtl-box-inr card_dtl_new">
+            <b>Available : </b>
+            <span class="form_calendar form_arrow_none cal_button">
+              <p-calendar [(ngModel)]="SelectedDates" [inline]="true" [disabled]="true" [monthNavigator]="true"
+                [showIcon]="true" selectionMode="multiple" [readonlyInput]="true" [minDate]="today">
+              </p-calendar>
+
+
+
+
+              <!-- <p-calendar #availibility [(ngModel)]="SelectedDates" selectionMode="multiple" [monthNavigator]="true"
+                [showOtherMonths]="false" [touchUI]="false" [showIcon]="true" [readonlyInput]="true"
+                [yearRange]="yearRange" [minDate]="today">
+                <p-header>
+                  <button type="button" (click)="handleCloseCalendar()" class="pull-right" style="margin:20px"
+                    class="cal-close">
+                    <i class="fa fa-close"></i>
+                  </button>
+                </p-header>
+              </p-calendar> -->
+
+
+
+
+
+            </span>
           </div>
-          <div class="cars-dtl-box-inr">
-            <b>luggage carrier : </b> <span>{{ carDetails.is_luggage_carrier?'Yes':'No' }}</span>
-          </div>
-          <!-- <div class="cars-dtl-box-inr">
-            <b>avialable : </b> <span>{{ carDetails.is_avialable?'Yes':'No' }}</span>
-          </div> -->
+
         </div>
       </div>
     </div>
@@ -68,7 +92,7 @@
     </div>
     <div class="row" *ngIf="carDetails">
       <div class="col-md-3" *ngFor="let image of carDetails.car_gallery">
-        <img [src]="imgUrl+image.name" class="img-responsive img-rounded" alt="car_jpeg">
+        <img [src]="imgUrl+image.name" class="img-responsive img-rounded mb-15" alt="car_jpeg">
       </div>
     </div>
   </div>

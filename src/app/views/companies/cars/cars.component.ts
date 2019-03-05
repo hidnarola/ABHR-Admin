@@ -57,8 +57,8 @@ export class CarsComponent implements OnInit, AfterViewInit {
     private messageService: MessageService,
   ) {
     const company = JSON.parse(localStorage.getItem('company-admin'));
+    console.log('company => ', company);
     this.companyId = company._id;
-    console.log('companyid==>', this.companyId);
   }
 
   UsersListData() {
@@ -70,7 +70,16 @@ export class CarsComponent implements OnInit, AfterViewInit {
       serverSide: true,
       ordering: true,
       order: [[5, 'desc']],
-      language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
+      // order: [[4, 'desc']],
+      language: { 'processing': '' },
+      responsive: true,
+      destroy: true,
+      // scrollX: true,
+      // scrollCollapse: true,
+      autoWidth: false,
+      initComplete: function (settings, json) {
+        $('.custom-datatable').wrap('<div style="overflow:auto; width:100%;position:relative;"></div>');
+      },
       ajax: (dataTablesParameters: any, callback) => {
         this.pageNumber = dataTablesParameters.length;
         dataTablesParameters['columns'][2]['isNumber'] = true;
@@ -78,7 +87,6 @@ export class CarsComponent implements OnInit, AfterViewInit {
         dataTablesParameters['columns'][4]['isBoolean'] = true;
         setTimeout(() => {
           dataTablesParameters.company_id = this.companyId;
-          console.log('dtaparametes car==>', dataTablesParameters);
           this.service.post('admin/company/car_list', dataTablesParameters).subscribe(res => {
             this.users = res['result']['data'];
             this.totalRecords = res['result']['recordsTotal'];
@@ -86,13 +94,18 @@ export class CarsComponent implements OnInit, AfterViewInit {
             if (this.users.length > 0) {
               this.isCols = true;
               $('.dataTables_wrapper').css('display', 'block');
+            } else {
+              if (dataTablesParameters['search']['value'] !== '' && dataTablesParameters['search']['value'] !== null) {
+                this.isCols = true;
+              } else {
+                this.isCols = false;
+              }
             }
             if (this.totalRecords > this.pageNumber) {
               $('.dataTables_paginate').css('display', 'block');
             } else {
               $('.dataTables_paginate').css('display', 'none');
             }
-            console.log(this.users);
             this.spinner.hide();
             callback({
               recordsTotal: res['result']['recordsTotal'],
@@ -105,11 +118,11 @@ export class CarsComponent implements OnInit, AfterViewInit {
       columns: [
         {
           data: 'Car Brand',
-          name: 'brandDetails.brand_name',
+          name: 'brand_name',
         },
         {
           data: 'Car Model',
-          name: 'modelDetails.model_name',
+          name: 'model_name',
         },
         // {
         //   data: 'Car Class',
@@ -120,8 +133,8 @@ export class CarsComponent implements OnInit, AfterViewInit {
         //   name: 'brandDetails.transmission',
         // },
         {
-          data: 'Release Year',
-          name: 'modelDetails.release_year',
+          data: 'Purchased Year',
+          name: 'age_of_car',
         },
         {
           data: 'Price',
@@ -129,7 +142,7 @@ export class CarsComponent implements OnInit, AfterViewInit {
         },
         {
           data: 'Available',
-          name: 'is_avialable',
+          name: 'is_available',
         },
         {
           data: 'Actions',
@@ -142,11 +155,19 @@ export class CarsComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.dtTrigger.next();
+    let table: any = $('.custom-datatable').DataTable();
+    table.columns().iterator('column', function (ctx, idx) {
+      if (idx !== 5) {
+        $(table.column(idx).header()).append('<span class="sort-icon"/>');
+      }
+      // if (idx !== 4) {
+      //   $(table.column(idx).header()).append('<span class="sort-icon"/>');
+      // }
+    });
   }
 
   // dlt popup
   delete(userId) {
-    console.log('userId==>', userId);
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete this record?',
       header: 'Confirmation',
@@ -187,6 +208,7 @@ export class CarsComponent implements OnInit, AfterViewInit {
   onSubmit() { }
 
   ngOnInit() {
+    this.isCols = true;
     this.UsersListData();
   }
 

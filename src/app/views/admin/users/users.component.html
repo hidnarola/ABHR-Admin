@@ -17,7 +17,7 @@
       <div class="col-lg-6 col-md-6">
         <h4 class="table-header">List of Users </h4>
       </div>
-      <div class="col-lg-6 col-md-6  text-right" *ngIf="isCols">
+      <div class="col-lg-6 col-md-6 text-right" *ngIf="isCols">
         <div class="filter_group">
           <span class="filter_by">Filter By :</span>
           <select [(ngModel)]="DDfilter" (change)="changeFilterOptionHandler($event)">
@@ -37,17 +37,17 @@
     </div>
     <div class="row">
       <div class="col-lg-12">
-        <div class="table table-responsive table-striped">
-          <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table">
+        <div class="table table-responsive table-striped datable_custom datable_last_none datable_second_last">
+          <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table custom-datatable">
             <thead>
               <tr>
                 <th style="width:10%">First Name</th>
                 <th>Last Name</th>
-                <th>Email</th>
+                <th class="dttable-width">Email</th>
                 <th>Member Since </th>
                 <th>No Of Rentals </th>
                 <th>Status </th>
-                <th class="disabled">Actions</th>
+                <th class="disabled text-center">Actions</th>
               </tr>
             </thead>
             <tbody *ngIf="users?.length != 0 && isCols">
@@ -60,7 +60,7 @@
                 <td>
                   <span> {{ (user.last_name !== 'null') ? user.last_name : ' - ' }} </span>
                 </td>
-                <td>
+                <td class="dttable-width">
                   <span> {{ user.email }} </span>
                 </td>
                 <td>
@@ -74,7 +74,7 @@
                     class="label label-{{user.app_user_status!=='rented'?'danger':'success'}}">
                     <i class="fa fa-circle"></i></span>
                 </td>
-                <td>
+                <td class="text-center">
                   <div ngbDropdown class="d-inline-block">
                     <!-- <button class="btn btn-primary" id="dropdownBasic1" ngbDropdownToggle></button> -->
                     <i class="mdi mdi-dots-vertical" id="dropdownBasic1" ngbDropdownToggle></i>
@@ -83,10 +83,11 @@
                         Details</button>
                       <!-- <button *ngIf="user.count !== 0" class="dropdown-item" [routerLink]="['/admin/users/history/' + user._id]">Rental
                         History</button> -->
-                      <button *ngIf="user.count !== 0" class="dropdown-item" [routerLink]="['/admin/users/history/' + user._id]">Rental
+                      <button *ngIf="user.count !== 0" class="dropdown-item"
+                        [routerLink]="['/admin/users/history/' + user._id]">Rental
                         History</button>
-                      <button *ngIf="user.count === 0" class="dropdown-item not_allowed" [routerLink]="['/admin/users/history/' + user._id]"
-                        disabled>Rental
+                      <button *ngIf="user.count === 0" class="dropdown-item not_allowed"
+                        [routerLink]="['/admin/users/history/' + user._id]" disabled>Rental
                         History</button>
                     </div>
                   </div>

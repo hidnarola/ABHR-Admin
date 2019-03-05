@@ -21,9 +21,7 @@ export class ArticleDetailComponent implements OnInit {
 
   ngOnInit() {
     this.service.post('admin/help/details/', { article_id: this.Id }).subscribe(res => {
-      console.log('details RES==>', res);
       this.Detail = res['data'];
-      console.log('this.Detail => ', this.Detail);
     }, error => {
     });
   }

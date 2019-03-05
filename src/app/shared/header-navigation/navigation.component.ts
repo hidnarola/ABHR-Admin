@@ -26,10 +26,8 @@ export class NavigationComponent implements AfterViewInit {
   public VATData;
   public config: PerfectScrollbarConfigInterface = {};
   changePassForm: FormGroup;
-  // VATForm: FormGroup;
   closeResult: string;
   public formData: any;
-  // public VATformData: any;
   submitted = false;
   public companyId;
   isLoading: boolean;
@@ -40,7 +38,7 @@ export class NavigationComponent implements AfterViewInit {
     includeThousandsSeparator: false,
     allowDecimal: true,
     integerLimit: 2,
-    decimalLimit: 1,
+    decimalLimit: 10,
     requireDecimal: false,
     allowNegative: false,
     allowLeadingZeroes: false
@@ -87,17 +85,12 @@ export class NavigationComponent implements AfterViewInit {
         this.AdminNumber = company.phone_number;
         this.AdminType = 'company_admin';
         this.companyId = company._id;
-        console.log('company => ', this.companyId);
       }
       if (company == null && company === undefined && user == null && user === undefined) {
         this.AdminName = 'Admin';
         this.AdminEmail = 'dse@narola.email';
         this.AdminNumber = '9654788458';
       }
-    });
-
-    this.service.get('admin/vat').subscribe(res => {
-      this.VATData = res['result'].rate + '%';
     });
   }
 
@@ -193,11 +186,8 @@ export class NavigationComponent implements AfterViewInit {
     if ((isWhitespace2 = (control.value || '').trim().length === 1) || (isWhitespace2 = (control.value || '').trim().length === 0)) {
       return { 'required': true };
     } else {
-      console.log('control.value => ', control.value);
       this.passwordData = { 'password': control.value, 'company_id': this.companyId };
-      console.log('passwordData===>', this.passwordData);
       return this.service.post('company/check_password', this.passwordData).subscribe(res => {
-        console.log('res pass check', res);
         if (res['status'] === 'failed') {
           this.f.old_password.setErrors({ 'matchPass': true });
           return;
@@ -218,8 +208,15 @@ export class NavigationComponent implements AfterViewInit {
   }
 
   showVATDialog() {
-    this.displayVAT = true;
+    this.service.get('admin/vat').subscribe(res => {
+      console.log('res => ', res);
+      this.VATData = res['result'].rate + '%';
+    });
+    setTimeout(() => {
+      this.displayVAT = true;
+    }, 500);
   }
+
   onSubmit() {
     this.submitted = true;
     if (!this.changePassForm.invalid) {
@@ -249,8 +246,6 @@ export class NavigationComponent implements AfterViewInit {
   onVATSubmit() {
     this.submitted = true;
     this.isLoading = false;
-    console.log('VATForm.form===>', this.VATData);
-    console.log('type of VATForm.form===>', typeof this.VATData);
     if (typeof this.VATData === 'string') {
       var rate = parseInt(this.VATData.split('%')[0]);
     } else if (typeof this.VATData === 'number') {

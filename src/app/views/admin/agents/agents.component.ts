@@ -55,6 +55,8 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
   public title = 'Add Agent';
   public pageNumber;
   public totalRecords;
+  public errMsg;
+  public numberErr: boolean = false;
 
   private subscription: Subscription;
   hideSpinner: boolean;
@@ -75,9 +77,9 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
     // addform validation
     const pattern = new RegExp('^\\ *([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})\\ *$');
     this.AddEditForm = this.formBuilder.group({
-      first_name: ['', Validators.compose([Validators.required, this.noWhitespaceValidator])],
-      last_name: ['', Validators.compose([Validators.required, this.noWhitespaceValidator])],
-      phone_number: ['', Validators.compose([Validators.pattern('\\ *[0-9]{10}\\ *')])],
+      first_name: ['', Validators.compose([Validators.required, Validators.pattern('^[A-Za-z]+$'), this.noWhitespaceValidator])],
+      last_name: ['', Validators.compose([Validators.required, Validators.pattern('^[A-Za-z]+$'), this.noWhitespaceValidator])],
+      phone_number: ['', Validators.compose([Validators.pattern('^[0-9]{10,20}$')])],
       email: ['', Validators.compose([Validators.required, this.noWhitespaceValidator, Validators.email,
       Validators.pattern(pattern), this.uniqueEmailValidator])],
     });
@@ -105,14 +107,12 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
         return { 'pattern': true };
       } else {
         this.emailData = { 'email': control.value ? control.value.trim() : '' };
-        console.log('control.value => ', control.value);
         if (this.isEdit) {
           this.emailData = { 'email': control.value ? control.value.trim() : '', 'user_id': this.userId };
         }
-        console.log('emailData===>', this.emailData);
         return this.service.post('admin/checkemail', this.emailData).subscribe(res => {
-          console.log('res for emailData => ', res);
           if (res['status'] === 'success') {
+            this.errMsg = res['message'];
             this.f.email.setErrors({ 'unique': true });
             return;
           } else {
@@ -133,18 +133,17 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   onSubmit() {
     this.submitted = true;
+    this.numberErr = false;
     if (!this.AddEditForm.invalid) {
-      this.isLoading = true;
       this.formData = this.AddEditForm.value;
       this.formData.email = this.formData.email.trim();
       this.formData.first_name = this.formData.first_name.trim();
       this.formData.last_name = this.formData.last_name.trim();
       this.formData.phone_number = this.formData.phone_number.trim();
-      console.log('formadata==>', this.formData);
+      this.isLoading = true;
       if (this.isEdit) {
         this.formData.user_id = this.userId;
         this.title = 'Edit Agent';
-        console.log('userId', this.userId);
         this.service.put('admin/agents/update', this.formData).subscribe(res => {
           this.isLoading = false;
           this.render();
@@ -173,6 +172,7 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.isEdit = false;
       this.submitted = false;
     } else {
+      this.isLoading = false;
       return;
     }
   }
@@ -181,14 +181,9 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   render(): void {
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      // this.dtOptions = {
-      //   language: {
-      //     processing: '<i class= "fa fa-refresh loader fa-spin"></i>'
-      //   }
-      // };
-      // Destroy the table first
+
       dtInstance.destroy();
-      // Call the dtTrigger to rerender again
+
       this.dtTrigger.next();
     });
   }
@@ -197,42 +192,48 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dtTrigger.unsubscribe();
   }
 
-  // public agentData = data;
-
   ngOnInit() {
-
+    this.isCols = true;
     this.AgentsListData();
   }
 
   AgentsListData() {
-    console.log('this.hideSpinner => ', this.hideSpinner);
     this.spinner.show();
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
       processing: true,
       serverSide: true,
-      responsive: true,
       ordering: true,
       order: [[4, 'desc']],
-      // language: {},
       language: {
         'processing': '',
+      },
+      responsive: true,
+      destroy: true,
+      // scrollX: true,
+      // scrollCollapse: true,
+      autoWidth: false,
+      initComplete: function (settings, json) {
+        $('.custom-datatable').wrap('<div style="overflow:auto; width:100%;position:relative;"></div>');
       },
       ajax: (dataTablesParameters: any, callback) => {
         this.pageNumber = dataTablesParameters.length;
         setTimeout(() => {
-          console.log('dtaparametes==>', dataTablesParameters);
           this.service.post('admin/agents/list', dataTablesParameters).subscribe(async (res: any) => {
             this.agents = await res['result']['data'];
-            this.totalRecords = res['result']['recordsTotal'];
             // this.agents = [];
+            this.totalRecords = res['result']['recordsTotal'];
             if (this.agents.length > 0) {
               this.isCols = true;
               $('.dataTables_wrapper').css('display', 'block');
+            } else {
+              if (dataTablesParameters['search']['value'] !== '' && dataTablesParameters['search']['value'] !== null) {
+                this.isCols = true;
+              } else {
+                this.isCols = false;
+              }
             }
-            console.log('total records===>', this.totalRecords);
-            console.log('page number', this.pageNumber);
             if (this.totalRecords > this.pageNumber) {
               $('.dataTables_paginate').css('display', 'block');
             } else {
@@ -281,11 +282,20 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.dtTrigger.next();
     this.hideSpinner = false;
+    let table: any = $('.custom-datatable').DataTable();
+    table.columns().iterator('column', function (ctx, idx) {
+      if (idx !== 4) {
+        $(table.column(idx).header()).append('<span class="sort-icon"/>');
+      }
+    });
   }
+
+  checkKeyPress(event) { }
+
+
 
   // model
   open2(content, item) {
-    console.log('item==>', item);
     if (item !== 'undefined' && item !== '') {
       this.title = 'Edit Agent';
       this.isEdit = true;
@@ -315,12 +325,13 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
     this.submitted = false;
+    this.isLoading = false;
+    this.numberErr = false;
   }
   // add-edit popup ends here
 
   // dlt popup
   delete(userId) {
-    console.log('userId==>', userId);
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete this record?',
       header: 'Confirmation',
@@ -339,4 +350,30 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
   // dlt pop up ends here
+
+  restrictAlphabets(e) {
+    var x = e.which || e.keycode;
+    if ((x >= 48 && x <= 57) || x === 8 ||
+      (x >= 35 && x <= 40) || x === 46) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  keyup(event) {
+    if (this.AddEditForm.controls.phone_number.status === 'INVALID') {
+      if (this.AddEditForm.controls.phone_number.value.length < 21) {
+        this.numberErr = false;
+      } else {
+        this.numberErr = true;
+      }
+    } else {
+      this.numberErr = false;
+    }
+    if (this.submitted === true) {
+      this.numberErr = false;
+    }
+  }
+
 }

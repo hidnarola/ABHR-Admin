@@ -121,7 +121,7 @@ export class ResetPasswordComponent implements OnInit {
           this.submitted = false;
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
           console.log('result==>', res);
-          this.router.navigate(['reset-password']);
+          this.router.navigate(['confirm-reset-password']);
         }, error => {
           this.messageService.add({ severity: 'error', summary: 'Error', detail: error['message'] });
         });

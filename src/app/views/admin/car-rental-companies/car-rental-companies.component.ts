@@ -70,6 +70,8 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
   public totalRecords;
   public placeData: any;
   public addressError: boolean = false;
+  public errMsg;
+  public numberErr: boolean = false;
 
   constructor(
     public renderer: Renderer,
@@ -91,7 +93,7 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
       description: ['', Validators.compose([Validators.required, this.noWhitespaceValidator])],
       site_url: ['', Validators.compose([Validators.required,
       Validators.pattern('^(https?:\/\/)?[0-9a-zA-Z]+\.[-_0-9a-zA-Z]+\.[0-9a-zA-Z]+$')])],
-      phone_number: ['', Validators.compose([Validators.pattern('\\ *[0-9]{10}\\ *')])],
+      phone_number: ['', Validators.compose([Validators.pattern('^[0-9]{10,20}$')])],
       email: ['', Validators.compose([Validators.required, Validators.email, Validators.pattern(pattern), this.uniqueEmailValidator])],
     });
 
@@ -119,7 +121,6 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
   public uniqueEmailValidator = (control: FormControl) => {
     let isWhitespace1;
     if (isWhitespace1 = (control.value || '').trim().length !== 0) {
-      console.log('else => ');
       const pattern = new RegExp('^\\ *([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})\\ *$');
       let result = pattern.test(control.value);
       if (!result) {
@@ -131,6 +132,7 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
         }
         return this.service.post('admin/company/checkemail', this.emailData).subscribe(res => {
           if (res['status'] === 'success') {
+            this.errMsg = res['message'];
             this.f.email.setErrors({ 'unique': true });
             return;
           } else {
@@ -171,18 +173,32 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
       serverSide: true,
       ordering: true,
       order: [[5, 'desc']],
-      language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
+      language: { 'processing': '' },
+      responsive: true,
+      destroy: true,
+      // scrollX: true,
+      // scrollCollapse: true,
+      autoWidth: false,
+      initComplete: function (settings, json) {
+        $('.custom-datatable').wrap('<div style="overflow:auto; width:100%;position:relative;"></div>');
+      },
       ajax: (dataTablesParameters: any, callback) => {
         this.pageNumber = dataTablesParameters.length;
         setTimeout(() => {
           dataTablesParameters['columns'][4]['isBoolean'] = true;
           this.service.post('admin/company/list', dataTablesParameters).subscribe(res => {
             this.users = res['result']['data'];
-            this.totalRecords = res['result']['recordsTotal'];
             // this.users = [];
+            this.totalRecords = res['result']['recordsTotal'];
             if (this.users.length > 0) {
               this.isCols = true;
               $('.dataTables_wrapper').css('display', 'block');
+            } else {
+              if (dataTablesParameters['search']['value'] !== '' && dataTablesParameters['search']['value'] !== null) {
+                this.isCols = true;
+              } else {
+                this.isCols = false;
+              }
             }
             if (this.totalRecords > this.pageNumber) {
               $('.dataTables_paginate').css('display', 'block');
@@ -214,15 +230,16 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
         {
           data: 'Phone Number',
           name: 'phone_number',
-        }, {
+        },
+        {
           data: 'Status',
           name: 'is_Active',
-          searchable: false
         },
         {
           data: 'Actions',
           name: 'createdAt',
-          orderable: false
+          orderable: false,
+          searchable: false
         }
       ]
     };
@@ -236,8 +253,15 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
       showSearchButton: false,
     };
     this.userSettings = Object.assign({}, this.userSettings);
-    console.log('this.userSettings in afterviewinit=> ', this.userSettings);
     // Very Important Line to add after modifying settings.
+
+    let table: any = $('.custom-datatable').DataTable();
+    const noSpanIndex = [5];
+    table.columns().iterator('column', function (ctx, idx) {
+      if (noSpanIndex.indexOf(idx) < 0) {
+        $(table.column(idx).header()).append('<span class="sort-icon"/>');
+      }
+    });
   }
 
   // Add-Edit pop up
@@ -282,6 +306,7 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
       }
     });
     this.submitted = false;
+    this.numberErr = false;
   }
   // add-edit popup ends here
 
@@ -341,17 +366,15 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
 
   onSubmit() {
     this.submitted = true;
+    this.numberErr = false;
     if (typeof this.placeData === 'undefined') {
       this.addressError = true;
-      console.log(' check here on submit 1=> ');
     } else {
       if (this.placeData.response === false) {
         this.addressError = true;
-        console.log(' check here on submit 2=> ');
       } else if (this.placeData.response === true) {
         this.addressError = false;
       }
-      console.log(' check here on submit 3=> ');
     }
     if (!this.AddEditForm.invalid) {
       this.isLoading = true;
@@ -399,25 +422,21 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
   }
 
   ngOnInit() {
+    this.isCols = true;
     this.UsersListData();
   }
 
   autoCompleteCallback1(selectedData: any) {
-    console.log(' selectedData in autocomplete => ', selectedData);
     if (selectedData.response) {
       this.placeData = selectedData;
-      console.log('this.placeData selectedData => ', this.placeData);
       if (typeof this.placeData === 'undefined') {
         this.addressError = true;
-        console.log(' check here  auto complete 1=> ');
       } else {
         if (this.placeData.response === false) {
           this.addressError = true;
-          console.log(' check here 2=> ');
         } else if (this.placeData.response === true) {
           this.addressError = false;
         }
-        console.log(' check here auto complete 2=> ');
       }
       this.service_location = [];
       var lng = selectedData.data.geometry.location.lng;
@@ -446,6 +465,29 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
     }
   }
 
-  test(address) { }
-  onChangeAddress() { }
+  restrictAlphabets(e) {
+    var x = e.which || e.keycode;
+    if ((x >= 48 && x <= 57) || x === 8 ||
+      (x >= 35 && x <= 40) || x === 46) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  keyup(event) {
+    if (this.AddEditForm.controls.phone_number.status === 'INVALID') {
+      if (this.AddEditForm.controls.phone_number.value.length < 21) {
+        this.numberErr = false;
+      } else {
+        this.numberErr = true;
+      }
+    } else {
+      this.numberErr = false;
+    }
+    if (this.submitted === true) {
+      this.numberErr = false;
+    }
+  }
+
 }

@@ -1,0 +1,82 @@
+<div class="card">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-lg-6 col-sm-6">
+        <h4 class="table-header">List of Reported Cars </h4>
+      </div>
+      <!-- <div class="col-lg-6 col-sm-6 text-right"> -->
+      <!-- <button type="button" class="btn btn-primary custom-add-btn m-r-10">
+          <i class="fa fa-external-link" aria-hidden="true"></i> Export
+        </button> -->
+      <!-- <button type="button" class="btn btn-primary custom-add-btn" (click)="open2(content, '')">
+          <i class="mdi mdi-account-plus" aria-hidden="true"></i> Add
+        </button>
+      </div> -->
+    </div>
+    <div *ngIf="!isCols">
+      <div class="p-grid p-dir-col">
+        <div class="p-col">
+          <div class="box">No Record found for Reported Cars</div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="table table-responsive table-striped datable_custom datable_last_none">
+          <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table custom-datatable">
+            <thead>
+              <tr>
+                <th>Booking Number</th>
+                <th>Category Type</th>
+                <th>Report Message</th>
+                <th>Status</th>
+                <!-- <th class="disabled text-center">Actions</th> -->
+              </tr>
+            </thead>
+            <tbody *ngIf="report?.length != 0 && isCols">
+              <tr *ngFor="let item of report; let i = index">
+                <td>
+                  <span>
+                    {{ item.booking_number }}
+                  </span>
+                </td>
+                <td>
+                  <span>
+                    {{ item.category_type }}
+                  </span>
+                </td>
+                <td>
+                  <span>
+                    {{ item.report_message }}
+                  </span>
+                </td>
+                <td>
+                  <span>
+                    {{ item.status }}
+                  </span>
+                </td>
+                <!-- <td class="text-center">
+                  <a href="javascript:void(0)" [routerLink]="['/admin/agents/view/',item._id]" pTooltip="View"
+                    tooltipPosition="bottom" class="m-r-20">
+                    <i class="fa fa-eye text-default"></i>
+                  </a>
+                  <a href="javascript:void(0)" (click)="open2(content, item)" pTooltip="Edit" tooltipPosition="bottom"
+                    class="m-r-20">
+                    <i class="fa fa-pencil text-success"></i>
+                  </a>
+                  <a href="javascript:void(0)" (click)="delete(item._id)" pTooltip="Delete" tooltipPosition="bottom">
+                    <i class="fa fa-close text-danger"></i> </a>
+                </td> -->
+              </tr>
+            </tbody>
+            <tbody *ngIf="report?.length == 0">
+              <tr>
+                <td colspan="6" class="no-data-available">No record found!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

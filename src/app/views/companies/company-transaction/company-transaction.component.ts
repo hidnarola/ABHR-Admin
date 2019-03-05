@@ -37,15 +37,14 @@ export class CompanyTransactionComponent implements OnInit, AfterViewInit, OnDes
   ) {
     const company = JSON.parse(localStorage.getItem('company-admin'));
     this.companyId = company._id;
-    console.log('companyid in car reports==>', this.companyId);
   }
 
   ngOnInit() {
+    this.isCols = true;
     this.TransactionData();
   }
 
   TransactionData() {
-    console.log('this.hideSpinner => ', this.hideSpinner);
     this.spinner.show();
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -58,6 +57,13 @@ export class CompanyTransactionComponent implements OnInit, AfterViewInit, OnDes
       language: {
         'processing': '',
       },
+      destroy: true,
+      // scrollX: true,
+      // scrollCollapse: true,
+      autoWidth: false,
+      initComplete: function (settings, json) {
+        $('.custom-datatable').wrap('<div style="overflow:auto; width:100%;position:relative;"></div>');
+      },
       ajax: (dataTablesParameters: any, callback) => {
         this.pageNumber = dataTablesParameters.length;
         dataTablesParameters['columns'][0]['isNumber'] = true;
@@ -66,18 +72,20 @@ export class CompanyTransactionComponent implements OnInit, AfterViewInit, OnDes
         dataTablesParameters['columns'][5]['isNumber'] = true;
         dataTablesParameters['company_id'] = this.companyId;
         setTimeout(() => {
-          console.log('dtaparametes==>', dataTablesParameters);
           this.service.post('company/transaction/list', dataTablesParameters).subscribe(res => {
-            console.log('res in trasaction=> ', res);
             this.transaction = res['result']['data'];
             this.totalRecords = res['result']['recordsTotal'];
             // this.transaction = [];
             if (this.transaction.length > 0) {
               this.isCols = true;
               $('.dataTables_wrapper').css('display', 'block');
+            } else {
+              if (dataTablesParameters['search']['value'] !== '' && dataTablesParameters['search']['value'] !== null) {
+                this.isCols = true;
+              } else {
+                this.isCols = false;
+              }
             }
-            console.log('total records===>', this.totalRecords);
-            console.log('page number', this.pageNumber);
             if (this.totalRecords > this.pageNumber) {
               $('.dataTables_paginate').css('display', 'block');
             } else {
@@ -94,7 +102,7 @@ export class CompanyTransactionComponent implements OnInit, AfterViewInit, OnDes
       },
       columns: [
         {
-          data: 'Booking Number',
+          data: 'Booking ID',
           name: 'booking_number',
         },
         {
@@ -105,13 +113,17 @@ export class CompanyTransactionComponent implements OnInit, AfterViewInit, OnDes
           data: 'Status',
           name: 'transaction_status',
         },
-        {
-          data: 'Coupon Code',
-          name: 'coupon_code',
-        },
+        // {
+        //   data: 'Coupon Code',
+        //   name: 'coupon_code',
+        // },
         {
           data: 'Coupon Rate',
-          name: 'coupon_rate',
+          name: 'coupon_percentage',
+        },
+        {
+          data: 'Total Amount',
+          name: 'total_booking_amount'
         },
         {
           data: 'VAT',
@@ -151,6 +163,12 @@ export class CompanyTransactionComponent implements OnInit, AfterViewInit, OnDes
   ngAfterViewInit(): void {
     this.dtTrigger.next();
     this.hideSpinner = false;
+    let table: any = $('.custom-datatable').DataTable();
+    table.columns().iterator('column', function (ctx, idx) {
+      if (idx !== 8) {
+        $(table.column(idx).header()).append('<span class="sort-icon"/>');
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -159,7 +177,6 @@ export class CompanyTransactionComponent implements OnInit, AfterViewInit, OnDes
 
   cancel(Id) {
     var date = moment().format('YYYY-MM-DD');
-    console.log('userId==>', Id);
     this.confirmationService.confirm({
       message: 'Are you sure want to cancel this Transaction?',
       header: 'Confirmation',

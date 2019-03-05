@@ -51,16 +51,15 @@ export class TransactionReportComponent implements OnInit, AfterViewInit, OnDest
   ) {
     const company = JSON.parse(localStorage.getItem('company-admin'));
     this.companyId = company._id;
-    console.log('companyid in car reports==>', this.companyId);
   }
 
   FilterRange() {
-    console.log('rangeDates in filter function => ', this.rangeDates);
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.draw();
     });
   }
   ngOnInit() {
+    this.isCols = true;
     this.ReportData();
     setTimeout(() => {
       this.ExportRecords();
@@ -78,7 +77,14 @@ export class TransactionReportComponent implements OnInit, AfterViewInit, OnDest
         serverSide: true,
         ordering: true,
         order: [[5, 'desc']],
-        language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
+        language: { 'processing': '' },
+        responsive: true,
+        // scrollX: true,
+        // scrollCollapse: true,
+        autoWidth: false,
+        initComplete: function (settings, json) {
+          $('.custom-datatable').wrap('<div style="overflow:auto; width:100%;position:relative;"></div>');
+        },
 
         ajax: (dataTablesParameters: any, callback) => {
           this.pageNumber = dataTablesParameters.length;
@@ -96,12 +102,22 @@ export class TransactionReportComponent implements OnInit, AfterViewInit, OnDest
             }
             this.service.post('company/transaction/report_list', dataTablesParameters).subscribe(res => {
               this.reports = res['result']['data'];
-              console.log(' transaction report => ', this.reports);
               this.totalRecords = res['result']['recordsTotal'];
               // this.reports = [];
               if (this.reports.length > 0) {
                 this.isCols = true;
                 $('.dataTables_wrapper').css('display', 'block');
+              } else {
+                if (dataTablesParameters['search']['value'] !== '' && dataTablesParameters['search']['value'] !== null ||
+                  ((dataTablesParameters['selectFromDate'] && dataTablesParameters['selectToDate']) !== '') &&
+                  ((dataTablesParameters['selectFromDate'] && dataTablesParameters['selectToDate']) !== null)) {
+                  this.isCols = true;
+                } else if (this.rangeDates) {
+                  this.isCols = true;
+                } else {
+                  this.isCols = false;
+                }
+                // this.isCols = false;
               }
               if (this.totalRecords > this.pageNumber) {
                 $('.dataTables_paginate').css('display', 'block');
@@ -148,9 +164,7 @@ export class TransactionReportComponent implements OnInit, AfterViewInit, OnDest
           },
         ]
       };
-    } catch (error) {
-      console.log('error => ', error);
-    }
+    } catch (error) { }
 
   }
   render(): void {
@@ -167,36 +181,36 @@ export class TransactionReportComponent implements OnInit, AfterViewInit, OnDest
   }
   ngAfterViewInit(): void {
     this.dtTrigger.next();
+    let table: any = $('.custom-datatable').DataTable();
+    table.columns().iterator('column', function (ctx, idx) {
+      $(table.column(idx).header()).append('<span class="sort-icon"/>');
+    });
   }
 
   handleFilterCalendar = () => {
     this.datePicker.overlayVisible = false;
-    console.log('this.rangeDates  => ', this.rangeDates);
   }
   handleClearCalendar = () => {
     this.rangeDates = null;
-    console.log('this.rangeDates  => ', this.rangeDates);
     this.datePicker.overlayVisible = false;
     this.render();
     this.spinner.show();
   }
   ExportRecords() {
-    console.log('here in export fun => ');
     this.service.post('company/transaction/export_report_list', this.exportParam).subscribe(async (res: any) => {
       this.exportData = await res['result']['data'];
       var ExcelData = [];
       this.isExcel = false;
       this.isPDF = false;
-      console.log('this.exportData => ', this.exportData);
       this.exportData.forEach(item => {
         let obj = {
-          'First_Name': item.first_name,
-          'Last_Name': item.last_name,
+          'First Name': item.first_name,
+          'Last Name': item.last_name,
           // 'Company_Name': item.company_name,
           'Status': item.transaction_status,
           'Transaction Amount': item.total_booking_amount,
-          'From_Date': moment(item.from_time).format('LL'),
-          'To_Date': moment(item.to_time).format('LL'),
+          'From Date': moment(item.from_time).format('LL'),
+          'To Date': moment(item.to_time).format('LL'),
         };
         ExcelData.push(obj);
         this.ExcelArray = ExcelData;
@@ -211,23 +225,22 @@ export class TransactionReportComponent implements OnInit, AfterViewInit, OnDest
       var ExcelData = [];
       this.isExcel = false;
       this.isPDF = false;
-      console.log('this.exportData => ', this.exportData);
       this.exportData.forEach(item => {
         let obj = {
-          'First_Name': item.first_name,
-          'Last_Name': item.last_name,
+          'First Name': item.first_name,
+          'Last Name': item.last_name,
           // 'Company_Name': item.company_name,
           'Status': item.transaction_status,
           'Transaction Amount': item.total_booking_amount,
-          'From_Date': moment(item.from_time).format('LL'),
-          'To_Date': moment(item.to_time).format('LL'),
+          'From Date': moment(item.from_time).format('LL'),
+          'To Date': moment(item.to_time).format('LL'),
         };
         ExcelData.push(obj);
         this.ExcelArray = ExcelData;
       });
     });
     setTimeout(() => {
-      this.excelService.exportAsExcelFile(this.ExcelArray, 'sample');
+      this.excelService.exportAsExcelFile(this.ExcelArray, 'Transaction-Report');
     }, 1000);
   }
 
@@ -235,8 +248,8 @@ export class TransactionReportComponent implements OnInit, AfterViewInit, OnDest
     this.isPDF = true;
     this.ExportRecords();
     var pdfdata = document.getElementById('contentToConvert');
+    // var pdfdata = $('#contentToConvert_wrapper').children(".dataTables_scroll")[0];
     html2canvas(pdfdata).then(canvas => {
-      console.log('canvas => ', canvas);
       // Few necessary setting options  
       var imgWidth = 208;
       var pageHeight = 500;

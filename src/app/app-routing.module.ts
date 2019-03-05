@@ -9,6 +9,7 @@ import { AuthGuard } from './shared/guards/auth.guard';
 import { AdminModule } from '../app/views/admin/admin.module';
 import { CompaniesModule } from '../app/views/companies/companies.module';
 import { LoginGuard } from './shared/guards/login.guard';
+import { CompanyAdminStatusResolve } from './shared/Resolve/company-admin-status';
 // import { AdminComponent } from './views/admin/admin.component';
 
 export const routes: Routes = [
@@ -45,12 +46,18 @@ export const routes: Routes = [
             {
                 path: 'company',
                 loadChildren: './authentication/authentication.module#AuthenticationModule',
+
             },
             {
                 path: 'reset-password',
                 loadChildren: './reset-password/reset-password.module#ResetPasswordModule',
                 canActivate: [LoginGuard],
-            }
+            },
+            {
+                path: 'confirm-reset-password',
+                loadChildren: './confirm-reset/confirm-reset.module#ConfirmResetModule',
+                canActivate: [LoginGuard],
+            },
         ]
     },
     {

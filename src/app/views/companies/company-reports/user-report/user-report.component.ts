@@ -50,26 +50,23 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {
     const company = JSON.parse(localStorage.getItem('company-admin'));
     this.companyId = company._id;
-    console.log('companyid in car reports==>', this.companyId);
   }
 
   DatePicker(date: NgbDateStruct) {
-    console.log('check => ', date);
     this.newDate = date.year + '-' + date.month + '-' + date.day;
-    console.log('newDate => ', this.newDate);
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.draw();
     });
   }
 
   FilterRange() {
-    console.log('rangeDates in filter function => ', this.rangeDates);
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.draw();
     });
   }
 
   ngOnInit() {
+    this.isCols = true;
     this.ReportData();
     setTimeout(() => {
       this.ExportRecords();
@@ -79,7 +76,6 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
   ReportData() {
     try {
       this.spinner.show();
-
       this.dtOptions = {
         pagingType: 'full_numbers',
         pageLength: 10,
@@ -88,7 +84,14 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
         serverSide: true,
         ordering: true,
         order: [[5, 'desc']],
-        language: { 'processing': '<i class="fa fa-spin fa-spinner"></i>' },
+        language: { 'processing': '' },
+        responsive: true,
+        // scrollX: true,
+        // scrollCollapse: true,
+        autoWidth: false,
+        initComplete: function (settings, json) {
+          $('.custom-datatable').wrap('<div style="overflow:auto; width:100%;position:relative;"></div>');
+        },
         ajax: (dataTablesParameters: any, callback) => {
           this.pageNumber = dataTablesParameters.length;
           dataTablesParameters['company_id'] = this.companyId;
@@ -111,13 +114,23 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
               if (this.reports.length > 0) {
                 this.isCols = true;
                 $('.dataTables_wrapper').css('display', 'block');
+              } else {
+                if (dataTablesParameters['search']['value'] !== '' && dataTablesParameters['search']['value'] !== null ||
+                  ((dataTablesParameters['selectFromDate'] && dataTablesParameters['selectToDate']) !== '') &&
+                  ((dataTablesParameters['selectFromDate'] && dataTablesParameters['selectToDate']) !== null)) {
+                  this.isCols = true;
+                } else if (this.rangeDates) {
+                  this.isCols = true;
+                } else {
+                  this.isCols = false;
+                }
+                // this.isCols = false;
               }
               if (this.totalRecords > this.pageNumber) {
                 $('.dataTables_paginate').css('display', 'block');
               } else {
                 $('.dataTables_paginate').css('display', 'none');
               }
-              console.log('response in reports', res);
               this.spinner.hide();
               callback({
                 recordsTotal: res['result']['recordsTotal'],
@@ -135,6 +148,14 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
           {
             data: 'Last Name',
             name: 'last_name',
+          },
+          {
+            data: 'Car Brand',
+            name: 'car_brand',
+          },
+          {
+            data: 'Car Model',
+            name: 'car_modal',
           },
           {
             data: 'Status',
@@ -155,7 +176,6 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
         ]
       };
     } catch (error) {
-      console.log('error => ', error);
     }
 
   }
@@ -173,14 +193,16 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   ngAfterViewInit(): void {
     this.dtTrigger.next();
+    let table: any = $('.custom-datatable').DataTable();
+    table.columns().iterator('column', function (ctx, idx) {
+      $(table.column(idx).header()).append('<span class="sort-icon"/>');
+    });
   }
   handleFilterCalendar = () => {
     this.datePicker.overlayVisible = false;
-    console.log('this.rangeDates  => ', this.rangeDates);
   }
   handleClearCalendar = () => {
     this.rangeDates = null;
-    console.log('this.rangeDates  => ', this.rangeDates);
     this.datePicker.overlayVisible = false;
     this.render();
     this.spinner.show();
@@ -191,16 +213,15 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
       var ExcelData = [];
       this.isExcel = false;
       this.isPDF = false;
-      console.log('this.exportData => ', this.exportData);
       this.exportData.forEach(item => {
         let obj = {
-          'First_Name': item.first_name,
-          'Last_Name': item.last_name,
-          'Company_Name': item.company_name,
+          'First Name': item.first_name,
+          'Last Name': item.last_name,
+          'Company Name': item.company_name,
           'Status': item.trip_status,
           'Total Rent': item.booking_rent,
-          'From_Date': moment(item.from_time).format('LL'),
-          'To_Date': moment(item.to_time).format('LL'),
+          'From Date': moment(item.from_time).format('LL'),
+          'To Date': moment(item.to_time).format('LL'),
         };
         ExcelData.push(obj);
         this.ExcelArray = ExcelData;
@@ -215,23 +236,22 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
       var ExcelData = [];
       this.isExcel = false;
       this.isPDF = false;
-      console.log('this.exportData => ', this.exportData);
       this.exportData.forEach(item => {
         let obj = {
-          'First_Name': item.first_name,
-          'Last_Name': item.last_name,
-          'Company_Name': item.company_name,
+          'First Name': item.first_name,
+          'Last Name': item.last_name,
+          'Company Name': item.company_name,
           'Status': item.trip_status,
           'Total Rent': item.booking_rent,
-          'From_Date': moment(item.from_time).format('LL'),
-          'To_Date': moment(item.to_time).format('LL'),
+          'From Date': moment(item.from_time).format('LL'),
+          'To Date': moment(item.to_time).format('LL'),
         };
         ExcelData.push(obj);
         this.ExcelArray = ExcelData;
       });
     });
     setTimeout(() => {
-      this.excelService.exportAsExcelFile(this.ExcelArray, 'sample');
+      this.excelService.exportAsExcelFile(this.ExcelArray, 'Users-Report');
     }, 1000);
   }
 
@@ -239,6 +259,7 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isPDF = true;
     this.ExportRecords();
     var pdfdata = document.getElementById('contentToConvert');
+    // var pdfdata = $('#contentToConvert_wrapper').children(".dataTables_scroll")[0];
     html2canvas(pdfdata).then(canvas => {
       // Few necessary setting options  
       var imgWidth = 208;
@@ -250,7 +271,7 @@ export class UserReportComponent implements OnInit, AfterViewInit, OnDestroy {
       let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF  
       var position = 0;
       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)
-      pdf.save('Users-report.pdf'); // Generated PDF   
+      pdf.save('Users-Report.pdf'); // Generated PDF   
     });
   }
 }

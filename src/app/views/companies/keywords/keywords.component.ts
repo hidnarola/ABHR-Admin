@@ -75,7 +75,6 @@ export class KeywordsComponent implements OnInit, AfterViewInit, OnDestroy {
     // modalService: ModalDialogService,
     viewRef: ViewContainerRef
   ) {
-    console.log("i am here");
     // addform validation
     const pattern = new RegExp('^([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})$');
     this.AddEditForm = this.formBuilder.group({
@@ -104,11 +103,9 @@ export class KeywordsComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.AddEditForm.invalid) {
       this.isLoading = true;
       this.formData = this.AddEditForm.value;
-      console.log('formadata==>', this.formData);
       if (this.isEdit) {
         this.formData.keyword_id = this.Id;
         this.title = 'Edit Keywords';
-        console.log('Id', this.Id);
         this.service.put('admin/keyword/edit', this.formData).subscribe(res => {
           this.isLoading = false;
           this.render();
@@ -172,14 +169,18 @@ export class KeywordsComponent implements OnInit, AfterViewInit, OnDestroy {
       responsive: true,
       ordering: true,
       order: [[3, 'desc']],
-      language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
+      language: { 'processing': '' },
+      destroy: true,
+      // scrollX: true,
+      // scrollCollapse: true,
+      autoWidth: false,
+      initComplete: function (settings, json) {
+        $('.custom-datatable').wrap('<div style="overflow:auto; width:100%;position:relative;"></div>');
+      },
       ajax: (dataTablesParameters: any, callback) => {
         setTimeout(() => {
-          console.log('dtaparametes==>', dataTablesParameters);
           this.service.post('admin/keyword/list', dataTablesParameters).subscribe(res => {
-            console.log(res['result']);
             this.keywords = res['result']['data'];
-            console.log(this.keywords);
             this.spinner.hide();
             callback({
               recordsTotal: res['result']['recordsTotal'],
@@ -214,11 +215,14 @@ export class KeywordsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.dtTrigger.next();
+    let table: any = $('.custom-datatable').DataTable();
+    table.columns().iterator('column', function (ctx, idx) {
+      $(table.column(idx).header()).append('<span class="sort-icon"/>');
+    });
   }
 
   // model
   open2(content, item) {
-    console.log('item==>', item);
     if (item !== 'undefined' && item !== '') {
       this.title = 'Edit Keywords';
       this.isEdit = true;
@@ -250,7 +254,6 @@ export class KeywordsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // dlt popup
   delete(Id) {
-    console.log('userId==>', Id);
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete this record?',
       header: 'Confirmation',

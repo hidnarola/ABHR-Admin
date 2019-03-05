@@ -1,13 +1,14 @@
 import { Component, OnInit, ViewChild, OnDestroy, AfterViewInit, Renderer } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { CrudService } from '../../../shared/services/crud.service';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerService } from 'ngx-spinner';
-
+import { HttpHeaders } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-coupons',
@@ -36,6 +37,13 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
   public idCompanyAdded: Boolean = false;
   public companylist;
   formCoupons: any = {};
+  public numberErr: boolean = false;
+  public rateError: boolean = false;
+  CarImageRAW: any = [];
+  CarImage: any = [];
+  imgUrl = environment.imgUrl;
+  public old_image;
+  public nameData: any;
 
   constructor(
     public renderer: Renderer,
@@ -48,7 +56,6 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
     private spinner: NgxSpinnerService
   ) {
     this.service.get('admin/coupon/companies').subscribe(res => {
-      console.log('res => ', res['data']);
       this.companylist = res['data'];
     });
 
@@ -58,31 +65,59 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
       discount_rate: Number,
       company_id: String,
       idCompanyAdded: Boolean,
+      description: String,
+      banner_image: FileList,
     };
   }
 
   builtformcontrol() {
-    console.log('this.idCompanyAdded => ', this.idCompanyAdded);
     if (this.idCompanyAdded === true) {
       this.AddEditForm = this.formBuilder.group({
-        coupon_code: ['', Validators.required],
-        // discount_rate: ['', Validators.compose([Validators.required, Validators.max(100), Validators.pattern('[0-9]*')])],
-        discount_rate: ['', Validators.compose([Validators.required, Validators.max(100), Validators.pattern('^[0-9][0-9]*(\.[0-9]+)?$')])],
-        idCompanyAdded: [],
+        coupon_code: ['', Validators.compose([Validators.required, this.noWhitespaceValidator, this.uniqueNameValidator])],
+        discount_rate: ['', Validators.compose([Validators.required, Validators.max(99.99),
+        Validators.pattern('^[0-9][0-9]*(\.[0-9]+)?$')])],
+        idCompanyAdded: [this.idCompanyAdded],
         company_id: ['', Validators.required],
+        description: ['', Validators.required],
+        // banner_image: ['']
       });
-      console.log('if => ');
     } else {
       this.AddEditForm = this.formBuilder.group({
-        coupon_code: ['', Validators.required],
-        // discount_rate: ['', Validators.compose([Validators.required, Validators.max(100), Validators.pattern('[0-9]*')])],
-        discount_rate: ['', Validators.compose([Validators.required, Validators.max(100), Validators.pattern('^[0-9][0-9]*(\.[0-9]+)?$')])],
-        idCompanyAdded: [],
+        coupon_code: ['', Validators.compose([Validators.required, this.noWhitespaceValidator, this.uniqueNameValidator])],
+        discount_rate: ['', Validators.compose([Validators.required, Validators.max(99.99),
+        Validators.pattern('^[0-9][0-9]*(\.[0-9]+)?$')])],
+        idCompanyAdded: [this.idCompanyAdded],
+        description: ['', Validators.required],
+        // banner_image: ['']
       });
-      console.log('else => ');
     }
   }
 
+  public uniqueNameValidator = (control: FormControl) => {
+    let isWhitespace2;
+    if ((isWhitespace2 = (control.value || '').trim().length === 1) || (isWhitespace2 = (control.value || '').trim().length === 0)) {
+      return { 'required': true };
+    } else {
+      this.nameData = { 'coupon_code': control.value };
+      if (this.isEdit) {
+        this.nameData = { 'coupon_code': control.value, 'coupon_id': this.couponId };
+      }
+      return this.service.post('admin/coupon/check_coupon', this.nameData).subscribe(res => {
+        if (res['status'] === 'success') {
+          this.f.coupon_code.setErrors({ 'uniqueName': true });
+          return;
+        } else {
+          this.f.coupon_code.setErrors(null);
+        }
+      });
+    }
+  }
+
+  noWhitespaceValidator(control: FormControl) {
+    let isWhitespace = (control.value || '').trim().length === 0;
+    let isValid = !isWhitespace;
+    return isValid ? null : { 'required': true };
+  }
   get f() { return this.AddEditForm.controls; }
   render(): void {
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
@@ -96,6 +131,7 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
+    this.isCols = true;
     this.CouponListData();
   }
 
@@ -108,25 +144,35 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
       serverSide: true,
       responsive: true,
       ordering: true,
-      order: [[3, 'desc']],
+      order: [[4, 'desc']],
       language: {
         'processing': '',
       },
+      destroy: true,
+      // scrollX: true,
+      // scrollCollapse: true,
+      autoWidth: false,
+      initComplete: function (settings, json) {
+        $('.custom-datatable').wrap('<div style="overflow:auto; width:100%;position:relative;"></div>');
+      },
       ajax: (dataTablesParameters: any, callback) => {
         this.pageNumber = dataTablesParameters.length;
+        dataTablesParameters['columns'][2]['isNumber'] = true;
         setTimeout(() => {
-          console.log('dtaparametes==>', dataTablesParameters);
           this.service.post('admin/coupon/list', dataTablesParameters).subscribe(async (res: any) => {
             this.coupons = await res['result']['data'];
-            console.log('====>', res['result']['data']);
             this.totalRecords = res['result']['recordsTotal'];
             // this.coupons = [];
             if (this.coupons.length > 0) {
               this.isCols = true;
               $('.dataTables_wrapper').css('display', 'block');
+            } else {
+              if (dataTablesParameters['search']['value'] !== '' && dataTablesParameters['search']['value'] !== null) {
+                this.isCols = true;
+              } else {
+                this.isCols = false;
+              }
             }
-            console.log('total records===>', this.totalRecords);
-            console.log('page number', this.pageNumber);
             if (this.totalRecords > this.pageNumber) {
               $('.dataTables_paginate').css('display', 'block');
             } else {
@@ -142,6 +188,10 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
         }, 1000);
       },
       columns: [
+        {
+          data: 'Banner',
+          name: 'banner_image',
+        },
         {
           data: 'Coupon Code',
           name: 'coupon_code',
@@ -165,28 +215,36 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.dtTrigger.next();
+    let table: any = $('.custom-datatable').DataTable();
+    table.columns().iterator('column', function (ctx, idx) {
+      if (idx !== 4) {
+        $(table.column(idx).header()).append('<span class="sort-icon"/>');
+      }
+    });
   }
 
   // model
   open2(content, item) {
-    console.log('this.idCompanyAdded 1 => ', this.idCompanyAdded);
-    console.log('item==>', item);
+    console.log('this.AddEditForm in open => ', this.AddEditForm);
+    console.log('here in open===>', item);
     if (item !== 'undefined' && item !== '') {
       this.title = 'Edit Coupon';
       this.isEdit = true;
       this.couponId = item._id;
       this.AddEditForm.controls['coupon_code'].setValue(item.coupon_code);
       this.AddEditForm.controls['discount_rate'].setValue(item.discount_rate);
-      console.log('car_rental_company_id => ', item.car_rental_company_id);
-      if (item.car_rental_company_id !== undefined) {
+      this.AddEditForm.controls['description'].setValue(item.description);
+      this.old_image = item.banner_image ? item.banner_image : '';
+      // if (item.car_rental_company_id !== undefined) {
+      if (item.companyDetails !== undefined) {
         this.idCompanyAdded = true;
         this.builtformcontrol();
         this.AddEditForm.controls['coupon_code'].setValue(item.coupon_code);
         this.AddEditForm.controls['discount_rate'].setValue(item.discount_rate);
-        console.log('this.idCompanyAdded 2 => ', this.idCompanyAdded);
+        this.AddEditForm.controls['description'].setValue(item.description);
         this.AddEditForm.controls['company_id'].setValue(item.companyDetails._id);
-        console.log('item.companyDetails._id => ', item.companyDetails._id);
       } else {
+        console.log('here in not added');
         this.idCompanyAdded = false;
       }
     } else {
@@ -204,9 +262,12 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isEdit = false;
         this.AddEditForm.controls['coupon_code'].setValue('');
         this.AddEditForm.controls['discount_rate'].setValue('');
+        this.AddEditForm.controls['description'].setValue('');
       }
     });
     this.submitted = false;
+    this.numberErr = false;
+    this.rateError = false;
   }
   // add-edit popup ends here
 
@@ -218,7 +279,6 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // dlt popup
   delete(couponId) {
-    console.log('couponId==>', couponId);
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete this record?',
       header: 'Confirmation',
@@ -239,12 +299,13 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
   // dlt pop up ends here
 
   onChangeChoiceCompany() {
-    console.log('this.AddEditForm===>', this.AddEditForm);
     var obj = {
-      coupon_code: [this.AddEditForm.controls.coupon_code.value, Validators.required],
-      discount_rate: [this.AddEditForm.controls.discount_rate.value, Validators.compose([Validators.required,
-      Validators.pattern('[0-9]*')])],
+      coupon_code: [this.AddEditForm.controls.coupon_code.value, Validators.compose([Validators.required, this.noWhitespaceValidator,
+      this.uniqueNameValidator])],
+      discount_rate: [this.AddEditForm.controls.discount_rate.value, Validators.compose([Validators.required, Validators.max(99.99),
+      Validators.pattern('^[0-9][0-9]*(\.[0-9]+)?$')])],
       idCompanyAdded: [this.idCompanyAdded],
+      description: [this.AddEditForm.controls.description.value, Validators.required],
     };
     if (this.idCompanyAdded === true) {
       obj = Object.assign(obj, { company_id: ['', Validators.required] });
@@ -255,21 +316,59 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     this.AddEditForm = this.formBuilder.group(obj);
   }
+
+  handleFileInput(event) {
+    let isValid = false;
+    const files = event.target.files;
+    this.formData.banner_image = event.target.files;
+    if (files) {
+      for (const file of files) {
+        if (file.type === 'image/jpeg' || file.type === 'image/png') {
+          isValid = true;
+        } else {
+          isValid = false;
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Invalid Image Format' });
+          return 0;
+        }
+      }
+    }
+  }
+
+
   onSubmit() {
     this.submitted = true;
-    console.log('this.formdata => ', this.formData);
+    this.numberErr = false;
+    this.rateError = false;
+    console.log('this.AddEditForm in submit => ', this.AddEditForm);
     if (!this.AddEditForm.invalid) {
-      this.isLoading = true;
-      this.formData = this.AddEditForm.value;
-      this.formData.idCompanyAdded = this.idCompanyAdded;
-      console.log('this.formData => ', this.formData);
-      console.log('idCompanyAdded => ', this.idCompanyAdded);
-      console.log('/* => ', this.AddEditForm.value);
+      console.log('formvalues=====>, ', this.AddEditForm.value);
+      const headers = new HttpHeaders();
+      // this is the important step. You need to set content type as null
+      headers.set('Content-Type', null);
+      headers.set('Accept', 'multipart/form-data');
+      // this.isLoading = true;
+      const formData = new FormData();
+      formData.append('coupon_code', this.f.coupon_code.value);
+      formData.append('description', this.f.description.value);
+      formData.append('discount_rate', this.f.discount_rate.value);
+      if (this.formData['banner_image'] instanceof Object) {
+        formData.append('banner_image', this.formData['banner_image'][0]);
+      }
+      console.log('this.f.idCompanyAdded.value => ', this.f.idCompanyAdded.value);
+      console.log('this.idCompanyAdded => ', this.idCompanyAdded);
+      if (this.f.idCompanyAdded.value === null) {
+        formData.append('idCompanyAdded', 'false');
+      } else {
+        formData.append('idCompanyAdded', this.f.idCompanyAdded.value);
+        if (this.f.idCompanyAdded.value === true) {
+          formData.append('company_id', this.f.company_id.value);
+        }
+      }
       if (this.isEdit) {
-        this.formData.coupon_id = this.couponId;
+        formData.append('old_banner_image', this.old_image);
+        formData.append('coupon_id', this.couponId);
         this.title = 'Edit Coupon';
-        console.log('couponId', this.couponId);
-        this.service.put('admin/coupon/update', this.formData).subscribe(res => {
+        this.service.post('admin/coupon/update', formData, headers).subscribe(res => {
           this.isLoading = false;
           this.render();
           this.closePopup();
@@ -282,7 +381,7 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
         });
       } else {
         this.title = 'Add Coupon';
-        this.service.post('admin/coupon/add', this.formData).subscribe(res => {
+        this.service.post('admin/coupon/add', formData, headers).subscribe(res => {
           this.isLoading = false;
           this.render();
           this.closePopup();
@@ -290,7 +389,6 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
         }, err => {
           err = err.error;
           this.isLoading = false;
-          console.log('err => ', err);
           this.isLoading = false;
           this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
           this.closePopup();
@@ -299,9 +397,42 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
       this.isEdit = false;
       this.submitted = false;
       this.idCompanyAdded = false;
+      this.AddEditForm.controls['idCompanyAdded'].setValue('');
+      console.log('this.AddEditForm after submit => ', this.AddEditForm);
     } else {
-      console.log(' here invalid= > ');
       return;
+    }
+  }
+
+  restrictAlphabets(e) {
+    var x = e.which || e.keycode;
+    if ((x >= 48 && x <= 57) || x === 8 ||
+      (x >= 35 && x <= 40) || x === 46) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  keyup(event) {
+    if (this.AddEditForm.controls.discount_rate.value !== '' && this.AddEditForm.controls.discount_rate.value !== null) {
+      var inputValue = !isNaN(parseFloat(this.AddEditForm.controls.discount_rate.value)) &&
+        isFinite(this.AddEditForm.controls.discount_rate.value);
+      if (inputValue === false) {
+        this.numberErr = true;
+      } else {
+        if (this.AddEditForm.controls.discount_rate.value > 99.99) {
+          this.rateError = true;
+        } else {
+          this.rateError = false;
+        }
+      }
+    } else {
+      this.numberErr = false;
+      this.rateError = false;
+    }
+    if (this.submitted === true) {
+      this.numberErr = false;
     }
   }
 

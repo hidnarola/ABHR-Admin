@@ -46,8 +46,14 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
         serverSide: true,
         ordering: true,
         order: [[3, 'desc']],
-        language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
-
+        language: { 'processing': '' },
+        // scrollX: true,
+        responsive: true,
+        // scrollCollapse: true,
+        autoWidth: false,
+        initComplete: function (settings, json) {
+          $('.custom-datatable').wrap('<div style="overflow:auto; width:100%;position:relative;"></div>');
+        },
         ajax: (dataTablesParameters: any, callback) => {
           this.pageNumber = dataTablesParameters.length;
           this.dtparams = dataTablesParameters;
@@ -56,15 +62,21 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
             if (this.DDfilter !== '') {
               dataTablesParameters['filtered_by'] = this.DDfilter;
             }
-            console.log('dtaparametes car==>', dataTablesParameters);
             this.service.post('admin/user/list', dataTablesParameters).subscribe(res => {
-              console.log('res => ', res['result']['data']);
               this.users = res['result']['data'];
-              this.totalRecords = res['result']['recordsTotal'];
               // this.users = [];
+              this.totalRecords = res['result']['recordsTotal'];
+
               if (this.users.length > 0) {
                 this.isCols = true;
                 $('.dataTables_wrapper').css('display', 'block');
+              }
+              else {
+                if (dataTablesParameters['search']['value'] !== '' && dataTablesParameters['search']['value'] !== null) {
+                  this.isCols = true;
+                } else {
+                  this.isCols = false;
+                }
               }
               if (this.totalRecords > this.pageNumber) {
                 $('.dataTables_paginate').css('display', 'block');
@@ -111,9 +123,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
           }
         ]
       };
-    } catch (error) {
-      console.log('error => ', error);
-    }
+    } catch (error) { }
 
   }
 
@@ -121,29 +131,19 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
     this.spinner.show();
     this.service.post('admin/user/list', params).subscribe(res => {
       this.users = res['result']['data'];
-      console.log(this.users);
       this.spinner.hide();
 
     });
   }
 
   changeFilterOptionHandler(e) {
-    console.log('this.DDfilter => ', this.DDfilter);
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.draw();
     });
-    // console.log('value => ', e.target.value);
-    // const params = this.dtparams;
-    // params.filtered_by = e.target.value;
-    // this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-    //   // Destroy the table first
-    //   dtInstance.destroy();
-    //   this.UsersListData(e.target.value);
-    // });
-    // // this.getUserListData(params);
   }
 
   ngOnInit() {
+    this.isCols = true;
     $.fn['dataTable'].ext.search.push((settings, data, dataIndex) => {
       const str = (data[5]) || ''; // use data for the filter column
       if (str === this.DDfilter) {
@@ -151,17 +151,17 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
       }
       return false;
     });
-    // this.items = [{
-    //   items: [
-    //     { label: 'View Details', icon: 'mdi mdi-text-subject' },
-    //     { label: 'Rental History', icon: 'mdi mdi-text-subject' }
-    //   ]
-    // }];
     this.UsersListData();
   }
 
   ngAfterViewInit(): void {
     this.dtTrigger.next();
+    let table: any = $('.custom-datatable').DataTable();
+    table.columns().iterator('column', function (ctx, idx) {
+      if (idx !== 6) {
+        $(table.column(idx).header()).append('<span class="sort-icon"/>');
+      }
+    });
   }
 
   render(): void {

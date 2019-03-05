@@ -50,26 +50,23 @@ export class CarReportComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {
     const company = JSON.parse(localStorage.getItem('company-admin'));
     this.companyId = company._id;
-    console.log('companyid in car reports==>', this.companyId);
   }
 
   DatePicker(date: NgbDateStruct) {
-    console.log('check => ', date);
     this.newDate = date.year + '-' + date.month + '-' + date.day;
-    console.log('newDate => ', this.newDate);
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.draw();
     });
   }
 
   FilterRange() {
-    console.log('rangeDates in filter function => ', this.rangeDates);
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.draw();
     });
   }
 
   ngOnInit() {
+    this.isCols = true;
     this.ReportData();
     setTimeout(() => {
       this.ExportRecords();
@@ -88,14 +85,18 @@ export class CarReportComponent implements OnInit, AfterViewInit, OnDestroy {
         serverSide: true,
         ordering: true,
         order: [[5, 'desc']],
-        language: { 'processing': '<i class="fa fa-refresh loader fa-spin"></i>' },
-
-
+        language: { 'processing': '' },
+        responsive: true,
+        // scrollX: true,
+        // scrollCollapse: true,
+        autoWidth: false,
+        initComplete: function (settings, json) {
+          $('.custom-datatable').wrap('<div style="overflow:auto; width:100%;position:relative;"></div>');
+        },
         ajax: (dataTablesParameters: any, callback) => {
           this.pageNumber = dataTablesParameters.length;
           dataTablesParameters['company_id'] = this.companyId;
           this.dtparams = dataTablesParameters;
-          console.log('check here => ', dataTablesParameters['company_id']);
           dataTablesParameters['columns'][2]['isNumber'] = true;
           dataTablesParameters['columns'][3]['isNumber'] = true;
           this.exportParam = dataTablesParameters;
@@ -114,13 +115,23 @@ export class CarReportComponent implements OnInit, AfterViewInit, OnDestroy {
               if (this.reports.length > 0) {
                 this.isCols = true;
                 $('.dataTables_wrapper').css('display', 'block');
+              } else {
+                if (dataTablesParameters['search']['value'] !== '' && dataTablesParameters['search']['value'] !== null ||
+                  ((dataTablesParameters['selectFromDate'] && dataTablesParameters['selectToDate']) !== '') &&
+                  ((dataTablesParameters['selectFromDate'] && dataTablesParameters['selectToDate']) !== null)) {
+                  this.isCols = true;
+                } else if (this.rangeDates) {
+                  this.isCols = true;
+                } else {
+                  this.isCols = false;
+                }
+                // this.isCols = false;
               }
               if (this.totalRecords > this.pageNumber) {
                 $('.dataTables_paginate').css('display', 'block');
               } else {
                 $('.dataTables_paginate').css('display', 'none');
               }
-              console.log('response in reports', res);
               this.spinner.hide();
               callback({
                 recordsTotal: res['result']['recordsTotal'],
@@ -158,7 +169,6 @@ export class CarReportComponent implements OnInit, AfterViewInit, OnDestroy {
         ]
       };
     } catch (error) {
-      console.log('error => ', error);
     }
 
   }
@@ -176,36 +186,35 @@ export class CarReportComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   ngAfterViewInit(): void {
     this.dtTrigger.next();
+    let table: any = $('.custom-datatable').DataTable();
+    table.columns().iterator('column', function (ctx, idx) {
+      $(table.column(idx).header()).append('<span class="sort-icon"/>');
+    });
   }
 
   handleFilterCalendar = () => {
     this.datePicker.overlayVisible = false;
-    console.log('this.rangeDates  => ', this.rangeDates);
   }
   handleClearCalendar = () => {
     this.rangeDates = null;
-    console.log('this.rangeDates  => ', this.rangeDates);
     this.datePicker.overlayVisible = false;
     this.render();
     this.spinner.show();
   }
   ExportRecords() {
-    console.log('here in export fun => ');
     this.service.post('company/car/export_report_list', this.exportParam).subscribe(async (res: any) => {
       this.exportData = await res['result']['data'];
       var ExcelData = [];
       this.isExcel = false;
       this.isPDF = false;
-      console.log('this.exportData => ', this.exportData);
       this.exportData.forEach(item => {
         let obj = {
-          'Brand': item.car_brand,
-          'Model': item.car_modal,
-          'Company_Name': item.company_name,
-          'Total_Rent': item.booking_rent,
+          'Car Brand': item.car_brand,
+          'Car Model': item.car_modal,
           'Status': item.trip_status,
-          'From_Date': moment(item.from_time).format('LL'),
-          'To_Date': moment(item.to_time).format('LL'),
+          'Total Rent': item.booking_rent,
+          'From Date': moment(item.from_time).format('LL'),
+          'To Date': moment(item.to_time).format('LL'),
         };
         ExcelData.push(obj);
         this.ExcelArray = ExcelData;
@@ -220,23 +229,21 @@ export class CarReportComponent implements OnInit, AfterViewInit, OnDestroy {
       var ExcelData = [];
       this.isExcel = false;
       this.isPDF = false;
-      console.log('this.exportData => ', this.exportData);
       this.exportData.forEach(item => {
         let obj = {
-          'Brand': item.car_brand,
-          'Model': item.car_modal,
-          'Company_Name': item.company_name,
-          'Total_Rent': item.booking_rent,
+          'Car Brand': item.car_brand,
+          'Car Model': item.car_modal,
           'Status': item.trip_status,
-          'From_Date': moment(item.from_time).format('LL'),
-          'To_Date': moment(item.to_time).format('LL'),
+          'Total Rent': item.booking_rent,
+          'From Date': moment(item.from_time).format('LL'),
+          'To Date': moment(item.to_time).format('LL'),
         };
         ExcelData.push(obj);
         this.ExcelArray = ExcelData;
       });
     });
     setTimeout(() => {
-      this.excelService.exportAsExcelFile(this.ExcelArray, 'sample');
+      this.excelService.exportAsExcelFile(this.ExcelArray, 'Car-Report');
     }, 1000);
   }
 
@@ -244,8 +251,8 @@ export class CarReportComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isPDF = true;
     this.ExportRecords();
     var pdfdata = document.getElementById('contentToConvert');
+    // var pdfdata = $('#contentToConvert_wrapper').children(".dataTables_scroll")[0];
     html2canvas(pdfdata).then(canvas => {
-      console.log('canvas => ', canvas);
       // Few necessary setting options  
       var imgWidth = 208;
       var pageHeight = 500;
@@ -256,7 +263,7 @@ export class CarReportComponent implements OnInit, AfterViewInit, OnDestroy {
       let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF  
       var position = 0;
       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)
-      pdf.save('Car-report.pdf'); // Generated PDF   
+      pdf.save('Car-Report.pdf'); // Generated PDF   
     });
   }
 

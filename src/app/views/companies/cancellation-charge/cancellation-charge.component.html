@@ -5,14 +5,16 @@
     </div>
     <div>
       <span class="cancellation_policy">Do you want to add Cancellation Policy?</span>
-      <p-inputSwitch [(ngModel)]="checked" (onChange)="checkCancellation()" [styleClass]="'inputswitchStyle'"></p-inputSwitch>
+      <p-inputSwitch [(ngModel)]="checked" (onChange)="checkCancellation()" [styleClass]="'inputswitchStyle'">
+      </p-inputSwitch>
     </div>
 
 
-    <form (ngSubmit)="onSubmit()" #f="ngForm" (keydown.enter)="$event.preventDefault()" *ngIf="checked" class="mt-15">
+    <form name="CancellationForm" (ngSubmit)="CancellationForm.form.valid && onSubmit()" #CancellationForm="ngForm"
+      (keydown.enter)="$event.preventDefault()" *ngIf="checked" class="mt-15">
       <div class="row">
         <div class="col-md-4"><label class="required">Hours :</label></div>
-        <div class="col-md-4"><label class="required">Rate :</label></div>
+        <div class="col-md-4"><label class="required">Rate(%) :</label></div>
       </div>
 
       <div *ngFor="let item of submitArray; let i = index">
@@ -20,36 +22,50 @@
           <div class="col-md-4">
             <div class="form-group">
               <input class="form-control" placeholder="Enter Hours" type="number" required="true" name="hours{{i}}"
-                onkeypress="return event.charCode >= 48" min="1" [(ngModel)]="submitArray[i].hours" (blur)="checkNumber($event)">
-              <div class="invalid-feedback">
+                (keypress)="restrictAlphabets($event)" onkeypress="return event.charCode >= 48" min="1"
+                [(ngModel)]="submitArray[i].hours" required="" #hours="ngModel"
+                [ngClass]="{ 'is-invalid': CancellationForm.submitted && hours.invalid }">
+              <div *ngIf="CancellationForm.submitted && hours.invalid" class="invalid-feedback">
+                <div *ngIf="hours.errors.required">Hour is required</div>
               </div>
             </div>
           </div>
 
           <div class="col-md-4">
             <div class="form-group">
-              <input class="form-control" placeholder="Enter Rate" max="100" pattern="[0-9]{1,3}" type="number"
-                onkeypress="return event.charCode >= 48" min="1" required="true" maxlength="3" name="rate{{i}}"
-                [(ngModel)]="submitArray[i].rate" (blur)="checkNumber($event)">
-              <div class="invalid-feedback">
+              <input class="form-control" placeholder="Enter Rate" type="number" (keypress)="restrictAlphabets($event)"
+                min="1" required="" maxlength="3" name="rate{{i}}" id="rateInput" [(ngModel)]="submitArray[i].rate"
+                #rate="ngModel" (keyup)="keyup($event,i)"
+                [ngClass]="{ 'is-invalid': (CancellationForm.submitted && rate.invalid) ||errMsg[i].rate }">
+              <div *ngIf="CancellationForm.submitted && rate.invalid" class="invalid-feedback">
+                <div *ngIf="rate.errors.required">Rate % is required</div>
               </div>
+
+
+              <div *ngIf="((errMsg.length !== 0) && errMsg[i].rate)" class="keyup-input-errMsg">
+                Rate % can't exceed 99.99
+              </div>
+
+
             </div>
           </div>
 
           <div class="col-md-4">
-            <button type="button" *ngIf="i==0" class="btn btn-primary custom-add-btn" (click)="addNext()">
+            <button type="button" *ngIf="i==0" class="btn btn-primary custom-add-btn mb-25" (click)="addNext()">
               <i class="fa fa-plus" aria-hidden="true"></i> Add
             </button>
-            <button type="button" *ngIf="i>0" class="btn btn-primary custom-add-btn" (click)="deleteThis(i)"> <i class="fa fa-minus"
-                aria-hidden="true"></i> Remove</button>
+            <button type="button" *ngIf="i>0" class="btn btn-primary custom-add-btn mb-25" (click)="deleteThis(i)"> <i
+                class="fa fa-minus" aria-hidden="true"></i> Remove</button>
           </div>
         </div>
       </div>
+
       <div class="row">
         <div class="col-sm-12">
           <button type="submit" *ngIf="!isLoading" class="btn waves-effect waves-light custom-btn btn-primary">Submit
           </button>
-          <button type="button" *ngIf="isLoading" class="btn waves-effect loading-btn waves-light btn-primary" type="button">
+          <button type="button" *ngIf="isLoading" class="btn waves-effect loading-btn waves-light btn-primary"
+            type="button">
             <i class="fa fa-spinner fa-spin"></i>Loading
           </button>
           <a class="btn waves-effect waves-light custom-btn btn-danger" [routerLink]="['/company/dashboard']">Cancel</a>

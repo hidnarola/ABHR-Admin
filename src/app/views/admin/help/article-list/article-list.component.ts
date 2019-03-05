@@ -56,11 +56,11 @@ export class ArticleListComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   ngOnInit() {
+    this.isCols = true;
     this.articleListData();
   }
 
   articleListData() {
-    console.log('this.hideSpinner => ', this.hideSpinner);
     this.spinner.show();
     this.dtOptions = {
       pagingType: 'full_numbers',
@@ -69,26 +69,35 @@ export class ArticleListComponent implements OnInit, AfterViewInit, OnDestroy {
       serverSide: true,
       responsive: true,
       ordering: true,
-      order: [[2, 'desc']],
+      order: [[1, 'desc']],
       language: {
         'processing': '',
+      },
+      destroy: true,
+      // scrollX: true,
+      // scrollCollapse: true,
+      autoWidth: false,
+      initComplete: function (settings, json) {
+        $('.custom-datatable').wrap('<div style="overflow:auto; width:100%;position:relative;"></div>');
       },
       ajax: (dataTablesParameters: any, callback) => {
         this.pageNumber = dataTablesParameters.length;
         dataTablesParameters['columns'][1]['isNumber'] = true;
         setTimeout(() => {
-          console.log('dtaparametes==>', dataTablesParameters);
           this.service.post('admin/help/list', dataTablesParameters).subscribe(res => {
             this.articleData = res['result']['data'];
             // this.articleData = [];
             this.totalRecords = res['result']['recordsTotal'];
-            console.log('res => ', res);
             if (this.articleData.length > 0) {
               this.isCols = true;
               $('.dataTables_wrapper').css('display', 'block');
+            } else {
+              if (dataTablesParameters['search']['value'] !== '' && dataTablesParameters['search']['value'] !== null) {
+                this.isCols = true;
+              } else {
+                this.isCols = false;
+              }
             }
-            console.log('total records===>', this.totalRecords);
-            console.log('page number', this.pageNumber);
             if (this.totalRecords > this.pageNumber) {
               $('.dataTables_paginate').css('display', 'block');
             } else {
@@ -108,10 +117,10 @@ export class ArticleListComponent implements OnInit, AfterViewInit, OnDestroy {
           data: 'Topic',
           name: 'topic',
         },
-        {
-          data: 'Description',
-          name: 'description',
-        },
+        // {
+        //   data: 'Description',
+        //   name: 'description',
+        // },
         {
           data: 'CreatedAt',
           name: 'createdAt',
@@ -128,18 +137,25 @@ export class ArticleListComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.dtTrigger.next();
     this.hideSpinner = false;
+    let table: any = $('.custom-datatable').DataTable();
+    table.columns().iterator('column', function (ctx, idx) {
+      if (idx !== 2) {
+        $(table.column(idx).header()).append('<span class="sort-icon"/>');
+      }
+    });
   }
 
   // dlt popup
   delete(userId) {
-    console.log('userId==>', userId);
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete this record?',
       header: 'Confirmation',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
+        this.spinner.show();
         this.service.put('admin/help/delete', { article_id: userId }).subscribe(res => {
           this.render();
+          this.spinner.hide();
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
         }, err => {
           err = err.error;

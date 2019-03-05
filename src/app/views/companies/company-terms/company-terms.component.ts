@@ -27,16 +27,13 @@ export class CompanyTermsComponent implements OnInit, AfterViewInit {
     private messageService: MessageService,
   ) {
     var company = JSON.parse(localStorage.getItem('company-admin'));
-    console.log('detail', company);
     this.companyId = company._id;
-    console.log('companyId => ', this.companyId);
     this.form = this.formbuilder.group({
       terms_and_conditions: ['']
     });
     this.formData = {
       terms_and_conditions: String,
     };
-    console.log('form data', this.formData);
   }
 
   ngOnInit() {
@@ -56,17 +53,14 @@ export class CompanyTermsComponent implements OnInit, AfterViewInit {
     this.formData = this.form.value;
     this.formData.company_id = this.companyId;
     this.service.put('company/terms_and_condition/update', this.form.value).subscribe(res => {
-      console.log('data after submit', res);
       this.isLoading = false;
       this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
       this.router.navigate(['/company/dashboard']);
     }, err => {
       err = err.error;
       this.isLoading = false;
-      console.log('err => ', err);
       this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
     });
-    console.log('form value => ', this.form.value);
   }
 }
 
