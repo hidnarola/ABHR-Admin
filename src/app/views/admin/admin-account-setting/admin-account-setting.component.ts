@@ -5,6 +5,7 @@ import { CrudService } from '../../../shared/services/crud.service';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { DataSharingService, AdminUser } from '../../../shared/services/data-sharing.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-admin-account-setting',
@@ -32,6 +33,7 @@ export class AdminAccountSettingComponent implements OnInit {
     private messageService: MessageService,
     public router: Router,
     private datashare: DataSharingService,
+    private spinner: NgxSpinnerService
   ) {
     const pattern = new RegExp('^\\ *([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})\\ *$');
     this.SettingForm = this.formBuilder.group({
@@ -52,11 +54,13 @@ export class AdminAccountSettingComponent implements OnInit {
       support_email: String,
       support_site_url: String
     };
+    this.spinner.show();
     this.user = JSON.parse(localStorage.getItem('admin'));
     this.Id = this.user._id;
     if (this.Id !== undefined && this.Id !== '' && this.Id != null) {
       this.service.get('admin/details/' + this.Id).subscribe(resp => {
         this.UserDetails = resp['result'].data;
+        this.spinner.hide();
         this.SettingForm.controls['first_name'].setValue(this.UserDetails.first_name);
         this.SettingForm.controls['last_name'].setValue(this.UserDetails.last_name);
         this.SettingForm.controls['phone_number'].setValue(this.UserDetails.phone_number);

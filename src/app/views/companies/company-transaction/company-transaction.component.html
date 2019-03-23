@@ -44,7 +44,7 @@
                 </td>
                 <td>
                   <span>
-                    {{ item.deposite_amount }}
+                    AED {{ item.deposite_amount }}
                   </span>
                 </td>
                 <td>
@@ -68,17 +68,17 @@
                 </td> -->
                 <td>
                   <span>
-                    {{ item.coupon_percentage ? item.coupon_percentage : '0' }}
+                    AED {{ item.coupon_percentage ? item.coupon_percentage : '0' }}
                   </span>
                 </td>
                 <td>
                   <span>
-                    {{item.total_booking_amount}}
+                    AED {{item.total_booking_amount}}
                   </span>
                 </td>
                 <td>
                   <span>
-                    {{ item.vat ? item.vat : '-'}}
+                    AED {{ item.vat ? item.vat : '0'}}
                   </span>
                 </td>
                 <td>
@@ -92,8 +92,8 @@
                   </span>
                 </td>
                 <td class="text-center">
-                  <a href="javascript:void(0)" [routerLink]="['/company/transactions/view/',item._id]" pTooltip="View"
-                    tooltipPosition="bottom" class="m-r-20">
+                  <a [routerLink]="['/company/transactions/view/',item._id]" pTooltip="View" tooltipPosition="bottom"
+                    class="m-r-20">
                     <i class="fa fa-eye text-default"></i>
                   </a>
                   <a [routerLink]="['/company/transactions/invoice/',item._id]" pTooltip="Invoice"

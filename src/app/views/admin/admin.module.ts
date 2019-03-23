@@ -9,8 +9,7 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { DataTablesModule } from 'angular-datatables';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
-// PrimeNG Module
+import { UiSwitchModule } from 'ngx-ui-switch';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { InputSwitchModule } from 'primeng/inputswitch';
@@ -18,9 +17,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { MenuModule } from 'primeng/menu';
 import { EditorModule } from 'primeng/editor';
 import { CheckboxModule } from 'primeng/checkbox';
-
 import { AdminComponent } from './admin.component';
-// Child components
 import { AgentsComponent } from './agents/agents.component';
 import { StaffComponent } from './staff/staff.component';
 import { CarRentalCompaniesComponent } from './car-rental-companies/car-rental-companies.component';
@@ -42,16 +39,11 @@ import { AdminCarReportComponent } from './admin-reports/admin-car-report/admin-
 import { AdminUsersReportComponent } from './admin-reports/admin-users-report/admin-users-report.component';
 import { AdminAccountSettingComponent } from './admin-account-setting/admin-account-setting.component';
 import { KeywordsComponent } from './keywords/keywords.component';
-// shared component
 import { RentalsComponent } from '../../shared/components/rentals-for-car/rentals.component';
 import { AlertComponent } from '../../shared/components/alert/alert.component';
 import { Ng4GeoautocompleteModule } from 'ng4-geoautocomplete';
 import { AdminTermsComponent } from './admin-terms/admin-terms.component';
 import { QuillModule } from 'ngx-quill';
-// import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
-// import { CalendarModule, DateAdapter } from 'angular-calendar';
-import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
-
 import { CalendarModule } from 'primeng/calendar';
 import { TransactionComponent } from './transaction/transaction.component';
 import { TransactionDetailComponent } from './transaction/transaction-detail/transaction-detail.component';
@@ -59,8 +51,6 @@ import { TransactionReportComponent } from './admin-reports/transaction-report/t
 import { DropdownModule } from 'primeng/dropdown';
 import { TakenAwayTrackingComponent } from './operations/taken-away-cars/returning-tracking/taken-away-tracking.component';
 import { DeliveredTrackingComponent } from './operations/delivered-cars/delivered-tracking/delivered-tracking.component';
-// import { SocketClass } from '../../shared/classes/socket.class';
-
 import { AgmCoreModule } from '@agm/core';
 import { AgmDirectionModule } from 'agm-direction';
 import { environment } from '../../../environments/environment';
@@ -74,6 +64,12 @@ import { AdminInvoiceComponent } from './transaction/admin-invoice/admin-invoice
 import { FeedbackComponent } from './feedback/feedback.component';
 import { FeedbackCategoryComponent } from './feedback/feedback-category/feedback-category.component';
 import { ReportedCarsComponent } from './feedback/reported-cars/reported-cars.component';
+import { ReportedCarDetailComponent } from './feedback/reported-cars/reported-car-detail/reported-car-detail.component';
+import { SuperAdminCheckPassResolve } from '../../shared/Resolve/super-admin-checkpass';
+import { DialogModule } from 'primeng/dialog';
+import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
+import { BsDropdownModule } from 'ngx-bootstrap'
+
 const AdminRoutes: Routes = [
   {
     path: '',
@@ -87,6 +83,9 @@ const AdminRoutes: Routes = [
         data: {
           title: 'Dashboard'
         },
+        resolve: {
+          admin: SuperAdminCheckPassResolve
+        }
       },
       {
         path: 'agents',
@@ -95,6 +94,9 @@ const AdminRoutes: Routes = [
           title: 'Manage Agents',
           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Agents' }]
         },
+        resolve: {
+          admin: SuperAdminCheckPassResolve
+        }
       },
       {
         path: 'agents/view/:id',
@@ -103,6 +105,9 @@ const AdminRoutes: Routes = [
           title: 'View Agent Detail',
           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Agents', url: '/admin/agents' }, { title: 'Agent Detail' }]
         },
+        resolve: {
+          admin: SuperAdminCheckPassResolve
+        }
       },
       {
         path: 'staff',
@@ -111,6 +116,9 @@ const AdminRoutes: Routes = [
           title: 'Manage Staffs',
           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Staff' }]
         },
+        resolve: {
+          admin: SuperAdminCheckPassResolve
+        }
       },
       {
         path: 'staff/view/:id',
@@ -119,6 +127,9 @@ const AdminRoutes: Routes = [
           title: 'View Staff',
           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Staff', url: '/admin/staff' }, { title: 'Staff Detail' }]
         },
+        resolve: {
+          admin: SuperAdminCheckPassResolve
+        }
       },
       {
         path: '',
@@ -133,6 +144,9 @@ const AdminRoutes: Routes = [
               title: 'Manage Companies',
               urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Companies' }]
             },
+            resolve: {
+              admin: SuperAdminCheckPassResolve
+            }
           },
           {
             path: 'car-rental-companies/view/:id',
@@ -144,6 +158,9 @@ const AdminRoutes: Routes = [
                 url: '/admin/car-rental-companies'
               }, { title: 'Company Detail' }]
             },
+            resolve: {
+              admin: SuperAdminCheckPassResolve
+            }
           },
           {
             path: 'car-rental-companies/car/view/:id',
@@ -158,6 +175,9 @@ const AdminRoutes: Routes = [
                 url: '/admin/car-rental-companies/view/:id'
               }, { title: 'Car Detail' }]
             },
+            resolve: {
+              admin: SuperAdminCheckPassResolve
+            }
           },
           {
             path: 'car-rental-companies/car/edit/:id',
@@ -174,6 +194,9 @@ const AdminRoutes: Routes = [
               },
               { title: 'Car Detail' }]
             },
+            resolve: {
+              admin: SuperAdminCheckPassResolve
+            }
           },
           {
             path: 'car-rental-companies/car/add',
@@ -191,6 +214,9 @@ const AdminRoutes: Routes = [
               },
               { title: 'Add Car' }]
             },
+            resolve: {
+              admin: SuperAdminCheckPassResolve
+            }
           },
         ]
       },
@@ -201,6 +227,9 @@ const AdminRoutes: Routes = [
           title: 'Manage Users',
           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Users' }]
         },
+        resolve: {
+          admin: SuperAdminCheckPassResolve
+        }
       },
       {
         path: 'users/view/:id',
@@ -209,6 +238,9 @@ const AdminRoutes: Routes = [
           title: 'View User Detail',
           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Users', url: '/admin/users' }, { title: 'User Detail' }]
         },
+        resolve: {
+          admin: SuperAdminCheckPassResolve
+        }
       },
       {
         path: 'users/history/:id',
@@ -217,6 +249,9 @@ const AdminRoutes: Routes = [
           title: 'View Rental History',
           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Users', url: '/admin/users' }, { title: 'Rental History' }]
         },
+        resolve: {
+          admin: SuperAdminCheckPassResolve
+        }
       },
       {
         path: 'transactions',
@@ -225,6 +260,9 @@ const AdminRoutes: Routes = [
           title: 'Manage Transactions',
           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Transactions' }]
         },
+        resolve: {
+          admin: SuperAdminCheckPassResolve
+        }
       },
       {
         path: 'transactions/view/:id',
@@ -236,6 +274,9 @@ const AdminRoutes: Routes = [
             url: '/admin/transactions'
           }, { title: 'Transactions Detail' }]
         },
+        resolve: {
+          admin: SuperAdminCheckPassResolve
+        }
       },
       {
         path: 'transactions/invoice/:id',
@@ -247,6 +288,9 @@ const AdminRoutes: Routes = [
             url: '/admin/transactions'
           }, { title: 'Invoice Detail' }]
         },
+        resolve: {
+          admin: SuperAdminCheckPassResolve
+        }
       },
       {
         path: 'reports',
@@ -255,6 +299,9 @@ const AdminRoutes: Routes = [
           title: 'Manage Reports',
           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Reports' }]
         },
+        resolve: {
+          admin: SuperAdminCheckPassResolve
+        }
       },
       {
         path: 'reports/car-reports',
@@ -263,6 +310,9 @@ const AdminRoutes: Routes = [
           title: 'Manage Car Reports',
           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Car Reports' }]
         },
+        resolve: {
+          admin: SuperAdminCheckPassResolve
+        }
       },
       {
         path: 'reports/user-reports',
@@ -271,6 +321,9 @@ const AdminRoutes: Routes = [
           title: 'Manage User Reports',
           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'User Reports' }]
         },
+        resolve: {
+          admin: SuperAdminCheckPassResolve
+        }
       },
       {
         path: 'reports/transaction-reports',
@@ -279,6 +332,9 @@ const AdminRoutes: Routes = [
           title: 'Transaction Reports',
           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Transaction Reports' }]
         },
+        resolve: {
+          admin: SuperAdminCheckPassResolve
+        }
       },
       {
         path: 'operations',
@@ -287,6 +343,9 @@ const AdminRoutes: Routes = [
           title: 'Operations',
           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Operations' }]
         },
+        resolve: {
+          admin: SuperAdminCheckPassResolve
+        }
       },
       {
         path: 'operations/car-delivering',
@@ -295,6 +354,9 @@ const AdminRoutes: Routes = [
           title: 'Manage Delivering  Cars',
           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Delivering Cars' }]
         },
+        resolve: {
+          admin: SuperAdminCheckPassResolve
+        }
       },
       {
         path: 'operations/car-delivering/view/:id',
@@ -306,6 +368,9 @@ const AdminRoutes: Routes = [
             url: '/admin/operations/car-delivering'
           }, { title: 'Track Delivering Cars' }]
         },
+        resolve: {
+          admin: SuperAdminCheckPassResolve
+        }
       },
       {
         path: 'operations/car-delivering/delivered/view/:id',
@@ -317,6 +382,9 @@ const AdminRoutes: Routes = [
             url: '/admin/operations/car-delivering'
           }, { title: 'Track Delivered Cars' }]
         },
+        resolve: {
+          admin: SuperAdminCheckPassResolve
+        }
       },
       {
         path: 'operations/car-returning',
@@ -325,6 +393,9 @@ const AdminRoutes: Routes = [
           title: 'Manage Returning Cars',
           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Returning Cars' }]
         },
+        resolve: {
+          admin: SuperAdminCheckPassResolve
+        }
       },
       {
         path: 'operations/car-returning/view/:id',
@@ -336,6 +407,9 @@ const AdminRoutes: Routes = [
             url: '/admin/operations/car-returning'
           }, { title: 'Track Returning Cars' }]
         },
+        resolve: {
+          admin: SuperAdminCheckPassResolve
+        }
       },
       {
         path: 'operations/car-returning/returned/view/:id',
@@ -347,6 +421,9 @@ const AdminRoutes: Routes = [
             url: '/admin/operations/car-returning'
           }, { title: 'Track Returning Cars' }]
         },
+        resolve: {
+          admin: SuperAdminCheckPassResolve
+        }
       },
       {
         path: 'settings',
@@ -355,6 +432,9 @@ const AdminRoutes: Routes = [
           title: 'Settings',
           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Settings' }]
         },
+        resolve: {
+          admin: SuperAdminCheckPassResolve
+        }
       },
       {
         path: 'account-setting',
@@ -362,6 +442,9 @@ const AdminRoutes: Routes = [
         data: {
           title: 'Account Setting',
           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Account Settings' }]
+        },
+        resolve: {
+          admin: SuperAdminCheckPassResolve
         }
       },
       {
@@ -370,6 +453,9 @@ const AdminRoutes: Routes = [
         data: {
           title: 'Legal Settings',
           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Legal Settings' }]
+        },
+        resolve: {
+          admin: SuperAdminCheckPassResolve
         }
       }
     ]
@@ -381,6 +467,9 @@ const AdminRoutes: Routes = [
       title: 'Manage Keywords',
       urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Keywords' }]
     },
+    resolve: {
+      admin: SuperAdminCheckPassResolve
+    }
   },
   {
     path: 'coupons',
@@ -389,6 +478,9 @@ const AdminRoutes: Routes = [
       title: 'Manage Coupons',
       urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Coupons' }]
     },
+    resolve: {
+      admin: SuperAdminCheckPassResolve
+    }
   },
   {
     path: 'feedback/category',
@@ -397,6 +489,9 @@ const AdminRoutes: Routes = [
       title: 'Manage Categories',
       urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Categories' }]
     },
+    resolve: {
+      admin: SuperAdminCheckPassResolve
+    }
   },
   {
     path: 'feedback/reported-cars',
@@ -405,7 +500,30 @@ const AdminRoutes: Routes = [
       title: 'Manage Reported Cars',
       urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Reported Cars' }]
     },
+    resolve: {
+      admin: SuperAdminCheckPassResolve
+    }
   },
+
+
+
+
+  {
+    path: 'feedback/reported-cars/view/:id',
+    component: ReportedCarDetailComponent,
+    data: {
+      title: 'View Reported Cars',
+      urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Reported Cars', url: '/admin/feedback/reported-cars' },
+      { title: 'Reported Car Detail' }]
+    },
+    resolve: {
+      admin: SuperAdminCheckPassResolve
+    }
+  },
+
+
+
+
   {
     path: 'help/article-list',
     component: ArticleListComponent,
@@ -413,6 +531,9 @@ const AdminRoutes: Routes = [
       title: 'Manage Articles',
       urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Articles' }]
     },
+    resolve: {
+      admin: SuperAdminCheckPassResolve
+    }
   },
   {
     path: 'help/article-list/edit/:id',
@@ -426,6 +547,9 @@ const AdminRoutes: Routes = [
       },
       { title: 'Edit Article' }]
     },
+    resolve: {
+      admin: SuperAdminCheckPassResolve
+    }
   },
   {
     path: 'help/article-list/view/:id',
@@ -439,6 +563,9 @@ const AdminRoutes: Routes = [
       },
       { title: 'View Article' }]
     },
+    resolve: {
+      admin: SuperAdminCheckPassResolve
+    }
   },
   {
     path: 'help/article-list/add',
@@ -452,6 +579,9 @@ const AdminRoutes: Routes = [
       },
       { title: 'Add Article' }]
     },
+    resolve: {
+      admin: SuperAdminCheckPassResolve
+    }
   },
 ];
 
@@ -469,6 +599,7 @@ const AdminRoutes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     ConfirmDialogModule,
+    DialogModule,
     ToastModule,
     InputSwitchModule,
     TooltipModule,
@@ -482,7 +613,10 @@ const AdminRoutes: Routes = [
     AgmCoreModule.forRoot({
       apiKey: environment.google_api_key,
     }),
-    AgmDirectionModule
+    AgmDirectionModule,
+    UiSwitchModule,
+    BsDropdownModule.forRoot(),
+    NgxIntlTelInputModule,
   ],
   exports: [RouterModule],
   declarations: [
@@ -526,6 +660,7 @@ const AdminRoutes: Routes = [
     FeedbackComponent,
     FeedbackCategoryComponent,
     ReportedCarsComponent,
+    ReportedCarDetailComponent,
   ],
   providers: [
     // SocketClass

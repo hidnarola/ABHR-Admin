@@ -41,19 +41,22 @@ export class CarDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
   CarDetails() {
     this.spinner.show();
     this.service.post('admin/company/car/details/', { car_id: this.carId }).subscribe(res => {
-      this.carDetails = res['data'].carDetail;
+      console.log('res in car detail => ', res);
+      this.carDetails = res['data'][0];
       this.today = new Date();
 
+      console.log('this.carDetails => ', this.carDetails.availableData);
 
-
-      if (this.carDetails.is_available !== undefined) {
-        var DateArray = this.carDetails.is_available;
+      if (this.carDetails.availableData !== undefined) {
+        var DateArray = this.carDetails.availableData;
         const _selectDate = [];
         DateArray.forEach(element => {
           if (element.availability.length !== 0) {
             element.availability.forEach(ele => {
-              let Dateobj = new Date(ele);
-              _selectDate.push(Dateobj);
+              if (ele !== null) {
+                let Dateobj = new Date(ele);
+                _selectDate.push(Dateobj);
+              }
             });
           }
         });
@@ -132,8 +135,7 @@ export class CarDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
             if (this.rentalData.length > 0) {
               this.isCols = true;
               $('.dataTables_wrapper').css('display', 'block');
-            }
-            else {
+            } else {
               if (dataTablesParameters['search']['value'] !== '' && dataTablesParameters['search']['value'] !== null) {
                 this.isCols = true;
               } else {
@@ -150,6 +152,7 @@ export class CarDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
               recordsFiltered: res['result']['recordsTotal'],
               data: []
             });
+            window.scrollTo(0, 0);
           });
         }, 1000);
       },

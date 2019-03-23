@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 import { CrudService } from '../../../../../shared/services/crud.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-add-edit-article',
@@ -33,7 +34,9 @@ export class AddEditArticleComponent implements OnInit {
     public router: Router,
     private route: ActivatedRoute,
     private messageService: MessageService,
+    private spinner: NgxSpinnerService
   ) {
+    this.spinner.show();
     const AdminUser = JSON.parse(localStorage.getItem('admin'));
     this.AdminId = AdminUser._id;
     this.UserType = AdminUser.type;
@@ -56,6 +59,7 @@ export class AddEditArticleComponent implements OnInit {
         this.isEdit = true;
         this.form.controls['topic'].setValue(this.Detail.topic);
         this.form.controls['description'].setValue(this.Detail.description);
+        this.spinner.hide();
       });
     } else {
       this.isEdit = false;

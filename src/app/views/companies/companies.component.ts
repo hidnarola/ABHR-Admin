@@ -1,6 +1,7 @@
 import { Component, AfterViewInit, OnInit } from '@angular/core';
-import { NgbProgressbarConfig } from '@ng-bootstrap/ng-bootstrap';
 import { CrudService } from '../../shared/services/crud.service';
+import * as moment from 'moment';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
     selector: 'app-companies',
@@ -13,35 +14,75 @@ export class CompaniesComponent implements AfterViewInit, OnInit {
     public companyId;
     totalCars;
     totalRentals;
+    currentYear;
+    currentMonth;
+    currentDate;
+    totalDays;
+    public days = [];
+    public displayDate;
+    public graphData = [];
+    public transactionData;
+    public graphDate;
+    public transactionDataArray: Array<any> = [];
+    public rentalData;
+    public rentalDataArray: Array<any> = [];
+
+
     constructor(
         private service: CrudService,
+        private spinner: NgxSpinnerService,
     ) {
-        console.log(' company admin company component=> ');
+        this.spinner.show();
         this.company = JSON.parse(localStorage.getItem('company-admin'));
-        console.log('this.company => ', this.company);
         this.companyId = this.company._id;
         this.subtitle = "This is some text within a card block."
+        this.currentYear = new Date().getFullYear();
+        this.currentMonth = new Date().getMonth();
+        this.currentDate = new Date().getDate();
+        this.totalDays = moment(this.currentYear + '-' + (this.currentMonth + 1), 'YYYY-MM').daysInMonth();
+        this.getDaysInMOnth(this.currentMonth, this.currentYear);
+
+        this.service.post('company/dashboard/graph', { company_id: this.companyId }).subscribe(res => {
+            this.graphData = res['data'];
+            this.graphData.forEach(ele => {
+                this.graphDate = moment(ele.Date).format('DD');
+                if (this.currentDate >= this.graphDate) {
+                    this.transactionData = ele.transaction_cnt;
+                    this.transactionDataArray.push(ele.transaction_cnt);
+                }
+                this.rentalData = ele.rental_cnt;
+                this.rentalDataArray.push(ele.rental_cnt);
+                this.spinner.hide();
+            });
+            const chartData = [
+                {
+                    data: this.transactionDataArray,
+                    label: 'Total Transaction'
+                },
+                {
+                    data: this.rentalDataArray,
+                    label: 'Total Rentals'
+                }
+            ];
+            this.lineChartData2 = Object.assign([], chartData);
+        });
+
     }
     // This is for the dashboar line chart
     // lineChart
-    public lineChartData: Array<any> = [
-        { data: [0, 130, 80, 70, 180, 105, 250], label: 'Site A' },
-        { data: [0, 100, 60, 200, 150, 90, 150], label: 'Site B' }
-    ];
     public lineChartData2: Array<any> = [
-        { data: [0, 5000, 15000, 8000, 15000, 9000, 30000, 0], label: 'Site A' },
-        { data: [0, 3000, 5000, 2000, 8000, 1000, 5000, 0], label: 'Site B' }
+        {
+            data: [],
+            label: 'Total Transaction'
+        },
+        {
+            data: [],
+            label: 'Total Rentals'
+        }
     ];
-    public lineChartLabels2: Array<any> = [
-        '1',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        '7',
-        '8'
-    ];
+
+    public lineChartLabels2: Array<any> = this.days;
+
     public lineChartLabels: Array<any> = [
         '2010',
         '2011',
@@ -114,6 +155,16 @@ export class CompaniesComponent implements AfterViewInit, OnInit {
     public lineChartLegend: boolean = true;
     public lineChartLegend2: boolean = false;
     public lineChartType: string = 'line';
+
+    getDaysInMOnth(m, y) {
+        const date = new Date(y, m, 1);
+        while (date.getMonth() === m) {
+            this.displayDate = moment(date).format('DD');
+            this.days.push(this.displayDate);
+            date.setDate(date.getDate() + 1);
+        }
+        console.log('this.days => ', this.days);
+    }
 
     ngAfterViewInit() {
         // (<any>$('#spark8')).sparkline([ 4, 5, 0, 10, 9, 12, 4, 9], {

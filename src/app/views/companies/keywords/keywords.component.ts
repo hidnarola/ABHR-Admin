@@ -187,6 +187,7 @@ export class KeywordsComponent implements OnInit, AfterViewInit, OnDestroy {
               recordsFiltered: res['result']['recordsTotal'],
               data: []
             });
+            window.scrollTo(0, 0);
           });
         }, 1000);
       },

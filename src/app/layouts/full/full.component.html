@@ -63,7 +63,8 @@
             <!-- <button class="right-side-toggle btn-inverse btn btn-circle btn-lg" (click)="showSettings = !showSettings"><i class="ti-settings text-white fa-spin"></i></button> -->
             <div class="right-sidebar" [ngClass]="{'shw-rside': showSettings}">
                 <div class="slimscrollright">
-                    <div class="rpanel-title"> Settings <span><i class="ti-close right-side-toggle" (click)="showSettings = !showSettings"></i></span>
+                    <div class="rpanel-title"> Settings <span><i class="ti-close right-side-toggle"
+                                (click)="showSettings = !showSettings"></i></span>
                     </div>
                     <div class="r-panel-body" [perfectScrollbar]="config">
 
@@ -193,8 +194,8 @@
                                 <div class="m-b-10">
 
                                     <div class="custom-control custom-checkbox">
-                                        <input class="custom-control-input sidebartoggler" id="customCheck133" type="checkbox"
-                                            [(ngModel)]="showMinisidebar">
+                                        <input class="custom-control-input sidebartoggler" id="customCheck133"
+                                            type="checkbox" [(ngModel)]="showMinisidebar">
                                         <label class="custom-control-label" for="customCheck133">Mini Sidebar</label>
                                     </div>
                                 </div>
@@ -228,7 +229,7 @@
     <!-- footer -->
     <!-- ============================================================== -->
     <footer class="footer">
-        © Copyright {{currentYear}} ABHR
+        © Copyright {{currentYear}} ABHR.
     </footer>
     <!-- ============================================================== -->
     <!-- End footer -->

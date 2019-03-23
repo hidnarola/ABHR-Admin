@@ -4,6 +4,7 @@ import { CrudService } from '../../../shared/services/crud.service';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { DataSharingService, AdminUser } from '../../../shared/services/data-sharing.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-company-account-setting',
@@ -37,6 +38,7 @@ export class CompanyAccountSettingComponent implements OnInit, AfterViewInit {
     private router: Router,
     private messageService: MessageService,
     private datashare: DataSharingService,
+    private spinner: NgxSpinnerService
   ) {
     const company = JSON.parse(localStorage.getItem('company-admin'));
     this.companyId = company._id;
@@ -63,13 +65,14 @@ export class CompanyAccountSettingComponent implements OnInit, AfterViewInit {
       city: String,
       address: String
     };
-
+    this.spinner.show();
     this.companyUser = JSON.parse(localStorage.getItem('company-admin'));
     this.Id = this.companyUser._id;
 
     if (this.Id !== undefined && this.Id !== '' && this.Id != null) {
       this.service.get('company/details/' + this.Id).subscribe(resp => {
         this.UserDetails = resp['data'].data;
+        this.spinner.hide();
         this.userSettings.inputPlaceholderText = this.UserDetails.company_address.address;
         let addressObj = { response: true, data: this.UserDetails.company_address.address };
         this.userSettings = {

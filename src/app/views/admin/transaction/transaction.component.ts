@@ -69,6 +69,7 @@ export class TransactionComponent implements OnInit, AfterViewInit, OnDestroy {
         setTimeout(() => {
           this.service.post('admin/transaction/list', dataTablesParameters).subscribe(res => {
             this.transaction = res['result']['data'];
+            console.log('this.transaction  => ', this.transaction);
             this.totalRecords = res['result']['recordsTotal'];
             // this.transaction = [];
             if (this.transaction.length > 0) {
@@ -92,6 +93,7 @@ export class TransactionComponent implements OnInit, AfterViewInit, OnDestroy {
               recordsFiltered: res['result']['recordsTotal'],
               data: []
             });
+            window.scrollTo(0, 0);
           });
         }, 1000);
       },

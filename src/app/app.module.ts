@@ -45,14 +45,19 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { TooltipModule } from 'primeng/tooltip';
 import { TextMaskModule } from 'angular2-text-mask';
 import { CompanyAdminStatusResolve } from './shared/Resolve/company-admin-status';
-// import { ConfirmResetComponent } from './confirm-reset/confirm-reset.component';
+import { TimeAgoPipe } from 'time-ago-pipe';
+import { SuperAdminCheckPassResolve } from './shared/Resolve/super-admin-checkpass';
+import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
+import { BsDropdownModule } from 'ngx-bootstrap'
+
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
   wheelSpeed: 2,
   wheelPropagation: true,
 };
 const APP_RESOLVER = [
-  CompanyAdminStatusResolve
+  CompanyAdminStatusResolve,
+  SuperAdminCheckPassResolve
 ];
 
 @NgModule({
@@ -64,7 +69,7 @@ const APP_RESOLVER = [
     NavigationComponent,
     BreadcrumbComponent,
     SidebarComponent,
-    // ConfirmResetComponent,
+    TimeAgoPipe
   ],
   imports: [
     CommonModule,
@@ -90,6 +95,8 @@ const APP_RESOLVER = [
     }),
     NavigationModule,
     NgIdleKeepaliveModule.forRoot(),
+    BsDropdownModule.forRoot(),
+    NgxIntlTelInputModule,
   ],
   providers: [
     Constant,

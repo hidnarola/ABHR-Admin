@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { CrudService } from '../../../shared/services/crud.service';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-company-terms',
@@ -25,6 +26,7 @@ export class CompanyTermsComponent implements OnInit, AfterViewInit {
     public service: CrudService,
     public router: Router,
     private messageService: MessageService,
+    private spinner: NgxSpinnerService
   ) {
     var company = JSON.parse(localStorage.getItem('company-admin'));
     this.companyId = company._id;
@@ -37,11 +39,13 @@ export class CompanyTermsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.spinner.show();
     this.service.get('company/terms_and_condition/' + this.companyId).subscribe(res => {
       this.termsData = res['data'];
       if (this.termsData != null) {
         this.form.controls['terms_and_conditions'].setValue(this.termsData.terms_and_conditions);
       }
+      this.spinner.hide();
     });
   }
 

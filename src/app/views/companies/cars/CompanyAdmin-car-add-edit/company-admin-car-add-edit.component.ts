@@ -75,16 +75,12 @@ export class CarAddEditComponent implements OnInit {
     this.route.params.subscribe(params => { this.carId = params.id; });
     this.selectedMonth = new Date().getMonth();
     this.selectedYear = new Date().getFullYear();
-
-
     this.today = new Date();
-
-
     if (this.carId !== undefined && this.carId !== '' && this.carId != null) {
       this.service.post('admin/company/car/details/', { car_id: this.carId }).subscribe(resp => {
-        this.carDetails = resp['data'].carDetail;
-        if (this.carDetails.is_available !== undefined) {
-          var DateArray = this.carDetails.is_available;
+        this.carDetails = resp['data'][0];
+        if (this.carDetails.availableData !== undefined) {
+          var DateArray = this.carDetails.availableData;
           const _selectDate = [];
           DateArray.forEach(element => {
 

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CrudService } from '../../../../shared/services/crud.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-transaction-detail',
@@ -12,6 +13,8 @@ export class TransactionDetailComponent implements OnInit {
 
   public transactionDetails;
   public transactionId;
+  public todate;
+  public date;
 
   constructor(
     private route: ActivatedRoute,
@@ -24,8 +27,14 @@ export class TransactionDetailComponent implements OnInit {
   TransactionDetails() {
     this.spinner.show();
     this.service.post('admin/transaction/details/', { booking_id: this.transactionId }).subscribe(res => {
-      console.log('transactionDetails RES==>', res['result']['data']);
       this.transactionDetails = res['result']['data'];
+      console.log('this.transactionDetails => ', this.transactionDetails);
+      console.log('this.TransactionDetails[]  => ', this.transactionDetails.extended_days);
+      if (this.transactionDetails.extended_days !== null) {
+        this.date = moment(this.transactionDetails.to_time).subtract(this.transactionDetails.extended_days, 'days');
+        console.log('this.date => ', this.date._d);
+        this.todate = this.date._d;
+      }
       this.spinner.hide();
     }, error => {
       this.spinner.hide();

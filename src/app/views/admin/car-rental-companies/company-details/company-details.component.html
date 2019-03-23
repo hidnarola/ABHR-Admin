@@ -6,7 +6,7 @@
         <h4> Details of {{userDetails?.name}} </h4>
       </div>
       <div class="col-lg-4 col-md-4 text-right">
-        <button type="button" class="btn btn-primary" (click)="open2(content, userDetails)">
+        <button type="button" class="btn btn-primary custom-add-btn" (click)="open2(content, userDetails)">
           <i class="mdi mdi-account-edit" aria-hidden="true"></i> Edit
         </button>
       </div>
@@ -47,7 +47,8 @@
         <!-- <button type="button" class="btn btn-primary custom-add-btn m-r-10">
           <i class="fa fa-external-link" aria-hidden="true"></i> Export
         </button> -->
-        <button type="button" class="btn btn-primary" [routerLink]="['/admin/car-rental-companies/car/add']">
+        <button type="button" class="btn btn-primary custom-add-btn"
+          [routerLink]="['/admin/car-rental-companies/car/add']">
           <i class="mdi mdi-account-plus" aria-hidden="true"></i> Add
         </button>
       </div>
@@ -55,7 +56,7 @@
     <div *ngIf="!isCols">
       <div class="p-grid p-dir-col">
         <div class="p-col">
-          <div class="box">Add your First Car for Rent</div>
+          <div class="box">No Record found for Car,Add your First Car for Rent</div>
         </div>
       </div>
     </div>
@@ -104,7 +105,7 @@
                 </td>
                 <td>
                   <span>
-                    {{item.rent_price}}
+                    AED {{item.rent_price}}
                   </span>
                 </td>
                 <td>

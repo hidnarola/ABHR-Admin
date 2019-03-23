@@ -31,8 +31,6 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 
-// const google = require('@types/googlemaps');
-// import {googlemaps} from '@types/googlemaps';
 
 @Component({
   selector: 'app-car-rental-companies',
@@ -211,6 +209,7 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
               recordsFiltered: res['result']['recordsTotal'],
               data: []
             });
+            window.scrollTo(0, 0);
           });
         }, 1000);
       },

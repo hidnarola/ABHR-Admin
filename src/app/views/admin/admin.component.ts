@@ -1,6 +1,7 @@
 import { Component, AfterViewInit, OnInit } from '@angular/core';
-import { NgbProgressbarConfig } from '@ng-bootstrap/ng-bootstrap';
 import { CrudService } from '../../shared/services/crud.service';
+import * as moment from 'moment';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-admin',
@@ -12,40 +13,75 @@ export class AdminComponent implements AfterViewInit, OnInit {
   totalCompanies;
   totalCars;
   totalRentals;
+  currentYear;
+  currentMonth;
+  currentDate;
+  totalDays;
+  public days = [];
+  public displayDate;
+  public graphData = [];
+  public transactionData;
+  public graphDate;
+  public transactionDataArray: Array<any> = [];
+  public rentalData;
+  public rentalDataArray: Array<any> = [];
+
   constructor(
     private service: CrudService,
+    private spinner: NgxSpinnerService
   ) {
-    this.subtitle = "This is some text within a card block."
+    this.spinner.show();
+    this.subtitle = 'This is some text within a card block.';
+    this.currentYear = new Date().getFullYear();
+    this.currentMonth = new Date().getMonth();
+    this.currentDate = new Date().getDate();
+    // this.currentDate = moment(new Date()).format('YYYY-MM-DD');
+    this.totalDays = moment(this.currentYear + '-' + (this.currentMonth + 1), 'YYYY-MM').daysInMonth();
+    this.getDaysInMOnth(this.currentMonth, this.currentYear);
+
+    this.service.get('admin/dashboard/graph').subscribe(res => {
+      this.graphData = res['data'];
+      this.graphData.forEach(ele => {
+        this.graphDate = moment(ele.Date).format('DD');
+        if (this.currentDate >= this.graphDate) {
+          // console.log('ele.transaction_cnt => ', 'AED' + ' ' + ele.transaction_cnt);
+          // this.transactionDataArray.push('AED' + ' ' + ele.transaction_cnt);
+          this.transactionDataArray.push(ele.transaction_cnt);
+          // console.log('this.transactionDataArray => ', this.transactionDataArray);
+        }
+        this.rentalDataArray.push(ele.rental_cnt);
+        this.spinner.hide();
+      });
+      const chartData = [
+        {
+          data: this.transactionDataArray,
+          label: 'Total Transaction'
+        },
+        {
+          data: this.rentalDataArray,
+          label: 'Total Rentals'
+        }
+      ];
+      this.lineChartData2 = Object.assign([], chartData);
+    });
+
   }
+
+
   // This is for the dashboar line chart
   // lineChart
-  public lineChartData: Array<any> = [
-    { data: [0, 130, 80, 70, 180, 105, 250], label: 'Site A' },
-    { data: [0, 100, 60, 200, 150, 90, 150], label: 'Site B' }
-  ];
   public lineChartData2: Array<any> = [
-    { data: [0, 5000, 15000, 8000, 15000, 9000, 30000, 0], label: 'Site A' },
-    { data: [0, 3000, 5000, 2000, 8000, 1000, 5000, 0], label: 'Site B' }
+    {
+      data: [],
+      label: 'Total Transaction'
+    },
+    {
+      data: [],
+      label: 'Total Rentals'
+    }
   ];
-  public lineChartLabels2: Array<any> = [
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8'
-  ];
-  public lineChartLabels: Array<any> = [
-    '2010',
-    '2011',
-    '2012',
-    '2013',
-    '2014',
-    '2015',
-    '2016'
-  ];
+  public lineChartLabels2: Array<any> = this.days;
+
   public lineChartOptions: any = {
     scales: {
       yAxes: [{
@@ -53,38 +89,19 @@ export class AdminComponent implements AfterViewInit, OnInit {
           beginAtZero: true
         },
         gridLines: {
-          color: "rgba(120, 130, 140, 0.13)"
+          color: 'rgba(120, 130, 140, 0.13)'
         }
       }],
       xAxes: [{
         gridLines: {
-          color: "rgba(120, 130, 140, 0.13)"
+          color: 'rgba(120, 130, 140, 0.13)'
         },
       }]
     },
     responsive: true,
     maintainAspectRatio: false
   };
-  public lineChartOptions2: any = {
-    scales: {
-      yAxes: [{
-        ticks: {
-          beginAtZero: true
-        },
-        gridLines: {
-          color: "rgba(120, 130, 140, 0.13)"
-        }
-      }],
-      xAxes: [{
-        gridLines: {
-          color: "rgba(120, 130, 140, 0.13)"
-        },
-      }]
-    },
-    responsive: true,
-    maintainAspectRatio: false,
-    elements: { line: { tension: 0 } }
-  };
+
   public lineChartColors: Array<any> = [
     {
       // grey
@@ -110,55 +127,18 @@ export class AdminComponent implements AfterViewInit, OnInit {
   public lineChartLegend2: boolean = false;
   public lineChartType: string = 'line';
 
-  ngAfterViewInit() {
-    // (<any>$('#spark8')).sparkline([ 4, 5, 0, 10, 9, 12, 4, 9], {
-    //     type: 'bar',
-    //     width: '100%',
-    //     height: '40',
-    //     barWidth: '4',
-    //     resize: true,
-    //     barSpacing: '5',
-    //     barColor: '#26c6da'
-    // });
-    // (<any>$('#spark9')).sparkline([ 0, 5, 6, 10, 9, 12, 4, 9], {
-    //     type: 'bar',
-    //     width: '100%',
-    //     height: '40',
-    //     barWidth: '4',
-    //     resize: true,
-    //     barSpacing: '5',
-    //     barColor: '#ef5350'
-    // });
-    // (<any>$('#spark10')).sparkline([ 0, 5, 6, 10, 9, 12, 4, 9], {
-    //     type: 'bar',
-    //     width: '100%',
-    //     height: '40',
-    //     barWidth: '4',
-    //     resize: true,
-    //     barSpacing: '5',
-    //     barColor: '#7460ee'
-    // });
-    // (<any>$('.spark-count')).sparkline([4, 5, 0, 10, 9, 12, 4, 9, 4, 5, 3, 10, 9, 12, 10, 9, 12, 4, 9], {
-    //     type: 'bar',
-    //     width: '100%',
-    //     height: '70',
-    //     barWidth: '2',
-    //     resize: true,
-    //     barSpacing: '6',
-    //     barColor: 'rgba(255, 255, 255, 0.3)'
-    // });
-    // (<any>$('.spark-count2')).sparkline([4, 5, 0, 10, 9, 12, 4, 9, 4, 5, 3, 10, 9, 12, 10, 9, 12, 4, 9], {
-    //     type: 'bar',
-    //     width: '100%',
-    //     height: '70',
-    //     barWidth: '2',
-    //     resize: true,
-    //     barSpacing: '6',
-    //     barColor: 'rgba(255, 255, 255, 0.3)'
-    // });
+  getDaysInMOnth(m, y) {
+    const date = new Date(y, m, 1);
+    while (date.getMonth() === m) {
+      this.displayDate = moment(date).format('DD');
+      this.days.push(this.displayDate);
+      date.setDate(date.getDate() + 1);
+    }
+  }
 
-    $(".list-task .list-group-item .checkbox label.custom-control").click(function () {
-      $(this).toggleClass("task-done");
+  ngAfterViewInit() {
+    $('.list-task .list-group-item .checkbox label.custom-control').click(function () {
+      $(this).toggleClass('task-done');
     });
   }
   ngOnInit() {

@@ -2,7 +2,7 @@ import { Component, AfterViewInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { Router } from '@angular/router';
-import { DataSharingService } from '../services/data-sharing.service';
+import { DataSharingService, CompanyPassword, AdminPassword } from '../services/data-sharing.service';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { CrudService } from '../services/crud.service';
@@ -30,6 +30,7 @@ export class NavigationComponent implements AfterViewInit {
   public formData: any;
   submitted = false;
   public companyId;
+  public adminId;
   isLoading: boolean;
   public passwordData: any;
   public numberMask = createNumberMask({
@@ -43,6 +44,8 @@ export class NavigationComponent implements AfterViewInit {
     allowNegative: false,
     allowLeadingZeroes: false
   });
+  public companyPass: CompanyPassword;
+  public adminPass: AdminPassword;
 
   constructor(
     private datashare: DataSharingService,
@@ -71,6 +74,7 @@ export class NavigationComponent implements AfterViewInit {
     this.CurrentAdmin = array[1];
     this.datashare.currentAdminUser.subscribe((res) => {
       var user = JSON.parse(localStorage.getItem('admin'));
+      console.log('user => ', user);
       var company = JSON.parse(localStorage.getItem('company-admin'));
 
       if (user != null && user !== undefined) {
@@ -78,6 +82,8 @@ export class NavigationComponent implements AfterViewInit {
         this.AdminEmail = user.email;
         this.AdminNumber = user.phone_number;
         this.AdminType = 'admin';
+        this.adminId = user._id;
+        console.log('adminId => ', this.adminId);
       }
       if (company != null && company !== undefined) {
         this.AdminName = company.name;
@@ -179,23 +185,37 @@ export class NavigationComponent implements AfterViewInit {
     }
   }
   get f() { return this.changePassForm.controls; }
-  // get fVAT() { return this.VATForm.controls; }
 
   public passwordMatchValidator = (control: FormControl) => {
     let isWhitespace2;
     if ((isWhitespace2 = (control.value || '').trim().length === 1) || (isWhitespace2 = (control.value || '').trim().length === 0)) {
       return { 'required': true };
     } else {
-      this.passwordData = { 'password': control.value, 'company_id': this.companyId };
-      return this.service.post('company/check_password', this.passwordData).subscribe(res => {
-        if (res['status'] === 'failed') {
-          this.f.old_password.setErrors({ 'matchPass': true });
-          return;
-        } else {
-          this.f.old_password.setErrors(null);
+
+      if (this.CurrentAdmin === 'company') {
+        this.passwordData = { 'password': control.value, 'company_id': this.companyId };
+        return this.service.post('company/check_password', this.passwordData).subscribe(res => {
+          if (res['status'] === 'failed') {
+            this.f.old_password.setErrors({ 'matchPass': true });
+            return;
+          } else {
+            this.f.old_password.setErrors(null);
+          }
         }
+        );
+      } else {
+        this.passwordData = { 'password': control.value, 'user_id': this.adminId };
+        return this.service.post('admin/check_password', this.passwordData).subscribe(res => {
+          if (res['status'] === 'failed') {
+            this.f.old_password.setErrors({ 'matchPass': true });
+            return;
+          } else {
+            this.f.old_password.setErrors(null);
+          }
+        }
+        );
       }
-      );
+
     }
   }
 
@@ -209,7 +229,6 @@ export class NavigationComponent implements AfterViewInit {
 
   showVATDialog() {
     this.service.get('admin/vat').subscribe(res => {
-      console.log('res => ', res);
       this.VATData = res['result'].rate + '%';
     });
     setTimeout(() => {
@@ -218,24 +237,61 @@ export class NavigationComponent implements AfterViewInit {
   }
 
   onSubmit() {
+    console.log('currentAdmin => ', this.CurrentAdmin);
     this.submitted = true;
     if (!this.changePassForm.invalid) {
       this.isLoading = true;
       this.formData = this.changePassForm.value;
-      this.formData.company_id = this.companyId;
-      this.service.post('company/change_password', this.formData).subscribe(res => {
-        this.display = false;
-        this.submitted = false;
-        this.isLoading = false;
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
-      }, err => {
-        err = err.error;
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
-        this.display = false;
-        // this.closePopup();
-        this.submitted = false;
-        this.isLoading = false;
-      });
+
+
+      if (this.CurrentAdmin === 'company') {
+        this.formData.company_id = this.companyId;
+        this.service.post('company/change_password', this.formData).subscribe(res => {
+          this.display = false;
+          this.submitted = false;
+          this.isLoading = false;
+          var company = JSON.parse(localStorage.getItem('company-admin'));
+          company.password = res['password'];
+          localStorage.setItem('company-admin', JSON.stringify(company));
+          this.companyPass = {
+            password: res['password'],
+          };
+          this.datashare.changeCompanyPassword(this.companyPass);
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
+        }, err => {
+          err = err.error;
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
+          this.display = false;
+          // this.closePopup();
+          this.submitted = false;
+          this.isLoading = false;
+        });
+      } else {
+        this.formData.user_id = this.adminId;
+        this.service.post('admin/change_password', this.formData).subscribe(res => {
+          this.display = false;
+          this.submitted = false;
+          this.isLoading = false;
+          var admin = JSON.parse(localStorage.getItem('admin'));
+          admin.password = res['password'];
+          localStorage.setItem('admin', JSON.stringify(admin));
+          console.log('res[] => ', res['password']);
+          this.adminPass = {
+            password: res['password'],
+          };
+          this.datashare.changeAdminPassword(this.adminPass);
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
+        }, err => {
+          err = err.error;
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
+          this.display = false;
+          // this.closePopup();
+          this.submitted = false;
+          this.isLoading = false;
+        });
+      }
+
+
       this.submitted = false;
       this.changePassForm.controls['old_password'].setValue('');
       this.changePassForm.controls['new_password'].setValue('');
@@ -254,7 +310,6 @@ export class NavigationComponent implements AfterViewInit {
     var obj = {
       'rate': rate
     };
-    console.log('obj => ', obj);
     this.service.put('admin/vat/update', obj).subscribe(res => {
       this.displayVAT = false;
       this.submitted = false;

@@ -14,3 +14,6 @@ select {
   margin-left: 37px;
 }
 button.not_allowed{cursor: not-allowed;}
+i.fa.fa-history.text-default {
+    color: red;
+}

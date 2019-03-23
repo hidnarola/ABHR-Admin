@@ -119,11 +119,11 @@ export class ResetPasswordComponent implements OnInit {
         };
         this.service.post('reset_password', this.formData).subscribe((res) => {
           this.submitted = false;
-          this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Password has been Reset successfully!!' });
           console.log('result==>', res);
           this.router.navigate(['confirm-reset-password']);
         }, error => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: error['message'] });
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Something went wrong, please try again!!' });
         });
         this.submitted = false;
         this.resetPasswordForm.controls['password'].setValue('');

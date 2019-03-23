@@ -205,6 +205,7 @@ export class FeedbackCategoryComponent implements OnInit, OnDestroy, AfterViewIn
               recordsFiltered: res['result']['recordsTotal'],
               data: []
             });
+            window.scrollTo(0, 0);
           });
         }, 1000);
       },
@@ -223,6 +224,7 @@ export class FeedbackCategoryComponent implements OnInit, OnDestroy, AfterViewIn
   }
 
   ngOnInit() {
+    this.isCols = true;
     this.CategoryListData();
   }
   render(): void {

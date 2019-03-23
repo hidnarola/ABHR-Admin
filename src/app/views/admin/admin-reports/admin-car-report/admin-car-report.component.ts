@@ -112,7 +112,11 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
               if (this.reports.length > 0) {
                 this.isCols = true;
                 $('.dataTables_wrapper').css('display', 'block');
+              } else if (this.reports.length === 0 && this.rangeDates === undefined) {
+                console.log('new condition => ');
+                this.isCols = false;
               } else {
+                console.log('this.rangeDates => ', this.rangeDates);
                 if ((dataTablesParameters['search']['value'] !== '' && dataTablesParameters['search']['value'] !== null) ||
                   ((dataTablesParameters['selectFromDate'] && dataTablesParameters['selectToDate']) !== '') &&
                   ((dataTablesParameters['selectFromDate'] && dataTablesParameters['selectToDate']) !== null)) {
@@ -137,6 +141,7 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
                 recordsFiltered: res['result']['recordsTotal'],
                 data: []
               });
+              window.scrollTo(0, 0);
             });
           }, 1000);
         },
@@ -266,10 +271,11 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
       var pageHeight = 500;
       var imgHeight = canvas.height * imgWidth / canvas.width;
       var heightLeft = imgHeight;
-      const contentDataURL = canvas.toDataURL('image/png')
+      const contentDataURL = canvas.toDataURL('image/png', 1.0);
       let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF
       var position = 0;
       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
+      // pdf.addImage(contentDataURL, 'JPEG', 0, position, imgWidth, imgHeight);
       pdf.save('Car-Report.pdf'); // Generated PDF
     });
   }

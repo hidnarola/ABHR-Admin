@@ -21,9 +21,9 @@
         <div class="row">
           <div class="col-md-4">
             <div class="form-group">
-              <input class="form-control" placeholder="Enter Hours" type="number" required="true" name="hours{{i}}"
-                (keypress)="restrictAlphabets($event)" onkeypress="return event.charCode >= 48" min="1"
-                [(ngModel)]="submitArray[i].hours" required="" #hours="ngModel"
+              <input class="form-control" placeholder="Enter Hours" type="number" required="true"
+                name="hours{{item._id}}" (keypress)="restrictAlphabets($event)" onkeypress="return event.charCode >= 48"
+                min="1" [(ngModel)]="submitArray[i].hours" required="" #hours="ngModel"
                 [ngClass]="{ 'is-invalid': CancellationForm.submitted && hours.invalid }">
               <div *ngIf="CancellationForm.submitted && hours.invalid" class="invalid-feedback">
                 <div *ngIf="hours.errors.required">Hour is required</div>
@@ -34,8 +34,8 @@
           <div class="col-md-4">
             <div class="form-group">
               <input class="form-control" placeholder="Enter Rate" type="number" (keypress)="restrictAlphabets($event)"
-                min="1" required="" maxlength="3" name="rate{{i}}" id="rateInput" [(ngModel)]="submitArray[i].rate"
-                #rate="ngModel" (keyup)="keyup($event,i)"
+                min="1" required="" maxlength="3" name="rate{{item._id}}" id="rateInput"
+                [(ngModel)]="submitArray[i].rate" #rate="ngModel" (keyup)="keyup($event,i)"
                 [ngClass]="{ 'is-invalid': (CancellationForm.submitted && rate.invalid) ||errMsg[i].rate }">
               <div *ngIf="CancellationForm.submitted && rate.invalid" class="invalid-feedback">
                 <div *ngIf="rate.errors.required">Rate % is required</div>

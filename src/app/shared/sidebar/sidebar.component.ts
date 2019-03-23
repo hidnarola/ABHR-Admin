@@ -5,6 +5,7 @@ import { COMPANY_ROUTES } from './menu-items';
 import { RouteInfo } from './sidebar.metadata';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { DataSharingService } from '../services/data-sharing.service';
 declare var $: any;
 @Component({
     selector: 'ap-sidebar',
@@ -35,8 +36,13 @@ export class SidebarComponent implements OnInit {
         }
     }
 
-    constructor(private modalService: NgbModal, private router: Router,
-        private route: ActivatedRoute, private messageService: MessageService) {
+    constructor(
+        private modalService: NgbModal,
+        private router: Router,
+        private route: ActivatedRoute,
+        private messageService: MessageService,
+        private datashare: DataSharingService
+    ) {
         var user = JSON.parse(localStorage.getItem('admin'));
         let company = JSON.parse(localStorage.getItem('company-admin'));
         if (user != null && user !== undefined) {
@@ -56,23 +62,29 @@ export class SidebarComponent implements OnInit {
     ngOnInit() {
         if (this.currentUser === 'admin') {
             this.sidebarnavItems = ROUTES.filter(sidebarnavItem => sidebarnavItem);
-            // console.log('sidebarnavItems => ', this.sidebarnavItems);
             $(function () {
-                $('.sidebartoggler').on('click', function () {
+                $('.sidebartoggler, .sidebar-menu-item').on('click', function () {
+                    if ($(this).is('.sidebar-menu-item') && window.screen.availWidth > 767) {
+                        return;
+                    }
                     if ($('#main-wrapper').hasClass('mini-sidebar')) {
                         $('body').trigger('resize');
                         $('#main-wrapper').removeClass('mini-sidebar');
-
                     } else {
                         $('body').trigger('resize');
                         $('#main-wrapper').addClass('mini-sidebar');
                     }
                 });
             });
+
+
         } else if (this.currentUser === 'company') {
             this.sidebarnavItems = COMPANY_ROUTES.filter(sidebarnavItem => sidebarnavItem);
             $(function () {
-                $('.sidebartoggler').on('click', function () {
+                $('.sidebartoggler, .sidebar-menu-item').on('click', function () {
+                    if ($(this).is('.sidebar-menu-item') && window.screen.availWidth > 767) {
+                        return;
+                    }
                     if ($('#main-wrapper').hasClass('mini-sidebar')) {
                         $('body').trigger('resize');
                         $('#main-wrapper').removeClass('mini-sidebar');
@@ -85,6 +97,7 @@ export class SidebarComponent implements OnInit {
             });
         }
     }
+
 
     logout() {
         if (this.currentUser === 'admin') {

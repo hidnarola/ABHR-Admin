@@ -7,18 +7,25 @@ import { MessageService } from 'primeng/api';
 export class CompanyAdminStatusResolve implements Resolve<any> {
     public companyId;
     public companyStatus;
+    public companyPassword;
     constructor(
         private service: CrudService,
         private router: Router,
         private messageService: MessageService
-    ) {
+    ) { }
+    resolve(route: ActivatedRouteSnapshot) {
+        console.log('in resolve => ');
         var company = JSON.parse(localStorage.getItem('company-admin'));
+        console.log('company => ', company);
         if (company != null && company !== undefined) {
             this.companyId = company._id;
+            this.companyPassword = company.password;
         }
-    }
-    resolve(route: ActivatedRouteSnapshot) {
-        this.service.post('company/check_status', { user_id: this.companyId }).subscribe(res => {
+        var Obj = {
+            user_id: this.companyId,
+            password: this.companyPassword
+        };
+        this.service.post('company/check_status', Obj).subscribe(res => {
             this.companyStatus = res['status'];
             if (this.companyStatus === 'success') {
                 localStorage.clear();

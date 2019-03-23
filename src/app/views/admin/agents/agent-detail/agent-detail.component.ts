@@ -170,7 +170,7 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
       processing: true,
       serverSide: true,
       ordering: true,
-      order: [[4, 'desc']],
+      order: [[5, 'desc']],
       language: {
         'processing': '',
       },
@@ -213,6 +213,7 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
               recordsFiltered: res['result']['recordsTotal'],
               data: []
             });
+            window.scrollTo(0, 0);
           });
         }, 1000);
       },
@@ -235,7 +236,11 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
         },
         {
           data: 'End Of Rent',
-          name: (('to_time') && ('createdAt')),
+          name: 'to_time',
+        },
+        {
+          data: 'Member Since',
+          name: 'createdAt',
         }
       ]
     };

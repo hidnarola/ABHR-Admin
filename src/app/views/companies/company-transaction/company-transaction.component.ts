@@ -74,6 +74,7 @@ export class CompanyTransactionComponent implements OnInit, AfterViewInit, OnDes
         setTimeout(() => {
           this.service.post('company/transaction/list', dataTablesParameters).subscribe(res => {
             this.transaction = res['result']['data'];
+            console.log('this.transaction => ', this.transaction);
             this.totalRecords = res['result']['recordsTotal'];
             // this.transaction = [];
             if (this.transaction.length > 0) {
@@ -97,6 +98,7 @@ export class CompanyTransactionComponent implements OnInit, AfterViewInit, OnDes
               recordsFiltered: res['result']['recordsTotal'],
               data: []
             });
+            window.scrollTo(0, 0);
           });
         }, 1000);
       },

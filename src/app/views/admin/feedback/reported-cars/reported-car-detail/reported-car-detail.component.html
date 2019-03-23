@@ -1,0 +1,175 @@
+<div class="card">
+  <div class="card-body">
+    <div class="cars-dtl-box" *ngIf="reportedCar">
+      <h4 id="blue" class="mt-45"> Reported Car Detail </h4>
+
+      <div class="row">
+        <div class="col-md-12">
+          <h5 class="transaction-dtl-h5">User Detail :</h5>
+        </div>
+        <div class="col-md-6">
+          <div class="cars-dtl-box-inr transaction-dtl-box">
+            <b>Name : </b>
+            <span> {{reportedCar.user_name}} </span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="cars-dtl-box-inr transaction-dtl-box">
+            <b>Email : </b>
+            <span> {{reportedCar.user_email}} </span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="cars-dtl-box-inr transaction-dtl-box">
+            <b>Phone Number : </b>
+            <span> {{reportedCar.user_phone_number ? reportedCar.user_phone_number : '-'}} </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <h5 class="transaction-dtl-h5">Car Detail :</h5>
+        </div>
+        <div class="col-md-6">
+          <div class="cars-dtl-box-inr transaction-dtl-box">
+            <b>Car Brand : </b>
+            <span> {{reportedCar.car_brand}} </span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="cars-dtl-box-inr transaction-dtl-box">
+            <b>Car Class : </b>
+            <span>{{reportedCar.car_class}}</span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="cars-dtl-box-inr transaction-dtl-box">
+            <b>Car Model : </b>
+            <span>{{reportedCar.car_brand}}</span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="cars-dtl-box-inr transaction-dtl-box">
+            <b>Car Color : </b>
+            <span>{{reportedCar.car_color}}</span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="cars-dtl-box-inr transaction-dtl-box">
+            <b>Purchased year : </b>
+            <span>{{reportedCar.age_of_car}}</span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="cars-dtl-box-inr transaction-dtl-box">
+            <b> Navigation : </b>
+            <span>{{reportedCar.is_navigation?'Yes':'No'}}</span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="cars-dtl-box-inr transaction-dtl-box">
+            <b>Licence Plate : </b>
+            <span>{{reportedCar.licence_plate}}</span>
+          </div>
+        </div>
+
+
+
+        <div class="col-md-6">
+          <div class="cars-dtl-box-inr transaction-dtl-box">
+            <b>Milage : </b>
+            <span>{{reportedCar.milage}}</span>
+          </div>
+        </div>
+
+
+        <div class="col-md-6">
+          <div class="cars-dtl-box-inr transaction-dtl-box">
+            <b>Deposit : </b>
+            <span>AED {{reportedCar.deposit?reportedCar.deposit: '0' }}</span>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="cars-dtl-box-inr transaction-dtl-box">
+            <b>No Of Persons : </b>
+            <span>{{reportedCar.no_of_person}}</span>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="cars-dtl-box-inr transaction-dtl-box">
+            <b> Rent Price : </b>
+            <span>AED {{reportedCar.rent_price}}</span>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="cars-dtl-box-inr transaction-dtl-box">
+            <b> transmission : </b>
+            <span>{{reportedCar.transmission}}</span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="cars-dtl-box-inr transaction-dtl-box">
+            <b>Driver's Age : </b>
+            <span>{{reportedCar.driving_eligibility_criteria}}</span>
+          </div>
+        </div>
+
+
+      </div>
+
+
+
+
+      <div class="row">
+        <div class="col-md-12">
+          <h5 class="transaction-dtl-h5">Report Detail :</h5>
+        </div>
+        <div class="col-md-6">
+          <div class="cars-dtl-box-inr transaction-dtl-box">
+            <b> Report Status : </b>
+            <span> {{reportedCar.status}} </span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="cars-dtl-box-inr transaction-dtl-box">
+            <b>Report Date : </b>
+            <span>{{reportedCar.createdAt | date:"MM/dd/yy"}}</span>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="cars-dtl-box-inr transaction-dtl-box report_msg">
+            <b>Report Message : </b>
+            <span>
+              {{reportedCar.report_message}}
+            </span>
+          </div>
+        </div>
+      </div>
+
+
+
+      <!-- <div class="row">
+        <div class="col-md-12">
+          <h5 class="transaction-dtl-h5">Booking Detail :</h5>
+        </div>
+        <div class="col-md-6">
+          <div class="cars-dtl-box-inr transaction-dtl-box">
+            <b>First Name : </b>
+            <span></span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="cars-dtl-box-inr transaction-dtl-box">
+            <b>Last Name : </b>
+            <span></span>
+          </div>
+        </div>
+      </div> -->
+
+    </div>
+  </div>
+</div>

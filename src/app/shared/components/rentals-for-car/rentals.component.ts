@@ -113,6 +113,7 @@ export class RentalsComponent implements OnInit, OnDestroy, AfterViewInit {
               recordsFiltered: res['result']['recordsTotal'],
               data: []
             });
+            window.scrollTo(0, 0);
           });
         }, 1000);
       },
@@ -123,7 +124,7 @@ export class RentalsComponent implements OnInit, OnDestroy, AfterViewInit {
         },
         {
           data: 'Client Name',
-          name: 'userId.first_name'
+          name: 'user_name'
         },
         {
           data: 'Price',

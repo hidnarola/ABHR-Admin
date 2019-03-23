@@ -6,21 +6,25 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 })
 export class DataSharingService {
   private adminU: AdminUser;
-  // private companyU: CompanyUser;
+  private companyPass: CompanyPassword;
+  private adminPass: AdminPassword;
   private isLoginSource = new BehaviorSubject(null);
   private isPageSource = new BehaviorSubject(null);
   private loadingSource = new BehaviorSubject(null);
   private adminUser = new BehaviorSubject(this.adminU);
-  // private companyUser = new BehaviorSubject(this.companyU);
+  private companyPassword = new BehaviorSubject(this.companyPass);
+  private adminPassword = new BehaviorSubject(this.adminPass);
   private companyStatus = new BehaviorSubject(null);
+  private sidebarStatus = new BehaviorSubject(null);
 
   currentIsLogin = this.isLoginSource.asObservable();
   currentPage = this.isPageSource.asObservable();
   currentloading = this.loadingSource.asObservable();
   currentAdminUser = this.adminUser.asObservable();
-  // currentCompanyUser = this.companyUser.asObservable();
+  currentCompanyPass = this.companyPassword.asObservable();
+  currentAdminPass = this.adminPassword.asObservable();
   currentCompanyStatus = this.companyStatus.asObservable();
-
+  currentSidebarStatus = this.sidebarStatus.asObservable();
 
   constructor() { }
 
@@ -41,16 +45,25 @@ export class DataSharingService {
     this.adminUser.next(value);
   }
 
-  // changeCompanyUser(value) {
-  //   console.log('in datadshar===>', value);
-  //   this.companyUser.next(value);
-  // }
-
   checkCompanyStatus(status: Boolean) {
     console.log('in datadshar===>', status);
     this.companyStatus.next(status);
   }
 
+  changeCompanyPassword(value) {
+    console.log('in datadshar===>', value);
+    this.companyPassword.next(value);
+  }
+
+  changeAdminPassword(value) {
+    console.log('in datadshar===>', value);
+    this.adminPassword.next(value);
+  }
+
+  checkSidebar(status: Boolean) {
+    console.log('in datadshar===>', status);
+    this.sidebarStatus.next(status);
+  }
 
 }
 export interface AdminUser {
@@ -59,4 +72,9 @@ export interface AdminUser {
   email: string;
   phone_number: string;
 }
-
+export interface CompanyPassword {
+  password: string;
+}
+export interface AdminPassword {
+  password: string;
+}

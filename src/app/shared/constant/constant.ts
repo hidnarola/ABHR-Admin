@@ -19,3 +19,4 @@ export class Cancel {
         this.descr = this.hours + ' ' + this.rate;
     }
 }
+

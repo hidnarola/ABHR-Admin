@@ -162,7 +162,9 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
+
+
+                    <tr *ngIf="InvoiceData.extended_days === null">
                       <td
                         style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-right: 1px solid #979797;padding-bottom: 300px;">
                         <p
@@ -173,23 +175,87 @@
                           {{InvoiceData.class | titlecase}} class, {{InvoiceData.car_milage | titlecase}} MIllage</p>
                       </td>
                       <td
-                        style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-right: 1px solid #979797;padding-bottom: 300px;text-align: center;">
-                        {{InvoiceData.booking_amount | currency:'EUR'}} </td>
+                        style="padding: 30px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-right: 1px solid #979797;padding-bottom: 300px;text-align: center;">
+                        {{InvoiceData.booking_amount}} </td>
                       <td
-                        style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;padding-bottom: 300px;text-align: center;">
-                        {{InvoiceData.booking_amount | currency:'EUR'}} </td>
+                        style="padding: 30px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;padding-bottom: 300px;text-align: center;">
+                        {{InvoiceData.booking_amount}} </td>
                     </tr>
-                    <tr>
+
+
+
+
+
+
+                    <tr *ngIf="InvoiceData.extended_days !== null">
+                      <td
+                        style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-right: 1px solid #979797;padding-bottom: 265px;">
+                        <p
+                          style="margin:0;padding: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;">
+                          {{InvoiceData.car_model}} {{InvoiceData.release_year}} </p>
+                        <p
+                          style="margin:0;padding: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;">
+                          {{InvoiceData.class | titlecase}} class, {{InvoiceData.car_milage | titlecase}} MIllage</p>
+
+                        <br>
+
+                        <p
+                          style="margin:0;padding: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;">
+                          Extended Booking Detail </p>
+                      </td>
+                      <td
+                        style="padding: 31px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-right: 1px solid #979797;padding-bottom: 265px;text-align: center;">
+                        <p
+                          style="margin:0;padding: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;">
+                          {{InvoiceData.booking_amount}}</p>
+                        <br>
+                        <p
+                          style="margin:0;padding: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;">
+                          {{InvoiceData.extend_booking_amount}}</p>
+
+                      </td>
+                      <td
+                        style="padding: 31px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-right: 1px solid #979797;padding-bottom: 265px;text-align: center;">
+                        <p
+                          style="margin:0;padding: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;">
+                          {{InvoiceData.booking_amount}}</p>
+                        <br>
+                        <p
+                          style="margin:0;padding: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;">
+                          {{InvoiceData.extend_booking_amount}}</p>
+
+                      </td>
+                    </tr>
+
+
+                    <tr *ngIf="InvoiceData.extended_days === null">
                       <td
                         style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-right: 1px solid #979797;background: #d8d8d8;">
                         Vat {{InvoiceData.vat}}%</td>
                       <td
                         style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-right: 1px solid #979797;background: #d8d8d8;text-align: center;">
-                        {{InvoiceData.vat_amount | currency:'EUR'}} </td>
+                        {{InvoiceData.vat_amount}} </td>
                       <td
                         style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;background: #d8d8d8;text-align: center;">
-                        {{InvoiceData.vat_amount | currency:'EUR'}} </td>
+                        {{InvoiceData.vat_amount}} </td>
                     </tr>
+
+
+
+
+                    <tr *ngIf="InvoiceData.extended_days !== null">
+                      <td
+                        style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-right: 1px solid #979797;background: #d8d8d8;">
+                        Vat {{InvoiceData.vat}}%</td>
+                      <td
+                        style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-right: 1px solid #979797;background: #d8d8d8;text-align: center;">
+                        {{InvoiceData.extend_vat_amount}} </td>
+                      <td
+                        style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;background: #d8d8d8;text-align: center;">
+                        {{InvoiceData.extend_vat_amount}} </td>
+                    </tr>
+
+
                   </tbody>
                 </table>
               </td>

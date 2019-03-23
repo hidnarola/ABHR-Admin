@@ -3,7 +3,7 @@
     <div class="cars-dtl-box" *ngIf="carDetails">
       <h4 id="blue" class="mt-45"> Car Detail Of {{carDetails.car_rental_company_name}} </h4>
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-lg-6">
           <div class="cars-dtl-box-inr">
             <b>brand name : </b><span>{{carDetails.car_brand}}</span>
           </div>
@@ -21,10 +21,10 @@
             <b>licence plate : </b> <span>{{ carDetails.licence_plate }}</span>
           </div>
           <div class="cars-dtl-box-inr">
-            <b>rent price : </b> <span>{{ carDetails.rent_price }}</span>
+            <b>rent price : </b> <span>AED {{ carDetails.rent_price }}</span>
           </div>
           <div class="cars-dtl-box-inr">
-            <b>deposit : </b> <span>{{ carDetails.deposit ? carDetails.deposit : '-' }}</span>
+            <b>deposit : </b> <span>AED {{ carDetails.deposit ? carDetails.deposit : '0' }}</span>
           </div>
           <div class="cars-dtl-box-inr">
             <b>No Of Persons : </b> <span>{{carDetails.no_of_person}}</span>
@@ -39,7 +39,7 @@
             <b>driver's age : </b><span>{{carDetails.driving_eligibility_criteria}}</span>
           </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-lg-6">
 
           <div class="cars-dtl-box-inr">
             <b>car class : </b><span>{{carDetails.car_class | titlecase }}</span>

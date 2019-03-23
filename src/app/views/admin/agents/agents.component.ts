@@ -4,25 +4,18 @@ import { DataTableDirective } from 'angular-datatables';
 import { Routes, RouterModule, ActivatedRoute } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
-
-// model
 import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
-
-// service
 import { DataSharingService } from '../../../shared/services/data-sharing.service';
 import { CrudService } from '../../../shared/services/crud.service';
-
-// popup-forms
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl } from '@angular/forms';
-
-// primng
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
-
-
-const AgentRoutes: Routes = [];
+import * as io from 'socket.io-client';
+import { cc } from '../../../shared/constant/country_code';
+import { environment } from '../../../../environments/environment';
+import { SelectItem } from 'primeng/api';
 
 @Component({
   selector: 'app-agents',
@@ -31,7 +24,7 @@ const AgentRoutes: Routes = [];
 })
 
 @NgModule({
-  imports: [RouterModule.forChild(AgentRoutes)],
+  imports: [],
   exports: [RouterModule]
 })
 
@@ -40,7 +33,6 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
   dtElement: DataTableDirective;
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject();
-
   AddEditForm: FormGroup;
   submitted = false;
   isCols: boolean;
@@ -57,9 +49,11 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
   public totalRecords;
   public errMsg;
   public numberErr: boolean = false;
-
   private subscription: Subscription;
   hideSpinner: boolean;
+  public countryCode: SelectItem[];
+  private socket;
+  selectedCc: string;
 
   constructor(
     public renderer: Renderer,
@@ -80,6 +74,8 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
       first_name: ['', Validators.compose([Validators.required, Validators.pattern('^[A-Za-z]+$'), this.noWhitespaceValidator])],
       last_name: ['', Validators.compose([Validators.required, Validators.pattern('^[A-Za-z]+$'), this.noWhitespaceValidator])],
       phone_number: ['', Validators.compose([Validators.pattern('^[0-9]{10,20}$')])],
+      // phone_number: [''],
+      country_code: [''],
       email: ['', Validators.compose([Validators.required, this.noWhitespaceValidator, Validators.email,
       Validators.pattern(pattern), this.uniqueEmailValidator])],
     });
@@ -88,8 +84,11 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
       first_name: String,
       last_name: String,
       phone_number: Number,
+      country_code: Number,
       email: String
     };
+    this.countryCode = cc;
+    console.log('this.selectedCc => ', this.selectedCc);
   }
 
   noWhitespaceValidator(control: FormControl) {
@@ -131,11 +130,55 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
     element.click();
     this.isLoading = false;
   }
+
+  // model
+  open2(content, item) {
+    console.log('item => ', item);
+    if (item !== 'undefined' && item !== '') {
+      this.title = 'Edit Agent';
+      this.isEdit = true;
+      this.userId = item._id;
+      this.AddEditForm.controls['first_name'].setValue(item.first_name);
+      this.AddEditForm.controls['last_name'].setValue(item.last_name);
+      this.AddEditForm.controls['email'].setValue(item.email);
+      this.AddEditForm.controls['phone_number'].setValue(item.phone_number);
+      this.AddEditForm.controls['country_code'].setValue(item.country_code);
+      //    this.AddEditForm.controls['deviceType'].setValue(item.deviceType);
+    } else {
+      this.title = 'Add Agent';
+      console.log('this.addeditform => ', this.AddEditForm.value.country_code);
+    }
+    const options: NgbModalOptions = {
+      keyboard: false,
+      backdrop: 'static'
+    };
+    this.modalService.open(content, options).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      if (reason === 'Cross click' || reason === 0) {
+        this.isEdit = false;
+        this.AddEditForm.controls['first_name'].setValue('');
+        this.AddEditForm.controls['last_name'].setValue('');
+        this.AddEditForm.controls['email'].setValue('');
+        this.AddEditForm.controls['phone_number'].setValue('');
+        this.AddEditForm.controls['country_code'].setValue('971');
+        // this.AddEditForm.controls['deviceType'].setValue('');
+      }
+    });
+    this.submitted = false;
+    this.isLoading = false;
+    this.numberErr = false;
+  }
+  // add-edit popup ends here
+
+
   onSubmit() {
+    console.log('this.AddEditForm => ', this.AddEditForm);
     this.submitted = true;
     this.numberErr = false;
     if (!this.AddEditForm.invalid) {
       this.formData = this.AddEditForm.value;
+      console.log('this.formData => ', this.formData);
       this.formData.email = this.formData.email.trim();
       this.formData.first_name = this.formData.first_name.trim();
       this.formData.last_name = this.formData.last_name.trim();
@@ -181,9 +224,7 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   render(): void {
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-
       dtInstance.destroy();
-
       this.dtTrigger.next();
     });
   }
@@ -195,7 +236,9 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
     this.isCols = true;
     this.AgentsListData();
+    this.socket = io.connect(environment.socketUrl);
   }
+
 
   AgentsListData() {
     this.spinner.show();
@@ -211,8 +254,6 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       responsive: true,
       destroy: true,
-      // scrollX: true,
-      // scrollCollapse: true,
       autoWidth: false,
       initComplete: function (settings, json) {
         $('.custom-datatable').wrap('<div style="overflow:auto; width:100%;position:relative;"></div>');
@@ -222,6 +263,7 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
         setTimeout(() => {
           this.service.post('admin/agents/list', dataTablesParameters).subscribe(async (res: any) => {
             this.agents = await res['result']['data'];
+            console.log('this.agents => ', this.agents);
             // this.agents = [];
             this.totalRecords = res['result']['recordsTotal'];
             if (this.agents.length > 0) {
@@ -245,6 +287,7 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
               recordsFiltered: res['result']['recordsTotal'],
               data: []
             });
+            window.scrollTo(0, 0);
           });
         }, 1000);
       },
@@ -294,41 +337,7 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
 
-  // model
-  open2(content, item) {
-    if (item !== 'undefined' && item !== '') {
-      this.title = 'Edit Agent';
-      this.isEdit = true;
-      this.userId = item._id;
-      this.AddEditForm.controls['first_name'].setValue(item.first_name);
-      this.AddEditForm.controls['last_name'].setValue(item.last_name);
-      this.AddEditForm.controls['email'].setValue(item.email);
-      this.AddEditForm.controls['phone_number'].setValue(item.phone_number);
-      //    this.AddEditForm.controls['deviceType'].setValue(item.deviceType);
-    } else {
-      this.title = 'Add Agent';
-    }
-    const options: NgbModalOptions = {
-      keyboard: false,
-      backdrop: 'static'
-    };
-    this.modalService.open(content, options).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      if (reason === 'Cross click' || reason === 0) {
-        this.isEdit = false;
-        this.AddEditForm.controls['first_name'].setValue('');
-        this.AddEditForm.controls['last_name'].setValue('');
-        this.AddEditForm.controls['email'].setValue('');
-        this.AddEditForm.controls['phone_number'].setValue('');
-        // this.AddEditForm.controls['deviceType'].setValue('');
-      }
-    });
-    this.submitted = false;
-    this.isLoading = false;
-    this.numberErr = false;
-  }
-  // add-edit popup ends here
+
 
   // dlt popup
   delete(userId) {
@@ -338,6 +347,9 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.service.put('admin/agents/delete', { user_id: userId }).subscribe(res => {
+          this.socket.emit('DeleteAgent', {
+            'agent_id': userId,
+          });
           this.render();
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
         }, err => {
@@ -345,8 +357,7 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
           this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
         });
       },
-      reject: () => {
-      }
+      reject: () => { }
     });
   }
   // dlt pop up ends here

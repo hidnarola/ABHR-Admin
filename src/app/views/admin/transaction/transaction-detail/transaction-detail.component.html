@@ -63,22 +63,32 @@
             <span> {{transactionDetails.from_time | date:"MM/dd/yy"}} </span>
           </div>
         </div>
-        <div class="col-md-6">
+
+        <div class="col-md-6" *ngIf="transactionDetails.extended_days === null">
           <div class="cars-dtl-box-inr transaction-dtl-box">
             <b> To Date : </b>
             <span> {{transactionDetails.to_time | date:"MM/dd/yy"}} </span>
           </div>
         </div>
+        <div class="col-md-6" *ngIf="transactionDetails.extended_days != null">
+          <div class="cars-dtl-box-inr transaction-dtl-box">
+            <b> To Date : </b>
+            <span> {{todate | date:"MM/dd/yy"}} </span>
+          </div>
+        </div>
+
+
+
         <div class="col-md-6">
           <div class="cars-dtl-box-inr transaction-dtl-box">
             <b>Per Day Rent : </b>
-            <span> {{transactionDetails.per_day_rent}} </span>
+            <span>AED {{transactionDetails.per_day_rent}} </span>
           </div>
         </div>
         <div class="col-md-6">
           <div class="cars-dtl-box-inr transaction-dtl-box">
             <b> Total Rent : </b>
-            <span> {{transactionDetails.total_rent}} </span>
+            <span>AED {{transactionDetails.total_rent}} </span>
           </div>
         </div>
         <div class="col-md-6" *ngIf="transactionDetails.coupon_code">
@@ -90,22 +100,82 @@
         <div class="col-md-6" *ngIf="transactionDetails.coupon_amount">
           <div class="cars-dtl-box-inr transaction-dtl-box">
             <b> Coupon Amount : </b>
-            <span> {{transactionDetails.coupon_amount}} </span>
+            <span>AED {{transactionDetails.coupon_amount}} </span>
           </div>
         </div>
         <div class="col-md-6">
           <div class="cars-dtl-box-inr transaction-dtl-box">
             <b>VAT Amount : </b>
-            <span> {{transactionDetails.vat_amount}} </span>
+            <span>AED {{transactionDetails.vat_amount}} </span>
           </div>
         </div>
         <div class="col-md-6">
           <div class="cars-dtl-box-inr transaction-dtl-box">
             <b> total Booking Cost : </b>
-            <span> {{transactionDetails.total_booking_cost}} </span>
+            <span>AED {{transactionDetails.total_booking_cost}} </span>
           </div>
         </div>
       </div>
+
+
+
+
+
+
+      <div class="row" *ngIf="transactionDetails.extended_days != null">
+        <div class="col-md-12">
+          <h5 class="transaction-dtl-h5">Extended Booking Detail :</h5>
+        </div>
+        <div class="col-md-6">
+          <div class="cars-dtl-box-inr transaction-dtl-box">
+            <b> Extended Days : </b>
+            <span> {{transactionDetails.extended_days}} </span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="cars-dtl-box-inr transaction-dtl-box">
+            <b> Extended Date : </b>
+            <span> {{transactionDetails.to_time | date:"MM/dd/yy"}} </span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="cars-dtl-box-inr transaction-dtl-box">
+            <b> Extended Total Rent : </b>
+            <span>AED {{transactionDetails.extend_total_rent}} </span>
+          </div>
+        </div>
+
+
+        <div class="col-md-6" *ngIf="transactionDetails.extend_coupon_amount">
+          <div class="cars-dtl-box-inr transaction-dtl-box">
+            <b>Extended Coupon Amount : </b>
+            <span>AED {{transactionDetails.extend_coupon_amount}} </span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="cars-dtl-box-inr transaction-dtl-box">
+            <b>Extended VAT Amount : </b>
+            <span>AED {{transactionDetails.extend_vat_amount}} </span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="cars-dtl-box-inr transaction-dtl-box">
+            <b> Total Extended Cost : </b>
+            <span>AED {{transactionDetails.extend_total_cost}} </span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="cars-dtl-box-inr transaction-dtl-box">
+            <b>Grand Total Cost : </b>
+            <span>AED {{transactionDetails.grand_total}} </span>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
 
       <!-- {{transactionDetails.cancel_date}} -->
       <div class="row" *ngIf="transactionDetails.cancel_date === 1">
@@ -115,13 +185,13 @@
         <div class="col-md-6">
           <div class="cars-dtl-box-inr transaction-dtl-box">
             <b>Cancel Charge : </b>
-            <span> {{transactionDetails.cancel_charge}} </span>
+            <span>AED {{transactionDetails.cancel_charge}} </span>
           </div>
         </div>
         <div class="col-md-6">
           <div class="cars-dtl-box-inr transaction-dtl-box">
             <b>Refundable Amount : </b>
-            <span> {{transactionDetails.refundable_amount}} </span>
+            <span>AED {{transactionDetails.refundable_amount}} </span>
           </div>
         </div>
       </div>

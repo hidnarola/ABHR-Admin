@@ -74,15 +74,14 @@
                     class="label label-{{user.app_user_status!=='rented'?'danger':'success'}}">
                     <i class="fa fa-circle"></i></span>
                 </td>
-                <td class="text-center">
+
+
+                <!-- <td class="text-center">
                   <div ngbDropdown class="d-inline-block">
-                    <!-- <button class="btn btn-primary" id="dropdownBasic1" ngbDropdownToggle></button> -->
                     <i class="mdi mdi-dots-vertical" id="dropdownBasic1" ngbDropdownToggle></i>
                     <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
                       <button class="dropdown-item" [routerLink]="['/admin/users/view/' + user._id]">View
                         Details</button>
-                      <!-- <button *ngIf="user.count !== 0" class="dropdown-item" [routerLink]="['/admin/users/history/' + user._id]">Rental
-                        History</button> -->
                       <button *ngIf="user.count !== 0" class="dropdown-item"
                         [routerLink]="['/admin/users/history/' + user._id]">Rental
                         History</button>
@@ -91,7 +90,25 @@
                         History</button>
                     </div>
                   </div>
+                </td> -->
+
+
+                <td class="text-center">
+                  <a [routerLink]="['/admin/users/view/',user._id]" pTooltip="View" tooltipPosition="bottom"
+                    class="m-r-20">
+                    <i class="fa fa-eye text-default"></i>
+                  </a>
+                  <a *ngIf="user.count !== 0" [routerLink]="['/admin/users/history/',user._id]" pTooltip="History"
+                    tooltipPosition="bottom">
+                    <i class="fa fa-history text-default"></i>
+                  </a>
+                  <a *ngIf="user.count === 0" pTooltip="No History" tooltipPosition="bottom" class="not_allowed">
+                    <i class="fa fa-history text-default"></i>
+                  </a>
                 </td>
+
+
+
               </tr>
             </tbody>
             <tbody *ngIf="users?.length == 0">

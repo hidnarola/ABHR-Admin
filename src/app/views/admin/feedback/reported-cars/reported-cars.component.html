@@ -4,14 +4,6 @@
       <div class="col-lg-6 col-sm-6">
         <h4 class="table-header">List of Reported Cars </h4>
       </div>
-      <!-- <div class="col-lg-6 col-sm-6 text-right"> -->
-      <!-- <button type="button" class="btn btn-primary custom-add-btn m-r-10">
-          <i class="fa fa-external-link" aria-hidden="true"></i> Export
-        </button> -->
-      <!-- <button type="button" class="btn btn-primary custom-add-btn" (click)="open2(content, '')">
-          <i class="mdi mdi-account-plus" aria-hidden="true"></i> Add
-        </button>
-      </div> -->
     </div>
     <div *ngIf="!isCols">
       <div class="p-grid p-dir-col">
@@ -30,7 +22,7 @@
                 <th>Category Type</th>
                 <th>Report Message</th>
                 <th>Status</th>
-                <!-- <th class="disabled text-center">Actions</th> -->
+                <th class="disabled text-center">Actions</th>
               </tr>
             </thead>
             <tbody *ngIf="report?.length != 0 && isCols">
@@ -52,21 +44,17 @@
                 </td>
                 <td>
                   <span>
-                    {{ item.status }}
+                    <ui-switch [checked]="item.status==='pending'?false:true" checkedLabel="Resolved"
+                      (change)="onChangeStatus($event, item._id)" uncheckedLabel="Pending">
+                    </ui-switch>
                   </span>
                 </td>
-                <!-- <td class="text-center">
-                  <a href="javascript:void(0)" [routerLink]="['/admin/agents/view/',item._id]" pTooltip="View"
+                <td class="text-center">
+                  <a [routerLink]="['/admin/feedback/reported-cars/view/',item._id]" pTooltip="View"
                     tooltipPosition="bottom" class="m-r-20">
                     <i class="fa fa-eye text-default"></i>
                   </a>
-                  <a href="javascript:void(0)" (click)="open2(content, item)" pTooltip="Edit" tooltipPosition="bottom"
-                    class="m-r-20">
-                    <i class="fa fa-pencil text-success"></i>
-                  </a>
-                  <a href="javascript:void(0)" (click)="delete(item._id)" pTooltip="Delete" tooltipPosition="bottom">
-                    <i class="fa fa-close text-danger"></i> </a>
-                </td> -->
+                </td>
               </tr>
             </tbody>
             <tbody *ngIf="report?.length == 0">
@@ -80,3 +68,32 @@
     </div>
   </div>
 </div>
+
+
+<p-dialog class="resolvedReportDialog" header="Add Resolved Message" [(visible)]="display" width="300px" modal="true"
+  blockScroll="false" closeOnEscape="false" closable="false">
+  <form [formGroup]="resolvedMessageForm" (ngSubmit)="onSubmit()" class="form-horizontal form-material row"
+    (keydown.enter)="$event.preventDefault()">
+    <div class="col-sm-12">
+      <div class="form-group">
+        <label class="required">Resolved Message </label>
+        <textarea class="form-control" type="text" required="" name="resolved_message" placeholder="Enter message"
+          id="resolved_message" formControlName="resolved_message" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f.resolved_message.errors }"></textarea>
+        <div *ngIf=" submitted && f.resolved_message.errors " class="invalid-feedback">
+          <div *ngIf="f.resolved_message.errors.required"> Message is required</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-12">
+      <button type="submit" *ngIf="!isLoading"
+        class="btn waves-effect waves-light custom-btn btn-primary">Submit</button>
+      <button type="button" *ngIf="isLoading" class="btn waves-effect loading-btn waves-light btn-primary"
+        type="button">
+        <i class="fa fa-spinner fa-spin"></i>Loading
+      </button>
+      <a class="btn waves-effect waves-light custom-btn btn-danger" (click)="cancel()">Cancel</a>
+    </div>
+  </form>
+</p-dialog>

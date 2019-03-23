@@ -11,10 +11,10 @@ export const AuthenticationRoutes: Routes = [
   {
     path: '',
     children: [
-      {
-        path: '404',
-        component: NotFoundComponent
-      },
+      // {
+      //   path: '404',
+      //   component: NotFoundComponent
+      // },
       {
         path: 'forget-password',
         component: ForgetPasswordComponent,

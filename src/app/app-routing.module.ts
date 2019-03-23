@@ -58,6 +58,10 @@ export const routes: Routes = [
                 loadChildren: './confirm-reset/confirm-reset.module#ConfirmResetModule',
                 canActivate: [LoginGuard],
             },
+            {
+                path: '404',
+                loadChildren: './not-found-page/not-found-page.module#NotFoundPageModule',
+            },
         ]
     },
     {

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { CrudService } from '../../../shared/services/crud.service';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-admin-terms',
@@ -26,6 +27,7 @@ export class AdminTermsComponent implements OnInit, AfterViewInit {
     public service: CrudService,
     public router: Router,
     private messageService: MessageService,
+    private spinner: NgxSpinnerService
   ) {
     this.form = this.formbuilder.group({
       about_us: [''],
@@ -42,6 +44,7 @@ export class AdminTermsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.spinner.show();
     this.service.get('admin/legal_settings').subscribe(res => {
       this.termsData = res['data'];
       if (this.termsData != null) {
@@ -50,6 +53,7 @@ export class AdminTermsComponent implements OnInit, AfterViewInit {
         this.form.controls['term_condition'].setValue(this.termsData.term_condition);
         this.form.controls['privacy_policy'].setValue(this.termsData.privacy_policy);
       }
+      this.spinner.hide();
     });
   }
 

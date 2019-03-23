@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { Cancel } from '../../../shared/constant/constant';
 import { CrudService } from '../../../shared/services/crud.service';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { id } from '@swimlane/ngx-datatable/release/utils';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-cancellation-charge',
@@ -30,7 +30,6 @@ export class CancellationChargeComponent implements OnInit {
   public errMsg = [];
 
   constructor(
-    private formBuilder: FormBuilder,
     public service: CrudService,
     public router: Router,
     private messageService: MessageService,
@@ -50,10 +49,9 @@ export class CancellationChargeComponent implements OnInit {
       // this.cancellationData = [];
       if (this.cancellationData.length !== 0) {
         this.checked = true;
-        this.cancellationData.forEach(element => {
-          var obj = { 'hours': element.hours, 'rate': element.rate };
-          this.submitArray.push(obj);
-          this.errMsg.push({ 'hours': false, 'rate': false });
+        this.cancellationData.forEach((element, i) => {
+          this.submitArray.push(element);
+          this.errMsg.push({ _id: element._id, 'hours': false, 'rate': false });
         });
       } else {
         this.checkCancellation();
@@ -69,8 +67,9 @@ export class CancellationChargeComponent implements OnInit {
       this.service.put('company/terms_and_condition/update', this.serviceobj).subscribe(res => {
       });
     } else {
-      this.submitArray.push({ 'hours': '', 'rate': '' });
-      this.errMsg.push({ 'hours': false, 'rate': false });
+      const ts = moment().unix();
+      this.submitArray.push({ _id: ts, 'hours': '', 'rate': '' });
+      this.errMsg.push({ _id: ts, 'hours': false, 'rate': false });
     }
   }
 
@@ -84,6 +83,7 @@ export class CancellationChargeComponent implements OnInit {
         element.rate === '' || element.rate === 0 || element.rate === null || this.errMsg[i].rate === true) {
         this.submitted = false;
       } else {
+        delete element._id;
         checkduplicate.push(element.hours);
         this.submitted = true;
         this.serviceobj.company_id = this.companyId;
@@ -93,6 +93,7 @@ export class CancellationChargeComponent implements OnInit {
 
     if (this.submitted) {
       var check = this.checkCommon(checkduplicate);
+      console.log('check on submit => ', check);
       if (check) {
         this.isLoading = false;
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please remove duplicate feilds first' });
@@ -109,11 +110,11 @@ export class CancellationChargeComponent implements OnInit {
       }
     } else {
       this.isLoading = false;
-      // this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Invalid Input' });
     }
   }
 
   checkCommon(a) {
+    console.log('a => ', a);
     for (var i = 0; i <= a.length; i++) {
       for (var j = i; j <= a.length; j++) {
         if (i !== j && a[i] === a[j]) {
@@ -125,36 +126,24 @@ export class CancellationChargeComponent implements OnInit {
   }
 
   addNext() {
-    console.log('in add function => ');
-    var check = false;
-    var ErrMsg = false;
+    let check = true;
+    const checkDuplicate = [];
+    console.log('checkDuplicate  => ', checkDuplicate);
+    console.log('this.submitArray => ', this.submitArray);
     this.submitArray.forEach((element, i) => {
-      if (element.hours === '' || element.hours === 0 || element.hours === null ||
-        element.rate === '' || element.rate === 0 || element.rate === null) {
+      var checkhours = this.checkCommon(checkDuplicate.push(element.hours));
+      console.log('checkhours => ', checkhours);
+      if ((element.hours === '' || element.hours === 0 || element.hours === null) ||
+        (element.rate === '' || element.rate === 0 || element.rate === null)) {
         check = false;
-      } else if (this.errMsg[i].rate === true) {
-        // ErrMsg = true;
+      } if (this.errMsg[i].rate === true) {
         check = false;
-      } else {
-        check = true;
       }
     });
-
     if (check) {
-      console.log('in check function => ');
-      console.log('this.submitArray before push => ', this.submitArray);
-      console.log('this.errMsg before push => ', this.errMsg);
-      this.submitArray.push({ 'hours': '', 'rate': '' });
-      this.errMsg.push({ 'hours': false, 'rate': false });
-      console.log('this.submitArray after push => ', this.submitArray);
-      console.log('this.errMsg after push => ', this.errMsg);
-    } else {
-      console.log('in check else => ');
-      // if (ErrMsg) {
-      //   this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Invalid Input' });
-      // } else {
-      //   this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please fill all feilds First' });
-      // }
+      const ts = moment().unix();
+      this.submitArray.push({ _id: ts, 'hours': '', 'rate': '' });
+      this.errMsg.push({ _id: ts, 'hours': false, 'rate': false });
     }
   }
 
@@ -169,14 +158,8 @@ export class CancellationChargeComponent implements OnInit {
   }
 
   deleteThis(index) {
-    console.log(' => ');
-    console.log('in delete function => ');
-    console.log('this.errMsg before splice=> ', this.errMsg);
-    console.log('this.submitArray before splice => ', this.submitArray);
     this.submitArray.splice(index, 1);
     this.errMsg.splice(index, 1);
-    console.log('this.errMsg after splice => ', this.errMsg);
-    console.log('this.submitArray after splice => ', this.submitArray);
   }
 
   keyup(event, i) {

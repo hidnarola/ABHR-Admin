@@ -40,11 +40,11 @@
           <div class="col-lg-6">
             <h4 class="table-header">List of Rentals </h4>
           </div>
-          <div class="col-lg-6 text-right">
-            <!-- <button type="button" class="btn btn-primary custom-add-btn">
+          <!-- <div class="col-lg-6 text-right"> -->
+          <!-- <button type="button" class="btn btn-primary custom-add-btn">
               <i class="fa fa-external-link" aria-hidden="true"></i> Export
             </button> -->
-          </div>
+          <!-- </div> -->
         </div>
         <div *ngIf="!isCols">
           <div class="p-grid p-dir-col">
@@ -64,6 +64,7 @@
                     <th>Price</th>
                     <th>Start Of Rent</th>
                     <th>End Of Rent</th>
+                    <th>Member Since</th>
                   </tr>
                 </thead>
                 <tbody *ngIf="rentalData?.length != 0 && isCols">
@@ -78,7 +79,7 @@
                     </td>
                     <td>
                       <span>
-                        {{ item.booking_rent }}
+                        AED {{ item.booking_rent }}
                       </span>
                     </td>
                     <td>
@@ -89,6 +90,11 @@
                     <td>
                       <span>
                         {{ item.to_time | date:"MM/dd/yy" }}
+                      </span>
+                    </td>
+                    <td>
+                      <span>
+                        {{ item.createdAt | date:"MM/dd/yy" }}
                       </span>
                     </td>
                   </tr>

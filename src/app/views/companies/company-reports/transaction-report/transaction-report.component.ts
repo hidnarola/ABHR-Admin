@@ -107,6 +107,9 @@ export class TransactionReportComponent implements OnInit, AfterViewInit, OnDest
               if (this.reports.length > 0) {
                 this.isCols = true;
                 $('.dataTables_wrapper').css('display', 'block');
+              } else if (this.reports.length === 0 && this.rangeDates === undefined) {
+                console.log('new condition => ');
+                this.isCols = false;
               } else {
                 if (dataTablesParameters['search']['value'] !== '' && dataTablesParameters['search']['value'] !== null ||
                   ((dataTablesParameters['selectFromDate'] && dataTablesParameters['selectToDate']) !== '') &&
@@ -130,6 +133,7 @@ export class TransactionReportComponent implements OnInit, AfterViewInit, OnDest
                 recordsFiltered: res['result']['recordsTotal'],
                 data: []
               });
+              window.scrollTo(0, 0);
             });
           }, 1000);
         },

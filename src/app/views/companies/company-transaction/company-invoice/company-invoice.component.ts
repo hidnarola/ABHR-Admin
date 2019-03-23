@@ -4,6 +4,7 @@ import * as jspdf from 'jspdf';
 import html2canvas from 'html2canvas';
 import { CrudService } from '../../../../shared/services/crud.service';
 import { ActivatedRoute } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-company-invoice',
@@ -21,13 +22,16 @@ export class CompanyInvoiceComponent implements OnInit {
   constructor(
     public service: CrudService,
     private route: ActivatedRoute,
+    private spinner: NgxSpinnerService
   ) {
+    this.spinner.show();
     this.today = new Date();
     this.route.params.subscribe(params => {
       this.Id = params.id;
     });
     this.service.post('admin/transaction/invoice', { booking_id: this.Id }).subscribe(res => {
       this.InvoiceData = res['data'];
+      this.spinner.hide();
     });
   }
 

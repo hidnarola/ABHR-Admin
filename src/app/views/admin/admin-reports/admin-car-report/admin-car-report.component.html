@@ -5,42 +5,50 @@
         <h4 class="table-header">List of Car Reports </h4>
       </div>
 
-      <!-- <div class="col-lg-2"></div> -->
       <div class="col-lg-6 col-md-6 justify-content-end" *ngIf="isCols">
         <form class="form-inline form_filter" style="justify-content: flex-end;"
           (keydown.enter)="$event.preventDefault()">
           <div class="form-group" style="margin-left:0;">
-            <span class="filter_by">Filter By :</span>
-            <p-calendar #filter_report [(ngModel)]="rangeDates" [ngModelOptions]="{standalone: true}"
-              placeholder="mm-dd-yyyy" [readonlyInput]="true" class="m-r-10" [showIcon]="true" selectionMode="range"
-              (onSelect)="FilterRange()">
-              <p-footer>
-                <button type="button" class="pull-right" (click)="handleClearCalendar()">Clear</button>
-              </p-footer>
-            </p-calendar>
+            <div class="filter-wrap">
+              <span class="filter_by">Filter By :</span>
+              <p-calendar #filter_report [(ngModel)]="rangeDates" [ngModelOptions]="{standalone: true}"
+                placeholder="mm-dd-yyyy" [readonlyInput]="true" class="m-r-10" [showIcon]="true" selectionMode="range"
+                (onSelect)="FilterRange()">
+                <p-footer>
+                  <button type="button" class="pull-right" (click)="handleClearCalendar()">Clear</button>
+                </p-footer>
+              </p-calendar>
+            </div>
 
-            <button (click)="exportAsXLSX()" *ngIf="!isExcel && reports?.length !== 0"
-              class="btn btn-primary custom-add-btn m-r-10">
-              Excel
-            </button>
-            <button *ngIf="reports?.length === 0" class="btn btn-primary custom-add-btn m-r-10 not_allowed" disabled>
-              Excel
-            </button>
-            <button type="button" *ngIf="isExcel" class="btn btn-primary custom-add-btn  loading-btn">
-              <i class="fa fa-spinner fa-spin"></i>Loading
-            </button>
 
-            <button type="button" value="CPTURE" *ngIf="!isPDF && reports?.length !== 0" (click)="captureScreen()"
-              class="btn btn-primary custom-add-btn">
-              PDF
-            </button>
-            <button type="button" *ngIf="reports?.length === 0" class="btn btn-primary not_allowed custom-add-btn"
-              disabled>
-              PDF
-            </button>
-            <button type="button" *ngIf="isPDF" class="btn btn-primary custom-add-btn  loading-btn">
-              <i class="fa fa-spinner fa-spin"></i>Loading
-            </button>
+            <div>
+              <button (click)="exportAsXLSX()" *ngIf="!isExcel && reports?.length !== 0"
+                class="btn btn-primary custom-add-btn m-r-10">
+                Excel
+              </button>
+              <button *ngIf="reports?.length === 0" class="btn btn-primary custom-add-btn m-r-10 not_allowed" disabled>
+                Excel
+              </button>
+              <button type="button" *ngIf="isExcel" class="btn btn-primary custom-add-btn  loading-btn">
+                <i class="fa fa-spinner fa-spin"></i>Loading
+              </button>
+            </div>
+
+
+            <div>
+              <button type="button" value="CPTURE" *ngIf="!isPDF && reports?.length !== 0" (click)="captureScreen()"
+                class="btn btn-primary custom-add-btn">
+                PDF
+              </button>
+              <button type="button" *ngIf="reports?.length === 0" class="btn btn-primary not_allowed custom-add-btn"
+                disabled>
+                PDF
+              </button>
+              <button type="button" *ngIf="isPDF" class="btn btn-primary custom-add-btn  loading-btn">
+                <i class="fa fa-spinner fa-spin"></i>Loading
+              </button>
+            </div>
+
 
           </div>
         </form>
@@ -93,7 +101,7 @@
                 </td>
                 <td>
                   <span>
-                    {{ item.booking_rent}}
+                    AED {{ item.booking_rent}}
                   </span>
                 </td>
                 <td>

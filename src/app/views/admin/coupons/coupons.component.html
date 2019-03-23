@@ -16,7 +16,7 @@
     <div *ngIf="!isCols">
       <div class="p-grid p-dir-col">
         <div class="p-col">
-          <div class="box">Add your First Coupon</div>
+          <div class="box">No Record found for coupon,Add your First Coupon</div>
         </div>
       </div>
     </div>
@@ -30,6 +30,7 @@
                 <th>Coupon Code</th>
                 <th>Discount Rate</th>
                 <th>Company Name</th>
+                <th>Display Status</th>
                 <th class="disabled text-center">Actions</th>
               </tr>
             </thead>
@@ -37,7 +38,8 @@
               <tr *ngFor="let item of coupons; let i = index">
                 <td>
                   <span>
-                    <img [src]="item.banner? imgUrl+'banner/'+item.banner:'/assets/images/no_car_image.jpg'"
+                    <img
+                      [src]="(item.banner && item.banner !== null)? imgUrl+'banner/'+item.banner:'/assets/images/no_car_image.jpg'"
                       id="coupon-img" class="img-rounded right_top_image" alt="coupon_Image" height="100" width="100" />
                   </span>
 
@@ -49,7 +51,7 @@
                 </td>
                 <td>
                   <span>
-                    {{ item.discount_rate }}
+                    {{ item.discount_rate }} %
                   </span>
                 </td>
                 <td>
@@ -57,12 +59,31 @@
                     {{ item.companyDetails ? item.companyDetails.name : 'Admin' }}
                   </span>
                 </td>
+                <td *ngIf="item.banner !== null && item.banner !== ''">
+                  <span>
+                    <!-- {{ item.isDisplay }} -->
+                    <span *ngIf="item.isDisplay === true">
+                      <p-inputSwitch [(ngModel)]="item.isDisplay" pTooltip="Active" tooltipPosition="bottom"
+                        (onChange)="handleChange($event, item._id)"></p-inputSwitch>
+                    </span>
+                    <span *ngIf="item.isDisplay === false">
+                      <p-inputSwitch [(ngModel)]="item.isDisplay" pTooltip="Deactive" tooltipPosition="bottom"
+                        (onChange)="handleChange($event, item._id)"></p-inputSwitch>
+                    </span>
+                  </span>
+                </td>
+                <td *ngIf="item.banner === null || item.banner === ''">
+                  <span>
+                    {{'-'}}
+                  </span>
+                </td>
                 <td class="text-center">
                   <a href="javascript:void(0)" (click)="open2(content, item)" pTooltip="Edit" tooltipPosition="bottom"
                     class="m-r-20">
                     <i class="fa fa-pencil text-success"></i>
                   </a>
-                  <a href="javascript:void(0)" (click)="delete(item._id)" pTooltip="Delete" tooltipPosition="bottom">
+                  <a href="javascript:void(0)" (click)="delete(item._id, item.banner)" pTooltip="Delete"
+                    tooltipPosition="bottom">
                     <i class="fa fa-close text-danger"></i>
                   </a>
                 </td>
@@ -141,13 +162,20 @@
           </div>
           <div class="col-sm-12">
             <div class="form-group">
-              <label> Banner :</label>
+              <label> Banner <b>(Please choose Square Image): </b></label>
               <!-- <input class="form-control file_input" type="file" name="banner_image" formControlName="banner_image"
                 (change)="handleFileInput($event)" accept="image/png, image/jpeg"> -->
-              <input class="form-control file_input" type="file" name="banner_image" (change)="handleFileInput($event)"
+              <input class="form-control file_input" type="file" name="banner_image" formControlName="banner_image"
+                [ngClass]="{ 'is-invalid': f.banner_image.errors }" (change)="handleFileInput($event)"
                 accept="image/png, image/jpeg">
+              <div *ngIf="f.banner_image.errors" class="invalid-feedback">
+                <div *ngIf="f.banner_image.errors.fileformat"> Please choose valid image format</div>
+                <div *ngIf="f.banner_image.errors.squareimage"> Please choose square Image</div>
+              </div>
             </div>
           </div>
+          <!-- <img [src]="couponImage?couponImage:'assets/images/no_car_image.jpg'" id="couponPreview"> -->
+
           <div class="col-sm-12">
             <div class="form-group">
               <p-checkbox [(ngModel)]="idCompanyAdded" (onChange)="onChangeChoiceCompany()"

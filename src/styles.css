@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import '~perfect-scrollbar/css/perfect-scrollbar.css';
+
 /* @import "../node_modules/angular-calendar/css/angular-calendar.css"; */
 .ps .ps__scrollbar-y-rail {left: 3px; right: auto;}
 body {color: #67757c; font-weight: 300; font-size: 1rem;}
@@ -15,19 +16,9 @@ a{cursor:pointer;}
 .dropdown-toggle::after {vertical-align: middle !important;}
 .btn-primary, 
 .btn-primary.disabled {background: #1976d2 !important; border: 1px solid #1976d2 !important;}
-/* .btn {padding:5px 10px !important; line-height:18px !important; font-size: 14px !important; border-radius:3px !important; text-transform: uppercase !important; } */
+
 .btn i{ vertical-align:middle; margin-right:4px;}
-/* body .dataTables_wrapper .dataTables_paginate .paginate_button {padding: 10px 15px 8px !important; line-height: 20px;}
-body .dataTables_wrapper .dataTables_paginate .paginate_button.current, 
-body .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover { color: #fff !important; border: 1px solid #1976d2; background-color:white !important; background:#1976d2 !important;}
-html body .dataTables_wrapper .dataTables_paginate .paginate_button:hover,
-html body .dataTables_wrapper .dataTables_paginate .paginate_button:active{background:#1976d2 !important; border:1px solid #1976d2 !important; box-shadow:none !important;}
-body .dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
-body .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover,
-body .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {color: #666 !important; background:#fff !important; opacity:.8; border: 1px solid #eee !important; font-size: 13px; font-weight: 400; letter-spacing: .08em; text-transform: uppercase; line-height:20px;}
-body .dataTables_wrapper .dataTables_info {font-size:13px; font-weight:400; padding:20px 0 0; line-height:40px;}
-.dataTables_wrapper .dataTables_paginate {padding:20px 0 0 !important;}
-.dataTables_length select { border: unset;border-bottom: 1px solid #666 !important;} */
+
 
 .modal-dialog {max-width:640px !important;}
 .modal-content {border:0 !important; border-radius:0 !important; margin-top: 25%;}
@@ -247,9 +238,85 @@ th.disabled {cursor: default !important;}
 .datable_custom.datable_last_none .dataTables_scrollBody table thead tr th:last-child span.sort-icon {display: none;}
 span.form_calendar.form_arrow_none.cal_button .ui-button-icon-only .ui-button-icon-left {left: 30% !important;}
 button.cal-close {margin: 0px !important;background: #1976d2!important;border: 0px !important;color: white;}
-.col-xs-12.text-center.confirm-pass-text {background-color: #1976d2;color: white;border: 1px solid #1976d2;border-radius: 4px;margin-top: 10px;padding: 10px 20px;}
+.col-xs-12.text-center.confirm-pass-text {background-color: #1976d2;color: white;border: 1px solid #1976d2;border-radius: 4px;margin-top: 10px;padding: 10px 20px;font-size: 15px;}
 p-editor strong {font-weight: bold;}
 h5.transaction-dtl-h5 {padding-top: 20px;}
+p.text-muted.m-t-30.m-b-30 {color: #455a64!important;font-weight: 400;}
+.switch.checked { color: #fff;}
+.cars-dtl-box-inr.transaction-dtl-box.report_msg { color: white;background-color: #559de4;border: 1px #eee solid;}
+.switch.switch-medium > .switch-pane > span {font-size: 14px !important}.switch.switch-medium {background-color: #5c5c5c;color: white;}
+ul.collapse.submenu_sidebar {margin-left: 9px;}
+.myWid70 input.hasDatepicker {width: 70%;}
+.cars-dtl-box-inr.card_dtl_new{ display: block; flex-direction: row;}
+.cars-dtl-box-inr.card_dtl_new b{width: calc(100% + 20px);text-align: center;margin-bottom: 0;   margin-right: -10px;min-width: unset;display: block;}
+textarea {resize: auto !important;resize: vertical !important;}
+textarea#resolved_message {height: 100px; margin-top: 10px;}
+.ql-editor p, .ql-editor ol, .ql-editor ul, .ql-editor pre, .ql-editor blockquote, .ql-editor h1, .ql-editor h2, .ql-editor h3, .ql-editor h4, .ql-editor h5, .ql-editor h6 { margin: inherit!important; padding: inherit!important}
+.resolvedReportDialog .ui-dialog .ui-dialog-titlebar-icon span { display: none !important;}
+.ui-dropdown-items-wrapper {width: 200px !important;}
+input#phoneNumber {width: 65%;}
+i.mdi.mdi-gauge {
+    font-size: 22px !important;
+}
+
+
+/* pdf-css */
+.tax-invoice table#Capture_invoice {width: 100%;margin: 0 auto;border-spacing: 0;vertical-align: middle;padding: 0;border-left: 1px solid #eee;border-right: 1px solid #eee;font-family: HelveticaNeue,Helvetica,Arial,sans-serif;max-width: 600px;}
+.logo td{    padding: 0;margin: 0;vertical-align: middle;}
+.logo td table{    width: 100%;padding: 0;margin: 0 auto;border-spacing: 0;vertical-align: middle;background: #000;text-align: center;}
+.logo td table th{    text-align: center;padding: 26px 0 28px 0;margin: 0;vertical-align: middle;}
+.logo td table th a{    display: block;padding: 0;margin: 0;vertical-align: middle;}
+.logo td table th a img{    padding: 0;margin: 0;vertical-align: middle;}
+.heading table {width: 100%;padding: 0;}
+.heading table td {text-align: center;padding: 20px 0;background: #EFEFF5;margin: 0;vertical-align: middle;}
+.heading table td a {display: block;padding: 0;margin: 0;vertical-align: middle;font-family: Montserrat;font-size: 18px;color: rgba(0,0,0,0.90) !important;line-height: 18px;text-decoration: none;text-transform: uppercase;font-weight: 700;}
+.heading table td a img {padding: 0;margin: 0;vertical-align: middle;margin-right: 18px;}
+.address-line td {padding: 20px;margin: 0;vertical-align: middle;}
+.address-line td table {width: 100%;padding: 0;margin: 0 auto;background: #fff;vertical-align: middle;}
+.address-line td table td {padding: 0;margin: 0;vertical-align: middle;}
+.address-line td table td p {font-family: 'Montserrat';font-size: 14px;color: #4A4A4A;line-height: 19px;font-weight: 600;margin: 0;padding: 0;vertical-align: middle;margin: 0;}
+.bill-to td {padding: 0 20px 20px;margin: 0;vertical-align: middle;}
+.bill-to td table {width: 100%;padding: 0;margin: 0 auto;background: #fff;vertical-align: middle;}
+.bill-to td table td.bill-address {padding: 0;margin: 0;vertical-align: top;}
+.bill-to td table .bill-address table {padding: 0;margin: 0;vertical-align: middle;border: 1px solid #979797;width: 275px;height: 177px;}
+.bill-to td table .bill-address table td {padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-bottom: 1px solid #979797;}
+.bill-to td td.bill-invoice {padding: 0;margin: 0;vertical-align: top;float: right;}
+.bill-to td td.bill-invoice table {padding: 0;margin: 0;vertical-align: middle;border: 1px solid #979797;}
+.bill-to td td.bill-invoice table tr td {padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-bottom: 1px solid #979797;border-right: 1px solid #979797;}
+.description-row td {padding: 0px 20px 15px;margin: 0;vertical-align: middle;}
+.description-row td table {width: 100%;padding: 0px;margin: 0 auto;background: #fff;vertical-align: middle;border: 1px solid #979797;}
+.description-row td table tr th {padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-bottom: 1px solid #979797;border-right: 1px solid #979797;}
+.description-row td table tbody tr td {padding: 12px 15px;margin: 0;vertical-align: top;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-right: 1px solid #979797;height: 330px;}
+.description-row td table tbody tr td p {margin: 0;padding: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;}
+.description-row td table tbody tr.footer-row td {padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-right: 1px solid #979797;background: #d8d8d8;height: auto;}
+.total-row td {padding: 0px 20px;margin: 0;vertical-align: middle;}
+.total-row td table {width: 100%;padding: 0px;margin: 0 auto;background: #fff;vertical-align: middle;border: 1px solid #979797;}
+.total-row td table tbody td {padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-right: 1px solid #979797;}
+.total-row td table tbody td p {margin: 0;padding: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 9px;color: #4A4A4A;line-height: 16px;font-weight: 600;}
+.bank-details td {padding: 20px;margin: 0;vertical-align: middle;}
+.bank-details td table {width: 100%;padding: 0;margin: 0 auto;background: #fff;vertical-align: middle;}
+.bank-details td table td {padding: 0;margin: 0;vertical-align: middle;}
+.bank-details td table td p {font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 600;margin: 0;padding: 0 0 10px 0;vertical-align: middle;margin: 0;}
+.bank-details td table td p:first-child {padding: 0 0 20px 0;}
+.contact-details td {padding: 0px 20px 20px 20px;margin: 0;vertical-align: middle;}
+.contact-details td table {width: 100%;padding: 0px;margin: 0 auto;background: #fff;vertical-align: middle;border: 1px solid #979797;}
+.contact-details td table thead th {padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-bottom: 1px solid #979797;border-right: 1px solid #979797;}
+.contact-details td table tbody td {padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-right: 1px solid #979797;}
+.help-row table {width: 100%;padding: 0;margin: 0;}
+.help-row table tbody td {width: 100%;text-align: center;padding: 20px 25px;background: #EFEFF5;margin: 0;vertical-align: middle;border-bottom: 5px solid #50E3C2;}
+.help-row table tbody td p {font-family: 'Montserrat';font-size: 12.5px;color: #000;line-height: 19px;font-weight: 300;padding: 0;vertical-align: middle;margin: 0;}
+.table-footer td {padding: 20px;margin: 0;vertical-align: middle;background: #000;}
+.table-footer td table {width: 100%;padding: 30px 25px;margin: 0;text-align: center;}
+.table-footer td table td {padding: 0 0 20px 0;margin: 0;vertical-align: middle;text-align: center;}	
+.table-footer td table td a {padding: 0 5px;margin: 0;display: inline-block;vertical-align: middle;}
+.table-footer td table td a img {vertical-align: middle;padding: 0;margin: 0;}
+.table-footer td table td p {text-align: center;font-family: 'Montserrat';font-size: 12.5px;color: #fff;line-height: 19px;font-weight: 300;padding: 0;vertical-align: middle;margin: 0;}
+.table-footer td table tr:last-child td {padding-bottom: 0;}
+
+
+
+
+
 
 /***media start here  **/
 @media (min-width:768px){
@@ -303,11 +370,100 @@ h5.transaction-dtl-h5 {padding-top: 20px;}
     .row_grey_one label:after {opacity: 0;}
     .row_grey_one > div:first-child {padding-right: 15px;}
     .row_grey_one label {border-bottom: 0px solid #ced4da;border-right: 1px solid #ced4da;    text-align: left;padding: 7px 10px 8px 12px;}
-    
+    .topbar .top-navbar .navbar-header .navbar-brand{    width: 40px; overflow: hidden;}
+    #main-wrapper .topbar .top-navbar .navbar-nav > .nav-item.show .dropdown-menu{width: 60% !important;left: auto!important;margin-right: 20px;}
+    .ui-dialog.ui-widget.ui-widget-content {
+    width: 95% !important;}
+    .tax-invoice table .bill-to table td {display: block;float: none;}
+    .tax-invoice table .bill-to table td table {width: 100%;margin-bottom: 15px;}
+    .tax-invoice.ng-star-inserted {overflow-x: auto;}
+}
+@media  (max-width: 640px){
+    .page-wrapper .dataTables_wrapper .dataTables_length,
+    .page-wrapper .dataTables_wrapper .dataTables_filter{
+            float: left;
+            text-align: left;
+            clear: left;
+    }
+
+
+}
+@media(max-width: 575px){
+    h4.table-header{
+            margin-bottom: 0;
+    }
+    .custom-add-btn{
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    .form-group .custom-autocomplete{
+            float: none !important;
+    }
+    body .card_dtl_new .ui-datepicker table td,
+    body .card_dtl_new .ui-datepicker table td > a,
+    body .card_dtl_new .ui-datepicker table td > span,
+    body .card_dtl_new .ui-datepicker table th{
+        padding: 0.0em !important;
+            font-size: 12px;
+    }
+    body .card_dtl_new .ui-datepicker{
+            padding: 0.857em 0 !important;
+        
+    }
+    .cars-dtl-box-inr b{
+            margin-bottom: 0;
+        display: block;
+        text-align: left;
+        margin-right: -10px;
+    }
+    .cars-dtl-box-inr.card_dtl_new b{
+        text-align: left;
+    }
+    .filter-wrap{
+    margin: 15px 0;
+    }
+h4.table-header.operation-header{margin-bottom: 30px;}
+form.form-inline.form_filter {
+    justify-content: left !important;
+}
+}
+@media(max-width: 564px){
+/* body .dataTables_wrapper .dataTables_paginate .paginate_button{
+        border-right: 0 !important;
+} */
+body .dataTables_wrapper .dataTables_paginate{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+} 
+body .dataTables_wrapper .dataTables_paginate > span{
+    border: 1px solid #ddd;
 }
 
+}
+@media(max-width: 450px){
+    .login-box{
+            width: 90% !important;
+    }
+}
 @media(max-width:449px){
     .agents-dtl-box span {padding: 10px;display: block;}
     .agents-dtl-box>div b{ padding: 8px 10px;margin: 0;width: 100%;text-align: left;}    .agents-dtl-box>div {margin: 0 0 5px; display: block; padding: 0;}
+     .form_filter .filter-wrap p-calendar > span > input{
+    width: 230px;
+    padding: 7px 8px 8px 8px !important;
+    }
+     .form_filter .filter-wrap  p-calendar {
+         margin-left: 0;}
+    #main-wrapper .topbar .top-navbar .navbar-nav > .nav-item.show .dropdown-menu{width: 80% !important;}
+}
 
+@media(max-width:375px){
+body .dataTables_wrapper .dataTables_paginate > span .paginate_button {
+    width: 30px;
+    height: 30px;
+    line-height: 10px !important;
+    min-width: inherit !important;
+    padding: 8px !important;
+}
 }

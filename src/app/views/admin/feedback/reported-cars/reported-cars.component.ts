@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, Renderer } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CrudService } from '../../../../shared/services/crud.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -33,6 +33,10 @@ export class ReportedCarsComponent implements OnInit, OnDestroy, AfterViewInit {
   public title = 'Add Report';
   closeResult: string;
   public Id;
+  public reportStatus;
+  display: boolean = false;
+  public reportId;
+  resolvedMessageForm: FormGroup;
 
   constructor(
     public renderer: Renderer,
@@ -44,7 +48,25 @@ export class ReportedCarsComponent implements OnInit, OnDestroy, AfterViewInit {
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private spinner: NgxSpinnerService,
-  ) { }
+  ) {
+    this.resolvedMessageForm = this.formBuilder.group({
+      resolved_message: ['', Validators.required]
+    });
+    this.formData = {
+      resolved_message: String,
+    };
+  }
+  get f() { return this.resolvedMessageForm.controls; }
+
+
+  // showDialog(event, id) {
+  //   console.log('event => ', event);
+  //   console.log('id => ', id);
+  //   console.log('this.report => ', this.report);
+  //   this.display = true;
+  //   this.resolvedMessageForm.controls['resolved_message'].setValue('');
+  //   this.submitted = false;
+  // }
 
   ReportListData() {
     this.spinner.show();
@@ -54,7 +76,7 @@ export class ReportedCarsComponent implements OnInit, OnDestroy, AfterViewInit {
       processing: true,
       serverSide: true,
       ordering: true,
-      // order: [[4, 'desc']],
+      order: [[4, 'desc']],
       language: {
         'processing': '',
       },
@@ -95,6 +117,7 @@ export class ReportedCarsComponent implements OnInit, OnDestroy, AfterViewInit {
               recordsFiltered: res['result']['recordsTotal'],
               data: []
             });
+            window.scrollTo(0, 0);
           });
         }, 1000);
       },
@@ -115,24 +138,23 @@ export class ReportedCarsComponent implements OnInit, OnDestroy, AfterViewInit {
           data: 'Status',
           name: 'status',
         },
-        // {
-        //   data: 'Actions',
-        //   name: 'createdAt',
-        //   orderable: false
-        // },
+        {
+          data: 'Actions',
+          name: 'createdAt',
+          orderable: false
+        },
       ]
     };
   }
 
   ngOnInit() {
+    this.isCols = true;
     this.ReportListData();
   }
 
   render(): void {
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-
       dtInstance.destroy();
-
       this.dtTrigger.next();
     });
   }
@@ -146,12 +168,81 @@ export class ReportedCarsComponent implements OnInit, OnDestroy, AfterViewInit {
     this.hideSpinner = false;
     let table: any = $('.custom-datatable').DataTable();
     table.columns().iterator('column', function (ctx, idx) {
-      $(table.column(idx).header()).append('<span class="sort-icon"/>');
-      // if (idx !== 4) {
-      //   $(table.column(idx).header()).append('<span class="sort-icon"/>');
-      // }
+      // $(table.column(idx).header()).append('<span class="sort-icon"/>');
+      if (idx !== 4) {
+        $(table.column(idx).header()).append('<span class="sort-icon"/>');
+      }
     });
   }
 
+  onChangeStatus = (e, Id) => {
+    console.log('Id => ', Id);
+    console.log('e => ', e);
+    this.reportId = Id;
+    if (e === true) {
+      console.log('true => ');
+      this.display = true;
+      this.resolvedMessageForm.controls['resolved_message'].setValue('');
+      this.submitted = false;
+    } else {
+      console.log('else => ');
+      this.reportStatus = 'pending';
+      var Obj = {
+        report_id: Id,
+        status: this.reportStatus
+      };
+      console.log('Obj => ', Obj);
+      this.service.post('admin/reports/change_status', Obj).subscribe(res => {
+        console.log('res => ', res);
+        this.render();
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
+      }, error => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Something went wrong' });
+      });
+    }
+  }
+  cancel() {
+    this.display = false;
+    this.reportStatus = 'pending';
+    this.render();
+  }
+  onSubmit() {
+    this.submitted = true;
+    if (!this.resolvedMessageForm.invalid) {
+      this.isLoading = true;
+      console.log('this.resolvedMessageForm => ', this.resolvedMessageForm.value.resolved_message);
+      var obj = {
+        report_id: this.reportId,
+        status: 'resolved',
+        resolved_message: this.resolvedMessageForm.value.resolved_message
+      };
+      console.log('Obj => ', obj);
+      this.service.post('admin/reports/change_status', obj).subscribe(res => {
+        console.log('res => ', res['status']);
+        if (res['status'] === 'success') {
+          this.reportStatus = 'resolved';
+        }
+        // this.reportStatus = 'resolved';
+        this.display = false;
+        this.submitted = false;
+        this.isLoading = false;
+        this.render();
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
+      }, err => {
+        err = err.error;
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
+        this.display = false;
+        this.submitted = false;
+        this.isLoading = false;
+      });
+      this.submitted = false;
+      this.resolvedMessageForm.controls['resolved_message'].setValue('');
+    }
+
+  }
+
+
+  //     this.submitted = false;
+  // this.resolvedMessageForm.controls['old_password'].setValue('');
 
 }

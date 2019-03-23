@@ -8,56 +8,47 @@
         <form class="form-inline form_filter" style="justify-content: flex-end;"
           (keydown.enter)="$event.preventDefault()">
           <div class="form-group" style="margin-left:0;">
-            <span class="filter_by">Filter By :</span>
 
-            <p-calendar #filter_report [(ngModel)]="rangeDates" [ngModelOptions]="{standalone: true}"
-              placeholder="mm-dd-yyyy" [readonlyInput]="true" class="m-r-10" [showIcon]="true" selectionMode="range"
-              (onSelect)="FilterRange()">
-              <p-footer>
-                <button type="button" class="pull-right" (click)="handleClearCalendar()">Clear</button>
-              </p-footer>
-            </p-calendar>
+            <div class="filter-wrap">
+              <span class="filter_by">Filter By :</span>
+              <p-calendar #filter_report [(ngModel)]="rangeDates" [ngModelOptions]="{standalone: true}"
+                placeholder="mm-dd-yyyy" [readonlyInput]="true" class="m-r-10" [showIcon]="true" selectionMode="range"
+                (onSelect)="FilterRange()">
+                <p-footer>
+                  <button type="button" class="pull-right" (click)="handleClearCalendar()">Clear</button>
+                </p-footer>
+              </p-calendar>
+            </div>
 
-            <button (click)="exportAsXLSX()" *ngIf="!isExcel && reports?.length !== 0"
-              class="btn btn-primary custom-add-btn m-r-10">
-              Excel
-            </button>
-            <button *ngIf="reports?.length === 0" class="btn btn-primary custom-add-btn m-r-10 not_allowed" disabled>
-              Excel
-            </button>
-            <button type="button" *ngIf="isExcel" class="btn btn-primary custom-add-btn  loading-btn">
-              <i class="fa fa-spinner fa-spin"></i>Loading
-            </button>
+            <div>
+              <button (click)="exportAsXLSX()" *ngIf="!isExcel && reports?.length !== 0"
+                class="btn btn-primary custom-add-btn m-r-10">
+                Excel
+              </button>
+              <button *ngIf="reports?.length === 0" class="btn btn-primary custom-add-btn m-r-10 not_allowed" disabled>
+                Excel
+              </button>
+              <button type="button" *ngIf="isExcel" class="btn btn-primary custom-add-btn  loading-btn">
+                <i class="fa fa-spinner fa-spin"></i>Loading
+              </button>
+            </div>
 
-            <button type="button" value="CPTURE" *ngIf="!isPDF && reports?.length !== 0" (click)="captureScreen()"
-              class="btn btn-primary custom-add-btn">
-              PDF
-            </button>
-            <button type="button" *ngIf="reports?.length === 0" class="btn btn-primary not_allowed custom-add-btn"
-              disabled>
-              PDF
-            </button>
-            <button type="button" *ngIf="isPDF" class="btn btn-primary custom-add-btn  loading-btn">
-              <i class="fa fa-spinner fa-spin"></i>Loading
-            </button>
+            <div>
+              <button type="button" value="CPTURE" *ngIf="!isPDF && reports?.length !== 0" (click)="captureScreen()"
+                class="btn btn-primary custom-add-btn">
+                PDF
+              </button>
+              <button type="button" *ngIf="reports?.length === 0" class="btn btn-primary not_allowed custom-add-btn"
+                disabled>
+                PDF
+              </button>
+              <button type="button" *ngIf="isPDF" class="btn btn-primary custom-add-btn  loading-btn">
+                <i class="fa fa-spinner fa-spin"></i>Loading
+              </button>
+            </div>
 
-            <!-- <div class="input-group">
-              <input class="form-control" placeholder="yyyy-mm-dd" (ngModelChange)="DatePicker($event)" name="dp"
-                [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
-              <div class="input-group-append">
-                <button class="btn btn-outline-secondary datepicker_button" (click)="d.toggle()" type="button">
-                  <i class="ti-calendar"></i>
-                </button>
-              </div>
-            </div> -->
           </div>
         </form>
-        <!-- <button type="button" class="btn btn-primary custom-add-btn m-r-10">
-            <i class="fa fa-external-link" aria-hidden="true"></i> Export
-          </button> -->
-        <!-- <button type="button" class="btn btn-primary custom-add-btn" (click)="open2(content, '')">
-            <i class="mdi mdi-account-plus" aria-hidden="true"></i> Add
-          </button> -->
       </div>
     </div>
     <div *ngIf="!isCols">
@@ -101,7 +92,7 @@
                 </td>
                 <td>
                   <span>
-                    {{ item.booking_rent}}
+                    AED {{ item.booking_rent}}
                   </span>
                 </td>
                 <td>

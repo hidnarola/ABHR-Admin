@@ -70,8 +70,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
               if (this.users.length > 0) {
                 this.isCols = true;
                 $('.dataTables_wrapper').css('display', 'block');
-              }
-              else {
+              } else {
                 if (dataTablesParameters['search']['value'] !== '' && dataTablesParameters['search']['value'] !== null) {
                   this.isCols = true;
                 } else {
@@ -89,6 +88,7 @@ export class UsersComponent implements OnInit, AfterViewInit, OnDestroy {
                 recordsFiltered: res['result']['recordsTotal'],
                 data: []
               });
+              window.scrollTo(0, 0);
             });
           }, 1000);
         },

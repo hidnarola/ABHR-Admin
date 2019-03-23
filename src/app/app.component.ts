@@ -31,14 +31,17 @@ export class AppComponent {
       this.loading = res;
     });
     // sets an idle timeout of 15 min
-    idle.setIdle(900);
+    idle.setIdle(840);
+    // idle.setIdle(20);
     // sets a timeout period of 15 mins
-    idle.setTimeout(900);
+    idle.setTimeout(840);
+    // idle.setTimeout(20);
     // sets inturrepts like scroll, keyup-down, mouse wheel, mouse down
     idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
 
     idle.onIdleEnd.subscribe(() => {
       this.idleState = 'NO_LONGER_IDLE';
+      this.reset();
     });
     idle.onTimeout.subscribe(() => {
       this.idleState = 'TIMED_OUT';
@@ -46,26 +49,40 @@ export class AppComponent {
       if (user != null && user !== undefined) {
         this.router.navigate(['/admin/login']);
         localStorage.clear();
-      } else { }
+        this.reset();
+        // console.log('in tiomeout  => ');
+      } else {
+        // this.reset();
+
+        // console.log('login else => ');
+      }
       if (company != null && company !== undefined) {
         console.log('i am company => ');
         this.router.navigate(['/company/login']);
         localStorage.clear();
-      } else { }
+        this.reset();
+      } else {
+        console.log('login else => ');
+      }
     });
 
     idle.onIdleStart.subscribe(() => this.idleState = 'You\'ve gone idle!');
+    this.reset();
+
     idle.onTimeoutWarning.subscribe((countdown) => this.idleState = 'You will time out in ' + countdown + ' seconds!');
 
     // sets the ping interval to 15 seconds
     keepalive.interval(15);
 
     keepalive.onPing.subscribe(() => this.lastPing = new Date());
+    // console.log('this.lastPing => ', this.lastPing);
 
-    this.reset();
+    // console.log('this.idleState => ', this.idleState);
+
   }
 
   reset() {
+    console.log('in reset => ');
     this.idle.watch();
     this.idleState = 'Started.';
     this.timeOut = false;

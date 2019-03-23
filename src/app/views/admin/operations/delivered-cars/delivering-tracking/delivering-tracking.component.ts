@@ -46,23 +46,13 @@ export class DeliveringTrackingComponent implements OnInit, AfterViewInit, OnDes
     },
   };
   constructor(
-    // private socket: SocketClass,
     private router: Router, private route: ActivatedRoute
   ) { }
 
-  markers: Marker[] = [
-  ];
-  clickedMarker(label: string, index: number) {
-    // console.log(`clicked the marker: ${label || index}`);
-  }
+  markers: Marker[] = [];
+  clickedMarker(label: string, index: number) { }
 
-  mapClicked($event: MouseEvent) {
-    // this.markers.push({
-    //   lat: $event.coords.lat,
-    //   lng: $event.coords.lng,
-    //   draggable: true
-    // });
-  }
+  mapClicked($event: MouseEvent) { }
 
   markerDragEnd(m: Marker, $event: MouseEvent) {
     console.log('dragEnd', m, $event);
@@ -82,48 +72,30 @@ export class DeliveringTrackingComponent implements OnInit, AfterViewInit, OnDes
     this.socket = io.connect(environment.socketUrl);
     this.joinGroup(this.bookingId, this.userId, 'user');
     this.getMessage();
-    // this.sendMessage('KP is here.');
     this.getCurrentPosition();
-    // this.setCurrentPosition();
   }
   ngAfterViewInit(): void { }
 
   setCurrentPosition() {
     const _lng = this.lng;
     const _lat = this.lat;
-    // setInterval(() => {
-    // _lng = _lng + Math.random() / 10000;
-    // _lat = _lat - Math.random() / 10000;
     const marker = [{
       lat: _lat,
       lng: _lng,
       iconUrl: 'assets/images/icon/car-placeholder-30-blue.png',
       draggable: false
     }];
-    // this.lat = _lat;
-    // this.lng = _lng;
     this.markers = marker;
-    // }, 2000);
   }
 
-  // public change(event: any) {
-  //   this.waypoints = event.request.waypoints;
 
-  //   // this.sendMessage();
-  //   // console.log('message => ', this.getMessage());
-
-  // }
   getDirection(origin, destination) {
-    // 21.1968399,72.7789305   21.1205296,72.7409003   21.1298389,73.0863185
-    // 21.195531,72.7906113 21.2050025,72.8384902
     console.log('getDirection => ');
     this.origin = { lat: origin.latitude, lng: origin.longitude };
     this.destination = { lat: destination.latitude, lng: destination.longitude };
     console.log('this.origin => ', this.origin);
     console.log('this.destination => ', this.destination);
     console.log('markers => ', this.markers);
-    // this.origin = 'Narola Infotech';
-    // this.destination = 'Railway Station';
   }
   leftGroup() {
     this.socket.emit('LeftGroup');
@@ -148,9 +120,7 @@ export class DeliveringTrackingComponent implements OnInit, AfterViewInit, OnDes
   }
 
   getMessage() {
-    // console.log('im getMSG   => ', 1);
     this.socket.on('Joined', (data: any) => {
-      // this.socket.on('test', (data: any) => {
       console.log('Joined data => ', data);
       this.lat = data.last_location.latitude;
       this.lng = data.last_location.longitude;

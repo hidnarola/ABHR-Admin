@@ -1,3 +1,8 @@
 .form-group label{
     color: #666 !important;
 }
+img#couponPreview {
+    /* display: none; */
+    z-index: -100;
+    position: absolute;
+}

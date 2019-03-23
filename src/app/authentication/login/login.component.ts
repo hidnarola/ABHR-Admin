@@ -18,6 +18,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     public formData: any;
     public alerts = [];
     public CurrentAdmin;
+    public err;
 
     private subscription: Subscription;
     message: any;
@@ -27,9 +28,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
         private formBuilder: FormBuilder,
         private messageService: MessageService) {
         const urlSegment = this.router.url;
-        console.log('urlsegment in login==>', urlSegment);
         const array = urlSegment.split('/');
-        console.log(array[1]);
         this.CurrentAdmin = array[1];
     }
 
@@ -56,7 +55,11 @@ export class LoginComponent implements OnInit, AfterViewInit {
                     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Login Successfully' });
                     this.router.navigate(['/admin/dashboard']);
                 }, err => {
+                    console.log('admin error => ');
                     err = err.error;
+                    console.log('err.error => ', err.error);
+                    console.log('this.err => ', this.err);
+                    console.log('err[] => ');
                     this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
                 });
             } else if (this.CurrentAdmin === 'company') {
@@ -68,10 +71,12 @@ export class LoginComponent implements OnInit, AfterViewInit {
                     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Login Successfully' });
                     this.router.navigate(['/company/dashboard']);
                 }, err => {
-                    err = err.error;
+                    this.err = err.error;
                     this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
                 });
             }
+            console.log(' empty=> ');
+            console.log('err => ', this.err);
             this.submitted = false;
             this.loginForm.controls['password'].setValue('');
             this.loginForm.controls['email'].setValue('');

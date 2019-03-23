@@ -79,9 +79,10 @@ export class AddEditCarComponent implements OnInit {
 
     if (this.carId !== undefined && this.carId !== '' && this.carId != null) {
       this.service.post('admin/company/car/details/', { car_id: this.carId }).subscribe(resp => {
-        this.carDetails = resp['data'].carDetail;
-        if (this.carDetails.is_available !== undefined) {
-          this.DateArray = this.carDetails.is_available;
+        this.carDetails = resp['data'][0];
+        console.log('this.carDetails => ', this.carDetails);
+        if (this.carDetails.availableData !== undefined) {
+          this.DateArray = this.carDetails.availableData;
           console.log('this.DateArray => ', this.DateArray);
           const _selectDate = [];
           this.DateArray.forEach(element => {

@@ -44,16 +44,18 @@ export class CarDetailsComponent implements OnInit {
 
   CarDetails() {
     this.service.post('admin/company/car/details/', { car_id: this.carId }).subscribe(res => {
-      this.carDetails = res['data'].carDetail;
-      console.log('this.carDetails => ', this.carDetails);
-      if (this.carDetails.is_available !== undefined) {
-        var DateArray = this.carDetails.is_available;
+      this.carDetails = res['data'][0];
+      console.log('this.carDetails => ', this.carDetails.availableData);
+      if (this.carDetails.availableData !== undefined) {
+        var DateArray = this.carDetails.availableData;
         const _selectDate = [];
         DateArray.forEach(element => {
           if (element.availability.length !== 0) {
             element.availability.forEach(ele => {
-              let Dateobj = new Date(ele);
-              _selectDate.push(Dateobj);
+              if (ele !== null) {
+                let Dateobj = new Date(ele);
+                _selectDate.push(Dateobj);
+              }
             });
           }
         });

@@ -15,13 +15,16 @@ export class ArticleDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private service: CrudService,
+    private spinner: NgxSpinnerService,
   ) {
+    this.spinner.show();
     this.route.params.subscribe(params => { this.Id = params.id; });
   }
 
   ngOnInit() {
     this.service.post('admin/help/details/', { article_id: this.Id }).subscribe(res => {
       this.Detail = res['data'];
+      this.spinner.hide();
     }, error => {
     });
   }

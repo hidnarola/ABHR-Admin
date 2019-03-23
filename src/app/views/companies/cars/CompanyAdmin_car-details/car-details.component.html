@@ -21,10 +21,10 @@
             <b>licence plate : </b> <span>{{ carDetails.licence_plate }}</span>
           </div>
           <div class="cars-dtl-box-inr">
-            <b>rent price : </b> <span>{{ carDetails.rent_price }}</span>
+            <b>rent price : </b> <span>AED {{ carDetails.rent_price }}</span>
           </div>
           <div class="cars-dtl-box-inr">
-            <b>deposit : </b> <span>{{ carDetails.deposit ? carDetails.deposit : '-' }}</span>
+            <b>deposit : </b> <span>AED {{ carDetails.deposit ? carDetails.deposit : '0' }}</span>
           </div>
           <div class="cars-dtl-box-inr">
             <b>No Of Persons : </b> <span>{{carDetails.no_of_person}}</span>
@@ -122,7 +122,7 @@
                 </td>
                 <td>
                   <span>
-                    {{ item.booking_rent }}
+                    AED {{ item.booking_rent }}
                   </span>
                 </td>
                 <td>
