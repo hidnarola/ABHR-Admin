@@ -2,18 +2,12 @@ import { Component, OnInit, Renderer, ViewChild, ViewEncapsulation, AfterViewIni
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import { ActivatedRoute } from '@angular/router';
-// service
 import { DataSharingService } from '../../../shared/services/data-sharing.service';
 import { CrudService } from '../../../shared/services/crud.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-// popup-forms
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-// model
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-// primng
+import { FormGroup } from '@angular/forms';
 import { ConfirmationService, Message } from 'primeng/api';
-// alert
 import { MessageService } from 'primeng/api';
 import { Subscription } from 'rxjs';
 
@@ -47,12 +41,8 @@ export class CarsComponent implements OnInit, AfterViewInit {
   constructor(
     public renderer: Renderer,
     public service: CrudService,
-    private dataShare: DataSharingService,
     public router: Router,
-    private route: ActivatedRoute,
     private confirmationService: ConfirmationService,
-    // private modalService: NgbModal,
-    // private formBuilder: FormBuilder,
     private spinner: NgxSpinnerService,
     private messageService: MessageService,
   ) {
@@ -70,12 +60,9 @@ export class CarsComponent implements OnInit, AfterViewInit {
       serverSide: true,
       ordering: true,
       order: [[5, 'desc']],
-      // order: [[4, 'desc']],
       language: { 'processing': '' },
       responsive: true,
       destroy: true,
-      // scrollX: true,
-      // scrollCollapse: true,
       autoWidth: false,
       initComplete: function (settings, json) {
         $('.custom-datatable').wrap('<div style="overflow:auto; width:100%;position:relative;"></div>');

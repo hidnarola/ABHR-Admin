@@ -1,14 +1,12 @@
 import * as $ from 'jquery';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CommonModule, LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
-
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FullComponent } from './layouts/full/full.component';
 import { BlankComponent } from './layouts/blank/blank.component';
-// shared component
 import { NavigationComponent } from './shared/header-navigation/navigation.component';
 import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import { BreadcrumbComponent } from './shared/breadcrumb/breadcrumb.component';
@@ -16,24 +14,16 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SpinnerComponent } from './shared/spinner.component';
-
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
-// NGX Modules
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ModalDialogModule } from 'ngx-modal-dialog';
-
-// Prime Modules
 import { ToastModule } from 'primeng/toast';
-// import { CalendarModule } from 'primeng/calendar';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
-
-// third party modules
 import { DataTablesModule } from 'angular-datatables';
 import { Constant } from './shared/constant/constant';
 import { DataSharingService } from './shared/services/data-sharing.service';
@@ -48,7 +38,8 @@ import { CompanyAdminStatusResolve } from './shared/Resolve/company-admin-status
 import { TimeAgoPipe } from 'time-ago-pipe';
 import { SuperAdminCheckPassResolve } from './shared/Resolve/super-admin-checkpass';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
-import { BsDropdownModule } from 'ngx-bootstrap'
+import { BsDropdownModule } from 'ngx-bootstrap';
+import { PDFExportModule } from '@progress/kendo-angular-pdf-export';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -97,6 +88,7 @@ const APP_RESOLVER = [
     NgIdleKeepaliveModule.forRoot(),
     BsDropdownModule.forRoot(),
     NgxIntlTelInputModule,
+    PDFExportModule
   ],
   providers: [
     Constant,

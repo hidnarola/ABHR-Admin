@@ -27,8 +27,53 @@
 
   </app-root>
   <script src="https://apis.google.com/js/platform.js"></script>
-  <script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyBpm9w9TINRaRqoSi8yriMMZwtcBaPkukM&libraries=places&language=en-US"></script>
+  <script type="text/javascript"
+    src="https://maps.google.com/maps/api/js?key=AIzaSyBpm9w9TINRaRqoSi8yriMMZwtcBaPkukM&libraries=places&language=en-US"></script>
 
 </body>
+<script type="text/javascript">
+  function idleTimer() {
+    var t;
+    window.onmousemove = resetTimer; // catches mouse movements
+    window.onmousedown = resetTimer; // catches mouse movements
+    window.onclick = resetTimer;     // catches mouse clicks
+    window.onscroll = resetTimer;    // catches scrolling
+    window.onkeypress = resetTimer;  //catches keyboard actions
+
+    if (window.localStorage.getItem('token')) {
+      if (Number(window.localStorage.getItem('sessionTimeout')) < Number(Math.floor(Date.now() / 1000))) {
+        logout();
+      }
+    }
+
+
+    function logout() {
+      var first = $(location).attr('pathname');
+      first.indexOf(1);
+      first.toLowerCase();
+      first = first.split("/")[1];
+      if (window.localStorage.getItem('token')) {
+        window.location.href = '/' + first + '/login';  //Adapt to actual logout script
+        window.localStorage.clear();
+      }
+    }
+
+    function reload() {
+      window.location = self.location.href;  //Reloads the current page
+    }
+
+    function resetTimer() {
+      clearTimeout(t);
+      if (window.localStorage.getItem('token')) {
+        var dt = new Date();
+        dt.setMinutes(dt.getMinutes() + 15);
+
+        window.localStorage.setItem('sessionTimeout', Math.floor(dt.getTime() / 1000));
+      }
+      t = setTimeout(logout, 1000 * 60 * 15);  // time is in milliseconds (1000 is 1 second)
+    }
+  }
+  idleTimer();
+</script>
 
 </html>

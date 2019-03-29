@@ -118,8 +118,10 @@ export class AddEditCarComponent implements OnInit {
 
             if (element.availability.length !== 0) {
               element.availability.forEach(ele => {
-                let Dateobj = new Date(ele);
-                _selectDate.push(Dateobj);
+                if (ele !== null) {
+                  let Dateobj = new Date(ele);
+                  _selectDate.push(Dateobj);
+                }
               });
             }
           });
@@ -205,7 +207,25 @@ export class AddEditCarComponent implements OnInit {
       deposit: Number,
       age_of_car: Number
     };
+
+
+
+
+
+    // var check = moment().add(15, 'minute');
+    // console.log('check => ', check);
+    // var currentTS = moment().unix();
+    // console.log('currentTS => ', currentTS);
+    // var LoginTimeStamp = moment(check).unix();
+    // console.log('loginTImet => ', LoginTimeStamp);
+    // // console.log('diff => ', currentTS.diff(LoginTimeStamp, 'minutes'));
+
+
+
   }
+
+
+
 
   getDaysInMonth(m, y) {
     const toDay = new Date();

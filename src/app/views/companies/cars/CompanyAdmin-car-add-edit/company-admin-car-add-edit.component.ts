@@ -109,8 +109,10 @@ export class CarAddEditComponent implements OnInit {
 
             if (element.availability.length !== 0) {
               element.availability.forEach(ele => {
-                let Dateobj = new Date(ele);
-                _selectDate.push(Dateobj);
+                if (ele !== null) {
+                  let Dateobj = new Date(ele);
+                  _selectDate.push(Dateobj);
+                }
               });
             }
           });

@@ -1,26 +1,17 @@
 import {
-  Component, OnInit, Renderer, ViewChild, OnDestroy, AfterViewInit, ElementRef,
-  ChangeDetectorRef
+  Component, OnInit, Renderer, ViewChild, OnDestroy, AfterViewInit, ElementRef
 } from '@angular/core';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
-
 import { NgxSpinnerService } from 'ngx-spinner';
-// services
 import { CrudService } from '../../../../shared/services/crud.service';
-import { DataSharingService } from '../../../../shared/services/data-sharing.service';
-
-// model
-import { NgbModal, ModalDismissReasons, NgbActiveModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
-
-// popup-forms
+import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-
-// alert
-import { MessageService, ConfirmationService } from 'primeng/api';
+import { MessageService, ConfirmationService, SelectItem } from 'primeng/api';
 import { Subscription } from 'rxjs';
+import { cc } from '../../../../shared/constant/country_code';
 
 @Component({
   selector: 'app-company-details',
@@ -29,6 +20,11 @@ import { Subscription } from 'rxjs';
 })
 export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
 
+  @ViewChild(DataTableDirective)
+  dtElementcar: DataTableDirective;
+  dtElementrental: DataTableDirective;
+  dtOptions: DataTables.Settings = {};
+  dtTrigger: Subject<any> = new Subject();
   public index;
   public viewData;
   public userId;
@@ -36,8 +32,6 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
   public carData;
   public rentalData;
   isCols: boolean;
-
-  private subscription: Subscription;
   message: any;
   AddEditForm: FormGroup;
   submitted = false;
@@ -47,21 +41,21 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
   public title = 'Add Company';
   isLoading: boolean;
   public numberErr: boolean = false;
-
-  @ViewChild(DataTableDirective)
-  dtElementcar: DataTableDirective;
-  dtElementrental: DataTableDirective;
-  dtOptions: DataTables.Settings = {};
-  dtTrigger: Subject<any> = new Subject();
   public searchElementRef: ElementRef;
   public header;
   public emailData: any;
+  public phoneData: any;
   public nameData: any;
   userSettings: any = {};
   public company_address: any;
-  public service_location = []; // [<longitude>, <latitude>]
+  public service_location = [];
   public pageNumber;
   public totalRecords;
+  public countryCode: SelectItem[];
+  selectedCc: string;
+  public emailErrMsg;
+  public phoneErrMsg;
+
   constructor(
     public renderer: Renderer,
     private route: ActivatedRoute,
@@ -90,13 +84,15 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
       description: ['', Validators.compose([Validators.required, this.noWhitespaceValidator])],
       site_url: ['', Validators.compose([Validators.required,
       Validators.pattern('^(https?:\/\/)?[0-9a-zA-Z]+\.[-_0-9a-zA-Z]+\.[0-9a-zA-Z]+$')])],
-      phone_number: ['', Validators.compose([Validators.pattern('^[0-9]{10,20}$')])],
+      phone_number: ['', Validators.compose([Validators.pattern('^[0-9]{10,20}$'), this.uniquePhoneValidator])],
+      country_code: [''],
       email: ['', Validators.compose([Validators.required, Validators.email, Validators.pattern(pattern), this.uniqueEmailValidator])],
     });
     this.formData = {
       name: String,
       description: String,
       phone_number: Number,
+      country_code: Number,
       email: String,
       site_url: String
     };
@@ -106,6 +102,7 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
       city: String,
       address: String
     };
+    this.countryCode = cc;
   }
 
   noWhitespaceValidator(control: FormControl) {
@@ -125,10 +122,36 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
         this.emailData = { 'email': control.value ? control.value.trim() : '', 'company_id': this.userId };
         return this.service.post('admin/company/checkemail', this.emailData).subscribe(res => {
           if (res['status'] === 'success') {
+            this.emailErrMsg = res['message'];
             this.f.email.setErrors({ 'unique': true });
             return;
           } else {
             this.f.email.setErrors(null);
+          }
+        });
+      }
+    }
+  }
+
+  public uniquePhoneValidator = (control: FormControl) => {
+    let isWhitespacePhone;
+    if (isWhitespacePhone = (control.value || '').trim().length !== 0) {
+      const pattern = new RegExp('^[0-9]{10,20}$');
+      let result = pattern.test(control.value);
+      if (!result) {
+        return { 'pattern': true };
+      } else {
+        this.phoneData = { 'phone_number': control.value ? control.value.trim() : '', 'company_id': this.userId };
+        return this.service.post('admin/company/checkphone', this.phoneData).subscribe(res => {
+          console.log('res-status => ', res['status']);
+          console.log('res => ', res);
+          if (res['status'] === 'success') {
+            this.phoneErrMsg = res['message'];
+            console.log('this.phoneErrMsg => ', this.phoneErrMsg);
+            this.f.phone_number.setErrors({ 'unique': true });
+            return;
+          } else {
+            this.f.phone_number.setErrors(null);
           }
         });
       }
@@ -172,6 +195,10 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
       this.formData.company_id = this.userId;
       this.formData.company_address = this.company_address;
       this.formData.service_location = this.service_location;
+      if (this.formData.phone_number === null || this.formData.phone_number === '' || this.formData.phone_number === 'null') {
+        this.formData.country_code = null;
+        console.log('number null => ');
+      }
       this.service.put('admin/company/update', this.formData).subscribe(res => {
         this.userDetails = this.formData;
         this.isLoading = true;
@@ -189,6 +216,7 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
 
   UserDetails() {
     this.service.get('admin/company/details/' + this.userId).subscribe(res => {
+      console.log('res[] => ', res['data']);
       if (res['data'] !== null) {
         this.userDetails = res['data'];
       } else {
@@ -200,6 +228,7 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
 
   // model
   open2(content, userDetails) {
+    console.log('userDetails => ', userDetails);
     this.isLoading = false;
     this.service_location = [];
     this.userSettings.inputPlaceholderText = userDetails.company_address.address;
@@ -210,6 +239,7 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
     this.AddEditForm.controls['email'].setValue(userDetails.email);
     this.AddEditForm.controls['site_url'].setValue(userDetails.site_url);
     this.AddEditForm.controls['phone_number'].setValue(userDetails.phone_number);
+    this.AddEditForm.controls['country_code'].setValue(userDetails.country_code);
     const options: NgbModalOptions = {
       keyboard: false,
       backdrop: 'static'
@@ -250,9 +280,6 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
       if (idx !== 5) {
         $(table.column(idx).header()).append('<span class="sort-icon"/>');
       }
-      // if (idx !== 4) {
-      //   $(table.column(idx).header()).append('<span class="sort-icon"/>');
-      // }
     });
   }
 
@@ -269,8 +296,6 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
       language: { 'processing': '' },
       responsive: true,
       destroy: true,
-      // scrollX: true,
-      // scrollCollapse: true,
       autoWidth: false,
       initComplete: function (settings, json) {
         $('.custom-datatable').wrap('<div style="overflow:auto; width:100%;position:relative;"></div>');

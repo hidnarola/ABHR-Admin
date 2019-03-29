@@ -11,18 +11,38 @@
                     <div class="ml-auto align-self-center">
                         <ul class="list-inline m-b-0">
                             <li>
-                                <h6 class="text-muted text-success"><i class="fa fa-circle font-10 m-r-10 "></i>Site A</h6>
+                                <h6 class="text-muted text-success"><i class="fa fa-circle font-10 m-r-10 "></i>
+                                    Total Rentals
+                                </h6>
                             </li>
                             <li>
-                                <h6 class="text-muted text-info"><i class="fa fa-circle font-10 m-r-10"></i>Site B</h6>
+                                <h6 class="text-muted text-info"><i class="fa fa-circle font-10 m-r-10"></i>
+                                    Total Transaction
+                                </h6>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <div style="height:300px;">
-                    <canvas baseChart height="130" [datasets]="lineChartData2" [labels]="lineChartLabels2" [options]="lineChartOptions"
-                        [colors]="lineChartColors" [legend]="lineChartLegend2" [chartType]="lineChartType">
-                    </canvas>
+                <div style="height:300px;" *ngIf="!noRecord" class="chartAreaWrapper">
+                    <div class="canvas-fixed-width">
+                        <canvas baseChart height="300" [datasets]="lineChartData2" [labels]="lineChartLabels2"
+                            [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend2"
+                            [chartType]="lineChartType">
+                        </canvas>
+                    </div>
+                </div>
+                <div style="height:300px;" *ngIf="noRecord" class="no-retal-box" class="chartAreaWrapper">
+                    <div class="canvas-fixed-width">
+                        <div class="no-retal-panel">
+                            <div class="ui-g">
+                                <div class="ui-g-12">No car rented yet!</div>
+                            </div>
+                        </div>
+                        <canvas baseChart height="300" [datasets]="lineChartData2" [labels]="lineChartLabels2"
+                            [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend2"
+                            [chartType]="lineChartType">
+                        </canvas>
+                    </div>
                 </div>
             </div>
         </div>

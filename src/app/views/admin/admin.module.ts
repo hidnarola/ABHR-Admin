@@ -68,7 +68,8 @@ import { ReportedCarDetailComponent } from './feedback/reported-cars/reported-ca
 import { SuperAdminCheckPassResolve } from '../../shared/Resolve/super-admin-checkpass';
 import { DialogModule } from 'primeng/dialog';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
-import { BsDropdownModule } from 'ngx-bootstrap'
+import { BsDropdownModule } from 'ngx-bootstrap';
+import { InvoicePdfComponent } from './transaction/admin-invoice/invoice-pdf/invoice-pdf.component';
 
 const AdminRoutes: Routes = [
   {
@@ -661,6 +662,7 @@ const AdminRoutes: Routes = [
     FeedbackCategoryComponent,
     ReportedCarsComponent,
     ReportedCarDetailComponent,
+    InvoicePdfComponent,
   ],
   providers: [
     // SocketClass

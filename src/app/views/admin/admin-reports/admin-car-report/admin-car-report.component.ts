@@ -106,13 +106,17 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
               console.log('response====>', res);
               this.reports = await res['result']['data'];
               // this.reports = [];
-              console.log('this.reports in cars => ', this.reports);
               this.totalRecords = res['result']['recordsTotal'];
               this.spinner.hide();
+              console.log('dataTablesParameters[search][value] => ', dataTablesParameters['search']['value']);
               if (this.reports.length > 0) {
                 this.isCols = true;
                 $('.dataTables_wrapper').css('display', 'block');
-              } else if (this.reports.length === 0 && this.rangeDates === undefined) {
+              } else if (dataTablesParameters['search']['value'] !== null) {
+                console.log('search value => ');
+                this.isCols = true;
+              } else if (this.reports.length === 0 &&
+                this.rangeDates === undefined) {
                 console.log('new condition => ');
                 this.isCols = false;
               } else {
@@ -122,6 +126,7 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
                   ((dataTablesParameters['selectFromDate'] && dataTablesParameters['selectToDate']) !== null)) {
                   this.isCols = true;
                 } else if (this.rangeDates) {
+                  console.log('with rangedates => ');
                   this.isCols = true;
                 } else {
                   console.log('filtered length 0 => ');

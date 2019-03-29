@@ -1,10 +1,11 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, Validators, FormControl } from '@angular/forms';
 import { CrudService } from '../../../shared/services/crud.service';
-import { MessageService } from 'primeng/api';
+import { MessageService, SelectItem } from 'primeng/api';
 import { Router } from '@angular/router';
-import { DataSharingService, AdminUser } from '../../../shared/services/data-sharing.service';
+import { DataSharingService, AdminUser, CompanyUser } from '../../../shared/services/data-sharing.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { cc } from '../../../shared/constant/country_code';
 
 @Component({
   selector: 'app-company-account-setting',
@@ -13,6 +14,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class CompanyAccountSettingComponent implements OnInit, AfterViewInit {
 
+  public companyU: CompanyUser;
   public adminU: AdminUser;
   public SettingForm;
   submitted = false;
@@ -22,15 +24,19 @@ export class CompanyAccountSettingComponent implements OnInit, AfterViewInit {
   isLoading: boolean;
   public UserDetails;
   public emailData: any;
+  public phoneData: any;
   public nameData: any;
   public companyId;
   public errMsg;
+  public phoneErrMsg;
   public numberErr: boolean = false;
   public company_address: any;
   userSettings: any = {};
   public placeData: any;
   public service_location = []; // [<longitude>, <latitude>]
   public addressError: boolean = false;
+  public countryCode: SelectItem[];
+  selectedCc: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -40,6 +46,7 @@ export class CompanyAccountSettingComponent implements OnInit, AfterViewInit {
     private datashare: DataSharingService,
     private spinner: NgxSpinnerService
   ) {
+    this.countryCode = cc;
     const company = JSON.parse(localStorage.getItem('company-admin'));
     this.companyId = company._id;
 
@@ -49,7 +56,8 @@ export class CompanyAccountSettingComponent implements OnInit, AfterViewInit {
       description: ['', Validators.compose([Validators.required, this.noWhitespaceValidator])],
       site_url: ['', Validators.compose([Validators.required,
       Validators.pattern('^(https?:\/\/)?[0-9a-zA-Z]+\.[-_0-9a-zA-Z]+\.[0-9a-zA-Z]+$')])],
-      phone_number: ['', Validators.compose([Validators.pattern('^[0-9]{10,20}$')])],
+      phone_number: ['', Validators.compose([Validators.pattern('^[0-9]{10,20}$'), this.uniquePhoneValidator])],
+      country_code: [''],
       email: ['', Validators.compose([Validators.required, Validators.email, Validators.pattern(pattern), this.uniqueEmailValidator])]
     });
     this.formData = {
@@ -57,6 +65,7 @@ export class CompanyAccountSettingComponent implements OnInit, AfterViewInit {
       description: String,
       site_url: String,
       phone_number: String,
+      country_code: Number,
       email: String
     };
     this.company_address = {
@@ -72,6 +81,13 @@ export class CompanyAccountSettingComponent implements OnInit, AfterViewInit {
     if (this.Id !== undefined && this.Id !== '' && this.Id != null) {
       this.service.get('company/details/' + this.Id).subscribe(resp => {
         this.UserDetails = resp['data'].data;
+        if (typeof this.UserDetails.country_code === 'undefined' || this.UserDetails.country_code === 'null' ||
+          this.UserDetails.country_code === '') {
+          this.UserDetails.country_code = '971';
+          this.SettingForm.controls['country_code'].setValue('971');
+        } else {
+          this.SettingForm.controls['country_code'].setValue(this.UserDetails.country_code);
+        }
         this.spinner.hide();
         this.userSettings.inputPlaceholderText = this.UserDetails.company_address.address;
         let addressObj = { response: true, data: this.UserDetails.company_address.address };
@@ -118,6 +134,28 @@ export class CompanyAccountSettingComponent implements OnInit, AfterViewInit {
     }
   }
 
+  public uniquePhoneValidator = (control: FormControl) => {
+    let isWhitespacePhone;
+    if (isWhitespacePhone = (control.value || '').trim().length !== 0) {
+      const pattern = new RegExp('^[0-9]{10,20}$');
+      let result = pattern.test(control.value);
+      if (!result) {
+        return { 'pattern': true };
+      } else {
+        this.phoneData = { 'phone_number': control.value ? control.value.trim() : '', 'company_id': this.companyId };
+        return this.service.post('admin/company/checkphone', this.phoneData).subscribe(res => {
+          if (res['status'] === 'success') {
+            this.phoneErrMsg = res['message'];
+            this.f.phone_number.setErrors({ 'unique': true });
+            return;
+          } else {
+            this.f.phone_number.setErrors(null);
+          }
+        });
+      }
+    }
+  }
+
   public uniqueNameValidator = (control: FormControl) => {
     let isWhitespace2;
     if ((isWhitespace2 = (control.value || '').trim().length === 1) || (isWhitespace2 = (control.value || '').trim().length === 0)) {
@@ -150,24 +188,29 @@ export class CompanyAccountSettingComponent implements OnInit, AfterViewInit {
       }
     }
     if (!this.SettingForm.invalid) {
-      // this.isLoading = true;
+      this.isLoading = true;
+      if (this.SettingForm.value.phone_number === 'null' || this.SettingForm.value.phone_number === '') {
+        this.SettingForm.controls['country_code'].setValue('');
+      }
       this.formData = this.SettingForm.value;
       this.formData.email = this.formData.email.trim();
       this.formData.name = this.formData.name.trim();
-      this.formData.phone_number = this.formData.phone_number.trim();
+      if (this.formData.phone_number !== null) {
+        this.formData.phone_number = this.formData.phone_number.trim();
+      }
       this.formData.company_address = this.company_address;
       this.formData.service_location = this.service_location;
       this.formData.company_id = this.Id;
       this.service.put('company/update', this.formData).subscribe(res => {
         this.isLoading = false;
         localStorage.setItem('company-admin', JSON.stringify(res['result'].data));
-        this.adminU = {
-          first_name: '',
-          last_name: '',
+        this.companyU = {
+          name: '',
+          company_address: '',
           phone_number: '',
           email: '',
         };
-        this.datashare.changeAdminUser(this.adminU);
+        this.datashare.changeCompanyUser(this.companyU);
         this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
         this.router.navigate(['/company/dashboard']);
       }, err => {
@@ -180,14 +223,7 @@ export class CompanyAccountSettingComponent implements OnInit, AfterViewInit {
 
   ngOnInit() { }
 
-  ngAfterViewInit() {
-    // this.userSettings = {
-    //   inputPlaceholderText: 'Enter Address',
-    //   showSearchButton: false,
-    // };
-    // this.userSettings = Object.assign({}, this.userSettings);
-    // Very Important Line to add after modifying settings.
-  }
+  ngAfterViewInit() { }
 
   autoCompleteCallback1(selectedData: any) {
     if (selectedData.response) {

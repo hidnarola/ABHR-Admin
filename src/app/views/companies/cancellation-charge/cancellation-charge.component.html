@@ -13,13 +13,13 @@
     <form name="CancellationForm" (ngSubmit)="CancellationForm.form.valid && onSubmit()" #CancellationForm="ngForm"
       (keydown.enter)="$event.preventDefault()" *ngIf="checked" class="mt-15">
       <div class="row">
-        <div class="col-md-4"><label class="required">Hours :</label></div>
-        <div class="col-md-4"><label class="required">Rate(%) :</label></div>
+        <div class="col-md-4 col-sm-4 col-5"><label class="required">Hours :</label></div>
+        <div class="col-md-4 col-sm-4 col-5"><label class="required">Rate(%) :</label></div>
       </div>
 
       <div *ngFor="let item of submitArray; let i = index">
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-md-4 col-sm-4 col-5">
             <div class="form-group">
               <input class="form-control" placeholder="Enter Hours" type="number" required="true"
                 name="hours{{item._id}}" (keypress)="restrictAlphabets($event)" onkeypress="return event.charCode >= 48"
@@ -31,7 +31,7 @@
             </div>
           </div>
 
-          <div class="col-md-4">
+          <div class="col-md-4 col-sm-4 col-5">
             <div class="form-group">
               <input class="form-control" placeholder="Enter Rate" type="number" (keypress)="restrictAlphabets($event)"
                 min="1" required="" maxlength="3" name="rate{{item._id}}" id="rateInput"
@@ -50,12 +50,13 @@
             </div>
           </div>
 
-          <div class="col-md-4">
-            <button type="button" *ngIf="i==0" class="btn btn-primary custom-add-btn mb-25" (click)="addNext()">
+          <div class="col-md-4 col-sm-4 col-2">
+            <button type="button" *ngIf="i==0" class="btn btn-primary custom-add-btn cancellation-btn mb-25"
+              (click)="addNext()">
               <i class="fa fa-plus" aria-hidden="true"></i> Add
             </button>
-            <button type="button" *ngIf="i>0" class="btn btn-primary custom-add-btn mb-25" (click)="deleteThis(i)"> <i
-                class="fa fa-minus" aria-hidden="true"></i> Remove</button>
+            <button type="button" *ngIf="i>0" class="btn btn-primary custom-add-btn cancellation-btn mb-25"
+              (click)="deleteThis(i)"> <i class="fa fa-minus" aria-hidden="true"></i> Remove</button>
           </div>
         </div>
       </div>

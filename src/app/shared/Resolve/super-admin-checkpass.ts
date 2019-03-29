@@ -1,7 +1,7 @@
-import { Injectable } from "@angular/core";
-import { Resolve, ActivatedRouteSnapshot, Router } from "@angular/router";
-import { MessageService } from "primeng/api";
-import { CrudService } from "../services/crud.service";
+import { Injectable } from '@angular/core';
+import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
+import { CrudService } from '../services/crud.service';
 
 @Injectable()
 export class SuperAdminCheckPassResolve implements Resolve<any> {

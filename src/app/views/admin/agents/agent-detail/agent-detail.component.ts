@@ -3,23 +3,12 @@ import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
-
 import { NgxSpinnerService } from 'ngx-spinner';
-
-// services
 import { CrudService } from '../../../../shared/services/crud.service';
-import { DataSharingService } from '../../../../shared/services/data-sharing.service';
-
-// model
-import { NgbModal, ModalDismissReasons, NgbActiveModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
-
-// popup-forms
+import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-
-// alert
-import { MessageService } from 'primeng/api';
-import { Subscription } from 'rxjs';
-
+import { MessageService, SelectItem } from 'primeng/api';
+import { cc } from '../../../../shared/constant/country_code';
 
 @Component({
   selector: 'app-agent-detail',
@@ -27,21 +16,16 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./agent-detail.component.css']
 })
 export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
-
+  @ViewChild(DataTableDirective)
+  dtElement: DataTableDirective;
+  dtOptions: DataTables.Settings = {};
+  dtTrigger: Subject<any> = new Subject();
   public index;
   public viewData;
   public userId;
   public agentDetails;
   isCols: boolean;
-
-  private subscription: Subscription;
   message: any;
-
-  @ViewChild(DataTableDirective)
-  dtElement: DataTableDirective;
-  dtOptions: DataTables.Settings = {};
-  dtTrigger: Subject<any> = new Subject();
-
   AddEditForm: FormGroup;
   submitted = false;
   public formData: any;
@@ -53,10 +37,14 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   public totalRecords;
   isLoading: boolean;
   public numberErr: boolean = false;
+  public countryCode: SelectItem[];
+  selectedCc: string;
+  public phoneData: any;
+  public errMsg;
+  public phoneErrMsg;
 
   constructor(
     public renderer: Renderer,
-    private dataShare: DataSharingService,
     private route: ActivatedRoute,
     private service: CrudService,
     private modalService: NgbModal,
@@ -73,7 +61,8 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
     this.AddEditForm = this.formBuilder.group({
       first_name: ['', Validators.compose([Validators.required, this.noWhitespaceValidator])],
       last_name: ['', Validators.compose([Validators.required, this.noWhitespaceValidator])],
-      phone_number: ['', [Validators.pattern('^[0-9]{10,20}$')]],
+      phone_number: ['', [Validators.pattern('^[0-9]{10,20}$'), this.uniquePhoneValidator]],
+      country_code: [''],
       email: ['', [Validators.required, Validators.email, Validators.pattern(pattern), this.uniqueEmailValidator]],
       // deviceType: [''],
     });
@@ -82,8 +71,10 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
       last_name: String,
       // deviceType: String,
       phone_number: Number,
+      country_code: Number,
       email: String
     };
+    this.countryCode = cc;
   }
 
   noWhitespaceValidator(control: FormControl) {
@@ -105,6 +96,7 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         return this.service.post('admin/checkemail', this.emailData).subscribe(res => {
           if (res['status'] === 'success') {
+            this.errMsg = res['message'];
             this.f.email.setErrors({ 'unique': true });
             return;
           } else {
@@ -114,6 +106,32 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     }
   }
+
+  public uniquePhoneValidator = (control: FormControl) => {
+    let isWhitespacePhone;
+    if (isWhitespacePhone = (control.value || '').trim().length !== 0) {
+      const pattern = new RegExp('^[0-9]{10,20}$');
+      var result = pattern.test(control.value);
+      if (!result) {
+        return { 'pattern': true };
+      } else {
+        this.phoneData = { 'phone_number': control.value ? control.value.trim() : '' };
+        if (this.isEdit) {
+          this.phoneData = { 'phone_number': control.value ? control.value.trim() : '', 'user_id': this.userId };
+        }
+        return this.service.post('admin/checkphone', this.phoneData).subscribe(res => {
+          if (res['status'] === 'success') {
+            this.phoneErrMsg = res['message'];
+            this.f.phone_number.setErrors({ 'unique': true });
+            return;
+          } else {
+            this.f.phone_number.setErrors(null);
+          }
+        });
+      }
+    }
+  }
+
   // add-edit-popup form validation
   get f() {
     return this.AddEditForm.controls;
@@ -132,7 +150,12 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
       this.formData.email = this.formData.email.trim();
       this.formData.first_name = this.formData.first_name.trim();
       this.formData.last_name = this.formData.last_name.trim();
-      this.formData.phone_number = this.formData.phone_number.trim();
+      if (this.formData.phone_number !== null) {
+        this.formData.phone_number = this.formData.phone_number.trim();
+      } else {
+        this.formData.country_code = null;
+        // console.log('this.formData.country_code => ', this.formData.country_code);
+      }
       this.formData.user_id = this.userId;
       this.service.put('admin/agents/update', this.formData).subscribe(res => {
         this.isLoading = false;
@@ -248,6 +271,7 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
   AgentDetails() {
     this.service.get('admin/agents/details/' + this.userId).subscribe(res => {
+      console.log('res[] => ', res['user']);
       if (res['user'] !== null) {
         this.agentDetails = res['user'];
       } else {
@@ -268,6 +292,8 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // model
   open2(content, agentDetails) {
+    console.log('agentDetails => ', agentDetails);
+    console.log('agentDetails.country_code => ', agentDetails.country_code);
     this.isLoading = false;
     if (agentDetails !== 'undefined' && agentDetails) {
       this.isEdit = true;
@@ -275,6 +301,7 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
       this.AddEditForm.controls['last_name'].setValue(agentDetails.last_name);
       this.AddEditForm.controls['email'].setValue(agentDetails.email);
       this.AddEditForm.controls['phone_number'].setValue(agentDetails.phone_number);
+      this.AddEditForm.controls['country_code'].setValue(agentDetails.country_code);
       // this.AddEditForm.controls['deviceType'].setValue(agentDetails.deviceType);
     }
     const options: NgbModalOptions = {

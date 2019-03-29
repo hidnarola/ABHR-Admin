@@ -25,6 +25,7 @@ export class AdminComponent implements AfterViewInit, OnInit {
   public transactionDataArray: Array<any> = [];
   public rentalData;
   public rentalDataArray: Array<any> = [];
+  public noRecord: boolean = false;
 
   constructor(
     private service: CrudService,
@@ -35,23 +36,33 @@ export class AdminComponent implements AfterViewInit, OnInit {
     this.currentYear = new Date().getFullYear();
     this.currentMonth = new Date().getMonth();
     this.currentDate = new Date().getDate();
-    // this.currentDate = moment(new Date()).format('YYYY-MM-DD');
     this.totalDays = moment(this.currentYear + '-' + (this.currentMonth + 1), 'YYYY-MM').daysInMonth();
     this.getDaysInMOnth(this.currentMonth, this.currentYear);
 
     this.service.get('admin/dashboard/graph').subscribe(res => {
       this.graphData = res['data'];
-      this.graphData.forEach(ele => {
-        this.graphDate = moment(ele.Date).format('DD');
-        if (this.currentDate >= this.graphDate) {
-          // console.log('ele.transaction_cnt => ', 'AED' + ' ' + ele.transaction_cnt);
-          // this.transactionDataArray.push('AED' + ' ' + ele.transaction_cnt);
-          this.transactionDataArray.push(ele.transaction_cnt);
-          // console.log('this.transactionDataArray => ', this.transactionDataArray);
-        }
-        this.rentalDataArray.push(ele.rental_cnt);
-        this.spinner.hide();
-      });
+      // this.graphData = [];
+      if (this.graphData.length !== 0) {
+        this.noRecord = false;
+        this.graphData.forEach(ele => {
+          this.graphDate = moment(ele.Date).format('DD');
+          if (this.currentDate >= this.graphDate) {
+            this.transactionDataArray.push(ele.transaction_cnt);
+          }
+          this.rentalDataArray.push(ele.rental_cnt);
+          this.spinner.hide();
+        });
+      } else {
+        this.noRecord = true;
+        this.days.forEach(e => {
+          if (this.currentDate >= e) {
+            this.transactionDataArray.push(0);
+          }
+          this.rentalDataArray.push(0);
+          this.spinner.hide();
+        });
+      }
+
       const chartData = [
         {
           data: this.transactionDataArray,

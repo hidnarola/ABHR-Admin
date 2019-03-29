@@ -233,6 +233,7 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // model
   open2(content, item) {
+    this.formData.banner_image = null;
     if (item !== 'undefined' && item !== '') {
       this.title = 'Edit Coupon';
       this.isEdit = true;
@@ -387,8 +388,6 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
       if (this.formData['banner_image'] instanceof Object && typeof this.formData['banner_image'] !== 'undefined') {
         formData.append('banner_image', this.formData['banner_image'][0]);
       }
-      console.log('this.f.idCompanyAdded.value => ', this.f.idCompanyAdded.value);
-      console.log('this.idCompanyAdded => ', this.idCompanyAdded);
       if (this.f.idCompanyAdded.value === null) {
         formData.append('idCompanyAdded', 'false');
       } else {
@@ -414,6 +413,7 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
         });
       } else {
         console.log('inadd=====>');
+        console.log('formData => ', formData);
         this.title = 'Add Coupon';
         this.service.post('admin/coupon/add', formData, headers).subscribe(res => {
           this.isLoading = false;

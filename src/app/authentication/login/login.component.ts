@@ -1,10 +1,9 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-// service
 import { CrudService } from '../../shared/services/crud.service';
 import { MessageService } from 'primeng/api';
-import { Subscription } from 'rxjs';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-login',
@@ -19,8 +18,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
     public alerts = [];
     public CurrentAdmin;
     public err;
-
-    private subscription: Subscription;
     message: any;
 
     constructor(public router: Router,
@@ -50,20 +47,20 @@ export class LoginComponent implements OnInit, AfterViewInit {
             if (this.CurrentAdmin === 'admin') {
                 this.service.post('admin/login', this.loginForm.value).subscribe(res => {
                     this.submitted = false;
+                    var LoginTime = moment().add(15, 'minute');
+                    var LoginTimeStamp = moment(LoginTime).unix();
                     localStorage.setItem('admin', JSON.stringify(res['result']));
                     localStorage.setItem('token', res['token']);
+                    localStorage.setItem('sessionTimeout', JSON.stringify(LoginTimeStamp));
                     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Login Successfully' });
                     this.router.navigate(['/admin/dashboard']);
                 }, err => {
-                    console.log('admin error => ');
                     err = err.error;
-                    console.log('err.error => ', err.error);
-                    console.log('this.err => ', this.err);
-                    console.log('err[] => ');
-                    this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
+                    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Email or Password is wrong' });
                 });
-            } else if (this.CurrentAdmin === 'company') {
+            } else {
                 this.service.post('company/login', this.loginForm.value).subscribe((res) => {
+                    console.log('res => ', res);
                     console.log('value', this.loginForm.value)
                     this.submitted = false;
                     localStorage.setItem('company-admin', JSON.stringify(res['result']));
@@ -71,15 +68,16 @@ export class LoginComponent implements OnInit, AfterViewInit {
                     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Login Successfully' });
                     this.router.navigate(['/company/dashboard']);
                 }, err => {
+                    console.log('1 => ');
                     this.err = err.error;
-                    this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
+                    console.log('this.err => ', this.err);
+
+                    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Email or Password is wrong' });
                 });
             }
-            console.log(' empty=> ');
-            console.log('err => ', this.err);
             this.submitted = false;
+            console.log('else => ');
             this.loginForm.controls['password'].setValue('');
-            this.loginForm.controls['email'].setValue('');
         }
     }
 

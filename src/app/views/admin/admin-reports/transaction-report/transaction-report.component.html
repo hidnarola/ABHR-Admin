@@ -1,13 +1,12 @@
 <div class="card">
   <div class="card-body">
     <div class="row">
-      <div class="col-lg-6 col-md-6">
+      <div class="col-lg-6 col-md-12">
         <h4 class="table-header">List of Transaction Reports </h4>
       </div>
-      <div class="col-lg-6 col-md-6 justify-content-end" *ngIf="isCols">
-        <form class="form-inline form_filter" style="justify-content: flex-end;"
-          (keydown.enter)="$event.preventDefault()">
-          <div class="form-group" style="margin-left:0;">
+      <div class="col-lg-6 col-md-12 justify-content-lg-end justify-content-md-start" *ngIf="isCols">
+        <form class="form-inline form_filter" (keydown.enter)="$event.preventDefault()">
+          <div class="form-group form-filter" style="margin-left:0;">
 
             <div class="filter-wrap">
               <span class="filter_by">Filter By :</span>

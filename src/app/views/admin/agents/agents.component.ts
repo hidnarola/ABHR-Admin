@@ -1,17 +1,15 @@
-import { Component, OnInit, Renderer, ViewChild, AfterViewInit, ViewContainerRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, Renderer, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
-import { Routes, RouterModule, ActivatedRoute } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
-import { DataSharingService } from '../../../shared/services/data-sharing.service';
 import { CrudService } from '../../../shared/services/crud.service';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
-import { Subscription } from 'rxjs';
 import * as io from 'socket.io-client';
 import { cc } from '../../../shared/constant/country_code';
 import { environment } from '../../../../environments/environment';
@@ -38,6 +36,7 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
   isCols: boolean;
   public formData: any;
   public emailData: any;
+  public phoneData: any;
   public userId;
   public isEdit: boolean;
   public isDelete: boolean;
@@ -48,19 +47,17 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
   public pageNumber;
   public totalRecords;
   public errMsg;
+  public phoneErrMsg;
   public numberErr: boolean = false;
-  private subscription: Subscription;
   hideSpinner: boolean;
-  public countryCode: SelectItem[];
   private socket;
+  public countryCode: SelectItem[];
   selectedCc: string;
 
   constructor(
     public renderer: Renderer,
     public service: CrudService,
-    private dataShare: DataSharingService,
     public router: Router,
-    private route: ActivatedRoute,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private modalService: NgbModal,
@@ -73,8 +70,7 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.AddEditForm = this.formBuilder.group({
       first_name: ['', Validators.compose([Validators.required, Validators.pattern('^[A-Za-z]+$'), this.noWhitespaceValidator])],
       last_name: ['', Validators.compose([Validators.required, Validators.pattern('^[A-Za-z]+$'), this.noWhitespaceValidator])],
-      phone_number: ['', Validators.compose([Validators.pattern('^[0-9]{10,20}$')])],
-      // phone_number: [''],
+      phone_number: ['', Validators.compose([Validators.pattern('^[0-9]{10,20}$'), this.uniquePhoneValidator])],
       country_code: [''],
       email: ['', Validators.compose([Validators.required, this.noWhitespaceValidator, Validators.email,
       Validators.pattern(pattern), this.uniqueEmailValidator])],
@@ -121,6 +117,32 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     }
   }
+
+  public uniquePhoneValidator = (control: FormControl) => {
+    let isWhitespacePhone;
+    if (isWhitespacePhone = (control.value || '').trim().length !== 0) {
+      const pattern = new RegExp('^[0-9]{10,20}$');
+      var result = pattern.test(control.value);
+      if (!result) {
+        return { 'pattern': true };
+      } else {
+        this.phoneData = { 'phone_number': control.value ? control.value.trim() : '' };
+        if (this.isEdit) {
+          this.phoneData = { 'phone_number': control.value ? control.value.trim() : '', 'user_id': this.userId };
+        }
+        return this.service.post('admin/checkphone', this.phoneData).subscribe(res => {
+          if (res['status'] === 'success') {
+            this.phoneErrMsg = res['message'];
+            this.f.phone_number.setErrors({ 'unique': true });
+            return;
+          } else {
+            this.f.phone_number.setErrors(null);
+          }
+        });
+      }
+    }
+  }
+
 
   // add-edit-popup form validation
   get f() { return this.AddEditForm.controls; }
@@ -177,12 +199,18 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.submitted = true;
     this.numberErr = false;
     if (!this.AddEditForm.invalid) {
+      console.log('this.AddEditForm => ', this.AddEditForm);
       this.formData = this.AddEditForm.value;
-      console.log('this.formData => ', this.formData);
       this.formData.email = this.formData.email.trim();
       this.formData.first_name = this.formData.first_name.trim();
       this.formData.last_name = this.formData.last_name.trim();
-      this.formData.phone_number = this.formData.phone_number.trim();
+      if (this.formData.phone_number !== null) {
+        this.formData.phone_number = this.formData.phone_number.trim();
+      } else {
+        this.formData.country_code = null;
+        console.log('this.formData.country_code => ', this.formData.country_code);
+      }
+      console.log('this.formData => ', this.formData);
       this.isLoading = true;
       if (this.isEdit) {
         this.formData.user_id = this.userId;
@@ -194,12 +222,14 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
         }, err => {
           err = err.error;
+          console.log(' err[message] => ', err['message']);
           this.isLoading = false;
           this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
           this.closePopup();
         });
       } else {
         this.title = 'Add Agent';
+        console.log('formdata in add form => ', this.formData);
         this.service.post('admin/agents/add', this.formData).subscribe(res => {
           this.isLoading = false;
           this.render();
@@ -231,6 +261,7 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
+    // this.closePopup();
   }
 
   ngOnInit() {

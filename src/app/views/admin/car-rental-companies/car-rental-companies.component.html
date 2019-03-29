@@ -133,7 +133,7 @@
                 <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                   <div *ngIf="f.email.errors.required">Email is required</div>
                   <div *ngIf="f.email.errors.pattern"> Email is wrong </div>
-                  <div *ngIf="f.email.errors.unique">{{errMsg}}</div>
+                  <div *ngIf="f.email.errors.unique">{{emailErrMsg}}</div>
                 </div>
               </div>
             </div>
@@ -161,15 +161,31 @@
             <div class="col-sm-6">
               <div class="form-group">
                 <label>Phone Number :</label>
-                <input class="form-control" type="string" name="phone_number" placeholder="Enter Phone Number"
-                  formControlName="phone_number" class="form-control" (keyup)="keyup($event)"
-                  (keypress)="restrictAlphabets($event)"
-                  [ngClass]="{ 'is-invalid': (submitted && f.phone_number.errors) || numberErr}">
-                <div *ngIf=" submitted && f.phone_number.errors " class="invalid-feedback">
-                  <div *ngIf="f.phone_number.errors.pattern">Phone number is wrong</div>
-                </div>
-                <div *ngIf="numberErr" class="keyup-input-errMsg">
-                  Phone number is wrong
+                <div class="cc-dropdown">
+                  <p-dropdown formControlName="country_code" [options]="countryCode" styleClass="phoneNumber-dropdown"
+                    [autoWidth]="false">
+                    <ng-template let-item pTemplate="selectedItem">
+                      <img [src]="item.label" style="width:16px;vertical-align:middle" />
+                      <span style="vertical-align:middle; margin-left: .5em"> {{item.value}} </span>
+                    </ng-template>
+                    <ng-template let-cc pTemplate="item">
+                      <div class="ui-helper-clearfix" style="position: relative;height: 25px;">
+                        <img [src]="cc.label" style="width:24px;position:absolute;top:1px;left:5px" />
+                        <div style="font-size:14px;float:right;margin-top:4px"> {{cc.value}} </div>
+                      </div>
+                    </ng-template>
+                  </p-dropdown>
+                  <input id="phoneNumber" class="form-control" type="string" name="phone_number"
+                    placeholder="Enter Phone Number" formControlName="phone_number" class="form-control"
+                    (keyup)="keyup($event)" (keypress)="restrictAlphabets($event)"
+                    [ngClass]="{ 'is-invalid': (submitted && f.phone_number.errors) || numberErr}">
+                  <div *ngIf="submitted && f.phone_number.errors" class="invalid-feedback">
+                    <div *ngIf="f.phone_number.errors.pattern">Phone number is wrong</div>
+                    <div *ngIf="f.phone_number.errors.unique">{{phoneErrMsg}}</div>
+                  </div>
+                  <div *ngIf="numberErr" class="keyup-input-errMsg">
+                    Phone number is wrong
+                  </div>
                 </div>
               </div>
             </div>

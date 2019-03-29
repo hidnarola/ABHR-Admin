@@ -26,6 +26,7 @@ export class CompaniesComponent implements AfterViewInit, OnInit {
     public transactionDataArray: Array<any> = [];
     public rentalData;
     public rentalDataArray: Array<any> = [];
+    public noRecord: boolean = false;
 
 
     constructor(
@@ -35,25 +36,42 @@ export class CompaniesComponent implements AfterViewInit, OnInit {
         this.spinner.show();
         this.company = JSON.parse(localStorage.getItem('company-admin'));
         this.companyId = this.company._id;
-        this.subtitle = "This is some text within a card block."
+        this.subtitle = 'This is some text within a card block.'
         this.currentYear = new Date().getFullYear();
         this.currentMonth = new Date().getMonth();
         this.currentDate = new Date().getDate();
         this.totalDays = moment(this.currentYear + '-' + (this.currentMonth + 1), 'YYYY-MM').daysInMonth();
+        console.log('this.totalDays => ', this.totalDays);
         this.getDaysInMOnth(this.currentMonth, this.currentYear);
 
         this.service.post('company/dashboard/graph', { company_id: this.companyId }).subscribe(res => {
             this.graphData = res['data'];
-            this.graphData.forEach(ele => {
-                this.graphDate = moment(ele.Date).format('DD');
-                if (this.currentDate >= this.graphDate) {
-                    this.transactionData = ele.transaction_cnt;
-                    this.transactionDataArray.push(ele.transaction_cnt);
-                }
-                this.rentalData = ele.rental_cnt;
-                this.rentalDataArray.push(ele.rental_cnt);
-                this.spinner.hide();
-            });
+            console.log('res => ', res);
+            console.log('this.graphData => ', this.graphData);
+            if (this.graphData.length !== 0) {
+                this.noRecord = false;
+                console.log('not blank => ');
+                this.graphData.forEach(ele => {
+                    this.graphDate = moment(ele.Date).format('DD');
+                    if (this.currentDate >= this.graphDate) {
+                        this.transactionDataArray.push(ele.transaction_cnt);
+                    }
+                    this.rentalDataArray.push(ele.rental_cnt);
+                    this.spinner.hide();
+                });
+            } else {
+                this.noRecord = true;
+                this.days.forEach(e => {
+                    if (this.currentDate >= e) {
+                        this.transactionDataArray.push(0);
+                    }
+                    this.rentalDataArray.push(0);
+                    this.spinner.hide();
+                });
+            }
+
+
+
             const chartData = [
                 {
                     data: this.transactionDataArray,

@@ -43,7 +43,7 @@
                     {{ item.last_name }}
                   </span>
                 </td>
-                <td class="dttable-width">
+                <td>
                   <span>
                     {{ item.email }}
                   </span>
@@ -136,16 +136,9 @@
           <div class="col-sm-6">
             <div class="form-group">
               <label>Phone Number :</label>
-
-              <!-- 
-              <ngx-intl-tel-input [cssClass]="'custom'" [preferredCountries]="[ 'us', 'gb']"
-                [onlyCountries]="['us', 'gb', 'es']" [enableAutoCountrySelect]="true" [enablePlaceholder]="false"
-                placeholder="Enter Phone Number" name="phone_number" formControlName="phone_number">
-              </ngx-intl-tel-input> -->
-              <div>
+              <div class="cc-dropdown">
                 <p-dropdown formControlName="country_code" [options]="countryCode" styleClass="phoneNumber-dropdown"
                   [autoWidth]="false">
-
                   <ng-template let-item pTemplate="selectedItem">
                     <img [src]="item.label" style="width:16px;vertical-align:middle" />
                     <span style="vertical-align:middle; margin-left: .5em"> {{item.value}} </span>
@@ -163,6 +156,7 @@
                   [ngClass]="{ 'is-invalid': (submitted && f.phone_number.errors) || numberErr }">
                 <div *ngIf=" submitted && f.phone_number.errors " class="invalid-feedback">
                   <div *ngIf="f.phone_number.errors.pattern">Phone number is wrong</div>
+                  <div *ngIf="f.phone_number.errors.unique">{{phoneErrMsg}}</div>
                 </div>
                 <div *ngIf="numberErr" class="keyup-input-errMsg">
                   Phone number is wrong
@@ -192,6 +186,7 @@
               </div>
             </div>
           </div> -->
+
           <div class="col-sm-12">
             <button type="submit" *ngIf="!isLoading"
               class="btn waves-effect waves-light custom-btn btn-primary">Submit</button>

@@ -15,17 +15,22 @@
       </div>
     </div>
     <div style="margin: 0;padding: 0;position: relative;">
-      <div *ngIf="InvoiceData" class="tax-invoice">
-        <table id="Capture_invoice" class="" cellspacing="0" cellpadding="0" border="0">
+      <div *ngIf="InvoiceData" class="Invoice-table">
+        <table id="Capture_invoice" class=""
+          style="width:600px; margin:0 auto;  border-spacing:0; vertical-align:middle; padding:0;border-left: 1px solid #eee;border-right: 1px solid #eee;font-family: HelveticaNeue,Helvetica,Arial,sans-serif;"
+          cellspacing="0" cellpadding="0" border="0">
           <thead>
-            <tr class="logo">
-              <td>
-                <table cellspacing="0" cellpadding="0" border="0">
+            <tr>
+              <td style="padding:0;margin:0;vertical-align:middle;">
+                <table
+                  style="width: 100%;padding: 0;margin: 0 auto;border-spacing: 0;vertical-align: middle;background: #000;text-align: center;"
+                  cellspacing="0" cellpadding="0" border="0">
                   <thead>
                     <tr>
-                      <th>
-                        <a>
-                          <img src="assets/images/ABHR2-05.png" alt="ABHR.png" />
+                      <th style="text-align:center;padding: 26px 0 28px 0;margin:0;vertical-align: middle;">
+                        <a style="display:block;padding:0;margin:0;vertical-align: middle;">
+                          <img style="padding:0;margin:0;vertical-align: middle;" src="assets/images/ABHR2-05.png"
+                            alt="ABHR.png" />
                         </a>
                       </th>
                     </tr>
@@ -33,13 +38,16 @@
                 </table>
               </td>
             </tr>
-            <tr class="heading">
-              <td>
+            <tr>
+              <td
+                style="background: #4990e2 ; height:auto; width:100%; display:block;padding:0;margin:0;vertical-align:middle;">
                 <div>
-                  <table cellspacing="0" cellpadding="0">
+                  <table style="width:100%; padding:0;" cellspacing="0" cellpadding="0">
                     <tr>
-                      <td>
-                        <a>
+                      <td
+                        style="text-align: center;padding: 20px 0;background: #EFEFF5;margin: 0;vertical-align: middle;">
+                        <a
+                          style="display: block;padding: 0;margin: 0;vertical-align: middle;font-family: Montserrat;font-size: 18px;color: rgba(0,0,0,0.90);line-height: 18px;text-decoration: none;text-transform: uppercase;font-weight: 700;">
                           <img style="padding:0;margin:0;vertical-align: middle;margin-right: 18px;"
                             src="assets/images/tex.png" alt="Report.png" />
                           Tax Invoice
@@ -50,13 +58,15 @@
                 </div>
               </td>
             </tr>
-            <tr class="address-line">
-              <td>
-                <table cellspacing="0" cellpadding="0">
+            <tr>
+              <td style="padding:20px ;margin:0;vertical-align:middle;">
+                <table style="width:100%; padding:0; margin:0 auto;  background:#fff;vertical-align:middle;"
+                  cellspacing="0" cellpadding="0">
                   <tbody>
                     <tr>
-                      <td>
-                        <p>
+                      <td style="padding:0;margin:0;vertical-align:middle;">
+                        <p
+                          style="font-family: 'Montserrat';font-size: 14px;color: #4A4A4A;line-height: 19px;font-weight: 600;margin: 0;padding:0;vertical-align: middle;margin:0;">
                           Office No. 13, ADNEC, Abu Dhabi, UAE.<br>
                           <!-- 17C-5, Barsha Heights, Dubai, UAE -->
                         </p>
@@ -66,20 +76,25 @@
                 </table>
               </td>
             </tr>
-            <tr class="bill-to">
-              <td>
-                <table cellspacing="0" cellpadding="0">
+            <tr>
+              <td style="padding:0 20px 40px;margin:0;vertical-align:middle;">
+                <table style="width:100%; padding:0; margin:0 auto;  background:#fff;vertical-align:middle;"
+                  cellspacing="0" cellpadding="0">
                   <tbody>
                     <tr>
-                      <td class="bill-address">
-                        <table cellspacing="0" cellpadding="0">
+                      <td style="padding:0;margin:0;vertical-align:top;">
+                        <table
+                          style="padding: 0;margin: 0;vertical-align: middle;border: 1px solid #979797;width: 231px;height: 177px;"
+                          cellspacing="0" cellpadding="0">
                           <tbody>
                             <tr>
-                              <td>
+                              <td
+                                style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-bottom: 1px solid #979797;">
                                 Bill to</td>
                             </tr>
                             <tr>
-                              <td>
+                              <td
+                                style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 22px;font-weight: 400; height: 132px;">
                                 {{InvoiceData.user_name | titlecase}}<br>
                                 <!-- shadi al saigh<br> -->
                                 {{InvoiceData.user_phone_number}}<br>
@@ -88,27 +103,34 @@
                           </tbody>
                         </table>
                       </td>
-                      <td class="bill-invoice">
-                        <table cellspacing="0" cellpadding="0">
+                      <td style="padding:0;margin:0;vertical-align:top;float:right;">
+                        <table style="padding:0;margin:0;vertical-align:middle;border:1px solid #979797; width: 200px;"
+                          cellspacing="0" cellpadding="0">
                           <tbody>
                             <tr>
-                              <td>
+                              <td
+                                style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-bottom: 1px solid #979797;border-right: 1px solid #979797; text-align: center;">
                                 Date</td>
-                              <td>
+                              <td
+                                style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-bottom: 1px solid #979797; text-align: center;">
                                 Invoice No.</td>
                             </tr>
                             <tr>
-                              <td>
+                              <td
+                                style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-bottom: 1px solid #979797;border-right: 1px solid #979797; text-align: center;">
                                 {{today | date}}</td>
-                              <td>
+                              <td
+                                style="padding: 12px 15px;margin:0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-bottom: 1px solid #979797; text-align: center;">
                                 VDM 0041</td>
                             </tr>
                             <tr>
-                              <td colspan="2">
+                              <td colspan="2"
+                                style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-bottom: 1px solid #979797;  text-align: center;">
                                 Our TRN No.</td>
                             </tr>
                             <tr>
-                              <td colspan="2">
+                              <td colspan="2"
+                                style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;  text-align: center;">
                                 <!-- {{InvoiceData._id}}  -->
                                 XXXXX
                               </td>
@@ -121,16 +143,21 @@
                 </table>
               </td>
             </tr>
-            <tr class="description-row">
-              <td>
-                <table cellspacing="0" cellpadding="0">
+            <tr>
+              <td style="padding:0px 20px 15px;margin:0;vertical-align:middle;">
+                <table
+                  style="width:100%; padding:0px;margin:0 auto;  background:#fff;vertical-align:middle;    border: 1px solid #979797;"
+                  cellspacing="0" cellpadding="0">
                   <thead>
                     <tr>
-                      <th>
+                      <th
+                        style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-bottom: 1px solid #979797;border-right: 1px solid #979797; text-align: center;">
                         Description</th>
-                      <th>
+                      <th
+                        style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-bottom: 1px solid #979797;border-right: 1px solid #979797;text-align: center; width: 130px">
                         Rate</th>
-                      <th>
+                      <th
+                        style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-bottom: 1px solid #979797; text-align: center;width: 130px">
                         Amount</th>
                     </tr>
                   </thead>
@@ -140,15 +167,20 @@
 
 
                     <tr *ngIf="InvoiceData.extended_days === null">
-                      <td>
-                        <p>
+                      <td
+                        style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-right: 1px solid #979797;padding-bottom: 300px;">
+                        <p
+                          style="margin:0;padding: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;">
                           {{InvoiceData.car_model}} {{InvoiceData.release_year}} </p>
-                        <p>
+                        <p
+                          style="margin:0;padding: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;">
                           {{InvoiceData.class | titlecase}} class, {{InvoiceData.car_milage | titlecase}} MIllage</p>
                       </td>
-                      <td>
+                      <td
+                        style="padding: 30px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-right: 1px solid #979797;padding-bottom: 300px;text-align: center;">
                         {{InvoiceData.booking_amount }} </td>
-                      <td>
+                      <td
+                        style="padding: 30px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;padding-bottom: 300px;text-align: center;">
                         {{InvoiceData.booking_amount }} </td>
                     </tr>
 
@@ -158,30 +190,40 @@
 
 
                     <tr *ngIf="InvoiceData.extended_days !== null">
-                      <td>
-                        <p>
+                      <td
+                        style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-right: 1px solid #979797;padding-bottom: 265px;">
+                        <p
+                          style="margin:0;padding: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;">
                           {{InvoiceData.car_model}} {{InvoiceData.release_year}} </p>
-                        <p>
+                        <p
+                          style="margin:0;padding: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;">
                           {{InvoiceData.class | titlecase}} class, {{InvoiceData.car_milage | titlecase}} MIllage</p>
 
                         <br>
 
-                        <p>
+                        <p
+                          style="margin:0;padding: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;">
                           Extended Booking Detail </p>
                       </td>
-                      <td>
-                        <p>
+                      <td
+                        style="padding: 31px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-right: 1px solid #979797;padding-bottom: 265px;text-align: center;">
+                        <p
+                          style="margin:0;padding: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;">
                           {{InvoiceData.booking_amount}}</p>
                         <br>
-                        <p>
+                        <p
+                          style="margin:0;padding: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;">
                           {{InvoiceData.extend_booking_amount}}</p>
 
                       </td>
-                      <td>
-                        <p>
+                      <td
+                        style="padding: 31px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-right: 1px solid #979797;padding-bottom: 265px;text-align: center;">
+                        <p
+                          style="margin:0;padding: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;">
                           {{InvoiceData.booking_amount}}</p>
                         <br>
-                        <p>
+                        <p
+                          style="margin:0;padding: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;">
                           {{InvoiceData.extend_booking_amount}}</p>
 
                       </td>
@@ -191,24 +233,30 @@
 
 
 
-                    <tr class="footer-row" *ngIf="InvoiceData.extended_days === null">
-                      <td>
+                    <tr *ngIf="InvoiceData.extended_days === null">
+                      <td
+                        style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-right: 1px solid #979797;background: #d8d8d8;">
                         Vat {{InvoiceData.vat}}%</td>
-                      <td>
+                      <td
+                        style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-right: 1px solid #979797;background: #d8d8d8;text-align: center;">
                         {{InvoiceData.vat_amount }} </td>
-                      <td>
+                      <td
+                        style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;background: #d8d8d8;text-align: center;">
                         {{InvoiceData.vat_amount }} </td>
                     </tr>
 
 
 
 
-                    <tr class="footer-row" *ngIf="InvoiceData.extended_days !== null">
-                      <td>
+                    <tr *ngIf="InvoiceData.extended_days !== null">
+                      <td
+                        style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-right: 1px solid #979797;background: #d8d8d8;">
                         Vat {{InvoiceData.vat}}%</td>
-                      <td>
+                      <td
+                        style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-right: 1px solid #979797;background: #d8d8d8;text-align: center;">
                         {{InvoiceData.extend_vat_amount}} </td>
-                      <td>
+                      <td
+                        style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;background: #d8d8d8;text-align: center;">
                         {{InvoiceData.extend_vat_amount}} </td>
                     </tr>
 
@@ -219,39 +267,51 @@
               </td>
             </tr>
 
-            <tr class="total-row">
-              <td>
-                <table cellspacing="0" cellpadding="0">
+            <tr>
+              <td style="padding:0px 20px;margin:0;vertical-align:middle;">
+                <table
+                  style="width:100%; padding:0px;margin:0 auto;  background:#fff;vertical-align:middle;    border: 1px solid #979797;"
+                  cellspacing="0" cellpadding="0">
                   <tbody>
                     <tr>
-                      <td>
-                        <p>
+                      <td
+                        style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;border-right: 1px solid #979797;">
+                        <p
+                          style="margin: 0;padding: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 10px;color: #4A4A4A;line-height: 16px;">
                           Please make Cheque or fund transfer to virtual Dusk media solution LLC</p>
                       </td>
-                      <td>
-                        TOTAL&nbsp;&nbsp; AED {{InvoiceData.AED}}</td>
+                      <td
+                        style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 600;">
+                        Total&nbsp;&nbsp; AED {{InvoiceData.AED}}</td>
                     </tr>
                   </tbody>
                 </table>
               </td>
             </tr>
-            <tr class="bank-details">
-              <td>
-                <table cellspacing="0" cellpadding="0">
+            <tr>
+              <td style="padding:20px;margin:0;vertical-align:middle;">
+                <table style="width:100%; padding:0; margin:0 auto;  background:#fff;vertical-align:middle;"
+                  cellspacing="0" cellpadding="0">
                   <tbody>
                     <tr>
-                      <td>
-                        <p>
+                      <td style="padding:0;margin:0;vertical-align:middle;">
+                        <p
+                          style="font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 600;margin: 0;padding: 0 0 20px 0;vertical-align: middle;margin:0;">
                           Our Bank Details are</p>
-                        <p>
+                        <p
+                          style="font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 600;margin: 0;padding: 0 0 10px 0;vertical-align: middle;margin:0;">
                           Account Name: </p>
-                        <p>
+                        <p
+                          style="font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 600;margin: 0;padding: 0 0 10px 0;vertical-align: middle;margin:0;">
                           Account No: </p>
-                        <p>
+                        <p
+                          style="font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 600;margin: 0;padding: 0 0 10px 0;vertical-align: middle;margin:0;">
                           Bank Branch: </p>
-                        <p>
+                        <p
+                          style="font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 600;margin: 0;padding: 0 0 10px 0;vertical-align: middle;margin:0;">
                           IBan: </p>
-                        <p>
+                        <p
+                          style="font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 600;margin: 0;padding: 0 0 0px 0;vertical-align: middle;margin:0;">
                           Swift Code: </p>
                       </td>
                     </tr>
@@ -259,26 +319,34 @@
                 </table>
               </td>
             </tr>
-            <tr class="contact-details">
-              <td>
-                <table cellspacing="0" cellpadding="0">
+            <tr>
+              <td style="padding:0px 20px 20px 20px;margin:0;vertical-align:middle;">
+                <table
+                  style="width:100%; padding:0px;margin:0 auto;  background:#fff;vertical-align:middle;    border: 1px solid #979797;"
+                  cellspacing="0" cellpadding="0">
                   <thead>
                     <tr>
-                      <th>
+                      <th
+                        style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-bottom: 1px solid #979797;border-right: 1px solid #979797; text-align: center;">
                         Phone</th>
-                      <th>
+                      <th
+                        style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-bottom: 1px solid #979797;border-right: 1px solid #979797; text-align: center;">
                         Email</th>
-                      <th>
+                      <th
+                        style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-bottom: 1px solid #979797; text-align: center;">
                         Website</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td>
+                      <td
+                        style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-right: 1px solid #979797; text-align: center;">
                         {{InvoiceData.phone_number}} </td>
-                      <td>
+                      <td
+                        style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400;border-right: 1px solid #979797; text-align: center;">
                         {{InvoiceData.email}} </td>
-                      <td>
+                      <td
+                        style="padding: 12px 15px;margin: 0;vertical-align: middle;font-family: 'Montserrat';font-size: 13px;color: #4A4A4A;line-height: 19px;font-weight: 400; text-align: center;">
                         www.myabhr.com</td>
                     </tr>
                   </tbody>
@@ -286,13 +354,16 @@
               </td>
             </tr>
 
-            <tr class="help-row">
-              <td>
+            <tr>
+              <td
+                style="background: #4990e2 ; height:auto; width:100%; display:block;padding:0;margin:0;vertical-align:middle;">
                 <div>
-                  <table cellspacing="0" cellpadding="0">
+                  <table style="width:100%; padding:0;margin:0;" cellspacing="0" cellpadding="0">
                     <tr>
-                      <td>
-                        <p>
+                      <td
+                        style="width: 100%;text-align: center;padding: 20px 25px;background: #EFEFF5;margin: 0;vertical-align: middle;border-bottom: 5px solid #50E3C2;">
+                        <p
+                          style="font-family: 'Montserrat';font-size: 12.5px;color: #000;line-height: 19px;font-weight: 300;padding: 0;vertical-align: middle;margin: 0;">
                           Please be sure to get in touch with us via chat or on {{InvoiceData.phone_number}} if you need
                           any help!</p>
                       </td>
@@ -301,28 +372,34 @@
                 </div>
               </td>
             </tr>
-            <tr class="table-footer">
-              <td>
+            <tr>
+              <td style="padding:45px 20px 30px 20px; margin:0;vertical-align:middle;background: #000;">
                 <div>
-                  <table cellspacing="0" cellpadding="0">
+                  <table style="width: 100%;padding: 30px 25px;margin: 0;text-align: center;" cellspacing="0"
+                    cellpadding="0">
                     <tbody>
                       <tr>
-                        <td>
-                          <a>
-                            <img src="assets/images/ic-1.png" alt="Facebook.png">
+                        <td style="padding: 0 0 20px 0;margin: 0;vertical-align: middle; text-align:center; ">
+                          <a style="padding: 0 5px;margin: 0;display: inline-block;vertical-align: middle;">
+                            <img style="vertical-align: middle;padding: 0;margin: 0;" src="assets/images/ic-1.png"
+                              alt="Facebook.png">
                           </a>
-                          <a>
-                            <img src="assets/images/ic-2.png" alt="Instagram.png">
+                          <a style="padding: 0 5px;margin: 0;display: inline-block;vertical-align: middle;">
+                            <img style="vertical-align: middle;padding: 0;margin: 0;" src="assets/images/ic-2.png"
+                              alt="Instagram.png">
                           </a>
-                          <a>
-                            <img src="assets/images/ic-3.png" alt="Twitter.png">
+                          <a style="padding: 0 5px;margin: 0;display: inline-block;vertical-align: middle;">
+                            <img style="vertical-align: middle;padding: 0;margin: 0;" src="assets/images/ic-3.png"
+                              alt="Twitter.png">
                           </a>
                         </td>
                       </tr>
                       <tr>
-                        <td>
-                          <p>
-                            You are receiving this email as tony.naief@gmail.com is registered on ABHR.if you wish to
+                        <td style="padding: 0;margin: 0;vertical-align: middle;">
+                          <p
+                            style="text-align: center;font-family: 'Montserrat';font-size: 12.5px;color: #fff;line-height: 19px;font-weight: 300;padding: 0;vertical-align: middle;margin: 0;">
+                            You are receiving this email as tony.naief@gmail.com is registered on ABHR. <br> if you wish
+                            to
                             unsubscribe, Click here.</p>
                         </td>
                       </tr>

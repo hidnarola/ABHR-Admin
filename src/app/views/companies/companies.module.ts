@@ -10,7 +10,6 @@ import { EditorModule } from 'primeng/editor';
 import { CalendarModule } from 'primeng/calendar';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { TooltipModule } from 'primeng/tooltip';
-// child component
 import { Routes, RouterModule } from '@angular/router';
 import { CarsComponent } from './cars/cars.component';
 import { CompanyReportsComponent } from './company-reports/company-reports.component';
@@ -31,8 +30,7 @@ import { TransactionReportComponent } from './company-reports/transaction-report
 import { CompanyInvoiceComponent } from './company-transaction/company-invoice/company-invoice.component';
 import { Ng4GeoautocompleteModule } from 'ng4-geoautocomplete';
 import { CompanyAdminStatusResolve } from '../../shared/Resolve/company-admin-status';
-// shared component
-// import { RentalsComponent } from '../../shared/components/rentals-for-car/rentals.component';
+import { DropdownModule } from 'primeng/dropdown';
 
 
 const CompanyRoutes: Routes = [{
@@ -243,6 +241,7 @@ const CompanyRoutes: Routes = [{
         CheckboxModule,
         InputSwitchModule,
         TooltipModule,
+        DropdownModule,
         Ng4GeoautocompleteModule.forRoot(),
         RouterModule.forChild(CompanyRoutes)
     ],

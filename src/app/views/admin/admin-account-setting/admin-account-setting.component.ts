@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-
 import { CrudService } from '../../../shared/services/crud.service';
-import { MessageService } from 'primeng/api';
+import { MessageService, SelectItem } from 'primeng/api';
 import { Router } from '@angular/router';
 import { DataSharingService, AdminUser } from '../../../shared/services/data-sharing.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { cc } from '../../../shared/constant/country_code';
 
 @Component({
   selector: 'app-admin-account-setting',
@@ -17,6 +17,8 @@ export class AdminAccountSettingComponent implements OnInit {
   SettingForm: FormGroup;
   submitted = false;
   public formData: any;
+  public phoneData: any;
+  public supportPhoneData: any;
   public emailData: any;
   public Id;
   public user;
@@ -24,8 +26,14 @@ export class AdminAccountSettingComponent implements OnInit {
   public UserDetails;
   public isEdit;
   public errMsg;
+  public phoneErrMsg;
+  public supportPhoneErrMsg;
   public numberErr: boolean = false;
   public numberErr2: boolean = false;
+  public countryCode: SelectItem[];
+  selectedCc: string;
+  public supportCountryCode: SelectItem[];
+  supportSelectedCc: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -35,31 +43,52 @@ export class AdminAccountSettingComponent implements OnInit {
     private datashare: DataSharingService,
     private spinner: NgxSpinnerService
   ) {
+    this.countryCode = cc;
+    this.supportCountryCode = cc;
+
     const pattern = new RegExp('^\\ *([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})\\ *$');
     this.SettingForm = this.formBuilder.group({
       first_name: ['', Validators.compose([Validators.required, Validators.pattern('^[A-Za-z]+$'), this.noWhitespaceValidator])],
       last_name: ['', Validators.compose([Validators.required, Validators.pattern('^[A-Za-z]+$'), this.noWhitespaceValidator])],
-      phone_number: ['', Validators.compose([Validators.required, Validators.pattern('^[0-9]{10,20}$')])],
+      phone_number: ['', Validators.compose([Validators.required, Validators.pattern('^[0-9]{10,20}$'), this.uniquePhoneValidator])],
+      country_code: [''],
       email: ['', Validators.compose([Validators.required, Validators.email, Validators.pattern(pattern), this.uniqueEmailValidator])],
       support_email: ['', Validators.compose([Validators.required, Validators.pattern(pattern), Validators.email])],
       support_site_url: ['', Validators.compose([Validators.pattern('^(https?:\/\/)?[0-9a-zA-Z]+\.[-_0-9a-zA-Z]+\.[0-9a-zA-Z]+$')])],
-      support_phone_number: ['', Validators.compose([Validators.required, Validators.pattern('^[0-9]{10,20}$')])],
+      support_phone_number: ['', Validators.compose([Validators.required, Validators.pattern('^[0-9]{10,20}$'),
+      this.uniqueSupportPhoneValidator])],
+      support_country_code: [''],
     });
     this.formData = {
       first_name: String,
       last_name: String,
       phone_number: Number,
+      country_code: Number,
       email: String,
       support_phone_number: Number,
+      support_country_code: Number,
       support_email: String,
       support_site_url: String
     };
     this.spinner.show();
     this.user = JSON.parse(localStorage.getItem('admin'));
+
     this.Id = this.user._id;
     if (this.Id !== undefined && this.Id !== '' && this.Id != null) {
       this.service.get('admin/details/' + this.Id).subscribe(resp => {
         this.UserDetails = resp['result'].data;
+        console.log('this.UserDetails => ', this.UserDetails);
+        if (typeof this.UserDetails.country_code === 'undefined' || this.UserDetails.country_code === 'null' ||
+          this.UserDetails.country_code === '' || typeof this.UserDetails.support_country_code === 'undefined' ||
+          this.UserDetails.support_country_code === 'null' || this.UserDetails.support_country_code === '') {
+          this.UserDetails.country_code = '971';
+          this.SettingForm.controls['country_code'].setValue('971');
+          this.UserDetails.support_country_code = '971';
+          this.SettingForm.controls['support_country_code'].setValue('971');
+        } else {
+          this.SettingForm.controls['country_code'].setValue(this.UserDetails.country_code);
+          this.SettingForm.controls['support_country_code'].setValue(this.UserDetails.support_country_code);
+        }
         this.spinner.hide();
         this.SettingForm.controls['first_name'].setValue(this.UserDetails.first_name);
         this.SettingForm.controls['last_name'].setValue(this.UserDetails.last_name);
@@ -95,6 +124,52 @@ export class AdminAccountSettingComponent implements OnInit {
             return;
           } else {
             this.f.email.setErrors(null);
+          }
+        });
+      }
+    }
+  }
+
+  public uniquePhoneValidator = (control: FormControl) => {
+    let isWhitespacePhone;
+    if (isWhitespacePhone = (control.value || '').trim().length !== 0) {
+      const pattern = new RegExp('^[0-9]{10,20}$');
+      var result = pattern.test(control.value);
+      if (!result) {
+        return { 'pattern': true };
+      } else {
+        this.phoneData = { 'phone_number': control.value ? control.value.trim() : '', 'user_id': this.Id };
+        return this.service.post('admin/checkphone', this.phoneData).subscribe(res => {
+          if (res['status'] === 'success') {
+            this.phoneErrMsg = res['message'];
+            this.f.phone_number.setErrors({ 'unique': true });
+            return;
+          } else {
+            this.f.phone_number.setErrors(null);
+          }
+        });
+      }
+    }
+  }
+
+  public uniqueSupportPhoneValidator = (control: FormControl) => {
+    let isWhitespaceSupportPhone;
+    if (isWhitespaceSupportPhone = (control.value || '').trim().length !== 0) {
+      const pattern = new RegExp('^[0-9]{10,20}$');
+      var result = pattern.test(control.value);
+      if (!result) {
+        return { 'pattern': true };
+      } else {
+        this.supportPhoneData = { 'phone_number': control.value ? control.value.trim() : '', 'user_id': this.Id };
+        return this.service.post('admin/checkphone', this.supportPhoneData).subscribe(res => {
+          if (res['status'] === 'success') {
+            console.log('res => ', res);
+            this.supportPhoneErrMsg = res['message'];
+            console.log('this.supportPhoneErrMsg => ', this.supportPhoneErrMsg);
+            this.f.support_phone_number.setErrors({ 'unique': true });
+            return;
+          } else {
+            this.f.support_phone_number.setErrors(null);
           }
         });
       }
@@ -154,7 +229,6 @@ export class AdminAccountSettingComponent implements OnInit {
       } else {
         this.numberErr = true;
       }
-      // $('#support_number_errMsg').css('border-color', '#ef5350');
     } else {
       this.numberErr = false;
     }

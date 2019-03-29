@@ -5,6 +5,7 @@ import { CrudService } from '../../../shared/services/crud.service';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import * as moment from 'moment';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-cancellation-charge',
@@ -33,12 +34,12 @@ export class CancellationChargeComponent implements OnInit {
     public service: CrudService,
     public router: Router,
     private messageService: MessageService,
+    private spinner: NgxSpinnerService,
   ) {
-
+    this.spinner.show();
     this.company = JSON.parse(localStorage.getItem('company-admin'));
     this.companyId = this.company._id;
     this.cancellationData = [];
-
     this.serviceobj = {
       company_id: String,
       cancellation_policy_criteria: Array
@@ -46,6 +47,7 @@ export class CancellationChargeComponent implements OnInit {
 
     this.service.get('company/terms_and_condition/' + this.companyId).subscribe(res => {
       this.cancellationData = res['data']['cancellation_policy_criteria'];
+      this.spinner.hide();
       // this.cancellationData = [];
       if (this.cancellationData.length !== 0) {
         this.checked = true;

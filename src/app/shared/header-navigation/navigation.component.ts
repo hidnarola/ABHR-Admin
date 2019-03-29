@@ -74,7 +74,6 @@ export class NavigationComponent implements AfterViewInit {
     this.CurrentAdmin = array[1];
     this.datashare.currentAdminUser.subscribe((res) => {
       var user = JSON.parse(localStorage.getItem('admin'));
-      console.log('user => ', user);
       var company = JSON.parse(localStorage.getItem('company-admin'));
 
       if (user != null && user !== undefined) {
@@ -83,7 +82,6 @@ export class NavigationComponent implements AfterViewInit {
         this.AdminNumber = user.phone_number;
         this.AdminType = 'admin';
         this.adminId = user._id;
-        console.log('adminId => ', this.adminId);
       }
       if (company != null && company !== undefined) {
         this.AdminName = company.name;
@@ -237,7 +235,6 @@ export class NavigationComponent implements AfterViewInit {
   }
 
   onSubmit() {
-    console.log('currentAdmin => ', this.CurrentAdmin);
     this.submitted = true;
     if (!this.changePassForm.invalid) {
       this.isLoading = true;
@@ -275,7 +272,6 @@ export class NavigationComponent implements AfterViewInit {
           var admin = JSON.parse(localStorage.getItem('admin'));
           admin.password = res['password'];
           localStorage.setItem('admin', JSON.stringify(admin));
-          console.log('res[] => ', res['password']);
           this.adminPass = {
             password: res['password'],
           };

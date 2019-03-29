@@ -1,36 +1,14 @@
-import {
-  Component, OnInit, Renderer, ViewChild, OnDestroy, AfterViewInit, ElementRef,
-  ChangeDetectorRef,
-  OnChanges,
-  SimpleChange
-} from '@angular/core';
+import { Component, OnInit, Renderer, ViewChild, OnDestroy, AfterViewInit, ElementRef, } from '@angular/core';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
-
-// routing
-import { Routes, RouterModule, ActivatedRoute } from '@angular/router';
-import { NgModule } from '@angular/core';
-
 import { NgxSpinnerService } from 'ngx-spinner';
-// service
-import { DataSharingService } from '../../../shared/services/data-sharing.service';
 import { CrudService } from '../../../shared/services/crud.service';
-
-// popup-forms
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-
-// model
-import { NgbModal, ModalDismissReasons, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
-
-// primng
-import { ConfirmationService, Message } from 'primeng/api';
-import { AutoCompleteModule } from 'primeng/autocomplete';
-
-// alert
+import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmationService, SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/api';
-import { Subscription } from 'rxjs';
-
+import { cc } from '../../../shared/constant/country_code';
 
 @Component({
   selector: 'app-car-rental-companies',
@@ -44,18 +22,17 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
   dtTrigger: Subject<any> = new Subject();
   public searchElementRef: ElementRef;
   public header;
-  // model: any = {};
   AddEditForm: FormGroup;
   submitted = false;
   public formData: any;
   public emailData: any;
+  public phoneData: any;
   public nameData: any;
   public title = 'Add Company';
   public userId;
   public isEdit: boolean;
   public isDelete: boolean;
   users: any;
-  private subscription: Subscription;
   checked: boolean;
   message: any;
   closeResult: string;
@@ -68,22 +45,23 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
   public totalRecords;
   public placeData: any;
   public addressError: boolean = false;
-  public errMsg;
+  public emailErrMsg;
+  public phoneErrMsg;
   public numberErr: boolean = false;
+  selectedCc: string;
+  public countryCode: SelectItem[];
 
   constructor(
     public renderer: Renderer,
     public service: CrudService,
-    private dataShare: DataSharingService,
     public router: Router,
-    private route: ActivatedRoute,
     private confirmationService: ConfirmationService,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private messageService: MessageService,
     private spinner: NgxSpinnerService,
-    private cd: ChangeDetectorRef,
   ) {
+    this.countryCode = cc;
     // addform validation
     const pattern = new RegExp('^\\ *([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,5})\\ *$');
     this.AddEditForm = this.formBuilder.group({
@@ -91,7 +69,8 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
       description: ['', Validators.compose([Validators.required, this.noWhitespaceValidator])],
       site_url: ['', Validators.compose([Validators.required,
       Validators.pattern('^(https?:\/\/)?[0-9a-zA-Z]+\.[-_0-9a-zA-Z]+\.[0-9a-zA-Z]+$')])],
-      phone_number: ['', Validators.compose([Validators.pattern('^[0-9]{10,20}$')])],
+      phone_number: ['', Validators.compose([Validators.pattern('^[0-9]{10,20}$'), this.uniquePhoneValidator])],
+      country_code: [''],
       email: ['', Validators.compose([Validators.required, Validators.email, Validators.pattern(pattern), this.uniqueEmailValidator])],
     });
 
@@ -99,6 +78,7 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
       name: String,
       description: String,
       phone_number: Number,
+      country_code: Number,
       email: String,
       site_url: String
     };
@@ -130,7 +110,7 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
         }
         return this.service.post('admin/company/checkemail', this.emailData).subscribe(res => {
           if (res['status'] === 'success') {
-            this.errMsg = res['message'];
+            this.emailErrMsg = res['message'];
             this.f.email.setErrors({ 'unique': true });
             return;
           } else {
@@ -140,6 +120,35 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
       }
     }
   }
+
+  public uniquePhoneValidator = (control: FormControl) => {
+    let isWhitespacePhone;
+    if (isWhitespacePhone = (control.value || '').trim().length !== 0) {
+      const pattern = new RegExp('^[0-9]{10,20}$');
+      let result = pattern.test(control.value);
+      if (!result) {
+        return { 'pattern': true };
+      } else {
+        this.phoneData = { 'phone_number': control.value ? control.value.trim() : '' };
+        if (this.isEdit) {
+          this.phoneData = { 'phone_number': control.value ? control.value.trim() : '', 'company_id': this.userId };
+        }
+        return this.service.post('admin/company/checkphone', this.phoneData).subscribe(res => {
+          console.log('res-status => ', res['status']);
+          console.log('res => ', res);
+          if (res['status'] === 'success') {
+            this.phoneErrMsg = res['message'];
+            console.log('this.phoneErrMsg => ', this.phoneErrMsg);
+            this.f.phone_number.setErrors({ 'unique': true });
+            return;
+          } else {
+            this.f.phone_number.setErrors(null);
+          }
+        });
+      }
+    }
+  }
+
 
   public uniqueNameValidator = (control: FormControl) => {
     let isWhitespace2;
@@ -265,6 +274,8 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
 
   // Add-Edit pop up
   open2(content, item) {
+    console.log('item => ', item);
+    console.log('item.country_code => ', item.country_code);
     this.service_location = [];
     if (item !== 'undefined' && item !== '') {
       this.title = 'Edit Company';
@@ -280,6 +291,7 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
       this.AddEditForm.controls['email'].setValue(item.email);
       this.AddEditForm.controls['site_url'].setValue(item.site_url);
       this.AddEditForm.controls['phone_number'].setValue(item.phone_number);
+      this.AddEditForm.controls['country_code'].setValue(item.country_code);
     } else {
       this.title = 'Add Company';
       this.userSettings.inputPlaceholderText = 'Enter Address';
@@ -301,6 +313,7 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
         this.AddEditForm.controls['email'].setValue('');
         this.AddEditForm.controls['site_url'].setValue('');
         this.AddEditForm.controls['phone_number'].setValue('');
+        this.AddEditForm.controls['country_code'].setValue('971');
         this.addressError = false;
       }
     });
@@ -384,6 +397,11 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
       this.formData.phone_number = this.formData.phone_number.trim();
       this.formData.company_address = this.company_address;
       this.formData.service_location = this.service_location;
+      if (this.formData.phone_number === null || this.formData.phone_number === '' || this.formData.phone_number === 'null') {
+        this.formData.country_code = null;
+        console.log('number null => ');
+      }
+      console.log('this.formData => ', this.formData);
       if (this.isEdit) {
         this.formData.company_id = this.userId;
         this.title = 'Edit Company';
