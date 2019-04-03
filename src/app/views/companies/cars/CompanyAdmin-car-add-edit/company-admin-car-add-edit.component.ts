@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment';
 import * as moment from 'moment';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-company-admin-car-add-edit',
@@ -68,6 +69,7 @@ export class CarAddEditComponent implements OnInit {
     public service: CrudService,
     private messageService: MessageService,
     public router: Router,
+    public spinner: NgxSpinnerService
   ) {
     const company = JSON.parse(localStorage.getItem('company-admin'));
     this.companyId = company._id;
@@ -77,8 +79,10 @@ export class CarAddEditComponent implements OnInit {
     this.selectedYear = new Date().getFullYear();
     this.today = new Date();
     if (this.carId !== undefined && this.carId !== '' && this.carId != null) {
+      this.spinner.show();
       this.service.post('admin/company/car/details/', { car_id: this.carId }).subscribe(resp => {
         this.carDetails = resp['data'][0];
+        this.spinner.hide();
         if (this.carDetails.availableData !== undefined) {
           var DateArray = this.carDetails.availableData;
           const _selectDate = [];

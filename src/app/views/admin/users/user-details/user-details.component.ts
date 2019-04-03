@@ -31,19 +31,18 @@ export class UserDetailsComponent implements OnInit {
   }
 
   getVerificationStatus(id) {
-    // if (parseInt(id, 2)) {
     try {
       return (_.find(this.CONST.VERIFICATION_STATUS, { 'key': id })).value;
     } catch (e) {
       return '';
     }
-    // }
   }
 
   getUserDetail(id) {
     this.spinner.show();
     this.service.get('admin/user/details/' + id).subscribe(res => {
       this.userData = res['result'];
+      console.log('this.userData => ', this.userData);
       this.userData.email_msg = this.getVerificationStatus(this.userData['email_verified']);
       this.userData.phone_msg = this.getVerificationStatus(this.userData['phone_number_verified']);
       this.userData.license_msg = this.getVerificationStatus(this.userData['driving_license_verification']);

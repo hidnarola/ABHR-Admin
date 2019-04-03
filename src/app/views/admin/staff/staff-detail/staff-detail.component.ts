@@ -75,7 +75,9 @@ export class StaffDetailComponent implements OnInit {
   get f() { return this.AddEditForm.controls; }
   closePopup() {
     const element = document.getElementById('closepopup');
-    element.click();
+    if (element !== null) {
+      element.click();
+    }
   }
   onSubmit() {
     this.submitted = true;

@@ -36,7 +36,6 @@ export class AddEditArticleComponent implements OnInit {
     private messageService: MessageService,
     private spinner: NgxSpinnerService
   ) {
-    this.spinner.show();
     const AdminUser = JSON.parse(localStorage.getItem('admin'));
     this.AdminId = AdminUser._id;
     this.UserType = AdminUser.type;
@@ -54,6 +53,7 @@ export class AddEditArticleComponent implements OnInit {
     };
 
     if (this.Id !== undefined && this.Id !== '' && this.Id != null) {
+      this.spinner.show();
       this.service.post('admin/help/details/', { article_id: this.Id }).subscribe(res => {
         this.Detail = res['data'];
         this.isEdit = true;

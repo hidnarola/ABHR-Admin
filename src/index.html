@@ -41,6 +41,8 @@
     window.onkeypress = resetTimer;  //catches keyboard actions
 
     if (window.localStorage.getItem('token')) {
+      console.log("token 1");
+
       if (Number(window.localStorage.getItem('sessionTimeout')) < Number(Math.floor(Date.now() / 1000))) {
         logout();
       }
@@ -52,8 +54,10 @@
       first.indexOf(1);
       first.toLowerCase();
       first = first.split("/")[1];
+      console.log('token', window.localStorage.getItem('token'));
       if (window.localStorage.getItem('token')) {
-        window.location.href = '/' + first + '/login';  //Adapt to actual logout script
+        window.location.href = window.location.origin +
+          '/' + (first) ? first : 'admin' + '/login';  //Adapt to actual logout script
         window.localStorage.clear();
       }
     }

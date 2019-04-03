@@ -3,7 +3,6 @@ import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from './../../../../../environments/environment';
-// services
 import { CrudService } from '../../../../shared/services/crud.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 
@@ -41,12 +40,8 @@ export class CarDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
   CarDetails() {
     this.spinner.show();
     this.service.post('admin/company/car/details/', { car_id: this.carId }).subscribe(res => {
-      console.log('res in car detail => ', res);
       this.carDetails = res['data'][0];
       this.today = new Date();
-
-      console.log('this.carDetails => ', this.carDetails.availableData);
-
       if (this.carDetails.availableData !== undefined) {
         var DateArray = this.carDetails.availableData;
         const _selectDate = [];
@@ -64,9 +59,6 @@ export class CarDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
           this.SelectedDates = _selectDate;
         }
       }
-
-
-
 
       let carCriteria = this.carDetails.resident_criteria;
       var CriteriaName = '';

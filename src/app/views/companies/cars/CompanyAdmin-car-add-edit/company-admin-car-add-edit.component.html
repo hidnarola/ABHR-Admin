@@ -1,344 +1,10 @@
-<!-- <div class="card">
-  <div class="card-body">
-    <form [formGroup]="AddEditCarForm" enctype="multipart/form-data" (ngSubmit)="onSubmit()"
-      (keydown.enter)="$event.preventDefault()">
-      <div class="row">
-
-        <div class="col-md-3">
-          <div class="form-group">
-            <label class="required"> Car Brand :</label>
-            <select class="form-control" type="String" required="" (change)="model($event.target.value)"
-              id="inlineFormCustomSelect" name="car_brand_id" formControlName="car_brand_id"
-              [ngClass]="{'is-invalid': submitted && f.car_brand_id.errors }">
-              <option value="" disabled selected>Choose Car Brand</option>
-              <option [value]="data._id" *ngFor="let data of brandlist">{{data.brand_name}}</option>
-            </select>
-            <div *ngIf=" submitted && f.car_brand_id.errors " class="invalid-feedback">
-              <div *ngIf="f.car_brand_id.errors.required"> Car Brand is required</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-3">
-          <div class="form-group">
-            <label class="required"> Car Model :</label>
-            <select class="form-control" type="String" required="" id="inlineFormCustomSelect" name="car_model_id"
-              required="" formControlName="car_model_id"
-              [ngClass]="{'is-invalid': submitted && f.car_model_id.errors }">
-              <option value="" disabled selected>Choose Car Model</option>
-              <option [value]="data._id" *ngFor="let data of modelList">{{data.model_name}}</option>
-            </select>
-            <div *ngIf="submitted && f.car_model_id.errors" class="invalid-feedback">
-              <div *ngIf="f.car_model_id.errors.required"> Car Model is required</div>
-              <div *ngIf="f.car_model_id.errors.isExist"> Car Model is not available</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-2">
-          <div class="form-group">
-            <label class="required">Transmission :</label>
-            <select class="custom-select col-12" type="String" id="inlineFormCustomSelect" name="transmission"
-              class="form-control" formControlName="transmission"
-              [ngClass]="{ 'is-invalid': submitted && f.transmission.errors }">
-              <option value="" disabled selected>Choose...</option>
-              <option value="manual">Manual</option>
-              <option value="automatic">Automatic</option>
-            </select>
-            <div *ngIf=" submitted && f.transmission.errors " class="invalid-feedback">
-              <div *ngIf="f.transmission.errors.required"> Transmission is required</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-2">
-          <div class="form-group">
-            <label class="required"> Mileage :</label>
-            <select class="custom-select col-12" type="String" id="inlineFormCustomSelect" name="milage"
-              class="form-control" formControlName="milage" [ngClass]="{ 'is-invalid': submitted && f.milage.errors }">
-              <option value="" disabled selected>Choose...</option>
-              <option value="open">Open</option>
-              <option value="limited">Limited</option>
-            </select>
-            <div *ngIf=" submitted && f.milage.errors " class="invalid-feedback">
-              <div *ngIf="f.milage.errors.required"> Mileage is required</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-2">
-          <div class="form-group">
-            <label class="required"> Car Class :</label>
-            <select class="custom-select col-12" type="String" id="inlineFormCustomSelect" name="car_class"
-              class="form-control" formControlName="car_class"
-              [ngClass]="{ 'is-invalid': submitted && f.car_class.errors }">
-              <option value="" disabled selected>Choose...</option>
-              <option value="economy">Economy</option>
-              <option value="luxury">Luxury</option>
-              <option value="suv">Suv</option>
-              <option value="family">Family</option>
-            </select>
-            <div *ngIf=" submitted && f.car_class.errors " class="invalid-feedback">
-              <div *ngIf="f.car_class.errors.required"> Car Class is required</div>
-            </div>
-          </div>
-        </div>
-
-
-        <div class="col-md-3">
-          <div class="form-group">
-            <label class="required">Licence plate number :</label>
-            <input class="form-control" placeholder="Licence plate number" type="string" required=""
-              name="licence_plate" formControlName="licence_plate"
-              [ngClass]="{'is-invalid': submitted && f.licence_plate.errors }">
-            <div *ngIf=" submitted && f.licence_plate.errors " class="invalid-feedback">
-              <div *ngIf="f.licence_plate.errors.required"> Licence Plate Number is required</div>
-              <div *ngIf="f.licence_plate.errors.uniqueName">Licence Plate Number already exist</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-3">
-          <div class="form-group">
-            <label class="required">Resident Criteria :</label>
-            <select class="custom-select col-12" id="inlineFormCustomSelect" class="form-control"
-              formControlName="resident_criteria" [ngClass]="{ 'is-invalid': submitted && f.resident_criteria.errors }">
-              <option value="" disabled selected>Choose...</option>
-              <option [value]="0">Rented to Residents</option>
-              <option [value]="1">None Residents</option>
-              <option [value]="2">Both</option>
-            </select>
-            <div *ngIf=" submitted && f.resident_criteria.errors " class="invalid-feedback">
-              <div *ngIf="f.resident_criteria.errors.required">Resident Criteria is required</div>
-            </div>
-          </div>
-        </div>
-
-
-
-        <div class="col-md-2">
-          <div class="form-group">
-            <label>Navigation Status :</label>
-            <div class="custom-radio-wrap">
-              <div class="custom-control custom-radio">
-                <input type="radio" id="navigation1" class="custom-control-input" [value]="true" name="is_navigation"
-                  required="" formControlName="is_navigation">
-                <label class="custom-control-label" for="navigation1">Yes</label>
-              </div>
-              <div class="custom-control custom-radio">
-                <input type="radio" id="navigation2" class="custom-control-input" [value]="false" name="is_navigation"
-                  formControlName="is_navigation">
-                <label class="custom-control-label" for="navigation2">No</label>
-              </div>
-              <div *ngIf=" submitted && f.is_navigation.errors " class="invalid-feedback">
-                <div *ngIf="f.is_navigation.errors.required"> Navigation is required</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-2">
-          <div class="form-group">
-            <label>AC :</label>
-            <div class="custom-radio-wrap">
-              <div class="custom-control custom-radio">
-                <input type="radio" id="ac1" class="custom-control-input" [value]="true" required="" name="is_AC"
-                  formControlName="is_AC">
-                <label class="custom-control-label" for="ac1">Yes</label>
-              </div>
-              <div class="custom-control custom-radio">
-                <input type="radio" id="ac2" class="custom-control-input" [value]="false" name="is_AC"
-                  formControlName="is_AC">
-                <label class="custom-control-label" for="ac2">No</label>
-              </div>
-              <div *ngIf=" submitted && f.is_AC.errors " class="invalid-feedback">
-                <div *ngIf="f.is_AC.errors.required"> AC is required</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-2">
-          <div class="form-group">
-            <label>Luggage Carrier :</label>
-            <div class="custom-radio-wrap">
-              <div class="custom-control custom-radio">
-                <input type="radio" id="luggage1" class="custom-control-input" [value]="true" required=""
-                  name="is_luggage_carrier" formControlName="is_luggage_carrier">
-                <label class="custom-control-label" for="luggage1">Yes</label>
-              </div>
-              <div class="custom-control custom-radio">
-                <input type="radio" id="luggage2" class="custom-control-input" [value]="false" name="is_luggage_carrier"
-                  formControlName="is_luggage_carrier">
-                <label class="custom-control-label" for="luggage2">No</label>
-              </div>
-            </div>
-            <div *ngIf=" submitted && f.is_luggage_carrier.errors " class="invalid-feedback">
-              <div *ngIf="f.is_luggage_carrier.errors.required"> Luggage Carrier is required</div>
-            </div>
-          </div>
-        </div>
-
-
-        <div class="col-md-3">
-          <div class="form-group">
-            <label class="required"> Rent Price :</label>
-            <input class="form-control" placeholder="Rent Price" type="text" required="" name="rent_price"
-              formControlName="rent_price" [ngClass]="{'is-invalid': submitted && f.rent_price.errors }">
-            <div *ngIf=" submitted && f.rent_price.errors " class="invalid-feedback">
-              <div *ngIf="f.rent_price.errors.required"> Rent Price is required</div>
-              <div *ngIf="f.rent_price.errors.pattern">Invalid Price</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-3">
-          <div class="form-group">
-            <label> Deposit :</label>
-            <input class="form-control" placeholder="Deposit" type="text" name="deposit" formControlName="deposit"
-              [ngClass]="{'is-invalid': submitted && f.deposit.errors }">
-            <div *ngIf=" submitted && f.deposit.errors " class="invalid-feedback">
-              <div *ngIf="f.deposit.errors.pattern">Invalid Deposit</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-2">
-          <div class="form-group">
-            <label class="required">car color :</label>
-            <input class="form-control" placeholder="Car Color" type="string" required="" name="car_color"
-              formControlName="car_color" [ngClass]="{'is-invalid': submitted && f.car_color.errors }">
-            <div *ngIf=" submitted && f.car_color.errors " class="invalid-feedback">
-              <div *ngIf="f.car_color.errors.required"> Car Color is required</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-2">
-          <div class="form-group">
-            <label class="required"> Age :</label>
-            <select class="custom-select col-12" id="inlineFormCustomSelect" name="driving_eligibility_criteria"
-              class="form-control" formControlName="driving_eligibility_criteria"
-              [ngClass]="{ 'is-invalid': submitted && f.driving_eligibility_criteria.errors }">
-              <option value="" disabled selected>Choose...</option>
-              <option value="18+">18+</option>
-              <option value="21+">21+</option>
-              <option value="30+">30+</option>
-            </select>
-            <div *ngIf=" submitted && f.driving_eligibility_criteria.errors " class="invalid-feedback">
-              <div *ngIf="f.driving_eligibility_criteria.errors.required"> Age Of Driver is required</div>
-            </div>
-          </div>
-        </div>
-
-
-
-        <div class="col-md-2">
-          <div class="form-group">
-            <label class="required"> No Of Persons :</label>
-            <select class="custom-select col-12" id="inlineFormCustomSelect" name="no_of_person" class="form-control"
-              formControlName="no_of_person" [ngClass]="{ 'is-invalid': submitted && f.no_of_person.errors }">
-              <option value="" disabled selected>Choose...</option>
-              <option [value]="2">2</option>
-              <option [value]="4">4</option>
-              <option [value]="5">5</option>
-              <option [value]="6">6</option>
-              <option [value]="8">8</option>
-              <option [value]="12">12</option>
-            </select>
-            <div *ngIf=" submitted && f.no_of_person.errors " class="invalid-feedback">
-              <div *ngIf="f.no_of_person.errors.required"> No Of Person is required</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-3">
-          <div class="form-group form_calendar form_arrow_none">
-            <label class="required"> Car availablity :</label>
-            <p-calendar #availibility [(ngModel)]="selectDate" [ngModelOptions]="{standalone: true}"
-              selectionMode="multiple" [monthNavigator]="true" [showOtherMonths]="false"
-              (onMonthChange)="checkMonth($event)" (onSelect)="checkSelect($event)" (ngModelChange)="onChange($event)"
-              placeholder="Select Availablity" [touchUI]="false" [showIcon]="true" [readonlyInput]="true"
-              [yearRange]="yearRange" [minDate]="today">
-              <p-header class="availibility-header">
-                <p-checkbox styleClass="cal-chkbox" [(ngModel)]="availabilitySelectAllArr[selectedMonth]"
-                  [ngModelOptions]="{standalone: true}" binary="true" (onChange)="selectAllDates($event)">
-                </p-checkbox>
-                Select Month
-              </p-header>
-              <p-footer>
-                <button type="button" (click)="handleCloseCalendar()"> Submit </button>
-                <button type="button" class="pull-right" (click)="handleClearCalendar()">Clear</button>
-              </p-footer>
-            </p-calendar>
-            <div *ngIf="availablityError" class="error-msg">
-              <div *ngIf="availablityError">Car availablity is required</div>
-            </div>
-          </div>
-        </div>
-
-
-        <div class="col-md-9">
-          <div class="form-group">
-            <label class="required"> Car Image :</label>
-            <input class="form-control file_input" type="file" name="car_gallery" formControlName="car_gallery"
-              (change)="handleFileInput($event)" [ngClass]="{ 'is-invalid': submitted && f.car_gallery.errors }"
-              accept="image/*" multiple>
-            <div *ngIf=" submitted && f.car_gallery.errors " class="invalid-feedback">
-              <div *ngIf="f.car_gallery.errors.minImages">Add Minimum 3 images</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-12" *ngIf="CarOldImage.length > 0">
-          <div class="form-group">
-            <label>Uploaded Car Image(s) Preview :</label>
-            <div class="row">
-              <div class="column img_wrap" *ngFor="let img of CarOldImage; let i = index">
-                <img [src]="imgUrl + 'car/' + img.name" height="100px" alt="cars" width="auto">
-                <i class="close fa fa-close" (click)="deleteOldImage(i)"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-12" *ngIf="CarImage.length > 0">
-          <div class="form-group">
-            <label>Car Image(s) Preview :</label>
-            <div class="row">
-              <div class="column img_wrap" *ngFor="let img of CarImage; let i = index">
-                <img [src]="img" height="100px" alt="cars" width="auto">
-                <i class="close fa fa-close" (click)="deleteImage(i)"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-12">
-          <button type="submit" *ngIf="!isLoading"
-            class="btn waves-effect waves-light custom-btn btn-primary">Submit</button>
-          <button type="button" *ngIf="isLoading" class="btn waves-effect loading-btn waves-light btn-primary"
-            type="button">
-            <i class="fa fa-spinner fa-spin"></i>Loading
-          </button>
-          <a class="btn waves-effect waves-light custom-btn btn-danger" [routerLink]="['/company/car' ]">Cancel</a>
-        </div>
-
-      </div>
-    </form>
-  </div>
-</div> -->
-
-
-
-
-
-
 <div class="card">
   <div class="card-body">
     <form [formGroup]="AddEditCarForm" enctype="multipart/form-data" (ngSubmit)="onSubmit()"
       (keydown.enter)="$event.preventDefault()">
       <div class="row">
 
-        <div class="col-md-3">
+        <div class="col-lg-3 col-md-4 col-sm-4">
           <div class="form-group">
             <label class="required"> Car Brand :</label>
             <select class="form-control" type="String" required="" (change)="model($event.target.value)"
@@ -353,7 +19,7 @@
           </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-lg-3 col-md-4 col-sm-4">
           <div class="form-group">
             <label class="required"> Car Model :</label>
             <select class="form-control" type="String" required="" id="inlineFormCustomSelect" name="car_model_id"
@@ -369,7 +35,7 @@
           </div>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-lg-2 col-md-4 col-sm-4">
           <div class="form-group">
             <label class="required">Transmission :</label>
             <select class="custom-select col-12" type="String" id="inlineFormCustomSelect" name="transmission"
@@ -385,7 +51,7 @@
           </div>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-lg-2 col-md-4 col-sm-4">
           <div class="form-group">
             <label class="required"> Mileage :</label>
             <select class="custom-select col-12" type="String" id="inlineFormCustomSelect" name="milage"
@@ -400,7 +66,7 @@
           </div>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-lg-2 col-md-4 col-sm-4">
           <div class="form-group">
             <label class="required"> Car Class :</label>
             <select class="custom-select col-12" type="String" id="inlineFormCustomSelect" name="car_class"
@@ -418,7 +84,7 @@
           </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-lg-3 col-md-4 col-sm-4">
           <div class="form-group">
             <label class="required">Licence plate number :</label>
             <input class="form-control" placeholder="Licence plate number" type="string" required=""
@@ -431,7 +97,7 @@
           </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-lg-3 col-md-4 col-sm-4">
           <div class="form-group">
             <label class="required">Resident Criteria :</label>
             <select class="custom-select col-12" id="inlineFormCustomSelect" class="form-control"
@@ -447,7 +113,7 @@
           </div>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-lg-2 col-md-4 col-sm-4">
           <div class="form-group">
             <label class="required">car color :</label>
             <input class="form-control" placeholder="Car Color" type="string" required="" name="car_color"
@@ -458,7 +124,7 @@
           </div>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-lg-2 col-md-4 col-sm-4">
           <div class="form-group">
             <label class="required"> Age :</label>
             <select class="custom-select col-12" id="inlineFormCustomSelect" name="driving_eligibility_criteria"
@@ -475,7 +141,7 @@
           </div>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-lg-2 col-md-4 col-sm-4">
           <div class="form-group">
             <label class="required"> No Of Persons :</label>
             <select class="custom-select col-12" id="inlineFormCustomSelect" name="no_of_person" class="form-control"
@@ -494,7 +160,7 @@
           </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-lg-3 col-md-4 col-sm-4">
           <div class="form-group">
             <label class="required"> Rent Price :</label>
             <input class="form-control" placeholder="Rent Price" type="text" required="" name="rent_price"
@@ -510,7 +176,7 @@
           </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-lg-3 col-md-4 col-sm-4">
           <div class="form-group">
             <label> Deposit :</label>
             <input class="form-control" placeholder="Deposit" type="text" name="deposit" formControlName="deposit"
@@ -525,7 +191,7 @@
           </div>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-lg-2 col-md-4 col-sm-4">
           <div class="form-group">
             <label class="required"> Purchased Year :</label>
             <input class="form-control" placeholder="Year" type="text" required="" name="age_of_car"
@@ -541,7 +207,7 @@
           </div>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-lg-2 col-md-4 col-sm-4">
           <div class="form-group form_calendar form_arrow_none">
             <label class="required"> Car Availability :</label>
             <p-calendar #availibility [(ngModel)]="selectDate" [ngModelOptions]="{standalone: true}"
@@ -566,7 +232,7 @@
           </div>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-lg-2 col-md-4 col-sm-4">
           <div class="form-group">
             <label>Navigation Status :</label>
             <div class="custom-radio-wrap">
@@ -587,7 +253,7 @@
           </div>
         </div>
 
-        <div class="col-md-10">
+        <div class="col-lg-10 col-md-10 col-sm-10">
           <div class="form-group">
             <label class="required"> Car Image :</label>
             <input class="form-control file_input" type="file" name="car_gallery" formControlName="car_gallery"
@@ -601,7 +267,7 @@
 
 
 
-        <div class="col-md-12" *ngIf="CarOldImage.length > 0">
+        <div class="col-lg-12 col-md-12 col-sm-12" *ngIf="CarOldImage.length > 0">
           <div class="form-group">
             <label>Uploaded Car Image Preview :</label>
             <div class="row">
@@ -612,7 +278,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-12" *ngIf="CarImage.length > 0">
+        <div class="col-lg-12 col-md-12 col-sm-12" *ngIf="CarImage.length > 0">
           <div class="form-group">
             <label>Car Image(s) Preview :</label>
             <div class="row">
@@ -623,7 +289,7 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-12">
+        <div class="col-lg-12 col-md-12 col-sm-12">
           <button type="submit" *ngIf="!isLoading"
             class="btn waves-effect waves-light custom-btn btn-primary">Submit</button>
           <button type="button" *ngIf="isLoading" class="btn waves-effect loading-btn waves-light btn-primary"

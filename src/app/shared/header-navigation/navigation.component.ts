@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { Router } from '@angular/router';
@@ -12,7 +12,7 @@ import createNumberMask from 'text-mask-addons/dist/createNumberMask';
   selector: 'app-navigation',
   templateUrl: './navigation.component.html'
 })
-export class NavigationComponent implements AfterViewInit {
+export class NavigationComponent implements AfterViewInit, OnDestroy {
   display: boolean = false;
   displayVAT: boolean = false;
   user;
@@ -151,6 +151,7 @@ export class NavigationComponent implements AfterViewInit {
     subject: 'Just see the my admin!',
     time: '9:00 AM'
   }];
+
   ngAfterViewInit() {
     const set = function () {
       const width = (window.innerWidth > 0) ? window.innerWidth : this.screen.width;
@@ -239,8 +240,6 @@ export class NavigationComponent implements AfterViewInit {
     if (!this.changePassForm.invalid) {
       this.isLoading = true;
       this.formData = this.changePassForm.value;
-
-
       if (this.CurrentAdmin === 'company') {
         this.formData.company_id = this.companyId;
         this.service.post('company/change_password', this.formData).subscribe(res => {
@@ -321,4 +320,5 @@ export class NavigationComponent implements AfterViewInit {
 
   }
 
+  ngOnDestroy(): void { }
 }

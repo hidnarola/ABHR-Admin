@@ -107,7 +107,7 @@ export class TransactionReportComponent implements OnInit, AfterViewInit, OnDest
               if (this.reports.length > 0) {
                 this.isCols = true;
                 $('.dataTables_wrapper').css('display', 'block');
-              } else if (dataTablesParameters['search']['value'] !== null) {
+              } else if (dataTablesParameters['search']['value'] !== '') {
                 console.log('search value => ');
                 this.isCols = true;
               } else if (this.reports.length === 0 && this.rangeDates === undefined) {

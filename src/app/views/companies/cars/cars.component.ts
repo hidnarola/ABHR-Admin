@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer, ViewChild, ViewEncapsulation, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Renderer, ViewChild, ViewEncapsulation, AfterViewInit, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import { ActivatedRoute } from '@angular/router';
@@ -16,7 +16,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './cars.component.html',
   styleUrls: ['./cars.component.css']
 })
-export class CarsComponent implements OnInit, AfterViewInit {
+export class CarsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(DataTableDirective)
   dtElement: DataTableDirective;
   dtOptions: DataTables.Settings = {};
@@ -154,6 +154,20 @@ export class CarsComponent implements OnInit, AfterViewInit {
     });
   }
 
+  ngOnDestroy(): void {
+    this.dtTrigger.unsubscribe();
+    this.closeDeletePopup();
+  }
+
+  closeDeletePopup() {
+    const data: HTMLCollection = document.getElementsByClassName('ui-button');
+    if (data.length > 0) {
+      console.log('l => ', data[1]);
+      const ele: any = data[1];
+      ele.click();
+    }
+  }
+
   // dlt popup
   delete(userId) {
     this.confirmationService.confirm({
@@ -190,7 +204,9 @@ export class CarsComponent implements OnInit, AfterViewInit {
 
   closePopup() {
     const element = document.getElementById('closepopup');
-    element.click();
+    if (element !== null) {
+      element.click();
+    }
   }
 
   onSubmit() { }

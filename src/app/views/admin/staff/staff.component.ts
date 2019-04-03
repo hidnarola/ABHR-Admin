@@ -115,7 +115,9 @@ export class StaffComponent implements OnInit, OnDestroy, AfterViewInit {
 
   closePopup() {
     const element = document.getElementById('closepopup');
-    element.click();
+    if (element !== null) {
+      element.click();
+    }
     this.isLoading = false;
   }
   onSubmit() {

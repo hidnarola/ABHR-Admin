@@ -1,14 +1,13 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ComponentRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CrudService } from '../../../../../shared/services/crud.service';
 import { MessageService } from 'primeng/api';
-
 import { Router } from '@angular/router';
 import { HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../../../../environments/environment';
 import * as moment from 'moment';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-add-edit-car',
@@ -17,7 +16,6 @@ import * as moment from 'moment';
 })
 export class AddEditCarComponent implements OnInit {
   @ViewChild('availibility') datePicker;
-
   public licencePlateData: any;
   CarImage: any = [];
   yearRange = '2019:2020';
@@ -45,21 +43,12 @@ export class AddEditCarComponent implements OnInit {
   public today;
   public checked: Boolean = false;
   public cnt;
-  public DateArray;
-  public availabilitySelectAllArr = [
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false
-  ];
+  // public DateArray;
+  public DateArray = [];
+  public carAvailableDates;
+  public availabilitySelectAllArr: any = [{ value: false }, { value: false }, { value: false }, { value: false },
+  { value: false }, { value: false }, { value: false }, { value: false }, { value: false }, { value: false },
+  { value: false }, { value: false }];
   public numberErr: boolean = false;
   public numberErr2: boolean = false;
   public numberErr3: boolean = false;
@@ -70,6 +59,7 @@ export class AddEditCarComponent implements OnInit {
     public service: CrudService,
     private messageService: MessageService,
     public router: Router,
+    public spinner: NgxSpinnerService
   ) {
     this.companyId = localStorage.getItem('companyId');
     this.route.params.subscribe(params => { this.carId = params.id; });
@@ -78,18 +68,38 @@ export class AddEditCarComponent implements OnInit {
     this.today = new Date();
 
     if (this.carId !== undefined && this.carId !== '' && this.carId != null) {
+      this.spinner.show();
       this.service.post('admin/company/car/details/', { car_id: this.carId }).subscribe(resp => {
         this.carDetails = resp['data'][0];
-        console.log('this.carDetails => ', this.carDetails);
+        this.spinner.hide();
+
         if (this.carDetails.availableData !== undefined) {
-          this.DateArray = this.carDetails.availableData;
-          console.log('this.DateArray => ', this.DateArray);
+
+
+
+          this.carAvailableDates = this.carDetails.availableData;
           const _selectDate = [];
-          this.DateArray.forEach(element => {
+          this.carAvailableDates.forEach(element => {
+
+
+
             const toDay = new Date();
             const toDayMonth = (toDay.getMonth() + 1);
+
             if (toDayMonth === element.month) {
               var currentDay = parseInt(moment().format("DD"));
+
+
+              element.availability.forEach(ele => {
+
+                let day = parseInt(moment(ele).format('DD'));
+                if (day >= currentDay) {
+                  if (ele !== null) {
+                    let currentDateObj = new Date(ele);
+                    _selectDate.push(currentDateObj);
+                  }
+                }
+              });
               if (toDayMonth < 10) {
                 var MonthDays = moment(this.selectedYear + '-' + '0' + element.month, 'YYYY-MM').daysInMonth();
                 var TotalDays = (MonthDays - currentDay) + 1;
@@ -97,34 +107,38 @@ export class AddEditCarComponent implements OnInit {
                 var MonthDays = moment(this.selectedYear + '-' + element.month, 'YYYY-MM').daysInMonth();
                 var TotalDays = (MonthDays - currentDay) + 1;
               }
-            } else {
-              if (element.month < 10) {
-                var TotalDays = moment(this.selectedYear + '-' + '0' + element.month, 'YYYY-MM').daysInMonth();
-                console.log('TotalDays => ', TotalDays);
-              } else {
-                var TotalDays = moment(this.selectedYear + '-' + element.month, 'YYYY-MM').daysInMonth();
-              }
-            }
+            } else if (toDayMonth > element.month) {
 
 
-
-            if (TotalDays === element.availability.length) {
-              console.log('element.month => ', element.month);
-              // const selectedMonth = (element.month - 1);
-              this.selectedMonth = element.month;
-              console.log('this.selectedMonth for checkbox=> ', this.selectedMonth);
-              this.availabilitySelectAllArr[this.selectedMonth] = true;
-            }
-
-            if (element.availability.length !== 0) {
               element.availability.forEach(ele => {
+
+
+
+
+              });
+            } else {
+
+              element.availability.forEach(ele => {
+
                 if (ele !== null) {
                   let Dateobj = new Date(ele);
                   _selectDate.push(Dateobj);
                 }
               });
+              if (element.month < 10) {
+                var TotalDays = moment(this.selectedYear + '-' + '0' + element.month, 'YYYY-MM').daysInMonth();
+              } else {
+                var TotalDays = moment(this.selectedYear + '-' + element.month, 'YYYY-MM').daysInMonth();
+              }
             }
+
+            if (TotalDays === element.availability.length) {
+              this.selectedMonth = element.month - 1;
+              this.availabilitySelectAllArr[this.selectedMonth].value = true;
+            }
+
           });
+
           if (_selectDate && _selectDate.length > 0) {
             this.selectDate = _selectDate;
           }
@@ -157,6 +171,7 @@ export class AddEditCarComponent implements OnInit {
         this.AddEditCarForm.controls['licence_plate'].setValue(this.carDetails.licence_plate);
         this.AddEditCarForm.controls['car_color'].setValue(this.carDetails.car_color);
       });
+
     }
 
     this.service.get('app/car/brandlist').subscribe(res => {
@@ -207,31 +222,13 @@ export class AddEditCarComponent implements OnInit {
       deposit: Number,
       age_of_car: Number
     };
-
-
-
-
-
-    // var check = moment().add(15, 'minute');
-    // console.log('check => ', check);
-    // var currentTS = moment().unix();
-    // console.log('currentTS => ', currentTS);
-    // var LoginTimeStamp = moment(check).unix();
-    // console.log('loginTImet => ', LoginTimeStamp);
-    // // console.log('diff => ', currentTS.diff(LoginTimeStamp, 'minutes'));
-
-
-
   }
-
-
 
 
   getDaysInMonth(m, y) {
     const toDay = new Date();
     const toDayMonth = toDay.getMonth();
     var cnt = 1;
-    console.log(' here getdaysin month=> ');
     if (toDayMonth === this.selectedMonth) {
       var currentDay = parseInt(moment().format("DD"));
       cnt = currentDay;
@@ -258,14 +255,12 @@ export class AddEditCarComponent implements OnInit {
     const toDayMonth = toDay.getMonth();
     const date = new Date(selectedYear, selectedmonth, 1);
     const _selectDate = (this.selectDate && this.selectDate.length > 0) ? this.selectDate : [];
-    console.log('selectedmonth in function=> ', selectedmonth);
     if (toDayMonth === this.selectedMonth) {
       var currentDay = parseInt(moment().format("DD"));
       this.cnt = currentDay;
     } else {
       this.cnt = 0;
     }
-    console.log(' here get says in selected month=> ');
     var TotalDays;
     var month = selectedmonth + 1;
     if (month < 10) {
@@ -281,73 +276,14 @@ export class AddEditCarComponent implements OnInit {
       });
       if (_selectDateStr.indexOf(dateMom) > 0) {
         this.cnt++;
-        console.log('this.cnt(if) => ', this.cnt);
       }
       date.setDate(date.getDate() + 1);
     }
-    console.log('cnt====>', this.cnt);
-    console.log('totaldays====>', TotalDays);
     if (this.cnt === TotalDays) {
-      this.availabilitySelectAllArr[selectedmonth] = true;
+      this.availabilitySelectAllArr[selectedmonth].value = true;
     } else {
-      this.availabilitySelectAllArr[selectedmonth] = false;
+      this.availabilitySelectAllArr[selectedmonth].value = false;
     }
-    // } else {
-
-
-
-
-
-    //   const toDay = new Date();
-    //   const toDayMonth = toDay.getMonth();
-    //   const date = new Date(selectedYear, selectedmonth, 1);
-    //   const _selectDate = (this.selectDate && this.selectDate.length > 0) ? this.selectDate : [];
-    //   console.log('date.getMonth()=====>', date.getMonth());
-    //   console.log('selectedmonth in function=> ', selectedmonth);
-    //   console.log('this.selectedMonth => ', this.selectedMonth);
-    //   if (toDayMonth === this.selectedMonth) {
-    //     var currentDay = parseInt(moment().format("DD"));
-    //     this.cnt = currentDay;
-    //   } else {
-    //     console.log('not current month => ');
-    //     this.cnt = 0;
-    //   }
-
-    //   var TotalDays;
-    //   var month = selectedmonth + 1;
-    //   if (month < 10) {
-    //     TotalDays = moment(this.selectedYear + '-' + '0' + month, 'YYYY-MM').daysInMonth();
-    //   } else if (month + 1 > 10) {
-    //     TotalDays = moment(this.selectedYear + '-' + month, 'YYYY-MM').daysInMonth();
-    //   }
-
-    //   while (date.getMonth() === selectedmonth) {
-    //     console.log('in while');
-    //     const _selectDateStr = [];
-    //     const dateMom = moment(date).format('YYYY-MM-DD');
-    //     console.log('dateMon======>', dateMom);
-    //     _selectDate.map((dt) => {
-    //       _selectDateStr.push(moment(dt).format('YYYY-MM-DD'));
-    //     });
-    //     if (_selectDateStr.indexOf(dateMom) > 0) {
-    //       this.cnt++;
-    //       console.log('this.cnt(if) => ', this.cnt);
-    //     }
-    //     date.setDate(date.getDate() + 1);
-    //   }
-    //   console.log('cnt====>', this.cnt);
-    //   console.log('totaldays====>', TotalDays);
-    //   if (this.cnt === TotalDays) {
-    //     this.availabilitySelectAllArr[selectedmonth] = true;
-    //   } else {
-    //     this.availabilitySelectAllArr[selectedmonth] = false;
-    //   }
-
-
-
-
-    // }
-
   }
 
   public uniqueCarNumberValidator = (control: FormControl) => {
@@ -393,14 +329,11 @@ export class AddEditCarComponent implements OnInit {
   handleFileInput(event) {
     let isValid = false;
     const files = event.target.files;
-    console.log('files => ', files);
     if (files) {
       for (const file of files) {
         if (file.type === 'image/jpeg' || file.type === 'image/png') {
           isValid = true;
-          console.log('file1=> ', file);
           if (file.size > 300000) {
-            console.log('file size > 300000 => ');
             this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please choose Image less then 300 kb' });
             return 0;
           }
@@ -438,8 +371,9 @@ export class AddEditCarComponent implements OnInit {
   handleClearCalendar = () => {
     this.selectDate = null;
     this.datePicker.overlayVisible = false;
-    this.availabilitySelectAllArr = [false, false, false, false, false, false, false, false, false, false, false, false];
-    console.log('this.submitted on clear button => ', this.submitted);
+    this.availabilitySelectAllArr = [{ value: false }, { value: false }, { value: false }, { value: false },
+    { value: false }, { value: false }, { value: false }, { value: false }, { value: false }, { value: false },
+    { value: false }, { value: false }];
     if (this.submitted === true) {
       this.availablityError = true;
     }
@@ -551,58 +485,11 @@ export class AddEditCarComponent implements OnInit {
 
   checkMonth(event) {
     this.selectedMonth = (event.month - 1);
-    console.log('this.selectedMonth on month navigator => ', this.selectedMonth);
     this.selectedYear = event.year;
-
-
-    // if (this.isEdit) {
-    //   var availableMonth = this.selectedMonth + 1;
-    //   this.DateArray.forEach(element => {
-    //     console.log('element => ', element);
-    //     if (element.month === availableMonth) {
-    //       const toDay = new Date();
-    //       const toDayMonth = (toDay.getMonth() + 1);
-    //       console.log('toDayMonth => ', toDayMonth);
-    //       console.log('availableMonth => ', availableMonth);
-    //       if (toDayMonth === availableMonth) {
-    //         var currentDay = parseInt(moment().format("DD"));
-    //         if (toDayMonth < 10) {
-    //           var MonthDays = moment(this.selectedYear + '-' + '0' + element.month, 'YYYY-MM').daysInMonth();
-    //           var TotalDays = (MonthDays - currentDay) + 1;
-    //           console.log('TotalDays => ', TotalDays);
-    //         } else {
-    //           var MonthDays = moment(this.selectedYear + '-' + element.month, 'YYYY-MM').daysInMonth();
-    //           var TotalDays = (MonthDays - currentDay) + 1;
-    //         }
-    //       } else {
-    //         if (element.month < 10) {
-    //           var TotalDays = moment(this.selectedYear + '-' + '0' + element.month, 'YYYY-MM').daysInMonth();
-    //           console.log('TotalDays => ', TotalDays);
-    //         } else {
-    //           var TotalDays = moment(this.selectedYear + '-' + element.month, 'YYYY-MM').daysInMonth();
-    //         }
-    //       }
-    //       console.log('element.availability.length => ', element.availability.length);
-    //       if (TotalDays === element.availability.length) {
-    //         this.selectedMonth = availableMonth;
-    //         this.availabilitySelectAllArr[this.selectedMonth] = true;
-    //       }
-    //     } else {
-    //       this.selectedMonth = availableMonth;
-    //     }
-    //   });
-    // }
-
-
-
-
-
-
-
   }
 
   selectAllDates(event) {
-    if (this.availabilitySelectAllArr[this.selectedMonth] === true) {
+    if (this.availabilitySelectAllArr[this.selectedMonth].value === true) {
       this.getDaysInMonth(this.selectedMonth, this.selectedYear);
       this.availablityError = false;
     } else {
@@ -611,20 +498,58 @@ export class AddEditCarComponent implements OnInit {
   }
 
   unselectAllDates() {
-    const remainingDates = [];
-    this.selectDate.forEach((date) => {
-      if (date.getMonth() !== this.selectedMonth) {
-        remainingDates.push(new Date(date));
-      }
-    });
-    setTimeout(() => {
-      if (remainingDates.length > 0) {
-        this.selectDate = remainingDates;
-        this.selectedMonth = this.selectDate[0].getMonth();
-      } else {
-        this.selectDate = null;
-      }
-    }, 0);
+    try {
+      const remainingDates = [];
+      this.selectDate.forEach((date) => {
+        if (date.getMonth() !== this.selectedMonth) {
+          remainingDates.push(new Date(date));
+        }
+      });
+
+      setTimeout(() => {
+        if (remainingDates.length > 0) {
+          this.selectDate = remainingDates;
+          this.selectedMonth = this.selectDate[0].getMonth();
+          // console.log('this.selectedMonth => ', this.selectedMonth);
+          // try {
+          //   const cal = document.getElementsByClassName('ui-datepicker-month');
+          //   const newCal = document.createElement('div');
+          //   console.log('this.datePicker.nativeElement JSON=> ', this.datePicker.el);
+          //   console.log('this.datePicker.nativeElement => ',
+          //     this.datePicker.el.nativeElement.firstElementChild.lastElementChild
+          //       .firstElementChild.firstElementChild.lastElementChild.firstElementChild);
+          //   const opt = cal.item(0).getElementsByTagName('option');
+          //   opt[this.selectedMonth].selected = true;
+          //   console.log('cal', cal);
+          //   cal.item(0).children.item(this.selectedMonth).setAttribute('selected', 'selected');
+          //   console.log('cal.item(0).children.item(this.selectedMonth) => ', cal.item(0).children.item(this.selectedMonth));
+          //   newCal.innerHTML = cal.item(0).parentElement.innerHTML;
+          //   cal.item(0).parentNode.removeChild(cal.item(0)); // (newCal, cal.item(0));
+          //   console.log('cal => ', cal);
+          //   console.log('newCal => ', newCal);
+          // } catch (error) {
+          //   console.log('error => ', error);
+          // }
+        } else {
+          this.selectDate = null;
+          this.selectedMonth = new Date().getMonth();
+        }
+      }, 0);
+    } catch (error) {
+      console.log('error => ', error);
+    }
+
+
+
+    // cal.item = this.selectedMonth;
+
+
+    // cal[0].nodeValue = this.selectedMonth;
+
+    // console.log('this.selectedMonth => ', this.selectedMonth);
+
+
+
   }
 
   ngOnInit() { }
@@ -670,8 +595,6 @@ export class AddEditCarComponent implements OnInit {
   }
 
   keyupCarAge(event) {
-
-    console.log('this.AddEditCarForm => ', this.AddEditCarForm.controls.age_of_car.value.length);
     if (this.AddEditCarForm.controls.age_of_car.value.length > 4) {
       if (this.AddEditCarForm.controls.age_of_car.value !== '' && this.AddEditCarForm.controls.age_of_car.value !== null) {
         if (this.AddEditCarForm.controls.age_of_car.status === 'INVALID') {

@@ -21,7 +21,6 @@ import { AdminComponent } from './admin.component';
 import { AgentsComponent } from './agents/agents.component';
 import { StaffComponent } from './staff/staff.component';
 import { CarRentalCompaniesComponent } from './car-rental-companies/car-rental-companies.component';
-import { AdminReportsComponent } from './admin-reports/admin-reports.component';
 import { UsersComponent } from './users/users.component';
 import { OperationsComponent } from './operations/operations.component';
 import { SettingsComponent } from './settings/settings.component';
@@ -54,14 +53,12 @@ import { DeliveredTrackingComponent } from './operations/delivered-cars/delivere
 import { AgmCoreModule } from '@agm/core';
 import { AgmDirectionModule } from 'agm-direction';
 import { environment } from '../../../environments/environment';
-import { HelpComponent } from './help/help.component';
 import { ArticleListComponent } from './help/article-list/article-list.component';
 import { AddEditArticleComponent } from './help/article-list/add-edit-article/add-edit-article.component';
 import { ArticleDetailComponent } from './help/article-list/article-detail/article-detail.component';
 import { DeliveringTrackingComponent } from './operations/delivered-cars/delivering-tracking/delivering-tracking.component';
 import { ReturnedTrackingComponent } from './operations/taken-away-cars/returned-tracking/returned-tracking.component';
 import { AdminInvoiceComponent } from './transaction/admin-invoice/admin-invoice.component';
-import { FeedbackComponent } from './feedback/feedback.component';
 import { FeedbackCategoryComponent } from './feedback/feedback-category/feedback-category.component';
 import { ReportedCarsComponent } from './feedback/reported-cars/reported-cars.component';
 import { ReportedCarDetailComponent } from './feedback/reported-cars/reported-car-detail/reported-car-detail.component';
@@ -69,7 +66,6 @@ import { SuperAdminCheckPassResolve } from '../../shared/Resolve/super-admin-che
 import { DialogModule } from 'primeng/dialog';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 import { BsDropdownModule } from 'ngx-bootstrap';
-import { InvoicePdfComponent } from './transaction/admin-invoice/invoice-pdf/invoice-pdf.component';
 
 const AdminRoutes: Routes = [
   {
@@ -288,17 +284,6 @@ const AdminRoutes: Routes = [
             title: 'Transactions',
             url: '/admin/transactions'
           }, { title: 'Invoice Detail' }]
-        },
-        resolve: {
-          admin: SuperAdminCheckPassResolve
-        }
-      },
-      {
-        path: 'reports',
-        component: AdminReportsComponent,
-        data: {
-          title: 'Manage Reports',
-          urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Reports' }]
         },
         resolve: {
           admin: SuperAdminCheckPassResolve
@@ -625,7 +610,6 @@ const AdminRoutes: Routes = [
     StaffComponent,
     CarRentalCompaniesComponent,
     AdminComponent,
-    AdminReportsComponent,
     UsersComponent,
     OperationsComponent,
     SettingsComponent,
@@ -651,22 +635,16 @@ const AdminRoutes: Routes = [
     TransactionReportComponent,
     TakenAwayTrackingComponent,
     DeliveredTrackingComponent,
-    HelpComponent,
     ArticleListComponent,
     AddEditArticleComponent,
     ArticleDetailComponent,
     DeliveringTrackingComponent,
     ReturnedTrackingComponent,
     AdminInvoiceComponent,
-    FeedbackComponent,
     FeedbackCategoryComponent,
     ReportedCarsComponent,
     ReportedCarDetailComponent,
-    InvoicePdfComponent,
   ],
-  providers: [
-    // SocketClass
-    // DataSharingService,
-  ]
+  providers: [ ]
 })
 export class AdminModule { }

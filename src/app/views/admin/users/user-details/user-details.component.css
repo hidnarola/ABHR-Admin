@@ -22,3 +22,7 @@ button.btn.btn-primary.custom-add-btn.green-btn {
     border: 1px solid #28a745 !important;
     cursor: not-allowed;
 }
+
+.cars-dtl-box-inr label.label.label-danger {
+    margin-left: 0px !important;
+}

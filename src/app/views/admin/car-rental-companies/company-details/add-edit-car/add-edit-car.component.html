@@ -4,7 +4,7 @@
       (keydown.enter)="$event.preventDefault()">
       <div class="row">
 
-        <div class="col-md-3">
+        <div class="col-lg-3 col-md-4 col-sm-4">
           <div class="form-group">
             <label class="required"> Car Brand :</label>
             <select class="form-control" type="String" required="" (change)="model($event.target.value)"
@@ -19,7 +19,7 @@
           </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-lg-3 col-md-4 col-sm-4">
           <div class="form-group">
             <label class="required"> Car Model :</label>
             <select class="form-control" type="String" required="" id="inlineFormCustomSelect" name="car_model_id"
@@ -35,7 +35,7 @@
           </div>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-lg-2 col-md-4 col-sm-4">
           <div class="form-group">
             <label class="required">Transmission :</label>
             <select class="custom-select col-12" type="String" id="inlineFormCustomSelect" name="transmission"
@@ -51,7 +51,7 @@
           </div>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-lg-2 col-md-4 col-sm-4">
           <div class="form-group">
             <label class="required"> Mileage :</label>
             <select class="custom-select col-12" type="String" id="inlineFormCustomSelect" name="milage"
@@ -66,7 +66,7 @@
           </div>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-lg-2 col-md-4 col-sm-4">
           <div class="form-group">
             <label class="required"> Car Class :</label>
             <select class="custom-select col-12" type="String" id="inlineFormCustomSelect" name="car_class"
@@ -84,7 +84,7 @@
           </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-lg-3 col-md-4 col-sm-4">
           <div class="form-group">
             <label class="required">Licence plate number :</label>
             <input class="form-control" placeholder="Licence plate number" type="string" required=""
@@ -97,7 +97,7 @@
           </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-lg-3 col-md-4 col-sm-4">
           <div class="form-group">
             <label class="required">Resident Criteria :</label>
             <select class="custom-select col-12" id="inlineFormCustomSelect" class="form-control"
@@ -112,7 +112,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-lg-2 col-md-4 col-sm-4">
           <div class="form-group">
             <label class="required">car color :</label>
             <input class="form-control" placeholder="Car Color" type="string" required="" name="car_color"
@@ -123,7 +123,7 @@
           </div>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-lg-2 col-md-4 col-sm-4">
           <div class="form-group">
             <label class="required"> Age :</label>
             <select class="custom-select col-12" id="inlineFormCustomSelect" name="driving_eligibility_criteria"
@@ -140,7 +140,7 @@
           </div>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-lg-2 col-md-4 col-sm-4">
           <div class="form-group">
             <label class="required"> No Of Persons :</label>
             <select class="custom-select col-12" id="inlineFormCustomSelect" name="no_of_person" class="form-control"
@@ -159,7 +159,7 @@
           </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-lg-3 col-md-4 col-sm-4">
           <div class="form-group">
             <label class="required"> Rent Price :</label>
             <input class="form-control" placeholder="Rent Price" type="text" required="" name="rent_price"
@@ -175,7 +175,7 @@
           </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-lg-3 col-md-4 col-sm-4">
           <div class="form-group">
             <label> Deposit :</label>
             <input class="form-control" placeholder="Deposit" type="text" name="deposit" formControlName="deposit"
@@ -190,7 +190,7 @@
           </div>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-lg-2 col-md-4 col-sm-4">
           <div class="form-group">
             <label class="required"> Purchased Year :</label>
             <input class="form-control" placeholder="Year" type="text" required="" name="age_of_car"
@@ -206,17 +206,18 @@
           </div>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-lg-2 col-md-4 col-sm-4">
           <div class="form-group form_calendar form_arrow_none">
             <label class="required"> Car Availability :</label>
             <p-calendar #availibility [(ngModel)]="selectDate" [ngModelOptions]="{standalone: true}"
               selectionMode="multiple" [monthNavigator]="true" [showOtherMonths]="false"
               (onMonthChange)="checkMonth($event)" (onSelect)="checkSelect($event)" (ngModelChange)="onChange($event)"
               placeholder="Select Availability" [touchUI]="false" [showIcon]="true" [readonlyInput]="true"
-              [yearRange]="yearRange" [minDate]="today">
+              [yearRange]="yearRange" [minDate]="today" [selectOtherMonths]="true">
               <p-header class="availibility-header">
-                <p-checkbox styleClass="cal-chkbox" [(ngModel)]="availabilitySelectAllArr[selectedMonth]"
-                  [ngModelOptions]="{standalone: true}" binary="true" (onChange)="selectAllDates($event)">
+                <p-checkbox styleClass="cal-chkbox" [(ngModel)]="availabilitySelectAllArr[selectedMonth].value"
+                  [ngModelOptions]="{standalone: true}" binary="true" name="word{{selectedMonth}}"
+                  (onChange)="selectAllDates($event)">
                 </p-checkbox>
                 Select Month
               </p-header>
@@ -232,7 +233,7 @@
           </div>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-lg-2 col-md-4 col-sm-4">
           <div class="form-group">
             <label>Navigation Status :</label>
             <div class="custom-radio-wrap">
@@ -253,7 +254,7 @@
           </div>
         </div>
 
-        <div class="col-md-10">
+        <div class="col-lg-10 col-md-10 col-sm-10">
           <div class="form-group">
             <label class="required"> Car Image :</label>
             <input class="form-control file_input" type="file" name="car_gallery" formControlName="car_gallery"
@@ -267,7 +268,7 @@
 
 
 
-        <div class="col-md-12" *ngIf="CarOldImage.length > 0">
+        <div class="col-lg-12 col-md-12 col-sm-12" *ngIf="CarOldImage.length > 0">
           <div class="form-group">
             <label>Uploaded Car Image Preview :</label>
             <div class="row">
@@ -279,7 +280,7 @@
           </div>
         </div>
 
-        <div class="col-md-12" *ngIf="CarImage.length > 0">
+        <div class="col-lg-12 col-md-12 col-sm-12" *ngIf="CarImage.length > 0">
           <div class="form-group">
             <label>Car Image(s) Preview :</label>
             <div class="row">
@@ -291,7 +292,7 @@
           </div>
         </div>
 
-        <div class="col-sm-12">
+        <div class="col-lg-12 col-md-12 col-sm-12">
           <button type="submit" *ngIf="!isLoading"
             class="btn waves-effect waves-light custom-btn btn-primary">Submit</button>
           <button type="button" *ngIf="isLoading" class="btn waves-effect loading-btn waves-light btn-primary"

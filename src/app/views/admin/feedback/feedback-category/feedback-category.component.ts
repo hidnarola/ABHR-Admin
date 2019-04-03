@@ -32,6 +32,7 @@ export class FeedbackCategoryComponent implements OnInit, OnDestroy, AfterViewIn
   public title = 'Add Category';
   closeResult: string;
   public Id;
+  public modalData;
 
   constructor(
     public renderer: Renderer,
@@ -63,6 +64,7 @@ export class FeedbackCategoryComponent implements OnInit, OnDestroy, AfterViewIn
 
   // model
   open2(content, item) {
+    this.modalData = content;
     if (item !== 'undefined' && item !== '') {
       this.title = 'Edit Category';
       this.isEdit = true;
@@ -90,8 +92,19 @@ export class FeedbackCategoryComponent implements OnInit, OnDestroy, AfterViewIn
 
   closePopup() {
     const element = document.getElementById('closepopup');
-    element.click();
+    if (element !== null) {
+      element.click();
+    }
     this.isLoading = false;
+  }
+
+  closeDeletePopup() {
+    const data: HTMLCollection = document.getElementsByClassName('ui-button');
+    if (data.length > 0) {
+      console.log('l => ', data[1]);
+      const ele: any = data[1];
+      ele.click();
+    }
   }
 
   // dlt popup
@@ -238,6 +251,11 @@ export class FeedbackCategoryComponent implements OnInit, OnDestroy, AfterViewIn
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
+    console.log('this.modalData on destroy => ', this.modalData);
+    if (this.modalData !== undefined) {
+      this.closePopup();
+    }
+    this.closeDeletePopup();
   }
 
   ngAfterViewInit(): void {

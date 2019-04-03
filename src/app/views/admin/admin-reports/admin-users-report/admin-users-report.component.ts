@@ -57,11 +57,13 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
       dtInstance.draw();
     });
   }
+
   FilterRange() {
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.draw();
     });
   }
+
   ngOnInit() {
     this.isCols = true;
     this.ReportData();
@@ -105,11 +107,12 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
             this.service.post('admin/user/report_list', dataTablesParameters).subscribe(res => {
               this.reports = res['result']['data'];
               // this.reports = [];
+              console.log('this.reports => ', this.reports);
               this.totalRecords = res['result']['recordsTotal'];
               if (this.reports.length > 0) {
                 this.isCols = true;
                 $('.dataTables_wrapper').css('display', 'block');
-              } else if (dataTablesParameters['search']['value'] !== null) {
+              } else if (dataTablesParameters['search']['value'] !== '') {
                 console.log('search value => ');
                 this.isCols = true;
               } else if (this.reports.length === 0 && this.rangeDates === undefined) {
@@ -187,6 +190,7 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
     } catch (error) { }
 
   }
+
   render(): void {
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       // Destroy the table first
@@ -198,7 +202,9 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
+    this.closeDeletePopup();
   }
+
   ngAfterViewInit(): void {
     this.dtTrigger.next();
     let table: any = $('.custom-datatable').DataTable();
@@ -212,12 +218,14 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
   handleFilterCalendar = () => {
     this.datePicker.overlayVisible = false;
   }
+
   handleClearCalendar = () => {
     this.rangeDates = null;
     this.datePicker.overlayVisible = false;
     this.render();
     this.spinner.show();
   }
+
   ExportRecords() {
     this.service.post('admin/user/export_report_list', this.exportParam).subscribe(async (res: any) => {
       this.exportData = await res['result']['data'];
@@ -284,6 +292,19 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight)
       pdf.save('Users-Report.pdf'); // Generated PDF   
     });
+  }
+
+  closeDeletePopup() {
+    // const data: HTMLCollection = document.getElementsByClassName('ui-button');
+    const data: HTMLCollection = document.getElementsByClassName('ui-dialog-footer');
+    console.log('data => ', data);
+    console.log('data.length => ', data.length);
+    if (data.length > 0) {
+      const ele: any = data[0].children[1];
+      ele.click();
+    } else {
+      console.log('else => ');
+    }
   }
 
   cancel(Id) {

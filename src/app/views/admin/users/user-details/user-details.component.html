@@ -4,33 +4,30 @@
       <div class="row mb-15">
         <div class="col-md-12">
           <h4 id="blue" class="h4_user_img"> Detail Of {{userData.first_name}} {{userData.last_name}}
-            <img [src]="userData.profile_image? imageURL+userData.profile_image:'/assets/images/users/user.png'" id="prfl-img"
-              class="img-fluid img-rounded right_top_image" alt="Profile_Image" />
+            <img [src]="userData.profile_image? imageURL+userData.profile_image:'/assets/images/users/user.png'"
+              id="prfl-img" class="img-fluid img-rounded right_top_image" alt="Profile_Image" />
           </h4>
         </div>
       </div>
-      <!-- <h4 id="blue" class="mt-45"> Detail Of <strong>"{{userData.first_name}} {{userData.last_name}}"</strong> </h4> -->
-      <!-- <img [src]="userData.profile_image?userData.profile_image:'/assets/images/users/user.png'" class="img-fluid img-rounded right_top_image"
-        alt="Profile_Image" /> -->
       <div class="row">
         <div class="col-md-12">
-          <div class="cars-dtl-box-inr"><b>Full name : </b><span>{{userData.first_name}} {{userData.last_name}}</span></div>
+          <div class="cars-dtl-box-inr"><b>Full name : </b><span>{{userData.first_name}} {{userData.last_name}}</span>
+          </div>
           <div class="cars-dtl-box-inr"><b>Email : </b>
             <span>{{ userData?.email_verified === 0 ? '' :userData?.email }}
-              <label class="label label-{{(userData?.email_verified === 0) ? 'danger': (userData?.email_verified === 1) ? 'warning': 'success'}}">
+              <label
+                class="label label-{{(userData?.email_verified === 0) ? 'danger': (userData?.email_verified === 1) ? 'warning': 'success'}}">
                 {{userData?.email_msg}}</label>
             </span>
 
           </div>
           <div class="cars-dtl-box-inr"><b>Phone Number : </b>
             <span>
-              {{ (userData?.phone_number_verified === 0) ? '-' : userData?.phone_number }}
-              <label class="label label-{{(userData?.phone_number_verified === 0) ? 'danger': (userData?.phone_number_verified === 1) ? 'warning': 'success'}}">
+              {{ (userData?.phone_number_verified === 0) ? '' : userData?.phone_number }}
+              <label
+                class="label label-{{(userData?.phone_number_verified === 0) ? 'danger': (userData?.phone_number_verified === 1) ? 'warning': 'success'}}">
                 {{userData?.phone_msg}}</label>
             </span>
-            <!-- <span  *ngIf="userData.phone_number">{{userData?.phone_number}}</span>&nbsp; -->
-
-            <!-- <span *ngIf="userData?.phone_number_verified === 0">-</span> -->
           </div>
           <div class="cars-dtl-box-inr" *ngIf="userData.address"><b>Address : </b>
             <span *ngFor="let address of userData?.address; let i = index">
@@ -38,7 +35,8 @@
             <span *ngIf="userData?.address.length === 0">-</span>
           </div>
           <div class="cars-dtl-box-inr"><b>No. of Rentals : </b><span>{{userData?.count | number}}</span></div>
-          <div class="cars-dtl-box-inr"><b>User Status : </b><span>{{userData?.app_user_status | titlecase}}</span></div>
+          <div class="cars-dtl-box-inr"><b>User Status : </b><span>{{userData?.app_user_status | titlecase}}</span>
+          </div>
         </div>
 
       </div>
@@ -51,36 +49,49 @@
     <div class="row">
       <div class="col-md-6">
         <h4 class="mb-20"> License Details
-          <label class="label label-{{(userData?.driving_license_verification === 0) ? 'danger': (userData?.driving_license_verification === 1) ? 'warning': 'success'}}">
+          <label
+            class="label label-{{(userData?.driving_license_verification === 0) ? 'danger': (userData?.driving_license_verification === 1) ? 'warning': 'success'}}">
             {{userData?.license_msg}}
           </label>
         </h4>
       </div>
       <div class="col-md-6 text-right">
-        <button type="button" class="btn btn-primary custom-add-btn" *ngIf="(userData?.driving_license_verification === 1)"
-          (click)="licenceVerification()">
+        <button type="button" class="btn btn-primary custom-add-btn"
+          *ngIf="(userData?.driving_license_verification === 1)" (click)="licenceVerification()">
           <i class="mdi mdi-check" aria-hidden="true"></i> Verify
         </button>
-        <button type="button" class="btn btn-primary custom-add-btn green-btn" *ngIf="(userData?.driving_license_verification === 2)">
+        <button type="button" class="btn btn-primary custom-add-btn green-btn"
+          *ngIf="(userData?.driving_license_verification === 2)">
           <i class="mdi mdi-checkbox-multiple-marked" aria-hidden="true"></i> Verified
         </button>
       </div>
     </div>
     <div class="row" *ngIf="userData">
       <div class="col-md-12" *ngIf="userData.driving_license">
-        <div class="cars-dtl-box-inr"><b>License Number : </b><span>{{userData.driving_license.number}}</span></div>
-        <div class="cars-dtl-box-inr"><b>Country: </b><span>{{userData.driving_license.country}}</span></div>
-        <div class="cars-dtl-box-inr"><b>Issue Date : </b><span>{{userData.driving_license.issue_date | date}}</span></div>
-        <div class="cars-dtl-box-inr"><b>Expiry Date : </b><span>{{userData.driving_license.expiry_date | date}}</span></div>
+        <div class="cars-dtl-box-inr">
+          <b>License Number : </b>
+          <span>{{userData.driving_license.number ? userData.driving_license.number : '-'}}</span>
+        </div>
+        <div class="cars-dtl-box-inr">
+          <b>Country: </b>
+          <span>{{userData.driving_license.country ? userData.driving_license.country : '-'}}</span>
+        </div>
+        <div class="cars-dtl-box-inr">
+          <b>Issue Date : </b>
+          <span>{{userData.driving_license.issue_date ? (userData.driving_license.issue_date | date) : '-' }}</span>
+        </div>
+        <div class="cars-dtl-box-inr">
+          <b>Expiry Date : </b>
+          <span>{{userData.driving_license.expiry_date ? (userData.driving_license.expiry_date | date) : '-' }}</span>
+        </div>
       </div>
       <div class="col-md-12" *ngIf="userData.driving_license">
-        <!-- <img [src]="imgUrl+ 'user/licence/' + image.name" class="img-fluid img-rounded" alt="Licence"> -->
-        <!-- <img [src]="imgUrl+ 'user/licence/' + image.name" class="img-fluid img-rounded" alt="Licence"> -->
-        <img [src]="userData.driving_license.front_image?imageURL+userData.driving_license.front_image:'/assets/images/document/license.png'"
+        <img
+          [src]="userData.driving_license.front_image?imageURL+userData.driving_license.front_image:'/assets/images/document/license.png'"
           class="img-fluid img-rounded license_image" alt="Licence_Front">
-        <img [src]="userData.driving_license.back_image?imageURL+userData.driving_license.back_image: '/assets/images/document/license.png'"
+        <img
+          [src]="userData.driving_license.back_image?imageURL+userData.driving_license.back_image: '/assets/images/document/license.png'"
           class="img-fluid img-rounded license_image" alt="Licence_Back">
-
       </div>
     </div>
   </div>
@@ -91,7 +102,8 @@
     <div class="row">
       <div class="col-md-6">
         <h4 class="mb-20"> Identity Card Details
-          <label class="label label-{{(userData?.id_card_verification === 0) ? 'danger': (userData?.id_card_verification === 1) ? 'warning': 'success'}}">
+          <label
+            class="label label-{{(userData?.id_card_verification === 0) ? 'danger': (userData?.id_card_verification === 1) ? 'warning': 'success'}}">
             {{userData?.id_msg}}
           </label>
         </h4>
@@ -101,7 +113,8 @@
           (click)="idCardVerification()">
           <i class="mdi mdi-check" aria-hidden="true"></i> Verify
         </button>
-        <button type="button" class="btn btn-primary custom-add-btn green-btn" *ngIf="(userData?.id_card_verification === 2)">
+        <button type="button" class="btn btn-primary custom-add-btn green-btn"
+          *ngIf="(userData?.id_card_verification === 2)">
           <i class="mdi mdi-checkbox-multiple-marked" aria-hidden="true"></i> Verified
         </button>
       </div>
@@ -109,9 +122,11 @@
     <div class="row" *ngIf="userData">
       <div class="col-md-12" *ngIf="userData.id_card">
         <div class="cars-dtl-box-inr"><b>Type : </b><span>{{userData.id_card.type}}</span></div>
-        <img [src]="userData.id_card.front_image?imageURL+userData.id_card.front_image:'/assets/images/document/license.png'"
+        <img
+          [src]="userData.id_card.front_image?imageURL+userData.id_card.front_image:'/assets/images/document/license.png'"
           class="img-fluid img-rounded license_image" alt="ID_Front">
-        <img [src]="userData.id_card.back_image?imageURL+userData.id_card.back_image:'/assets/images/document/license.png'"
+        <img
+          [src]="userData.id_card.back_image?imageURL+userData.id_card.back_image:'/assets/images/document/license.png'"
           class="img-fluid img-rounded license_image" alt="ID_Back">
       </div>
     </div>

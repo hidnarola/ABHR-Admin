@@ -7,7 +7,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { CrudService } from '../../../shared/services/crud.service';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl, AbstractControl } from '@angular/forms';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import * as io from 'socket.io-client';
@@ -53,6 +53,7 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
   private socket;
   public countryCode: SelectItem[];
   selectedCc: string;
+  public modalData;
 
   constructor(
     public renderer: Renderer,
@@ -84,7 +85,6 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
       email: String
     };
     this.countryCode = cc;
-    console.log('this.selectedCc => ', this.selectedCc);
   }
 
   noWhitespaceValidator(control: FormControl) {
@@ -149,13 +149,23 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   closePopup() {
     const element = document.getElementById('closepopup');
-    element.click();
+    if (element !== null) {
+      element.click();
+    }
     this.isLoading = false;
   }
-
+  closeDeletePopup() {
+    const data: HTMLCollection = document.getElementsByClassName('ui-button');
+    if (data.length > 0) {
+      console.log('l => ', data[1]);
+      const ele: any = data[1];
+      ele.click();
+    }
+  }
   // model
   open2(content, item) {
     console.log('item => ', item);
+    this.modalData = content;
     if (item !== 'undefined' && item !== '') {
       this.title = 'Edit Agent';
       this.isEdit = true;
@@ -261,7 +271,11 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
-    // this.closePopup();
+    console.log('this.modalData on destroy => ', this.modalData);
+    if (this.modalData !== undefined) {
+      this.closePopup();
+    }
+    this.closeDeletePopup();
   }
 
   ngOnInit() {

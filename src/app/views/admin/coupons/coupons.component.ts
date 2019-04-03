@@ -45,6 +45,7 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
   public old_image;
   public nameData: any;
   public couponImage;
+  public modalData;
 
   constructor(
     public renderer: Renderer,
@@ -119,7 +120,9 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
     let isValid = !isWhitespace;
     return isValid ? null : { 'required': true };
   }
+
   get f() { return this.AddEditForm.controls; }
+
   render(): void {
     this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
       dtInstance.destroy();
@@ -129,6 +132,11 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
+    console.log('this.modalData on destroy => ', this.modalData);
+    if (this.modalData !== undefined) {
+      this.closePopup();
+    }
+    this.closeDeletePopup();
   }
 
   ngOnInit() {
@@ -233,6 +241,7 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // model
   open2(content, item) {
+    this.modalData = content;
     this.formData.banner_image = null;
     if (item !== 'undefined' && item !== '') {
       this.title = 'Edit Coupon';
@@ -280,8 +289,20 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   closePopup() {
     const element = document.getElementById('closepopup');
-    element.click();
+    console.log('element => ', element);
+    if (element !== null) {
+      element.click();
+    }
     this.isLoading = false;
+  }
+
+  closeDeletePopup() {
+    const data: HTMLCollection = document.getElementsByClassName('ui-button');
+    if (data.length > 0) {
+      console.log('l => ', data[1]);
+      const ele: any = data[1];
+      ele.click();
+    }
   }
 
   // dlt popup

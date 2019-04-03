@@ -95,7 +95,9 @@ export class KeywordsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   closePopup() {
     const element = document.getElementById('closepopup');
-    element.click();
+    if (element !== null) {
+      element.click();
+    }
     this.isLoading = false;
   }
   onSubmit() {

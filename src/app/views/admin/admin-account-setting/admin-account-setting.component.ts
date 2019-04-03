@@ -55,8 +55,8 @@ export class AdminAccountSettingComponent implements OnInit {
       email: ['', Validators.compose([Validators.required, Validators.email, Validators.pattern(pattern), this.uniqueEmailValidator])],
       support_email: ['', Validators.compose([Validators.required, Validators.pattern(pattern), Validators.email])],
       support_site_url: ['', Validators.compose([Validators.pattern('^(https?:\/\/)?[0-9a-zA-Z]+\.[-_0-9a-zA-Z]+\.[0-9a-zA-Z]+$')])],
-      support_phone_number: ['', Validators.compose([Validators.required, Validators.pattern('^[0-9]{10,20}$'),
-      this.uniqueSupportPhoneValidator])],
+      support_phone_number:
+        ['', Validators.compose([Validators.required, Validators.pattern('^[0-9]{10,20}$'), this.uniqueSupportPhoneValidator])],
       support_country_code: [''],
     });
     this.formData = {
@@ -180,6 +180,7 @@ export class AdminAccountSettingComponent implements OnInit {
     this.submitted = true;
     this.numberErr = false;
     this.numberErr2 = false;
+    console.log('this.SettingForm => ', this.SettingForm);
     if (!this.SettingForm.invalid) {
       this.isLoading = true;
       this.formData = this.SettingForm.value;

@@ -42,6 +42,7 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   public phoneData: any;
   public errMsg;
   public phoneErrMsg;
+  public modalData;
 
   constructor(
     public renderer: Renderer,
@@ -139,8 +140,11 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
   closePopup() {
     const element = document.getElementById('closepopup');
-    element.click();
+    if (element !== null) {
+      element.click();
+    }
   }
+
   onSubmit() {
     this.submitted = true;
     this.numberErr = false;
@@ -183,6 +187,10 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
+    console.log('this.modalData on destroy => ', this.modalData);
+    if (this.modalData !== undefined) {
+      this.closePopup();
+    }
   }
 
   RentalData() {
@@ -292,6 +300,8 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // model
   open2(content, agentDetails) {
+    this.modalData = content;
+    console.log('content => ', content);
     console.log('agentDetails => ', agentDetails);
     console.log('agentDetails.country_code => ', agentDetails.country_code);
     this.isLoading = false;

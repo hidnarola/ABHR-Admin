@@ -331,6 +331,11 @@ body .ui-button:enabled:focus { box-shadow: none !important;}
 
 
 /***media start here  **/
+@media(max-width:1169px){
+    .blue .topbar .navbar-header .navbar-brand img {
+    margin-top: 10px;
+}
+}
 @media (min-width:768px){
     .topbar ul.dropdown-user {min-width: 300px !important;}
     .card_one_data .cars-dtl-box-inr b {position: absolute;left: 0;top: 0;margin: 0;height: 100%;padding: 0;display: flex;align-items: center;justify-content: flex-end;padding-right: 10px;}
@@ -338,6 +343,7 @@ body .ui-button:enabled:focus { box-shadow: none !important;}
     .card_one_data .cars-dtl-box-inr label {margin: 0;}
     .card_one_data .cars-dtl-box-inr span {display: flex;width: 100%;flex-wrap: wrap;align-items: center;}
     .card_one_data .cars-dtl-box-inr span label {margin-left: 10px;}
+   
 }
 
 @media(max-width:1460px){
@@ -359,6 +365,9 @@ body .ui-button:enabled:focus { box-shadow: none !important;}
     .row_grey_one label:after {opacity: 0;}
     .row_grey_one > div:first-child {padding-right: 15px;}
     .row_grey_one label {border-bottom: 0px solid #ced4da;border-right: 1px solid #ced4da;    text-align: left;padding: 7px 10px 8px 12px;}
+     body .dataTables_wrapper .dataTables_paginate{float:none; text-align:center; width:100%; clear:both;}
+     .dataTables_wrapper .dataTables_info{float:none !important; text-align:center;}
+     .breadcrumb-item + .breadcrumb-item {padding-left: 5px;}
 }
 @media(max-width: 991px){
 .form_filter{

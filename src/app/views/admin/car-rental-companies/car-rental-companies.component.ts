@@ -50,6 +50,7 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
   public numberErr: boolean = false;
   selectedCc: string;
   public countryCode: SelectItem[];
+  public modalData;
 
   constructor(
     public renderer: Renderer,
@@ -274,6 +275,7 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
 
   // Add-Edit pop up
   open2(content, item) {
+    this.modalData = content;
     console.log('item => ', item);
     console.log('item.country_code => ', item.country_code);
     this.service_location = [];
@@ -354,12 +356,28 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
+    console.log('this.modalData on destroy => ', this.modalData);
+    if (this.modalData !== undefined) {
+      this.closePopup();
+    }
+    this.closeDeletePopup();
   }
 
   closePopup() {
     const element = document.getElementById('closepopup');
-    element.click();
+    if (element !== null) {
+      element.click();
+    }
     this.isLoading = false;
+  }
+
+  closeDeletePopup() {
+    const data: HTMLCollection = document.getElementsByClassName('ui-button');
+    if (data.length > 0) {
+      console.log('l => ', data[1]);
+      const ele: any = data[1];
+      ele.click();
+    }
   }
 
   handleChange(e, id) {

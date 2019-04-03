@@ -52,6 +52,7 @@ export class ArticleListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
+    this.closeDeletePopup();
   }
 
 
@@ -168,5 +169,14 @@ export class ArticleListComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
   // dlt pop up ends here
+
+  closeDeletePopup() {
+    const data: HTMLCollection = document.getElementsByClassName('ui-button');
+    if (data.length > 0) {
+      console.log('l => ', data[1]);
+      const ele: any = data[1];
+      ele.click();
+    }
+  }
 
 }

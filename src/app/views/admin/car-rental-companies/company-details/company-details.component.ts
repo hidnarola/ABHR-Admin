@@ -55,6 +55,7 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
   selectedCc: string;
   public emailErrMsg;
   public phoneErrMsg;
+  public modalData;
 
   constructor(
     public renderer: Renderer,
@@ -179,8 +180,18 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
   get f() { return this.AddEditForm.controls; }
   closePopup() {
     const element = document.getElementById('closepopup');
-    element.click();
+    if (element !== null) {
+      element.click();
+    }
     this.isLoading = false;
+  }
+  closeDeletePopup() {
+    const data: HTMLCollection = document.getElementsByClassName('ui-button');
+    if (data.length > 0) {
+      console.log('l => ', data[1]);
+      const ele: any = data[1];
+      ele.click();
+    }
   }
   onSubmit() {
     this.submitted = true;
@@ -228,6 +239,7 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
 
   // model
   open2(content, userDetails) {
+    this.modalData = content;
     console.log('userDetails => ', userDetails);
     this.isLoading = false;
     this.service_location = [];
@@ -265,6 +277,11 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
+    console.log('this.modalData on destroy => ', this.modalData);
+    if (this.modalData !== undefined) {
+      this.closePopup();
+    }
+    this.closeDeletePopup();
   }
 
   ngAfterViewInit(): void {

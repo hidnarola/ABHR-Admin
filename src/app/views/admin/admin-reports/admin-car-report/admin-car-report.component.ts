@@ -106,19 +106,27 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
               console.log('response====>', res);
               this.reports = await res['result']['data'];
               // this.reports = [];
+              console.log('this.reports => ', this.reports);
               this.totalRecords = res['result']['recordsTotal'];
               this.spinner.hide();
+              console.log('dataTablepaRAMETERS => ', dataTablesParameters);
               console.log('dataTablesParameters[search][value] => ', dataTablesParameters['search']['value']);
               if (this.reports.length > 0) {
                 this.isCols = true;
                 $('.dataTables_wrapper').css('display', 'block');
-              } else if (dataTablesParameters['search']['value'] !== null) {
+              } else if (dataTablesParameters['search']['value'] !== '') {
                 console.log('search value => ');
                 this.isCols = true;
               } else if (this.reports.length === 0 &&
                 this.rangeDates === undefined) {
                 console.log('new condition => ');
                 this.isCols = false;
+                // if (dataTablesParameters['search']['value'] !== '') {
+                //   console.log('search value => ');
+                //   this.isCols = true;
+                // } else {
+                //   this.isCols = false;
+                // }
               } else {
                 console.log('this.rangeDates => ', this.rangeDates);
                 if ((dataTablesParameters['search']['value'] !== '' && dataTablesParameters['search']['value'] !== null) ||
