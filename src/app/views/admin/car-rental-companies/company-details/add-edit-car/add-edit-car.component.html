@@ -205,7 +205,7 @@
             </div>
           </div>
         </div>
-
+        <!-- [yearRange]="yearRange" -->
         <div class="col-lg-2 col-md-4 col-sm-4">
           <div class="form-group form_calendar form_arrow_none">
             <label class="required"> Car Availability :</label>
@@ -213,7 +213,7 @@
               selectionMode="multiple" [monthNavigator]="true" [showOtherMonths]="false"
               (onMonthChange)="checkMonth($event)" (onSelect)="checkSelect($event)" (ngModelChange)="onChange($event)"
               placeholder="Select Availability" [touchUI]="false" [showIcon]="true" [readonlyInput]="true"
-              [yearRange]="yearRange" [minDate]="today" [selectOtherMonths]="true">
+              [minDate]="today" [selectOtherMonths]="true" [disabledDates]="bookedDates">
               <p-header class="availibility-header">
                 <p-checkbox styleClass="cal-chkbox" [(ngModel)]="availabilitySelectAllArr[selectedMonth].value"
                   [ngModelOptions]="{standalone: true}" binary="true" name="word{{selectedMonth}}"

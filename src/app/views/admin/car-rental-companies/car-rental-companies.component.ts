@@ -417,7 +417,6 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
       this.formData.service_location = this.service_location;
       if (this.formData.phone_number === null || this.formData.phone_number === '' || this.formData.phone_number === 'null') {
         this.formData.country_code = null;
-        console.log('number null => ');
       }
       console.log('this.formData => ', this.formData);
       if (this.isEdit) {

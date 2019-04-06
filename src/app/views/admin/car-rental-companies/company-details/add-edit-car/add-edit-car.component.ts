@@ -18,7 +18,7 @@ export class AddEditCarComponent implements OnInit {
   @ViewChild('availibility') datePicker;
   public licencePlateData: any;
   CarImage: any = [];
-  yearRange = '2019:2020';
+  // yearRange = '2019:2020';
   CarOldImage: any = [];
   CarImageRAW: any = [];
   imgUrl = environment.imgUrl;
@@ -46,12 +46,14 @@ export class AddEditCarComponent implements OnInit {
   // public DateArray;
   public DateArray = [];
   public carAvailableDates;
+  public carBookedDates;
   public availabilitySelectAllArr: any = [{ value: false }, { value: false }, { value: false }, { value: false },
   { value: false }, { value: false }, { value: false }, { value: false }, { value: false }, { value: false },
   { value: false }, { value: false }];
   public numberErr: boolean = false;
   public numberErr2: boolean = false;
   public numberErr3: boolean = false;
+  bookedDates: Array<Date> = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -72,26 +74,15 @@ export class AddEditCarComponent implements OnInit {
       this.service.post('admin/company/car/details/', { car_id: this.carId }).subscribe(resp => {
         this.carDetails = resp['data'][0];
         this.spinner.hide();
-
         if (this.carDetails.availableData !== undefined) {
-
-
-
           this.carAvailableDates = this.carDetails.availableData;
           const _selectDate = [];
           this.carAvailableDates.forEach(element => {
-
-
-
             const toDay = new Date();
             const toDayMonth = (toDay.getMonth() + 1);
-
             if (toDayMonth === element.month) {
               var currentDay = parseInt(moment().format("DD"));
-
-
               element.availability.forEach(ele => {
-
                 let day = parseInt(moment(ele).format('DD'));
                 if (day >= currentDay) {
                   if (ele !== null) {
@@ -108,18 +99,9 @@ export class AddEditCarComponent implements OnInit {
                 var TotalDays = (MonthDays - currentDay) + 1;
               }
             } else if (toDayMonth > element.month) {
-
-
-              element.availability.forEach(ele => {
-
-
-
-
-              });
+              element.availability.forEach(ele => { });
             } else {
-
               element.availability.forEach(ele => {
-
                 if (ele !== null) {
                   let Dateobj = new Date(ele);
                   _selectDate.push(Dateobj);
@@ -131,17 +113,26 @@ export class AddEditCarComponent implements OnInit {
                 var TotalDays = moment(this.selectedYear + '-' + element.month, 'YYYY-MM').daysInMonth();
               }
             }
-
             if (TotalDays === element.availability.length) {
               this.selectedMonth = element.month - 1;
               this.availabilitySelectAllArr[this.selectedMonth].value = true;
             }
-
           });
-
           if (_selectDate && _selectDate.length > 0) {
             this.selectDate = _selectDate;
           }
+        }
+        if (this.carDetails.disabledDates !== undefined) {
+          this.carBookedDates = this.carDetails.disabledDates;
+          console.log('this.carBookedDates => ', this.carBookedDates);
+          this.carBookedDates.forEach(e => {
+            console.log('e => ', e);
+            let bookedDateObj = new Date(e);
+            this.bookedDates.push(bookedDateObj);
+            this.selectDate.push(bookedDateObj);
+          });
+          console.log('bookedDates => ', this.bookedDates);
+          console.log('selectDate => ', this.selectDate);
         }
         this.isEdit = true;
         this.service.post('app/car/modelList', { brand_ids: [this.carDetails.car_brand_id] }).subscribe(res => {
@@ -279,6 +270,7 @@ export class AddEditCarComponent implements OnInit {
       }
       date.setDate(date.getDate() + 1);
     }
+
     if (this.cnt === TotalDays) {
       this.availabilitySelectAllArr[selectedmonth].value = true;
     } else {

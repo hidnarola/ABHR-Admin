@@ -121,7 +121,10 @@
     </div>
     <div class="row" *ngIf="userData">
       <div class="col-md-12" *ngIf="userData.id_card">
-        <div class="cars-dtl-box-inr"><b>Type : </b><span>{{userData.id_card.type}}</span></div>
+        <div class="cars-dtl-box-inr">
+          <b>Type : </b>
+          <span>{{userData.id_card.type ? userData.id_card.type : '-'}}</span>
+        </div>
         <img
           [src]="userData.id_card.front_image?imageURL+userData.id_card.front_image:'/assets/images/document/license.png'"
           class="img-fluid img-rounded license_image" alt="ID_Front">
