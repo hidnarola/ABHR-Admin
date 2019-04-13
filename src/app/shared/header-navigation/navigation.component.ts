@@ -46,6 +46,8 @@ export class NavigationComponent implements AfterViewInit, OnDestroy {
   });
   public companyPass: CompanyPassword;
   public adminPass: AdminPassword;
+  public passErr: boolean = false;
+  public repeatPassErr: boolean = false;
 
   constructor(
     private datashare: DataSharingService,
@@ -57,8 +59,9 @@ export class NavigationComponent implements AfterViewInit, OnDestroy {
     // change pass form
     this.changePassForm = this.formBuilder.group({
       old_password: ['', Validators.compose([Validators.required, this.passwordMatchValidator])],
-      new_password: ['', Validators.compose([Validators.required, Validators.minLength(6), Validators.maxLength(13)])],
-      repeat_new_password: ['', Validators.required],
+      new_password: ['', Validators.compose([Validators.required, Validators.minLength(6),
+      Validators.maxLength(13), this.noWhitespaceValidator])],
+      repeat_new_password: ['', Validators.compose([Validators.required, this.noWhitespaceValidator])],
     },
       {
         validator: MustMatch('new_password', 'repeat_new_password')
@@ -183,6 +186,9 @@ export class NavigationComponent implements AfterViewInit, OnDestroy {
       this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Logout Successfully' });
     }
   }
+
+
+
   get f() { return this.changePassForm.controls; }
 
   public passwordMatchValidator = (control: FormControl) => {
@@ -190,7 +196,6 @@ export class NavigationComponent implements AfterViewInit, OnDestroy {
     if ((isWhitespace2 = (control.value || '').trim().length === 1) || (isWhitespace2 = (control.value || '').trim().length === 0)) {
       return { 'required': true };
     } else {
-
       if (this.CurrentAdmin === 'company') {
         this.passwordData = { 'password': control.value, 'company_id': this.companyId };
         return this.service.post('company/check_password', this.passwordData).subscribe(res => {
@@ -220,6 +225,7 @@ export class NavigationComponent implements AfterViewInit, OnDestroy {
 
   showDialog() {
     this.display = true;
+    this.passErr = false;
     this.changePassForm.controls['old_password'].setValue('');
     this.changePassForm.controls['new_password'].setValue('');
     this.changePassForm.controls['repeat_new_password'].setValue('');
@@ -237,6 +243,22 @@ export class NavigationComponent implements AfterViewInit, OnDestroy {
 
   onSubmit() {
     this.submitted = true;
+    console.log('this.changePassForm.controls => ', this.changePassForm.controls);
+    // if (this.changePassForm.controls.new_password.errors.minlength !== undefined ||
+    //   this.changePassForm.controls.new_password.errors.maxlength !== undefined) {
+    //   console.log('not undefined => ');
+    //   if ((this.changePassForm.controls.new_password.errors.minlength.actualLength < 6) ||
+    //     (this.changePassForm.controls.new_password.errors.minlength.actualLength > 13)) {
+    //     this.passErr = false;
+    //   } else {
+    //     this.passErr = true;
+    //   }
+    // }
+    // if (this.changePassForm.controls.new_password.value.length > 5 && this.changePassForm.controls.new_password.value.length < 14) {
+    //   this.passErr = true;
+    // } else {
+    //   this.passErr = false;
+    // }
     if (!this.changePassForm.invalid) {
       this.isLoading = true;
       this.formData = this.changePassForm.value;
@@ -321,4 +343,34 @@ export class NavigationComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void { }
+
+  noWhitespaceValidator(control: FormControl) {
+    let isWhitespace = (control.value || '').trim().length === 0;
+    let isValid = !isWhitespace;
+    return isValid ? null : { 'required': true };
+    // return isValid ? null : { 'null': true };
+  }
+
+  // keyupPass() {
+  //   if ((this.changePassForm.value.new_password.length > 0)
+  //     && (this.changePassForm.controls.new_password.value.trim().length === 0)) {
+  //     if (this.submitted === true) {
+  //       if (this.changePassForm.controls.new_password.value.length > 5 && this.changePassForm.controls.new_password.value.length < 14) {
+  //         this.passErr = true;
+  //       } else {
+  //         this.passErr = false;
+  //       }
+  //     } else {
+  //       this.passErr = true;
+  //     }
+  //   } else {
+  //     this.passErr = false;
+  //   }
+  // }
+
+  // keyupRepeatPass() {
+  //   console.log('reset pass keyup => ');
+  //   console.log('chng pass form => ', this.changePassForm.value.repeat_new_password);
+  // }
+
 }

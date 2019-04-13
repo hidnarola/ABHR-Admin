@@ -22,7 +22,6 @@ import { AgentsComponent } from './agents/agents.component';
 import { StaffComponent } from './staff/staff.component';
 import { CarRentalCompaniesComponent } from './car-rental-companies/car-rental-companies.component';
 import { UsersComponent } from './users/users.component';
-import { OperationsComponent } from './operations/operations.component';
 import { SettingsComponent } from './settings/settings.component';
 import { AgentDetailComponent } from './agents/agent-detail/agent-detail.component';
 import { CompanyDetailsComponent } from './car-rental-companies/company-details/company-details.component';
@@ -324,7 +323,6 @@ const AdminRoutes: Routes = [
       },
       {
         path: 'operations',
-        component: OperationsComponent,
         data: {
           title: 'Operations',
           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Operations' }]
@@ -611,7 +609,6 @@ const AdminRoutes: Routes = [
     CarRentalCompaniesComponent,
     AdminComponent,
     UsersComponent,
-    OperationsComponent,
     SettingsComponent,
     AgentDetailComponent,
     StaffDetailComponent,
@@ -645,6 +642,6 @@ const AdminRoutes: Routes = [
     ReportedCarsComponent,
     ReportedCarDetailComponent,
   ],
-  providers: [ ]
+  providers: []
 })
 export class AdminModule { }

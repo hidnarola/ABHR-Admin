@@ -6,11 +6,12 @@ const host = location.host.split(':')[0];
 export const environment = {
   production: false,
   // apiUrl: 'http://18.219.16.50:4000/',
+  apiUrl: 'http://localhost:4000/',
   imgUrl: 'http://18.219.16.50:4000/upload/',
   socketUrl: 'http://18.219.16.50:4000',
   // socketUrl: 'http://192.168.100.36:4000',
   // apiUrl: 'http://192.168.100.36:4000/',
-  apiUrl: 'http://192.168.100.37:4000/',
+  // apiUrl: 'http://192.168.100.37:4000/',
   // imgUrl: 'http://192.168.100.32:4000/upload/',
   google_api_key: 'AIzaSyBpm9w9TINRaRqoSi8yriMMZwtcBaPkukM',
 };

@@ -288,17 +288,23 @@
                 </div>
             </div>
         </div>
+        <!-- [ngClass]="{ 'is-invalid': (submitted && f.new_password.errors) || passErr }" -->
+        <!-- (keyup)="keyupPass()" -->
         <div class="col-sm-12">
             <div class="form-group">
                 <label class="required">New Password </label>
                 <input class="form-control" type="password" required="" name="new_password"
                     placeholder="Enter New Password" formControlName="new_password" class="form-control"
-                    [ngClass]="{ 'is-invalid': submitted && f.new_password.errors }">
-                <div *ngIf=" submitted && f.new_password.errors " class="invalid-feedback">
+                    [ngClass]="{ 'is-invalid': submitted && f.new_password.errors}">
+                <div *ngIf="submitted && f.new_password.errors" class="invalid-feedback">
                     <div *ngIf="f.new_password.errors.required">New Password is required</div>
-                    <div *ngIf="f.new_password.errors.minlength || f.new_password.errors.maxlength">New Password should
-                        be 6 to 13 characters</div>
+                    <div *ngIf="f.new_password.errors.minlength || f.new_password.errors.maxlength">
+                        New Password should be 6 to 13 characters
+                    </div>
                 </div>
+                <!-- <div class="invalid-feedback">
+                    <div *ngIf="passErr">Only Space is not allowed</div>
+                </div> -->
             </div>
         </div>
         <div class="col-sm-12">

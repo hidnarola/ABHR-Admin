@@ -68,7 +68,7 @@ export class DeliveredCarsComponent implements OnInit, AfterViewInit, OnDestroy 
       serverSide: true,
       responsive: true,
       ordering: true,
-      order: [[7, 'desc']],
+      order: [[8, 'desc']],
       language: {
         'processing': '',
       },

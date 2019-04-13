@@ -405,20 +405,34 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
     this.company_address.address = selectedData.data.formatted_address;
     this.service_location.push(lng);
     this.service_location.push(lat);
+    var countryFlag = 0;
+    var cityFlag = 0;
+    var stateFlag = 0;
     for (var i = 0; i < selectedData.data.address_components.length; i++) {
-      var addressType = selectedData.data.address_components[i].types[0];
       var addressType = selectedData.data.address_components[i].types[0];
       if (addressType === 'country') {
         var country = selectedData.data.address_components[i].long_name;
         this.company_address.country = country;
+        countryFlag = 1;
       }
       if (addressType === 'administrative_area_level_1') {
         var state = selectedData.data.address_components[i].long_name;
         this.company_address.state = state;
+        stateFlag = 1;
       }
       if (addressType === 'locality') {
         var city = selectedData.data.address_components[i].long_name;
         this.company_address.city = city;
+        cityFlag = 1;
+      }
+      if (countryFlag === 0) {
+        this.company_address.country = '';
+      }
+      if (cityFlag === 0) {
+        this.company_address.city = '';
+      }
+      if (stateFlag === 0) {
+        this.company_address.state = '';
       }
     }
   }

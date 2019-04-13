@@ -380,10 +380,6 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   checkKeyPress(event) { }
 
-
-
-
-
   // dlt popup
   delete(userId) {
     this.confirmationService.confirm({

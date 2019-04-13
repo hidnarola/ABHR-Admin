@@ -47,6 +47,7 @@ export class AdminTermsComponent implements OnInit, AfterViewInit {
     this.spinner.show();
     this.service.get('admin/legal_settings').subscribe(res => {
       this.termsData = res['data'];
+      console.log('this.termsData => ', this.termsData);
       if (this.termsData != null) {
         this.form.controls['about_us'].setValue(this.termsData.about_us);
         this.form.controls['copyright'].setValue(this.termsData.copyright);

@@ -340,6 +340,11 @@ body .ui-button:enabled:focus { box-shadow: none !important;}
 .table-footer td table tr:last-child td {padding-bottom: 0;}
 /* pdf-css */
 
+/* Calender */
+.ui-datepicker-calendar-container span.ui-state-default.ui-state-disabled .cal-dis-btn{
+    color: white;
+    background-color: black;
+}
 
 
 
