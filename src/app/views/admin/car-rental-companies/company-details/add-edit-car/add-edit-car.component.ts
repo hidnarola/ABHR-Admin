@@ -19,7 +19,6 @@ export class AddEditCarComponent implements OnInit {
   @ViewChild('availibility') datePicker;
   public licencePlateData: any;
   CarImage: any = [];
-  // yearRange = '2019:2020';
   CarOldImage: any = [];
   CarImageRAW: any = [];
   imgUrl = environment.imgUrl;
@@ -122,8 +121,8 @@ export class AddEditCarComponent implements OnInit {
               }
             }
           });
-          // this.selectDate = [..._selectDate, ...this.bookedDates];
-          this.selectDate = [..._selectDate];
+          this.selectDate = [..._selectDate, ...this.bookedDates];
+          // this.selectDate = [..._selectDate];
           this.selectedMonth = minMonth - 1;
         }
 
@@ -155,9 +154,7 @@ export class AddEditCarComponent implements OnInit {
         this.AddEditCarForm.controls['licence_plate'].setValue(this.carDetails.licence_plate);
         this.AddEditCarForm.controls['car_color'].setValue(this.carDetails.car_color);
       });
-
     }
-
     this.service.get('app/car/brandlist').subscribe(res => {
       this.brandlist = res['data'].brand;
     });
@@ -232,29 +229,6 @@ export class AddEditCarComponent implements OnInit {
     this.selectDate = _selectDate;
   }
 
-  changeColorHandler = () => {
-    // const bookedDates = this.bookedDates;
-    // const currentMonth = this.selectedMonth;
-    // const bookedDatesDOM = document.getElementsByClassName('ui-state-disabled');
-    // console.log('bookedDatesDOM => ', bookedDatesDOM);
-    // console.log('bookedDatesDOM.length => ', bookedDatesDOM.length);
-
-    // // console.log('bookedDataDOM[0].inn => ', bookedDatesDOM[0].innerHTML);
-    // if (bookedDatesDOM[0]) {
-    //   bookedDatesDOM[0].className += ' cal-dis-btn';
-    // }
-    // // if (currentMonth === new Date().getMonth()) {
-    // // for (let i = 0; i < bookedDatesDOM.length; i++) {
-    // //   // if(bookedDatesDOM[i].innerHTML == '' ){
-    // //   console.log('bookedDatesDOM => ', bookedDatesDOM);
-    // //   bookedDatesDOM.classList.add(' cal-dis-btn');
-    // //   // }
-    // // }
-    // // } else {
-
-    // // }
-  }
-
   getDaysInSelectedMonth(selectedmonth, selectedYear) {
     const toDay = new Date();
     const toDayMonth = toDay.getMonth();
@@ -265,7 +239,6 @@ export class AddEditCarComponent implements OnInit {
       this.cnt = currentDay;
     } else {
       this.cnt = 0;
-      // this.cnt = 1;
     }
     var TotalDays;
     var month = selectedmonth + 1;
@@ -362,10 +335,12 @@ export class AddEditCarComponent implements OnInit {
       }
     }
   }
+
   deleteImage(index) {
     this.CarImage.splice(index, 1);
     this.CarImageRAW.splice(index, 1);
   }
+
   deleteOldImage(index) {
     this.CarOldImage.splice(index, 1);
   }
@@ -390,12 +365,13 @@ export class AddEditCarComponent implements OnInit {
     if (this.selectDate !== undefined && this.selectDate !== null) {
       this.availablityError = false;
       const final = [];
-      this.selectDate.forEach(ele => {
-        if (!(this.bookedDates.indexOf(ele) >= 0)) {
-          final.push(ele);
-        }
-      });
-      final.forEach(element => {
+      // this.selectDate.forEach(ele => {
+      //   if (!(this.bookedDates.indexOf(ele) >= 0)) {
+      //     final.push(ele);
+      //   }
+      // });
+      // final.forEach(element => {
+      this.selectDate.forEach(element => {
         var month = (moment(element).month() + 1);
         const strElement = moment(element).format('YYYY-MM-DD');
         if (typeof this.finalDates[month] !== 'undefined') {
@@ -409,7 +385,7 @@ export class AddEditCarComponent implements OnInit {
     } else {
       this.availablityError = true;
     }
-
+    console.log('this.bookedDates ,this.finalDates => ', this.bookedDates, this.finalDates);
     this.submitted = true;
     this.numberErr = false;
     this.numberErr2 = false;
@@ -493,36 +469,6 @@ export class AddEditCarComponent implements OnInit {
     this.getDaysInSelectedMonth(this.selectedMonth, this.selectedYear);
   }
 
-  checkOpen() {
-    // this.changeColorHandler();
-
-    // console.log('open open => ');
-    // const toDay = new Date();
-    // const toDayMonth = toDay.getMonth();
-    // console.log('toDayMonth => ', toDayMonth);
-    // this.bookedDates.forEach(d => {
-    //   if (toDayMonth === d.getMonth()) {
-    //     const bookedCurrentMonthObj = parseInt(moment(d).format('DD'));
-    //     this.currentMonthBookedDates.push(bookedCurrentMonthObj);
-    //   }
-    // });
-    // const ddArr = await document.getElementsByClassName('ui-state-disabled');
-
-    // console.log('dd  open => ', ddArr);
-    // console.log('dd.length => ', ddArr.item);
-
-    // for (let i = 0; i < ddArr.item.length; i++) {
-    //   // console.log('ddArr[i] => ', ddArr.item(i));
-    //   // console.log('check here ******* => ', this.currentMonthBookedDates);
-    //   // console.log('this.currentMonthBookedDates[i].indexof(dd.item(i).innerHTML) > 0 => ',
-    //   //   this.currentMonthBookedDates[i].indexof(ddArr.item(i).innerHTML) > 0);
-    //   // if (this.currentMonthBookedDates[i].indexof(ddArr.item(i).innerHTML) > 0) {
-    //   //   ddArr.item(i).className += ' black';
-    //   // }
-    // }
-
-  }
-
   checkSelect(event) {
     this.availablityError = false;
   }
@@ -530,7 +476,6 @@ export class AddEditCarComponent implements OnInit {
   checkMonth(event) {
     this.selectedMonth = (event.month - 1);
     this.selectedYear = event.year;
-    const dd = document.getElementsByClassName('ui-state-disabled');
   }
 
   selectAllDates(event) {
@@ -550,7 +495,6 @@ export class AddEditCarComponent implements OnInit {
           remainingDates.push(new Date(date));
         }
       });
-
       setTimeout(() => {
         if (remainingDates.length > 0) {
           this.selectDate = remainingDates;

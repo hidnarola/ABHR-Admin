@@ -208,7 +208,10 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
       this.formData.service_location = this.service_location;
       if (this.formData.phone_number === null || this.formData.phone_number === '' || this.formData.phone_number === 'null') {
         this.formData.country_code = null;
-        console.log('number null => ');
+      } else {
+        if (this.formData.country_code === null) {
+          this.formData.country_code = 971;
+        }
       }
       this.service.put('admin/company/update', this.formData).subscribe(res => {
         this.userDetails = this.formData;

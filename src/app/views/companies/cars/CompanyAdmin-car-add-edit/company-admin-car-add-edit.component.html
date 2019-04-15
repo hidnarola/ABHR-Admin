@@ -214,10 +214,11 @@
               selectionMode="multiple" [monthNavigator]="true" [showOtherMonths]="false"
               (onMonthChange)="checkMonth($event)" (onSelect)="checkSelect($event)" (ngModelChange)="onChange($event)"
               placeholder="Select Availability" [touchUI]="false" [showIcon]="true" [readonlyInput]="true"
-              [yearRange]="yearRange" [minDate]="today">
+              [minDate]="today" [selectOtherMonths]="true" [disabledDates]="bookedDates">
               <p-header class="availibility-header">
-                <p-checkbox styleClass="cal-chkbox" [(ngModel)]="availabilitySelectAllArr[selectedMonth]"
-                  [ngModelOptions]="{standalone: true}" binary="true" (onChange)="selectAllDates($event)">
+                <p-checkbox styleClass="cal-chkbox" [(ngModel)]="availabilitySelectAllArr[selectedMonth].value"
+                  [ngModelOptions]="{standalone: true}" binary="true" name="word{{selectedMonth}}"
+                  (onChange)="selectAllDates($event)">
                 </p-checkbox>
                 Select Month
               </p-header>

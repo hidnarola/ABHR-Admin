@@ -154,11 +154,13 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
       this.formData.email = this.formData.email.trim();
       this.formData.first_name = this.formData.first_name.trim();
       this.formData.last_name = this.formData.last_name.trim();
-      if (this.formData.phone_number !== null) {
+      if (this.formData.phone_number !== null && this.formData.phone_number.length > 0) {
         this.formData.phone_number = this.formData.phone_number.trim();
+        if (this.formData.country_code === null || this.formData.country_code === '') {
+          this.formData.country_code = 971;
+        }
       } else {
         this.formData.country_code = null;
-        // console.log('this.formData.country_code => ', this.formData.country_code);
       }
       this.formData.user_id = this.userId;
       this.service.put('admin/agents/update', this.formData).subscribe(res => {

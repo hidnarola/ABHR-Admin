@@ -44,24 +44,17 @@ export class CarAddEditComponent implements OnInit {
   public checked: Boolean = false;
   public cnt;
   public today;
-  public availabilitySelectAllArr = [
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false
-  ];
-  yearRange = '2019:2020';
+  public carAvailableDates;
+  public carBookedDates;
+  public availabilitySelectAllArr: any = [{ value: false }, { value: false }, { value: false }, { value: false },
+  { value: false }, { value: false }, { value: false }, { value: false }, { value: false }, { value: false },
+  { value: false }, { value: false }];
   public numberErr: boolean = false;
   public numberErr2: boolean = false;
   public numberErr3: boolean = false;
+  bookedDates: Array<Date> = [];
+  currentMonthBookedDates: Array<any> = [];
+  public bookedDateObj;
 
   constructor(
     private route: ActivatedRoute,
@@ -83,46 +76,55 @@ export class CarAddEditComponent implements OnInit {
       this.service.post('admin/company/car/details/', { car_id: this.carId }).subscribe(resp => {
         this.carDetails = resp['data'][0];
         this.spinner.hide();
+        if (this.carDetails.disabledDates !== undefined) {
+          this.carBookedDates = this.carDetails.disabledDates;
+          this.carBookedDates.forEach(element => {
+            element.availability.forEach(date => {
+              if (date && (moment(moment().format('MM-DD-YYYY'), 'MM-DD-YYYY').unix()
+                <= moment(moment(date).format('MM-DD-YYYY'), 'MM-DD-YYYY').unix())) {
+                this.bookedDates.push(new Date(date));
+              }
+            });
+          });
+        }
         if (this.carDetails.availableData !== undefined) {
-          var DateArray = this.carDetails.availableData;
+          this.carAvailableDates = this.carDetails.availableData;
           const _selectDate = [];
-          DateArray.forEach(element => {
-
-            const toDay = new Date();
-            const toDayMonth = (toDay.getMonth() + 1);
-            if (toDayMonth === element.month) {
-              var currentDay = parseInt(moment().format("DD"));
-              if (toDayMonth < 10) {
-                var MonthDays = moment(this.selectedYear + '-' + '0' + element.month, 'YYYY-MM').daysInMonth();
-                var TotalDays = (MonthDays - currentDay) + 1;
-              } else {
-                var MonthDays = moment(this.selectedYear + '-' + element.month, 'YYYY-MM').daysInMonth();
+          let minMonth = 12;
+          this.carAvailableDates.find((e) => {
+            ((e.month < minMonth) && (e.month > new Date().getMonth()))
+              ? minMonth = e.month
+              : minMonth = minMonth;
+          });
+          console.log('minMonth => ', minMonth);
+          this.carAvailableDates.forEach(element => {
+            const edate = [];
+            element.availability.forEach(date => {
+              if (date && (moment(moment().format('MM-DD-YYYY'), 'MM-DD-YYYY').unix()
+                <= moment(moment(date).format('MM-DD-YYYY'), 'MM-DD-YYYY').unix())) {
+                _selectDate.push(new Date(date));
               }
-            } else {
-              if (element.month < 10) {
-                var TotalDays = moment(this.selectedYear + '-' + '0' + element.month, 'YYYY-MM').daysInMonth();
-              } else {
-                var TotalDays = moment(this.selectedYear + '-' + element.month, 'YYYY-MM').daysInMonth();
-              }
-            }
-
-            if (TotalDays === element.availability.length) {
-              var selectedMonth = (element.month - 1);
-              this.availabilitySelectAllArr[selectedMonth] = true;
-            }
-
-            if (element.availability.length !== 0) {
-              element.availability.forEach(ele => {
-                if (ele !== null) {
-                  let Dateobj = new Date(ele);
-                  _selectDate.push(Dateobj);
+            });
+            if ((Number(element.month) === Number(moment().format('MM')))) {
+              element.availability.forEach(date => {
+                if (moment(moment().format('MM-DD-YYYY'), 'MM-DD-YYYY').unix()
+                  < moment(moment(new Date(date)).format('MM-DD-YYYY'), 'MM-DD-YYYY').unix()) {
+                  edate.push(new Date(date));
                 }
               });
+              if ((edate.length === (moment(element.month, 'MM').daysInMonth()) -
+                Number(moment().format('DD')))) {
+                this.availabilitySelectAllArr[element.month - 1].value = true;
+              }
+            } else {
+              if (element.availability.length === moment(element.month, 'MM').daysInMonth()) {
+                this.availabilitySelectAllArr[element.month - 1].value = true;
+              }
             }
           });
-          if (_selectDate && _selectDate.length > 0) {
-            this.selectDate = _selectDate;
-          }
+          this.selectDate = [..._selectDate, ...this.bookedDates];
+          // this.selectDate = [..._selectDate];
+          this.selectedMonth = minMonth - 1;
         }
         this.isEdit = true;
         this.service.post('app/car/modelList', { brand_ids: [this.carDetails.car_brand_id] }).subscribe(res => {
@@ -175,8 +177,6 @@ export class CarAddEditComponent implements OnInit {
       old_images: [],
       is_change_photo: [false],
       driving_eligibility_criteria: ['', Validators.required],
-      // driving_eligibility_criteria: ['', [Validators.required, Validators.min(18), Validators.max(120),
-      // Validators.pattern('[0-9]*')]],
       is_navigation: [false],
       is_AC: [false],
       is_luggage_carrier: [false],
@@ -204,23 +204,12 @@ export class CarAddEditComponent implements OnInit {
       age_of_car: Number
     };
   }
-  // getDaysInMonth(m, y) {
-  //   var date = new Date(y, m, 1);
-  //   const _selectDate = this.selectDate && this.selectDate.length ? this.selectDate : [];
-  //   while (date.getMonth() === m) {
-  //     _selectDate.push(new Date(date));
-  //     date.setDate(date.getDate() + 1);
-  //   }
-  //   this.selectDate = _selectDate;
-  // }
-
-
   getDaysInMonth(m, y) {
     const toDay = new Date();
     const toDayMonth = toDay.getMonth();
     var cnt = 1;
     if (toDayMonth === this.selectedMonth) {
-      var currentDay = parseInt(moment().format("DD"));
+      var currentDay = parseInt(moment().format('DD'));
       cnt = currentDay;
     }
     const date = new Date(y, m, cnt);
@@ -238,25 +227,26 @@ export class CarAddEditComponent implements OnInit {
     }
     this.selectDate = _selectDate;
   }
-  getDaysInSelectedMonth(selectedMonth, selectedYear) {
+
+  getDaysInSelectedMonth(selectedmonth, selectedYear) {
     const toDay = new Date();
     const toDayMonth = toDay.getMonth();
-    const date = new Date(selectedYear, selectedMonth, 1);
+    const date = new Date(selectedYear, selectedmonth, 1);
     const _selectDate = (this.selectDate && this.selectDate.length > 0) ? this.selectDate : [];
     if (toDayMonth === this.selectedMonth) {
-      var currentDay = parseInt(moment().format("DD"));
+      var currentDay = parseInt(moment().format('DD'));
       this.cnt = currentDay;
     } else {
       this.cnt = 0;
     }
     var TotalDays;
-    var month = selectedMonth + 1;
+    var month = selectedmonth + 1;
     if (month < 10) {
       TotalDays = moment(this.selectedYear + '-' + '0' + month, 'YYYY-MM').daysInMonth();
     } else if (month + 1 > 10) {
       TotalDays = moment(this.selectedYear + '-' + month, 'YYYY-MM').daysInMonth();
     }
-    while (date.getMonth() === selectedMonth) {
+    while (date.getMonth() === selectedmonth) {
       const _selectDateStr = [];
       const dateMom = moment(date).format('YYYY-MM-DD');
       _selectDate.map((dt) => {
@@ -268,12 +258,11 @@ export class CarAddEditComponent implements OnInit {
       date.setDate(date.getDate() + 1);
     }
     if (this.cnt === TotalDays) {
-      this.availabilitySelectAllArr[selectedMonth] = true;
+      this.availabilitySelectAllArr[selectedmonth].value = true;
     } else {
-      this.availabilitySelectAllArr[selectedMonth] = false;
+      this.availabilitySelectAllArr[selectedmonth].value = false;
     }
   }
-
 
   public uniqueCarNumberValidator = (control: FormControl) => {
     let isWhitespace2;
@@ -294,11 +283,8 @@ export class CarAddEditComponent implements OnInit {
       });
     }
   }
-
-  modellist = (id) => {
-  }
+  modellist = (id) => { }
   get f() { return this.AddEditCarForm.controls; }
-
   model(id) {
     this.service.post('app/car/modelList', { brand_ids: [id] }).subscribe(res => {
       if ((res['data'] !== undefined) && (res['data'] != null) && res['data']) {
@@ -329,27 +315,40 @@ export class CarAddEditComponent implements OnInit {
       }
     }
   }
+
   deleteImage(index) {
     this.CarImage.splice(index, 1);
     this.CarImageRAW.splice(index, 1);
   }
+
   deleteOldImage(index) {
     this.CarOldImage.splice(index, 1);
   }
+
   handleCloseCalendar = () => {
     this.datePicker.overlayVisible = false;
   }
+
   handleClearCalendar = () => {
     this.selectDate = null;
     this.datePicker.overlayVisible = false;
-    this.availabilitySelectAllArr = [false, false, false, false, false, false, false, false, false, false, false, false];
+    this.availabilitySelectAllArr = [{ value: false }, { value: false }, { value: false }, { value: false },
+    { value: false }, { value: false }, { value: false }, { value: false }, { value: false }, { value: false },
+    { value: false }, { value: false }];
     if (this.submitted === true) {
       this.availablityError = true;
     }
   }
+
   onSubmit() {
     if (this.selectDate !== undefined && this.selectDate !== null) {
       this.availablityError = false;
+      // const final = [];
+      // this.selectDate.forEach(ele => {
+      //   if (!(this.bookedDates.indexOf(ele) >= 0)) {
+      //     final.push(ele);
+      //   }
+      // });
       this.selectDate.forEach(element => {
         var month = (moment(element).month() + 1);
         const strElement = moment(element).format('YYYY-MM-DD');
@@ -442,12 +441,9 @@ export class CarAddEditComponent implements OnInit {
     }
   }
 
-
   onChange(event) {
     this.getDaysInSelectedMonth(this.selectedMonth, this.selectedYear);
   }
-
-
 
   checkSelect(event) {
     this.availablityError = false;
@@ -459,29 +455,33 @@ export class CarAddEditComponent implements OnInit {
   }
 
   selectAllDates(event) {
-    if (this.availabilitySelectAllArr[this.selectedMonth] === true) {
+    if (this.availabilitySelectAllArr[this.selectedMonth].value === true) {
       this.getDaysInMonth(this.selectedMonth, this.selectedYear);
       this.availablityError = false;
     } else {
       this.unselectAllDates();
     }
   }
-
   unselectAllDates() {
-    const remainingDates = [];
-    this.selectDate.forEach((date) => {
-      if (date.getMonth() !== this.selectedMonth) {
-        remainingDates.push(new Date(date));
-      }
-    });
-    setTimeout(() => {
-      if (remainingDates.length > 0) {
-        this.selectDate = remainingDates;
-        this.selectedMonth = this.selectDate[0].getMonth();
-      } else {
-        this.selectDate = null;
-      }
-    }, 0);
+    try {
+      const remainingDates = [];
+      this.selectDate.forEach((date) => {
+        if (date.getMonth() !== this.selectedMonth) {
+          remainingDates.push(new Date(date));
+        }
+      });
+      setTimeout(() => {
+        if (remainingDates.length > 0) {
+          this.selectDate = remainingDates;
+          this.selectedMonth = this.selectDate[0].getMonth();
+        } else {
+          this.selectDate = null;
+          this.selectedMonth = new Date().getMonth();
+        }
+      }, 0);
+    } catch (error) {
+      console.log('error => ', error);
+    }
   }
 
   ngOnInit() { }
@@ -495,7 +495,6 @@ export class CarAddEditComponent implements OnInit {
       return false;
     }
   }
-
 
   keyupRent(event) {
     if (this.AddEditCarForm.controls.rent_price.value !== '' && this.AddEditCarForm.controls.rent_price.value !== null) {
@@ -546,6 +545,4 @@ export class CarAddEditComponent implements OnInit {
       this.numberErr3 = false;
     }
   }
-
-
 }

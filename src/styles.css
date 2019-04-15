@@ -341,10 +341,10 @@ body .ui-button:enabled:focus { box-shadow: none !important;}
 /* pdf-css */
 
 /* Calender */
-.ui-datepicker-calendar-container span.ui-state-default.ui-state-disabled .cal-dis-btn{
+/* .ui-datepicker-calendar-container span.ui-state-default.ui-state-disabled .cal-dis-btn{
     color: white;
     background-color: black;
-}
+} */
 
 
 
