@@ -30,20 +30,16 @@ export class ForgetPasswordComponent implements OnInit {
     public route: ActivatedRoute,
     private messageService: MessageService) {
     const user = JSON.parse(localStorage.getItem('admin'));
-    console.log('data from local storage', user)
     const company = JSON.parse(localStorage.getItem('company-admin'));
     if (user != null && user !== undefined) {
       this.AdminType = user.first_name;
-      console.log('user name ==>', this.AdminType)
     }
     if (company != null && company !== undefined) {
       this.AdminType = company.name;
-      console.log('user name ==>', this.AdminType)
     }
 
     const urlSegment = this.router.url;
     const array = urlSegment.split('/');
-    console.log(array[1]);
     this.currentUser = array[1];
   }
 
@@ -59,7 +55,6 @@ export class ForgetPasswordComponent implements OnInit {
   get f() { return this.forgetPasswordForm.controls; }
 
   onSubmit() {
-    console.log('here');
     this.submitted = true;
     if (!this.forgetPasswordForm.invalid) {
       if (this.currentUser === 'admin') {
@@ -75,14 +70,12 @@ export class ForgetPasswordComponent implements OnInit {
       } else if (this.currentUser === 'company') {
         this.service.post('company/forget_password', this.forgetPasswordForm.value).subscribe((res) => {
           this.submitted = false;
-          console.log('result==>', res);
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
           this.router.navigate(['/company/forget-password']);
           this.forgetPasswordForm.controls['email'].setValue('');
         }, err => {
           err = err.error;
           this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
-          console.log('err => ');
         });
       }
       this.submitted = false;

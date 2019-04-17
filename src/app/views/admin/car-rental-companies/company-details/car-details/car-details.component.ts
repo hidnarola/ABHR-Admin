@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { environment } from './../../../../../../environments/environment';
-// services
 import { CrudService } from '../../../../../shared/services/crud.service';
 import { DataSharingService } from '../../../../../shared/services/data-sharing.service';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -27,25 +26,15 @@ export class CarDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private service: CrudService,
-    private dataService: DataSharingService,
     private spinner: NgxSpinnerService,
   ) {
     this.today = new Date();
-    // this.StartDate = moment().startOf('year').format('YYYY/MM/DD');
-    // console.log('this.StartDate => ', this.StartDate);
-    // this.EndDate = moment().endOf('year').format('YYYY/MM/DD');
-    // console.log('this.EndDate => ', this.EndDate);
-    // this.dates = this.getDates(moment(this.StartDate).format('YYYY-MM-DD'), moment(this.EndDate).format('YYYY-MM-DD'));
-    // console.log('dates====>', this.dates);
-
-
     this.route.params.subscribe(params => { this.carId = params.id; });
   }
 
   CarDetails() {
     this.service.post('admin/company/car/details/', { car_id: this.carId }).subscribe(res => {
       this.carDetails = res['data'][0];
-      console.log('this.carDetails => ', this.carDetails.availableData);
       if (this.carDetails.availableData !== undefined) {
         var DateArray = this.carDetails.availableData;
         const _selectDate = [];
@@ -63,9 +52,6 @@ export class CarDetailsComponent implements OnInit {
           this.SelectedDates = _selectDate;
         }
       }
-
-
-
       let carCriteria = this.carDetails.resident_criteria;
       var CriteriaName = '';
       if (carCriteria === 0) {
@@ -78,44 +64,12 @@ export class CarDetailsComponent implements OnInit {
       this.carDetails.resident_criteria = CriteriaName;
       localStorage.setItem('companyId', this.carDetails.car_rental_company_id);
     }, error => {
+      console.log('error => ', error);
     });
   }
-
-  // handleCloseCalendar = () => {
-  //   this.datePicker.overlayVisible = false;
-  // }
 
   ngOnInit() {
     this.CarDetails();
   }
-
-
-
-
-  // Returns an array of dates between the two dates
-  // getDates(startDate, endDate) {
-  //   var dates = [],
-  //     currentDate = startDate,
-  //     addDays = function (days) {
-  //       var date = new Date(this.valueOf());
-  //       date.setDate(date.getDate() + days);
-  //       return date;
-  //     };
-  //   while (currentDate <= endDate) {
-  //     const dateMom = moment(currentDate).format('YYYY-MM-DD');
-  //     dates.push(dateMom);
-  //     currentDate = addDays.call(currentDate, 1);
-  //   }
-  //   return dates;
-  // }
-
-  // Usage
-
-  // dates.forEach(function(date) {
-  //   console.log(date);
-  // })
-
-
-
 
 }

@@ -42,7 +42,6 @@ export class UserDetailsComponent implements OnInit {
     this.spinner.show();
     this.service.get('admin/user/details/' + id).subscribe(res => {
       this.userData = res['result'];
-      console.log('this.userData => ', this.userData);
       this.userData.email_msg = this.getVerificationStatus(this.userData['email_verified']);
       this.userData.phone_msg = this.getVerificationStatus(this.userData['phone_number_verified']);
       this.userData.license_msg = this.getVerificationStatus(this.userData['driving_license_verification']);

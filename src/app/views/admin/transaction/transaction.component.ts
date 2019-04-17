@@ -69,7 +69,6 @@ export class TransactionComponent implements OnInit, AfterViewInit, OnDestroy {
         setTimeout(() => {
           this.service.post('admin/transaction/list', dataTablesParameters).subscribe(res => {
             this.transaction = res['result']['data'];
-            console.log('this.transaction  => ', this.transaction);
             this.totalRecords = res['result']['recordsTotal'];
             // this.transaction = [];
             if (this.transaction.length > 0) {
@@ -175,7 +174,6 @@ export class TransactionComponent implements OnInit, AfterViewInit, OnDestroy {
   closeDeletePopup() {
     const data: HTMLCollection = document.getElementsByClassName('ui-button');
     if (data.length > 0) {
-      console.log('l => ', data[1]);
       const ele: any = data[1];
       ele.click();
     }

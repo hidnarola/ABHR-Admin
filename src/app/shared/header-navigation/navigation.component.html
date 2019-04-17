@@ -215,32 +215,6 @@
 
 
 <!--Super Admin--- Change VAT-->
-<!-- <p-dialog header="Change VAT" [(visible)]="displayVAT" width="300px" modal="true" blockScroll="false" closeOnEscape="false">
-    <form [formGroup]="VATForm" (ngSubmit)="onVATSubmit()" class="form-horizontal form-material row" (keydown.enter)="$event.preventDefault()">
-        <div class="col-sm-12">
-            <div class="form-group">
-                <label class="required">VAT Rate </label>
-                <input class="form-control" type="text" [textMask]="{mask: numberMask}" required="" name="rate"
-                    placeholder="Enter VAT Rate" formControlName="rate" class="form-control" [ngClass]="{ 'is-invalid': submitted && fVAT.rate.errors }">
-                <div *ngIf="submitted && fVAT.rate.errors" class="invalid-feedback">
-                    <div *ngIf="fVAT.rate.errors.required"> VAT Rate is required</div>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-12">
-            <button type="submit" *ngIf="!isLoading" class="btn waves-effect waves-light custom-btn btn-primary">Submit</button>
-            <button type="button" *ngIf="isLoading" class="btn waves-effect loading-btn waves-light btn-primary" type="button">
-                <i class="fa fa-spinner fa-spin"></i>Loading
-            </button>
-            <a class="btn waves-effect waves-light custom-btn btn-danger" (click)="displayVAT=false">Cancel</a>
-        </div>
-    </form>
-</p-dialog> -->
-
-
-
-
-
 <p-dialog header="Change VAT" [(visible)]="displayVAT" width="300px" modal="true" blockScroll="false"
     closeOnEscape="false">
     <form name="VATForm" #VATForm="ngForm" class="form-horizontal form-material row"
@@ -288,8 +262,6 @@
                 </div>
             </div>
         </div>
-        <!-- [ngClass]="{ 'is-invalid': (submitted && f.new_password.errors) || passErr }" -->
-        <!-- (keyup)="keyupPass()" -->
         <div class="col-sm-12">
             <div class="form-group">
                 <label class="required">New Password </label>
@@ -302,9 +274,6 @@
                         New Password should be 6 to 13 characters
                     </div>
                 </div>
-                <!-- <div class="invalid-feedback">
-                    <div *ngIf="passErr">Only Space is not allowed</div>
-                </div> -->
             </div>
         </div>
         <div class="col-sm-12">

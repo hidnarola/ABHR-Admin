@@ -60,23 +60,17 @@ export class LoginComponent implements OnInit, AfterViewInit {
                 });
             } else {
                 this.service.post('company/login', this.loginForm.value).subscribe((res) => {
-                    console.log('res => ', res);
-                    console.log('value', this.loginForm.value)
                     this.submitted = false;
                     localStorage.setItem('company-admin', JSON.stringify(res['result']));
                     localStorage.setItem('token', res['token']);
                     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Login Successfully' });
                     this.router.navigate(['/company/dashboard']);
                 }, err => {
-                    console.log('1 => ');
                     this.err = err.error;
-                    console.log('this.err => ', this.err);
-
                     this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Email or Password is wrong' });
                 });
             }
             this.submitted = false;
-            console.log('else => ');
             this.loginForm.controls['password'].setValue('');
         }
     }

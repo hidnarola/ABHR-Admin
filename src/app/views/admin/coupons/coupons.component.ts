@@ -132,7 +132,6 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
-    console.log('this.modalData on destroy => ', this.modalData);
     if (this.modalData !== undefined) {
       this.closePopup();
     }
@@ -173,7 +172,6 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
             this.coupons = await res['result']['data'];
             // this.coupons = [];
             this.totalRecords = res['result']['recordsTotal'];
-            console.log('res====>', this.coupons);
             if (this.coupons.length > 0) {
               this.isCols = true;
               $('.dataTables_wrapper').css('display', 'block');
@@ -289,7 +287,6 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   closePopup() {
     const element = document.getElementById('closepopup');
-    console.log('element => ', element);
     if (element !== null) {
       element.click();
     }
@@ -299,7 +296,6 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
   closeDeletePopup() {
     const data: HTMLCollection = document.getElementsByClassName('ui-button');
     if (data.length > 0) {
-      console.log('l => ', data[1]);
       const ele: any = data[1];
       ele.click();
     }
@@ -307,7 +303,6 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // dlt popup
   delete(couponId, banner) {
-    console.log('banner => ', banner);
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete this record?',
       header: 'Confirmation',
@@ -332,7 +327,6 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
   // dlt pop up ends here
 
   onChangeChoiceCompany() {
-    console.log('this.AddEditForm on checkbox => ', this.AddEditForm);
     var obj = {
       coupon_code: [this.AddEditForm.controls.coupon_code.value, Validators.compose([Validators.required,
       this.noWhitespaceValidator, this.uniqueNameValidator])],
@@ -350,7 +344,6 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     }
     this.AddEditForm = this.formBuilder.group(obj);
-    console.log('this.AddEditForm after obj => ', this.AddEditForm);
   }
 
   handleFileInput(event) {
@@ -358,7 +351,6 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
     let isValid = false;
     const files = event.target.files;
     this.formData.banner_image = event.target.files;
-    console.log('this.formData.banner_image fileinput event => ', this.formData.banner_image);
     if (files) {
       for (const file of files) {
         if (file.type === 'image/jpeg' || file.type === 'image/png') {
@@ -366,11 +358,9 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
           fr.onload = (e: any) => { // when file has loaded
             var img = new Image();
             img.src = e.target.result;
-            console.log('imageee=>', img);
             img.onload = () => {
               var width = img.width;
               var height = img.height;
-              console.log('width====>', width, 'height====>', height);
               if (width === height) {
                 this.f.banner_image.setErrors(null);
                 return;
@@ -394,10 +384,8 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
     this.submitted = true;
     this.numberErr = false;
     this.rateError = false;
-    console.log('this.AddEditForm in submit => ', this.AddEditForm);
     if (!this.AddEditForm.invalid) {
       this.isLoading = true;
-      console.log('formvalues=====>, ', this.AddEditForm.value);
       const headers = new HttpHeaders();
       // this is the important step. You need to set content type as null
       headers.set('Content-Type', null);
@@ -433,8 +421,6 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
           this.closePopup();
         });
       } else {
-        console.log('inadd=====>');
-        console.log('formData => ', formData);
         this.title = 'Add Coupon';
         this.service.post('admin/coupon/add', formData, headers).subscribe(res => {
           this.isLoading = false;
@@ -452,7 +438,6 @@ export class CouponsComponent implements OnInit, OnDestroy, AfterViewInit {
       this.submitted = false;
       this.idCompanyAdded = false;
       this.AddEditForm.controls['idCompanyAdded'].setValue('');
-      console.log('this.AddEditForm after submit => ', this.AddEditForm);
     } else {
       this.isLoading = false;
       return;

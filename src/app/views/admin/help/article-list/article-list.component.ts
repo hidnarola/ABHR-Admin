@@ -173,7 +173,6 @@ export class ArticleListComponent implements OnInit, AfterViewInit, OnDestroy {
   closeDeletePopup() {
     const data: HTMLCollection = document.getElementsByClassName('ui-button');
     if (data.length > 0) {
-      console.log('l => ', data[1]);
       const ele: any = data[1];
       ele.click();
     }

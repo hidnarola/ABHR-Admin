@@ -49,17 +49,9 @@ export class TakenAwayTrackingComponent implements OnInit, AfterViewInit {
 
   markers: Marker[] = [
   ];
-  clickedMarker(label: string, index: number) {
-    // console.log(`clicked the marker: ${label || index}`);
-  }
+  clickedMarker(label: string, index: number) { }
 
-  mapClicked($event: MouseEvent) {
-    // this.markers.push({
-    //   lat: $event.coords.lat,
-    //   lng: $event.coords.lng,
-    //   draggable: true
-    // });
-  }
+  mapClicked($event: MouseEvent) { }
 
   markerDragEnd(m: Marker, $event: MouseEvent) {
     console.log('dragEnd', m, $event);
@@ -74,37 +66,24 @@ export class TakenAwayTrackingComponent implements OnInit, AfterViewInit {
     this.socket = io.connect(environment.socketUrl);
     this.joinGroup(this.bookingId, this.userId, 'user');
     this.getMessage();
-    // this.sendMessage('KP is here.');
-
-    // this.setCurrentPosition();
   }
   ngAfterViewInit(): void { this.getCurrentPosition(); }
 
   setCurrentPosition() {
     const _lng = this.lng;
     const _lat = this.lat;
-    // setInterval(() => {
-    // _lng = _lng + Math.random() / 10000;
-    // _lat = _lat - Math.random() / 10000;
     const marker = [{
       lat: _lat,
       lng: _lng,
       iconUrl: 'assets/images/icon/car-placeholder-30-blue.png',
       draggable: false
     }];
-    // this.lat = _lat;
-    // this.lng = _lng;
     this.markers = marker;
-    // }, 2000);
   }
 
   getDirection(origin, destination) {
-    // 21.1968399,72.7789305   21.1205296,72.7409003   21.1298389,73.0863185
-    // 21.195531,72.7906113 21.2050025,72.8384902
     this.origin = { lat: origin.latitude, lng: origin.longitude };
     this.destination = { lat: destination.latitude, lng: destination.longitude };
-    // this.origin = 'Narola Infotech';
-    // this.destination = 'Railway Station';
   }
   leftGroup() {
     this.socket.emit('LeftGroup');
@@ -129,19 +108,15 @@ export class TakenAwayTrackingComponent implements OnInit, AfterViewInit {
   }
 
   getMessage() {
-    // console.log('im getMSG   => ', 1);
     this.socket.on('Joined', (data: any) => {
-      // this.socket.on('test', (data: any) => {
       this.lat = data.last_location.latitude;
       this.lng = data.last_location.longitude;
       this.setCurrentPosition();
-      console.log('Joined data => ', data);
       this.getDirection(data.destination_location, data.source_location);
     });
   }
   getCurrentPosition() {
     this.socket.on('recieveTrackingObject', (data: any) => {
-      console.log('Current Location data => ', data);
       this.lat = data.Latitude;
       this.lng = data.Longitude;
       this.setCurrentPosition();

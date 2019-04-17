@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild, Renderer } from '@angular/core';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { CrudService } from '../../../../shared/services/crud.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -50,7 +50,7 @@ export class ReportedCarsComponent implements OnInit, OnDestroy, AfterViewInit {
     private spinner: NgxSpinnerService,
   ) {
     this.resolvedMessageForm = this.formBuilder.group({
-      resolved_message: ['', Validators.required]
+      resolved_message: ['', Validators.compose([Validators.required, this.noWhitespaceValidator])]
     });
     this.formData = {
       resolved_message: String,
@@ -58,15 +58,12 @@ export class ReportedCarsComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   get f() { return this.resolvedMessageForm.controls; }
 
+  noWhitespaceValidator(control: FormControl) {
+    let isWhitespace = (control.value || '').trim().length === 0;
+    let isValid = !isWhitespace;
+    return isValid ? null : { 'required': true };
+  }
 
-  // showDialog(event, id) {
-  //   console.log('event => ', event);
-  //   console.log('id => ', id);
-  //   console.log('this.report => ', this.report);
-  //   this.display = true;
-  //   this.resolvedMessageForm.controls['resolved_message'].setValue('');
-  //   this.submitted = false;
-  // }
 
   ReportListData() {
     this.spinner.show();
@@ -91,10 +88,8 @@ export class ReportedCarsComponent implements OnInit, OnDestroy, AfterViewInit {
         setTimeout(() => {
           dataTablesParameters['columns'][0]['isNumber'] = true;
           this.service.post('admin/reports/list', dataTablesParameters).subscribe(async (res: any) => {
-            console.log('res => ', res);
             this.report = await res['result']['data'];
             // this.categories = [];
-            console.log('this.reports => ', this.report);
             this.totalRecords = res['result']['recordsTotal'];
             if (this.report.length > 0) {
               this.isCols = true;
@@ -176,24 +171,18 @@ export class ReportedCarsComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   onChangeStatus = (e, Id) => {
-    console.log('Id => ', Id);
-    console.log('e => ', e);
     this.reportId = Id;
     if (e === true) {
-      console.log('true => ');
       this.display = true;
       this.resolvedMessageForm.controls['resolved_message'].setValue('');
       this.submitted = false;
     } else {
-      console.log('else => ');
       this.reportStatus = 'pending';
       var Obj = {
         report_id: Id,
         status: this.reportStatus
       };
-      console.log('Obj => ', Obj);
       this.service.post('admin/reports/change_status', Obj).subscribe(res => {
-        console.log('res => ', res);
         this.render();
         this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
       }, error => {
@@ -210,19 +199,15 @@ export class ReportedCarsComponent implements OnInit, OnDestroy, AfterViewInit {
     this.submitted = true;
     if (!this.resolvedMessageForm.invalid) {
       this.isLoading = true;
-      console.log('this.resolvedMessageForm => ', this.resolvedMessageForm.value.resolved_message);
       var obj = {
         report_id: this.reportId,
         status: 'resolved',
         resolved_message: this.resolvedMessageForm.value.resolved_message
       };
-      console.log('Obj => ', obj);
       this.service.post('admin/reports/change_status', obj).subscribe(res => {
-        console.log('res => ', res['status']);
         if (res['status'] === 'success') {
           this.reportStatus = 'resolved';
         }
-        // this.reportStatus = 'resolved';
         this.display = false;
         this.submitted = false;
         this.isLoading = false;
@@ -240,9 +225,5 @@ export class ReportedCarsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
   }
-
-
-  //     this.submitted = false;
-  // this.resolvedMessageForm.controls['old_password'].setValue('');
 
 }

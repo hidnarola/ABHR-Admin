@@ -96,7 +96,6 @@ export class CarAddEditComponent implements OnInit {
               ? minMonth = e.month
               : minMonth = minMonth;
           });
-          console.log('minMonth => ', minMonth);
           this.carAvailableDates.forEach(element => {
             const edate = [];
             element.availability.forEach(date => {
@@ -331,6 +330,7 @@ export class CarAddEditComponent implements OnInit {
 
   handleClearCalendar = () => {
     this.selectDate = null;
+    this.selectedMonth = new Date().getMonth();
     this.datePicker.overlayVisible = false;
     this.availabilitySelectAllArr = [{ value: false }, { value: false }, { value: false }, { value: false },
     { value: false }, { value: false }, { value: false }, { value: false }, { value: false }, { value: false },

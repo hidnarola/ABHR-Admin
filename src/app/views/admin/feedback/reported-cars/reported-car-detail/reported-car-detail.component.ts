@@ -23,7 +23,6 @@ export class ReportedCarDetailComponent implements OnInit {
       this.Id = params.id;
     });
     this.service.post('admin/reports/details', { report_id: this.Id }).subscribe(res => {
-      console.log('res => ', res['data']);
       this.reportedCar = res['data'];
       this.spinner.hide();
     });

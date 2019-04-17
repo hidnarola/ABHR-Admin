@@ -144,11 +144,8 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
       } else {
         this.phoneData = { 'phone_number': control.value ? control.value.trim() : '', 'company_id': this.userId };
         return this.service.post('admin/company/checkphone', this.phoneData).subscribe(res => {
-          console.log('res-status => ', res['status']);
-          console.log('res => ', res);
           if (res['status'] === 'success') {
             this.phoneErrMsg = res['message'];
-            console.log('this.phoneErrMsg => ', this.phoneErrMsg);
             this.f.phone_number.setErrors({ 'unique': true });
             return;
           } else {
@@ -188,7 +185,6 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
   closeDeletePopup() {
     const data: HTMLCollection = document.getElementsByClassName('ui-button');
     if (data.length > 0) {
-      console.log('l => ', data[1]);
       const ele: any = data[1];
       ele.click();
     }
@@ -230,7 +226,6 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
 
   UserDetails() {
     this.service.get('admin/company/details/' + this.userId).subscribe(res => {
-      console.log('res[] => ', res['data']);
       if (res['data'] !== null) {
         this.userDetails = res['data'];
       } else {
@@ -243,7 +238,6 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
   // model
   open2(content, userDetails) {
     this.modalData = content;
-    console.log('userDetails => ', userDetails);
     this.isLoading = false;
     this.service_location = [];
     this.userSettings.inputPlaceholderText = userDetails.company_address.address;
@@ -280,7 +274,6 @@ export class CompanyDetailsComponent implements OnInit, OnDestroy, AfterViewInit
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
-    console.log('this.modalData on destroy => ', this.modalData);
     if (this.modalData !== undefined) {
       this.closePopup();
     }

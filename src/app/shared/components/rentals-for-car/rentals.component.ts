@@ -32,7 +32,6 @@ export class RentalsComponent implements OnInit, OnDestroy, AfterViewInit {
     private spinner: NgxSpinnerService,
   ) {
     this.route.params.subscribe(params => { this.carId = params.id; });
-    console.log('carId in rentals==>', this.carId);
   }
 
   render(): void {
@@ -83,13 +82,11 @@ export class RentalsComponent implements OnInit, OnDestroy, AfterViewInit {
       },
       ajax: (dataTablesParameters: any, callback) => {
         this.pageNumber = dataTablesParameters.length;
-        console.log('dataparametes in rental==>', dataTablesParameters);
         dataTablesParameters['columns'][0]['isNumber'] = true;
         dataTablesParameters['columns'][2]['isNumber'] = true;
         setTimeout(() => {
           dataTablesParameters.car_id = this.carId;
           this.service.post('company/car/rented_list', dataTablesParameters).subscribe(res => {
-            console.log('res in rental -------', res);
             this.rentalData = res['result']['data'];
             this.totalRecords = res['result']['recordsTotal'];
             if (this.rentalData.length > 0) {

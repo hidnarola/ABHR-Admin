@@ -19,7 +19,6 @@ export class SuperAdminCheckPassResolve implements Resolve<any> {
             this.Id = admin._id;
             this.adminPassword = admin.password;
         }
-        console.log('in resolve => ');
         var Obj = {
             user_id: this.Id,
             password: this.adminPassword

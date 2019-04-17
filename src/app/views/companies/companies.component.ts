@@ -28,7 +28,6 @@ export class CompaniesComponent implements AfterViewInit, OnInit {
     public rentalDataArray: Array<any> = [];
     public noRecord: boolean = false;
 
-
     constructor(
         private service: CrudService,
         private spinner: NgxSpinnerService,
@@ -41,16 +40,12 @@ export class CompaniesComponent implements AfterViewInit, OnInit {
         this.currentMonth = new Date().getMonth();
         this.currentDate = new Date().getDate();
         this.totalDays = moment(this.currentYear + '-' + (this.currentMonth + 1), 'YYYY-MM').daysInMonth();
-        console.log('this.totalDays => ', this.totalDays);
         this.getDaysInMOnth(this.currentMonth, this.currentYear);
 
         this.service.post('company/dashboard/graph', { company_id: this.companyId }).subscribe(res => {
             this.graphData = res['data'];
-            console.log('res => ', res);
-            console.log('this.graphData => ', this.graphData);
             if (this.graphData.length !== 0) {
                 this.noRecord = false;
-                console.log('not blank => ');
                 this.graphData.forEach(ele => {
                     this.graphDate = moment(ele.Date).format('DD');
                     if (this.currentDate >= this.graphDate) {
@@ -69,9 +64,6 @@ export class CompaniesComponent implements AfterViewInit, OnInit {
                     this.spinner.hide();
                 });
             }
-
-
-
             const chartData = [
                 {
                     data: this.transactionDataArray,
@@ -181,56 +173,9 @@ export class CompaniesComponent implements AfterViewInit, OnInit {
             this.days.push(this.displayDate);
             date.setDate(date.getDate() + 1);
         }
-        console.log('this.days => ', this.days);
     }
 
     ngAfterViewInit() {
-        // (<any>$('#spark8')).sparkline([ 4, 5, 0, 10, 9, 12, 4, 9], {
-        //     type: 'bar',
-        //     width: '100%',
-        //     height: '40',
-        //     barWidth: '4',
-        //     resize: true,
-        //     barSpacing: '5',
-        //     barColor: '#26c6da'
-        // });
-        // (<any>$('#spark9')).sparkline([ 0, 5, 6, 10, 9, 12, 4, 9], {
-        //     type: 'bar',
-        //     width: '100%',
-        //     height: '40',
-        //     barWidth: '4',
-        //     resize: true,
-        //     barSpacing: '5',
-        //     barColor: '#ef5350'
-        // });
-        // (<any>$('#spark10')).sparkline([ 0, 5, 6, 10, 9, 12, 4, 9], {
-        //     type: 'bar',
-        //     width: '100%',
-        //     height: '40',
-        //     barWidth: '4',
-        //     resize: true,
-        //     barSpacing: '5',
-        //     barColor: '#7460ee'
-        // });
-        // (<any>$('.spark-count')).sparkline([4, 5, 0, 10, 9, 12, 4, 9, 4, 5, 3, 10, 9, 12, 10, 9, 12, 4, 9], {
-        //     type: 'bar',
-        //     width: '100%',
-        //     height: '70',
-        //     barWidth: '2',
-        //     resize: true,
-        //     barSpacing: '6',
-        //     barColor: 'rgba(255, 255, 255, 0.3)'
-        // });
-        // (<any>$('.spark-count2')).sparkline([4, 5, 0, 10, 9, 12, 4, 9, 4, 5, 3, 10, 9, 12, 10, 9, 12, 4, 9], {
-        //     type: 'bar',
-        //     width: '100%',
-        //     height: '70',
-        //     barWidth: '2',
-        //     resize: true,
-        //     barSpacing: '6',
-        //     barColor: 'rgba(255, 255, 255, 0.3)'
-        // });
-
         $(".list-task .list-group-item .checkbox label.custom-control").click(function () {
             $(this).toggleClass("task-done");
         });

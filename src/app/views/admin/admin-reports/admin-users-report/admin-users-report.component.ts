@@ -21,9 +21,7 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
   dtElement: DataTableDirective;
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject();
-
   public reports;
-  // Data table parameters
   dtparams: any;
   DDfilter = '';
   fromDate: NgbDateStruct;
@@ -33,7 +31,6 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
   isCols: boolean;
   public pageNumber;
   public totalRecords;
-  // selectFromDate: Array<Date>;
   selectToDate: Array<Date>;
   rangeDates: Date[];
   public exportParam: any;
@@ -107,16 +104,13 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
             this.service.post('admin/user/report_list', dataTablesParameters).subscribe(res => {
               this.reports = res['result']['data'];
               // this.reports = [];
-              console.log('this.reports => ', this.reports);
               this.totalRecords = res['result']['recordsTotal'];
               if (this.reports.length > 0) {
                 this.isCols = true;
                 $('.dataTables_wrapper').css('display', 'block');
               } else if (dataTablesParameters['search']['value'] !== '') {
-                console.log('search value => ');
                 this.isCols = true;
               } else if (this.reports.length === 0 && this.rangeDates === undefined) {
-                console.log('new condition => ');
                 this.isCols = false;
               } else {
                 if (dataTablesParameters['search']['value'] !== '' && dataTablesParameters['search']['value'] !== null ||
@@ -295,15 +289,10 @@ export class AdminUsersReportComponent implements OnInit, AfterViewInit, OnDestr
   }
 
   closeDeletePopup() {
-    // const data: HTMLCollection = document.getElementsByClassName('ui-button');
     const data: HTMLCollection = document.getElementsByClassName('ui-dialog-footer');
-    console.log('data => ', data);
-    console.log('data.length => ', data.length);
     if (data.length > 0) {
       const ele: any = data[0].children[1];
       ele.click();
-    } else {
-      console.log('else => ');
     }
   }
 

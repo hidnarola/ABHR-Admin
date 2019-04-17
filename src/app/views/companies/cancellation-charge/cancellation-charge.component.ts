@@ -95,7 +95,6 @@ export class CancellationChargeComponent implements OnInit {
 
     if (this.submitted) {
       var check = this.checkCommon(checkduplicate);
-      console.log('check on submit => ', check);
       if (check) {
         this.isLoading = false;
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Please remove duplicate feilds first' });
@@ -116,7 +115,6 @@ export class CancellationChargeComponent implements OnInit {
   }
 
   checkCommon(a) {
-    console.log('a => ', a);
     for (var i = 0; i <= a.length; i++) {
       for (var j = i; j <= a.length; j++) {
         if (i !== j && a[i] === a[j]) {
@@ -130,11 +128,8 @@ export class CancellationChargeComponent implements OnInit {
   addNext() {
     let check = true;
     const checkDuplicate = [];
-    console.log('checkDuplicate  => ', checkDuplicate);
-    console.log('this.submitArray => ', this.submitArray);
     this.submitArray.forEach((element, i) => {
       var checkhours = this.checkCommon(checkDuplicate.push(element.hours));
-      console.log('checkhours => ', checkhours);
       if ((element.hours === '' || element.hours === 0 || element.hours === null) ||
         (element.rate === '' || element.rate === 0 || element.rate === null)) {
         check = false;

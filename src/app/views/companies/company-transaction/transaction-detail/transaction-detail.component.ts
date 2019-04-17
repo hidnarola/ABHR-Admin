@@ -28,10 +28,8 @@ export class TransactionDetailComponent implements OnInit {
     this.spinner.show();
     this.service.post('company/transaction/details/', { booking_id: this.transactionId }).subscribe(res => {
       this.transactionDetails = res['result']['data'];
-      console.log('this.TransactionDetails[]  => ', this.transactionDetails.extended_days);
       if (this.transactionDetails.extended_days !== null) {
         this.date = moment(this.transactionDetails.to_time).subtract(this.transactionDetails.extended_days, 'days');
-        console.log('this.date => ', this.date._d);
         this.todate = this.date._d;
       }
       this.spinner.hide();

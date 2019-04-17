@@ -189,7 +189,6 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
-    console.log('this.modalData on destroy => ', this.modalData);
     if (this.modalData !== undefined) {
       this.closePopup();
     }
@@ -281,7 +280,6 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
 
   AgentDetails() {
     this.service.get('admin/agents/details/' + this.userId).subscribe(res => {
-      console.log('res[] => ', res['user']);
       if (res['user'] !== null) {
         this.agentDetails = res['user'];
       } else {
@@ -303,9 +301,6 @@ export class AgentDetailComponent implements OnInit, OnDestroy, AfterViewInit {
   // model
   open2(content, agentDetails) {
     this.modalData = content;
-    console.log('content => ', content);
-    console.log('agentDetails => ', agentDetails);
-    console.log('agentDetails.country_code => ', agentDetails.country_code);
     this.isLoading = false;
     if (agentDetails !== 'undefined' && agentDetails) {
       this.isEdit = true;

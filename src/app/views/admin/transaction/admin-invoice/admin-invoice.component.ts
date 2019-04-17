@@ -30,7 +30,6 @@ export class AdminInvoiceComponent implements OnInit {
       this.Id = params.id;
     });
     this.service.post('admin/transaction/invoice', { booking_id: this.Id }).subscribe(res => {
-      console.log('res => ', res['data']);
       this.InvoiceData = res['data'];
       this.spinner.hide();
     });

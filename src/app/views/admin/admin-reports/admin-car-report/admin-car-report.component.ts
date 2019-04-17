@@ -89,9 +89,7 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
         ajax: (dataTablesParameters: any, callback) => {
           this.pageNumber = dataTablesParameters.length;
           this.dtparams = dataTablesParameters;
-          console.log('this.dtparams => ', this.dtparams);
           dataTablesParameters['columns'][4]['isNumber'] = true;
-          console.log(dataTablesParameters);
           this.exportParam = dataTablesParameters;
           setTimeout(() => {
             if (this.rangeDates) {
@@ -101,9 +99,7 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
                 this.datePicker.overlayVisible = false;
               }
             }
-            console.log('dataTablesParameters in car report => ', dataTablesParameters);
             this.service.post('admin/cars/report_list', dataTablesParameters).subscribe(async (res: any) => {
-              console.log('response====>', res);
               this.reports = await res['result']['data'];
               // this.reports = [];
               this.totalRecords = res['result']['recordsTotal'];
@@ -197,7 +193,6 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
 
   handleFilterCalendar = () => {
     this.datePicker.overlayVisible = false;
-    console.log('this.rangeDates  => ', this.rangeDates);
   }
   handleClearCalendar = () => {
     this.rangeDates = null;
@@ -249,7 +244,6 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
         this.ExcelArray = ExcelData;
       });
     });
-    // this.ExportRecords();
     setTimeout(() => {
       this.excelService.exportAsExcelFile(this.ExcelArray, 'Car-Report');
     }, 1000);
@@ -259,7 +253,6 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
     this.isPDF = true;
     this.ExportRecords();
     var pdfdata = document.getElementById('contentToConvert');
-    // var pdfdata = $('#ownerDocument').children(".dataTables_scroll")[0];
     html2canvas(pdfdata).then(canvas => {
       // Few necessary setting options
       var imgWidth = 208;
@@ -270,7 +263,6 @@ export class AdminCarReportComponent implements OnInit, AfterViewInit, OnDestroy
       let pdf = new jspdf('p', 'mm', 'a4'); // A4 size page of PDF
       var position = 0;
       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
-      // pdf.addImage(contentDataURL, 'JPEG', 0, position, imgWidth, imgHeight);
       pdf.save('Car-Report.pdf'); // Generated PDF
     });
   }

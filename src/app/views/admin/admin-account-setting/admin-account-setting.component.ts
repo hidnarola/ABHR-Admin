@@ -28,8 +28,8 @@ export class AdminAccountSettingComponent implements OnInit {
   public errMsg;
   public phoneErrMsg;
   public supportPhoneErrMsg;
-  public numberErr: boolean = false;
-  public numberErr2: boolean = false;
+  public numberErr = false;
+  public numberErr2 = false;
   public countryCode: SelectItem[];
   selectedCc: string;
   public supportCountryCode: SelectItem[];
@@ -77,7 +77,6 @@ export class AdminAccountSettingComponent implements OnInit {
     if (this.Id !== undefined && this.Id !== '' && this.Id != null) {
       this.service.get('admin/details/' + this.Id).subscribe(resp => {
         this.UserDetails = resp['result'].data;
-        console.log('this.UserDetails => ', this.UserDetails);
         if (typeof this.UserDetails.country_code === 'undefined' || this.UserDetails.country_code === 'null' ||
           this.UserDetails.country_code === '' || typeof this.UserDetails.support_country_code === 'undefined' ||
           this.UserDetails.support_country_code === 'null' || this.UserDetails.support_country_code === '') {
@@ -163,9 +162,7 @@ export class AdminAccountSettingComponent implements OnInit {
         this.supportPhoneData = { 'phone_number': control.value ? control.value.trim() : '', 'user_id': this.Id };
         return this.service.post('admin/checkphone', this.supportPhoneData).subscribe(res => {
           if (res['status'] === 'success') {
-            console.log('res => ', res);
             this.supportPhoneErrMsg = res['message'];
-            console.log('this.supportPhoneErrMsg => ', this.supportPhoneErrMsg);
             this.f.support_phone_number.setErrors({ 'unique': true });
             return;
           } else {
@@ -180,7 +177,6 @@ export class AdminAccountSettingComponent implements OnInit {
     this.submitted = true;
     this.numberErr = false;
     this.numberErr2 = false;
-    console.log('this.SettingForm => ', this.SettingForm);
     if (!this.SettingForm.invalid) {
       this.isLoading = true;
       this.formData = this.SettingForm.value;

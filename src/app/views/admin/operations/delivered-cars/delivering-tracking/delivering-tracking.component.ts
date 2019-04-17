@@ -90,12 +90,8 @@ export class DeliveringTrackingComponent implements OnInit, AfterViewInit, OnDes
 
 
   getDirection(origin, destination) {
-    console.log('getDirection => ');
     this.origin = { lat: origin.latitude, lng: origin.longitude };
     this.destination = { lat: destination.latitude, lng: destination.longitude };
-    console.log('this.origin => ', this.origin);
-    console.log('this.destination => ', this.destination);
-    console.log('markers => ', this.markers);
   }
   leftGroup() {
     this.socket.emit('LeftGroup');
@@ -121,7 +117,6 @@ export class DeliveringTrackingComponent implements OnInit, AfterViewInit, OnDes
 
   getMessage() {
     this.socket.on('Joined', (data: any) => {
-      console.log('Joined data => ', data);
       this.lat = data.last_location.latitude;
       this.lng = data.last_location.longitude;
       this.setCurrentPosition();
@@ -129,9 +124,7 @@ export class DeliveringTrackingComponent implements OnInit, AfterViewInit, OnDes
     });
   }
   getCurrentPosition() {
-    console.log(' current location=> ');
     this.socket.on('recieveTrackingObject', (data: any) => {
-      console.log('Current Location data => ', data);
       this.lat = data.Latitude;
       this.lng = data.Longitude;
       this.setCurrentPosition();

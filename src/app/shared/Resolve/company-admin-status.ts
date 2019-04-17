@@ -14,7 +14,6 @@ export class CompanyAdminStatusResolve implements Resolve<any> {
         private messageService: MessageService
     ) { }
     resolve(route: ActivatedRouteSnapshot) {
-        console.log('in resolve => ');
         var company = JSON.parse(localStorage.getItem('company-admin'));
         console.log('company => ', company);
         if (company != null && company !== undefined) {

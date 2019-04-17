@@ -243,22 +243,6 @@ export class NavigationComponent implements AfterViewInit, OnDestroy {
 
   onSubmit() {
     this.submitted = true;
-    console.log('this.changePassForm.controls => ', this.changePassForm.controls);
-    // if (this.changePassForm.controls.new_password.errors.minlength !== undefined ||
-    //   this.changePassForm.controls.new_password.errors.maxlength !== undefined) {
-    //   console.log('not undefined => ');
-    //   if ((this.changePassForm.controls.new_password.errors.minlength.actualLength < 6) ||
-    //     (this.changePassForm.controls.new_password.errors.minlength.actualLength > 13)) {
-    //     this.passErr = false;
-    //   } else {
-    //     this.passErr = true;
-    //   }
-    // }
-    // if (this.changePassForm.controls.new_password.value.length > 5 && this.changePassForm.controls.new_password.value.length < 14) {
-    //   this.passErr = true;
-    // } else {
-    //   this.passErr = false;
-    // }
     if (!this.changePassForm.invalid) {
       this.isLoading = true;
       this.formData = this.changePassForm.value;
@@ -348,29 +332,5 @@ export class NavigationComponent implements AfterViewInit, OnDestroy {
     let isWhitespace = (control.value || '').trim().length === 0;
     let isValid = !isWhitespace;
     return isValid ? null : { 'required': true };
-    // return isValid ? null : { 'null': true };
   }
-
-  // keyupPass() {
-  //   if ((this.changePassForm.value.new_password.length > 0)
-  //     && (this.changePassForm.controls.new_password.value.trim().length === 0)) {
-  //     if (this.submitted === true) {
-  //       if (this.changePassForm.controls.new_password.value.length > 5 && this.changePassForm.controls.new_password.value.length < 14) {
-  //         this.passErr = true;
-  //       } else {
-  //         this.passErr = false;
-  //       }
-  //     } else {
-  //       this.passErr = true;
-  //     }
-  //   } else {
-  //     this.passErr = false;
-  //   }
-  // }
-
-  // keyupRepeatPass() {
-  //   console.log('reset pass keyup => ');
-  //   console.log('chng pass form => ', this.changePassForm.value.repeat_new_password);
-  // }
-
 }

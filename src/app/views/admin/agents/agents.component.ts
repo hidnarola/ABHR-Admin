@@ -157,14 +157,12 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
   closeDeletePopup() {
     const data: HTMLCollection = document.getElementsByClassName('ui-button');
     if (data.length > 0) {
-      console.log('l => ', data[1]);
       const ele: any = data[1];
       ele.click();
     }
   }
   // model
   open2(content, item) {
-    console.log('item => ', item);
     this.modalData = content;
     if (item !== 'undefined' && item !== '') {
       this.title = 'Edit Agent';
@@ -178,7 +176,6 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
       //    this.AddEditForm.controls['deviceType'].setValue(item.deviceType);
     } else {
       this.title = 'Add Agent';
-      console.log('this.addeditform => ', this.AddEditForm.value.country_code);
     }
     const options: NgbModalOptions = {
       keyboard: false,
@@ -208,7 +205,6 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.submitted = true;
     this.numberErr = false;
     if (!this.AddEditForm.invalid) {
-      console.log('this.AddEditForm => ', this.AddEditForm);
       this.formData = this.AddEditForm.value;
       this.formData.email = this.formData.email.trim();
       this.formData.first_name = this.formData.first_name.trim();
@@ -232,14 +228,12 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
           this.messageService.add({ severity: 'success', summary: 'Success', detail: res['message'] });
         }, err => {
           err = err.error;
-          console.log(' err[message] => ', err['message']);
           this.isLoading = false;
           this.messageService.add({ severity: 'error', summary: 'Error', detail: err['message'] });
           this.closePopup();
         });
       } else {
         this.title = 'Add Agent';
-        console.log('formdata in add form => ', this.formData);
         this.service.post('admin/agents/add', this.formData).subscribe(res => {
           this.isLoading = false;
           this.render();
@@ -271,7 +265,6 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
-    console.log('this.modalData on destroy => ', this.modalData);
     if (this.modalData !== undefined) {
       this.closePopup();
     }
@@ -308,7 +301,6 @@ export class AgentsComponent implements OnInit, AfterViewInit, OnDestroy {
         setTimeout(() => {
           this.service.post('admin/agents/list', dataTablesParameters).subscribe(async (res: any) => {
             this.agents = await res['result']['data'];
-            console.log('this.agents => ', this.agents);
             // this.agents = [];
             this.totalRecords = res['result']['recordsTotal'];
             if (this.agents.length > 0) {

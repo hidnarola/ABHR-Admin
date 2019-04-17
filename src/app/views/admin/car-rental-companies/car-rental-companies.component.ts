@@ -135,11 +135,8 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
           this.phoneData = { 'phone_number': control.value ? control.value.trim() : '', 'company_id': this.userId };
         }
         return this.service.post('admin/company/checkphone', this.phoneData).subscribe(res => {
-          console.log('res-status => ', res['status']);
-          console.log('res => ', res);
           if (res['status'] === 'success') {
             this.phoneErrMsg = res['message'];
-            console.log('this.phoneErrMsg => ', this.phoneErrMsg);
             this.f.phone_number.setErrors({ 'unique': true });
             return;
           } else {
@@ -276,8 +273,6 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
   // Add-Edit pop up
   open2(content, item) {
     this.modalData = content;
-    console.log('item => ', item);
-    console.log('item.country_code => ', item.country_code);
     this.service_location = [];
     if (item !== 'undefined' && item !== '') {
       this.title = 'Edit Company';
@@ -356,7 +351,6 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
-    console.log('this.modalData on destroy => ', this.modalData);
     if (this.modalData !== undefined) {
       this.closePopup();
     }
@@ -374,7 +368,6 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
   closeDeletePopup() {
     const data: HTMLCollection = document.getElementsByClassName('ui-button');
     if (data.length > 0) {
-      console.log('l => ', data[1]);
       const ele: any = data[1];
       ele.click();
     }
@@ -395,19 +388,25 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
   }
 
   onSubmit() {
-    this.submitted = true;
     this.numberErr = false;
+    console.log('this.placeData => ', this.placeData);
     if (typeof this.placeData === 'undefined') {
       this.addressError = true;
+      this.submitted = false;
     } else {
       if (this.placeData.response === false) {
         this.addressError = true;
+        this.submitted = false;
       } else if (this.placeData.response === true) {
         this.addressError = false;
+      } else {
+        console.log('check here ********************* => ');
       }
     }
-    console.log('this.company_address => ', this.company_address);
-    if (!this.AddEditForm.invalid) {
+    console.log('this.AddEditForm => ', this.AddEditForm);
+    console.log('this.AddEditForm.invalid => ', this.AddEditForm.invalid);
+    this.submitted = true;
+    if (!this.AddEditForm.invalid && this.addressError === false) {
       this.isLoading = true;
       this.formData = this.AddEditForm.value;
       this.formData.email = this.formData.email.trim();
@@ -423,7 +422,6 @@ export class CarRentalCompaniesComponent implements OnInit, OnDestroy, AfterView
           this.formData.country_code = 971;
         }
       }
-      console.log('this.formData => ', this.formData);
       if (this.isEdit) {
         this.formData.company_id = this.userId;
         this.title = 'Edit Company';

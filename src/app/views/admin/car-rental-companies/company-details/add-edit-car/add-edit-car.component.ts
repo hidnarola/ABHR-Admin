@@ -94,7 +94,6 @@ export class AddEditCarComponent implements OnInit {
               ? minMonth = e.month
               : minMonth = minMonth;
           });
-          console.log('minMonth => ', minMonth);
           this.carAvailableDates.forEach(element => {
             const edate = [];
             element.availability.forEach(date => {
@@ -351,7 +350,7 @@ export class AddEditCarComponent implements OnInit {
 
   handleClearCalendar = () => {
     this.selectDate = null;
-    // this.selectedMonth = new Date().getMonth();
+    this.selectedMonth = new Date().getMonth();
     this.datePicker.overlayVisible = false;
     this.availabilitySelectAllArr = [{ value: false }, { value: false }, { value: false }, { value: false },
     { value: false }, { value: false }, { value: false }, { value: false }, { value: false }, { value: false },
@@ -385,7 +384,6 @@ export class AddEditCarComponent implements OnInit {
     } else {
       this.availablityError = true;
     }
-    console.log('this.bookedDates ,this.finalDates => ', this.bookedDates, this.finalDates);
     this.submitted = true;
     this.numberErr = false;
     this.numberErr2 = false;
@@ -396,7 +394,6 @@ export class AddEditCarComponent implements OnInit {
       this.f.car_gallery.setErrors({ 'minImages': true });
       return;
     }
-    console.log('this.finalDates => ', this.finalDates);
     const formData = new FormData();
     formData.append('car_rental_company_id', this.f.car_rental_company_id.value);
     formData.append('car_brand_id', this.f.car_brand_id.value);

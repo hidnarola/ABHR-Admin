@@ -71,9 +71,7 @@ export class ReturnedTrackingComponent implements OnInit, AfterViewInit, OnDestr
   ngAfterViewInit(): void { }
 
   getDirection() {
-    console.log('this.bookingId => ', this.bookingId);
     this.service.post('admin/tracking/returned/details', { 'booking_id': this.bookingId }).subscribe(res => {
-      console.log('res => ', res);
       this.trackData = res['result'];
       this.origin = {
         lat: this.trackData.return_source_location[1],

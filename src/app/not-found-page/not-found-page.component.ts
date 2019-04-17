@@ -15,8 +15,6 @@ export class NotFoundPageComponent implements OnInit, AfterViewInit {
     this.currentYear = new Date().getFullYear();
     this.superAdmin = JSON.parse(localStorage.getItem('admin'));
     this.company = JSON.parse(localStorage.getItem('company-admin'));
-    console.log('company in 404 => ', this.company);
-    console.log('superAdmin in 404 => ', this.superAdmin);
   }
 
   ngOnInit() { }

@@ -101,7 +101,6 @@ export class FeedbackCategoryComponent implements OnInit, OnDestroy, AfterViewIn
   closeDeletePopup() {
     const data: HTMLCollection = document.getElementsByClassName('ui-button');
     if (data.length > 0) {
-      console.log('l => ', data[1]);
       const ele: any = data[1];
       ele.click();
     }
@@ -192,10 +191,8 @@ export class FeedbackCategoryComponent implements OnInit, OnDestroy, AfterViewIn
         this.pageNumber = dataTablesParameters.length;
         setTimeout(() => {
           this.service.post('admin/reports/category_list', dataTablesParameters).subscribe(async (res: any) => {
-            console.log('res => ', res);
             this.categories = await res['result']['data'];
             // this.categories = [];
-            console.log('this.categories => ', this.categories);
             this.totalRecords = res['result']['recordsTotal'];
             if (this.categories.length > 0) {
               this.isCols = true;
@@ -251,7 +248,6 @@ export class FeedbackCategoryComponent implements OnInit, OnDestroy, AfterViewIn
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
-    console.log('this.modalData on destroy => ', this.modalData);
     if (this.modalData !== undefined) {
       this.closePopup();
     }
