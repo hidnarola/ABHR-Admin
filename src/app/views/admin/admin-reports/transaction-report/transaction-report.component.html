@@ -73,6 +73,7 @@
                 <th>Transaction Amount</th>
                 <th>From Date</th>
                 <th>To Date</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody *ngIf="reports?.length != 0 && isCols">
@@ -120,6 +121,12 @@
                   <span>
                     {{ item.to_time | date:"MM/dd/yy"}}
                   </span>
+                </td>
+                <td class="text-center">
+                  <a [routerLink]="['/admin/reports/transaction-reports/view/',item._id]" pTooltip="View" tooltipPosition="bottom"
+                  class="m-r-20">
+                  <i class="fa fa-eye text-default"></i>
+                  </a>
                 </td>
               </tr>
             </tbody>

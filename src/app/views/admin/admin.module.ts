@@ -65,6 +65,7 @@ import { SuperAdminCheckPassResolve } from '../../shared/Resolve/super-admin-che
 import { DialogModule } from 'primeng/dialog';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 import { BsDropdownModule } from 'ngx-bootstrap';
+import { TransactionReportDetailsComponent } from './admin-reports/transaction-report-details/transaction-report-details.component';
 
 const AdminRoutes: Routes = [
   {
@@ -319,6 +320,17 @@ const AdminRoutes: Routes = [
         },
         resolve: {
           admin: SuperAdminCheckPassResolve
+        }
+      },
+      {
+        path: 'reports/transaction-reports/view/:id',
+        component: TransactionReportDetailsComponent,
+        data: {
+          title: 'Transaction Reports view',
+           urls: [{ title: 'Dashboard', url: '/admin/dashboard' }, { title: 'Transaction Reports View' }]
+        },
+        resolve: {
+            admin: SuperAdminCheckPassResolve
         }
       },
       {
@@ -641,6 +653,7 @@ const AdminRoutes: Routes = [
     FeedbackCategoryComponent,
     ReportedCarsComponent,
     ReportedCarDetailComponent,
+    TransactionReportDetailsComponent,
   ],
   providers: []
 })
