@@ -1,0 +1,358 @@
+
+<div class="card">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-lg-6 col-md-12">
+        <h4 class="table-header">Transaction Report </h4>
+      </div>
+      <div class="col-lg-6 col-md-12 justify-content-lg-end justify-content-md-start">
+        <form class="form-inline form_filter" (keydown.enter)="$event.preventDefault()">
+          <div class="form-group form-filter" style="margin-left:0;">
+
+            <div>
+              <button type="button" value="CPTURE" *ngIf="!isPDF" (click)="captureScreen()"
+                class="btn btn-primary custom-add-btn">
+                PDF
+              </button>
+
+              <!-- <button type="button" value="CPTURE" *ngIf="!isPDF" (click)="captureScreen()"
+                class="btn btn-primary custom-add-btn">
+                PDF
+              </button> -->
+
+              <button type="button" *ngIf="isPDF" class="btn btn-primary custom-add-btn  loading-btn">
+                <i class="fa fa-spinner fa-spin"></i>Loading
+              </button>
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </div> 
+
+
+<div id="contentToConvert">
+<div class="card card_one_data" >
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6">
+        <h4 class="mb-20"> User Details
+        </h4>
+      </div>
+      <div class="col-md-6 text-right">
+        <!-- <button type="button" class="btn btn-primary custom-add-btn"
+          *ngIf="(userData?.driving_license_verification === 1)" (click)="licenceVerification()">
+          <i class="mdi mdi-check" aria-hidden="true"></i> Verify
+        </button>
+        <button type="button" class="btn btn-primary custom-add-btn green-btn"
+          *ngIf="(userData?.driving_license_verification === 2)">
+          <i class="mdi mdi-checkbox-multiple-marked" aria-hidden="true"></i> Verified
+        </button> -->
+      </div>
+    </div>
+    <div class="row" >
+      <div class="col-md-12" >
+        <div class="cars-dtl-box-inr">
+          <b>Full Name : </b>
+           <span>{{transactionReportData?.data[0].user_details.first_name ? transactionReportData?.data[0].user_details.first_name : '-'}} {{transactionReportData?.data[0].user_details.last_name }}</span> 
+         
+        </div>
+        <div class="cars-dtl-box-inr">
+          <b>Email : </b>
+          <span >{{transactionReportData?.data[0].user_details.email ? transactionReportData?.data[0].user_details.email : '-'}}  </span> 
+          
+        </div>
+        <div class="cars-dtl-box-inr">
+          <b>Phone Number : </b>
+          <span>{{transactionReportData?.data[0].user_details.phone_number ? transactionReportData?.data[0].user_details.phone_number : '-'}} </span> 
+        
+        </div>
+        <div class="cars-dtl-box-inr">
+          <b>Address : </b>
+          <span>
+            {{this.transactionReportData?.data[0].user_details['address'][0].building }} 
+            {{this.transactionReportData?.data[0].user_details['address'][0].street }} 
+            {{this.transactionReportData?.data[0].user_details['address'][0].city}}
+             {{this.transactionReportData?.data[0].user_details['address'][0].state}} 
+             {{this.transactionReportData?.data[0].user_details['address'][0].country}}</span>  
+       
+        </div>
+        
+      </div>
+    
+    </div>
+  </div>
+</div>
+
+<div class="card card_one_data">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <h4 class="mb-20"> Car Details
+          </h4>
+        </div>
+        <div class="col-md-6 text-right">
+          <!-- <button type="button" class="btn btn-primary custom-add-btn"
+            *ngIf="(userData?.driving_license_verification === 1)" (click)="licenceVerification()">
+            <i class="mdi mdi-check" aria-hidden="true"></i> Verify
+          </button>
+          <button type="button" class="btn btn-primary custom-add-btn green-btn"
+            *ngIf="(userData?.driving_license_verification === 2)">
+            <i class="mdi mdi-checkbox-multiple-marked" aria-hidden="true"></i> Verified
+          </button> -->
+        </div>
+      </div>
+      <div class="row" >
+        <div class="col-md-12" >
+            <div class="cars-dtl-box-inr">
+                <b>Company Name : </b> 
+                <span>{{this.transactionReportData?.data[0].car_company_details[0].name ? this.transactionReportData?.data[0].car_company_details[0].name: '-'}} </span>
+               
+              </div>
+          <div class="cars-dtl-box-inr">
+            <b>Licence plate : </b>
+            <span>{{transactionReportData?.data[0].car_details.licence_plate ? transactionReportData?.data[0].car_details.licence_plate : '-'}} </span> 
+            
+          </div>
+          <div class="cars-dtl-box-inr">
+            <b>Rent price: </b>
+            <span>{{transactionReportData?.data[0].car_details.rent_price ? transactionReportData?.data[0].car_details.rent_price: '-'}} </span> 
+           
+          </div>
+          <div class="cars-dtl-box-inr">
+            <b>Car color : </b> 
+            <span>{{this.transactionReportData?.data[0].car_details.car_color ? this.transactionReportData?.data[0].car_details.car_color: '-'}} </span> 
+           
+          </div>
+          
+        </div>
+      
+      </div>
+    </div>
+  </div>
+
+<div class="card card_one_data">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6">
+        <h4 class="mb-20"> Payment Details
+        </h4>
+      </div>
+      <div class="col-md-6 text-right">
+        <!-- <button type="button" class="btn btn-primary custom-add-btn"
+          *ngIf="(userData?.driving_license_verification === 1)" (click)="licenceVerification()">
+          <i class="mdi mdi-check" aria-hidden="true"></i> Verify
+        </button>
+        <button type="button" class="btn btn-primary custom-add-btn green-btn"
+          *ngIf="(userData?.driving_license_verification === 2)">
+          <i class="mdi mdi-checkbox-multiple-marked" aria-hidden="true"></i> Verified
+        </button> -->
+      </div>
+    </div>
+    <div class="row" >
+      <div class="col-md-12" >
+        <div class="cars-dtl-box-inr">
+          <b>Booking Number : </b>
+          <span>{{this.transactionReportData?.data[0].booking_number ? this.transactionReportData?.data[0].booking_number : '-'}} </span> 
+         
+        </div>
+       
+        <div class="cars-dtl-box-inr">
+          <b>Deposite Amount : </b> 
+          <span>{{this.transactionReportData?.data[0].deposite_amount ? this.transactionReportData?.data[0].deposite_amount: '-'}} </span> 
+         
+        </div>
+        <div class="cars-dtl-box-inr">
+            <b>From Date : </b>
+            <span>{{this.transactionReportData?.data[0].createdAt | date:"MM/dd/yy"}} </span> 
+          
+          </div>
+        <div class="cars-dtl-box-inr">
+          <b>To Date : </b> 
+          <span>{{this.transactionReportData?.data[0].modifiedAt | date:"MM/dd/yy"}} </span>
+        
+        </div>
+      </div>
+    
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="card card_one_data">
+  <div class="card-body">
+  
+    <div class="row">
+      <div class="col-md-6">
+        <h4 class="mb-20"> Agent to company
+        </h4>
+      </div>
+      <div class="col-md-6 text-right">
+        <!-- <button type="button" class="btn btn-primary custom-add-btn"
+          *ngIf="(userData?.driving_license_verification === 1)" (click)="licenceVerification()">
+          <i class="mdi mdi-check" aria-hidden="true"></i> Verify
+        </button>
+        <button type="button" class="btn btn-primary custom-add-btn green-btn"
+          *ngIf="(userData?.driving_license_verification === 2)">
+          <i class="mdi mdi-checkbox-multiple-marked" aria-hidden="true"></i> Verified
+        </button> -->
+      </div>
+    </div>
+    <div class="row" >
+        <div class="col-md-12" >
+            <div class="cars-dtl-box-inr">
+                <b>Defected points : </b>
+                <span>
+                  {{usertocompanydefecteditem1 ? usertocompanydefecteditem1 : '-'}}
+                </span>
+                <span>
+                    {{usertocompanydefecteditem2}}
+                  </span>
+                  <span>
+                      {{usertocompanydefecteditem3}}
+                    </span>
+                
+              </div>
+          <div class="cars-dtl-box-inr">
+            <b>Milage : </b>
+            <span>{{transactionReportAgenttocompanyData['handoverData'].milage ? transactionReportAgenttocompanyData['handoverData'].milage : '-'}}</span>
+          </div>
+          <div class="cars-dtl-box-inr">
+            <b>Petrol Tank: </b>
+            <span>{{transactionReportAgenttocompanyData['handoverData'].petrol_tank ? transactionReportAgenttocompanyData['handoverData'].petrol_tank : '-'}}</span>
+          </div>
+         
+          <div class="cars-dtl-box-inr">
+            <b>Notes: </b>
+            <span>{{transactionReportAgenttocompanyData['handoverData'].notes ? transactionReportAgenttocompanyData['handoverData'].notes : '-'}}</span> 
+          </div>
+        </div>
+      
+      </div>
+
+<br/><br/>
+    <div class="row">
+      <div class="col-md-6">
+        <h4 class="mb-20"> Agent to user
+        </h4>
+      </div>
+      <div class="col-md-6 text-right">
+        <!-- <button type="button" class="btn btn-primary custom-add-btn"
+          *ngIf="(userData?.driving_license_verification === 1)" (click)="licenceVerification()">
+          <i class="mdi mdi-check" aria-hidden="true"></i> Verify
+        </button>
+        <button type="button" class="btn btn-primary custom-add-btn green-btn"
+          *ngIf="(userData?.driving_license_verification === 2)">
+          <i class="mdi mdi-checkbox-multiple-marked" aria-hidden="true"></i> Verified
+        </button> -->
+      </div>
+    </div>
+    <div class="row" >
+      <div class="col-md-12" >
+          <div class="cars-dtl-box-inr">
+              <b>Defected points : </b>
+               <span>{{agenttouserdefecteditem1 ?  agenttouserdefecteditem1: '-'}}</span> 
+               <span>{{agenttouserdefecteditem2}}</span>
+               <span>{{agenttouserdefecteditem3}}</span>
+              
+            </div>
+            <div class="cars-dtl-box-inr">
+              <b>Milage : </b>
+              <span>{{transactionReportAgenttouserData['handoverData'].milage ? transactionReportAgenttouserData['handoverData'].milage : '-'}}</span>
+            
+            </div>
+            <div class="cars-dtl-box-inr">
+              <b>Petrol Tank: </b>
+              <span>{{transactionReportAgenttouserData['handoverData'].petrol_tank ? transactionReportAgenttouserData['handoverData'].petrol_tank : '-'}}</span>
+            
+            </div>
+           
+            <div class="cars-dtl-box-inr">
+              <b>Notes: </b>
+              <span>{{transactionReportAgenttouserData['handoverData'].notes ? transactionReportAgenttouserData['handoverData'].notes : '-'}}</span> 
+              
+            </div>
+      </div>
+    
+    </div>
+
+
+
+    <br/><br/>
+    <div class="row" >
+        <div class="col-md-6">
+            <h4 class="mb-20"> User to agent
+            </h4>
+          </div>
+        <div class="col-md-12" >
+            <div class="cars-dtl-box-inr">
+                <b>Defected points : </b>
+                <span>
+                  {{usertoagentdefecteditem1 ? usertoagentdefecteditem1:'-'}}
+                </span>
+                <span>
+                    {{usertoagentdefecteditem2}}
+                  </span>
+                  <span>
+                      {{usertoagentdefecteditem3}}
+                    </span>
+              </div>
+              <div class="cars-dtl-box-inr">
+                <b>Milage : </b>
+                <span>{{transactionReportUserToAgentData['handoverData'].milage ? transactionReportUserToAgentData['handoverData'].milage : '-'}}</span>
+               
+              </div>
+              <div class="cars-dtl-box-inr">
+                <b>Petrol Tank: </b>
+                <span>{{transactionReportUserToAgentData['handoverData'].petrol_tank ? transactionReportUserToAgentData['handoverData'].petrol_tank : '-'}}</span>
+               
+              </div>
+             
+              <div class="cars-dtl-box-inr">
+                <b>Notes: </b>
+                <span>{{transactionReportUserToAgentData['handoverData'].notes ? transactionReportUserToAgentData['handoverData'].notes : '-'}}</span> 
+               
+              </div>
+        </div>
+      
+      </div>
+
+    <br /><br />
+
+    
+  </div>
+</div>
+
+<br /><br />
+
+</div>
+
+
+<!-- 
+<div class="card">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-lg-6 col-md-12">
+        <h4 class="table-header">Transaction Report </h4>
+      </div>
+      <div class="col-lg-6 col-md-12 justify-content-lg-end justify-content-md-start">
+        <form class="form-inline form_filter" (keydown.enter)="$event.preventDefault()">
+          <div class="form-group form-filter" style="margin-left:0;">
+
+            <div>
+              <button type="button" value="CPTURE" *ngIf="!isPDF" (click)="captureScreen()"
+                class="btn btn-primary custom-add-btn">
+                PDF
+              </button>
+
+              <button type="button" *ngIf="isPDF" class="btn btn-primary custom-add-btn  loading-btn">
+                <i class="fa fa-spinner fa-spin"></i>Loading
+              </button>
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </div> -->
