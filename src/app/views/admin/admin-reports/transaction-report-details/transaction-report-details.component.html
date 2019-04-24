@@ -272,6 +272,12 @@ PDF
 <span>{{transactionReportAgenttouserData['handoverData'].notes ? transactionReportAgenttouserData['handoverData'].notes : '-'}}</span> 
 
 </div>
+<div class="cars-dtl-box-inr">
+<b>Signature: </b>
+<span> <img [src]="imgUrl+transactionReportAgenttouserData['handoverData'].signature" class="img-responsive img-rounded mb-15" alt="signature"></span> 
+
+</div>
+
 </div>
 
 </div>
@@ -313,9 +319,7 @@ PDF
 <span>{{transactionReportUserToAgentData['handoverData'].notes ? transactionReportUserToAgentData['handoverData'].notes : '-'}}</span> 
 
 </div>
-<div class="col-md-3" >
-<img [src]="imgUrl+transactionReportUserToAgentData['handoverData'].signature" class="img-responsive img-rounded mb-15" alt="signature">
-</div>
+
 </div>
 
 </div>
